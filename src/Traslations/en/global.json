@@ -345,9 +345,28 @@
       "vandalized-cameras": "Vandalized Cameras"
     },
     "reports": {
-      "reports-tittle": "",
+      "reports-tittle": "Reports",
+      "reports-of": "Reports of - ",
       "add-report": "Add report",
-      "eddit-report": ""
+      "eddit-report": "",
+      "new-report": {
+        "add-report": "New report",
+        "property": "Property",
+        "agent": "Monitoring agent",
+        "date": "Date",
+        "time": "Hour",
+        "incident": "Incident",
+        "level": "Case level",
+        "monitoring-team": "Monitoring Team",
+        "number-case": "Number of case",
+        "images": "images",
+        "cancel": "Cancel",
+        "send": "Send",
+        "footer": {
+          "information": "Information",
+          "evidences":  "Evidences"
+        }
+      }
     },
     "footer": "All rights reserved by Innova Monitoring"
   }

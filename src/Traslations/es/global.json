@@ -301,7 +301,6 @@
     "tittle_carrousel": "Entidades policiales con las cuales hemos trabajado:"
   },
   "dashboard": {
-
     "dashboard-navbar": {
       "hi": "Hola,",
         "user-profile": {
@@ -311,12 +310,10 @@
     }
     },
     "dashboard-sliderbar": {
-
       "dashboard-section": {
         "dashboard-tittle": "Panel de control",
         "home": "Inicio"
       },
-
       "integral-management-section": {
 
         "integral-tittle": "Gestión Integral",
@@ -327,9 +324,7 @@
         "cases": "Categoria de casos",
         "properties": "Propiedades"
       },
-
       "graphical-insights-section":{
-
         "graphical-tittle": "Informes gráficos",
         "report-bar": "Barra de reportes",
         "types-of-cases": "Tipos de casos",
@@ -337,9 +332,7 @@
         "reports-per-month": "Cronología de los informes",
         "logout": "Cerrar sesión"
       }
-
     },
-
     "dashboard-index": {
       "home": "Inicio",
       "number-reports": "Numero de reportes",
@@ -350,8 +343,27 @@
     },
     "reports":{
       "reports-tittle": "Informes",
-      "add-report": "Agregar reporte",
-      "eddit-report": ""
+      "reports-of": "Reportes de - ",
+      "add-report": "Agregar informe",
+      "eddit-report": "",
+      "new-report": {
+        "add-report": "Nuevo informe",
+        "property": "Propiedad",
+        "agent": "Agente de monitoreo",
+        "date": "Fecha",
+        "time": "Hora",
+        "incident": "Incidente",
+        "level": "Nivel del caso",
+        "monitoring-team": "Equipo de monitoreo",
+        "number-case": "Numero de caso",
+        "images": "Imagenes",
+        "cancel": "Cancelar",
+        "send": "Enviar",
+        "footer": {
+          "information": "Información",
+          "evidences": "Evidencias"
+        }
+      }
 
     },
 

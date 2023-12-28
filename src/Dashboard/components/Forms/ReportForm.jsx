@@ -5,6 +5,7 @@ import { InputNumber } from "primereact/inputnumber";
 import { Dropdown } from "primereact/dropdown";
 import { Calendar } from "primereact/calendar";
 import { UserContext } from "../../../context/UserContext";
+import { useTranslation } from "react-i18next";
 
 export const ReportForm = ({properties, agents, incidents}) => {
  
@@ -13,14 +14,14 @@ export const ReportForm = ({properties, agents, incidents}) => {
 
 
   const levels = [
-   "Level 1", "Level 2", "Level 3", "Level 4"
+   "1", "2", "3", "4"
   ];
 
   const team = [
      "Innova Monitoring",
      "Impro",
   ];
-
+  const [t] = useTranslation("global");
   return (
     <div>
       <div className="flex">
@@ -38,7 +39,7 @@ export const ReportForm = ({properties, agents, incidents}) => {
             }
             options={properties}
             optionLabel="name"
-            placeholder="Property"
+            placeholder={t("dashboard.reports.new-report.property")}
             className="w-full md:w-14rem"
           />
         </div>
@@ -55,7 +56,7 @@ export const ReportForm = ({properties, agents, incidents}) => {
             })}
             options={agents}
             optionLabel="name"
-            placeholder="Monitoring Agents"
+            placeholder={t("dashboard.reports.new-report.agent")}
             className="w-full md:w-14rem"
           />
         </div>
@@ -67,7 +68,7 @@ export const ReportForm = ({properties, agents, incidents}) => {
             <i className="pi pi-clock"></i>
           </span>
           <Calendar
-            placeholder="Date"
+            placeholder={t("dashboard.reports.new-report.date")}
             value={date}
             onChange={(e) => setReportForm((i) => {
              
@@ -81,7 +82,7 @@ export const ReportForm = ({properties, agents, incidents}) => {
             <i className="pi pi-user"></i>
           </span>
           <Calendar
-            placeholder="Time"
+            placeholder={t("dashboard.reports.new-report.time")}
             value={time}
             onChange={(e) => setReportForm((i) => {
            
@@ -105,7 +106,7 @@ export const ReportForm = ({properties, agents, incidents}) => {
             })}
             options={incidents}
             optionLabel="incident"
-            placeholder="Incident"
+            placeholder={t("dashboard.reports.new-report.incident")}
             className="w-full md:w-14rem"
           />
         </div>
@@ -116,11 +117,10 @@ export const ReportForm = ({properties, agents, incidents}) => {
           <Dropdown
             value={level}
             onChange={(e) => setReportForm((i) => {
-            
               return { ...reportForm, level:e.value };
             })}
             options={levels}
-            placeholder="Level"
+            placeholder={t("dashboard.reports.new-report.level")}
             className="w-full md:w-14rem"
           />
         </div>
@@ -138,18 +138,17 @@ export const ReportForm = ({properties, agents, incidents}) => {
               return { ...reportForm, company:e.value };
             })}
             options={team}
-            placeholder="Monitoring Team"
+            placeholder={t("dashboard.reports.new-report.monitoring-team")}
             className="w-full md:w-14rem"
           />
         </div>
-
         <div className="p-inputgroup my-3 ml-3">
           <span className="p-inputgroup-addon">
             <i className="pi pi-hashtag"></i>
           </span>
           <InputText value={numerCase} onChange={(e) => setReportForm((i) => {
               return { ...reportForm, numerCase:e.target.value };
-            })} placeholder="Number Case" />
+          })} placeholder={t("dashboard.reports.new-report.number-case")} />
         </div>
       </div>
     </div>

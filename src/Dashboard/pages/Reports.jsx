@@ -8,7 +8,7 @@ import { AiOutlinePlusCircle } from "react-icons/ai";
 import "primeicons/primeicons.css";
 import { Dialog } from "primereact/dialog";
 import { useNavigate } from "react-router-dom";
-import { FooterReportForm } from "../components/Forms/FooterReportForm";
+import { FooterReportForm } from "../components/Forms/FooterReportForm/FooterReportForm";
 import { ReportFormEvidences } from "../components/Forms/ReportFormEvidences";
 import useFetchProperties from "../Hooks/useFetchProperties";
 import { useFetchIncidents } from "../Hooks/useFetchIncidents";
@@ -30,17 +30,8 @@ const Reports = () => {
 
   const [information, setInformation] = useState(true);
 
-  const {
-    propertyContext,
-    setPropertyContext,
-    reportSaved,
-    setreportSaved,
-    reportFormVisible,
-    setReportFormVisible,
-    editReportFormVisible,
-    setEditReportFormVisible,
-    setReportForm,
-  } = useContext(UserContext);
+  const { propertyContext, setPropertyContext, reportSaved, setreportSaved, reportFormVisible, 
+  setReportFormVisible, editReportFormVisible, setEditReportFormVisible, setReportForm,} = useContext(UserContext);
 
   const [reportes, setReportes] = useState([]);
 
@@ -50,24 +41,27 @@ const Reports = () => {
   let idStorage = propertyStorage.id;
   let id = propertyContext.id || idStorage;
   useEffect(() => {
+
     GetReports(propertyContext.id || id, userRole ).then((data) => {
       if (userRole == "Admin") {
-     
         setReportes(data);
       }
+
       if (userRole == "Client") {
         let verifiedReports = data.filter((rep) => rep.isVerified);
-      
         setReportes(verifiedReports);
       }
-
     });
+    
   }, [propertyContext, reportSaved]);
+
   const [t] = useTranslation("global");
+
   return (
+
     <>
       <Dialog
-        header={"hola"}
+        header={t("dashboard.reports.new-report.add-report")} 
         visible={reportFormVisible}
         style={{ width: "50vw" }}
         onHide={() => {
@@ -117,13 +111,13 @@ const Reports = () => {
       </Dialog>
 
       <div className="m-20 md:m-10 mt-14 p-2 md:p-0 bg-white rounded-3xl">
-        <Header category="Pagee" title={"Reports - " + propertyContext.name} />
+        <Header category={t("dashboard.reports.reports-tittle")} title={t("dashboard.reports.reports-of") + propertyContext.name} />
         <div className="card flex justify-end py-2 mb-7">
           {userRole == "Admin" ? (
             <Button
               onClick={() => setReportFormVisible(!reportFormVisible)}
               severity="info"
-              label="Add Report"
+              label={t("dashboard.reports.add-report")}
             >
               <AiOutlinePlusCircle className="ml-2 "></AiOutlinePlusCircle>
             </Button>
@@ -131,6 +125,7 @@ const Reports = () => {
             <></>
           )}
         </div>
+        {/* Esta es la tabla */}
         <GridComponent
           id="gridcomp"
           dataSource={reportes}
@@ -145,11 +140,11 @@ const Reports = () => {
             {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             {userRole === "Admin"
               ? reportsGridAdmin.map((item, index) => (
-                  <ColumnDirective key={index} {...item} />
-                ))
+                <ColumnDirective key={index} {...item} />
+              ))
               : reportsGrid.map((item, index) => (
-                  <ColumnDirective key={index} {...item} />
-                ))}
+                <ColumnDirective key={index} {...item} />
+              ))}
           </ColumnsDirective>
           <Inject
             services={[

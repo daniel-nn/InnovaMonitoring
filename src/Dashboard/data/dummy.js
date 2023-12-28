@@ -6373,7 +6373,9 @@ export const reportsGrid = [
     template: GridDetails,
   },
 ];
+
 export const reportsGridAdmin = [
+
   {
     headerText: "Image",
     template: gridOrderImage,
@@ -6398,7 +6400,7 @@ export const reportsGridAdmin = [
 
   {
     field: "dateIncident",
-    headerText: "Date Incident",
+    headerText: "Datse Incident",
     width: "130",
     textAlign: "Center",
   },

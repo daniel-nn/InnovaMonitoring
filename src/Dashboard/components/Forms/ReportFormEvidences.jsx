@@ -4,6 +4,8 @@ import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { UserContext } from "../../../context/UserContext";
 import { postReport } from "../../helper/postReport";
+import { useTranslation } from "react-i18next";
+
 
 export const ReportFormEvidences = ({
   reportFormVisible,
@@ -92,7 +94,11 @@ if(!date){
     setReportFormVisible(false);
     setreportSaved(!reportSaved);
   };
-
+const [t] = useTranslation("global")
+  const handleDialogHide = () => {
+    setReportFormVisible(false);
+    setReportForm({});
+  };
   return (
     <div>
       <div className="p-inputgroup my-3 ml-3">
@@ -120,7 +126,7 @@ if(!date){
               return { ...reportForm, images: e.target.value };
             })
           }
-          placeholder="Images"
+          placeholder={t("dashboard.reports.new-report.images")}
           rows={5}
           cols={30}
         />
@@ -142,13 +148,9 @@ if(!date){
         />
       </div>
       <div className="w-full flex justify-end">
-        <Button icon="pi pi-times" severity="danger" label="Cancel" />
+        <Button icon="pi pi-times" severity="danger" label={t("dashboard.reports.new-report.cancel")} onClick={() => {setReportFormVisible(false); setReportForm({});}} />
         <div className="w-3"></div>
-        <Button
-          icon="pi pi-check"
-          label="Send"
-          onClick={() => saveReport(reportForm)}
-        />
+        <Button icon="pi pi-check" label={t("dashboard.reports.new-report.send")} onClick={() => saveReport(reportForm)} />
       </div>
     </div>
   );
