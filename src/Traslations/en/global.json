@@ -307,35 +307,35 @@
   "dashboard": {
     "dashboard-navbar": {
       "hi": "Hi,",
-      "user-profile":{
+      "user-profile": {
         "profile": "My profile",
         "account": "Account settings",
         "logout-button": "Logout"
       }
+    },
+    "dashboard-sliderbar": {
+      "dashboard-section": {
+        "dashboard-tittle": "Dashboard",
+        "home": "Home"
       },
-      "dashboard-sliderbar": {
-        "dashboard-section": {
-          "dashboard-tittle": "Dashboard",
-          "home": "Home"
-        },
-        "integral-management-section": {
-          "integral-tittle": "Integral management",
-          "reports": "Reports",
-          "map": "Map",
-          "agents": "Agents",
-          "users": "Users",
-          "cases": "Types of Cases",
-          "properties": "Properties"
-        },
-        "graphical-insights-section": {
-          "graphical-tittle": "Report chart",
-          "report-bar": "Report bar",
-          "types-of-cases": "Types of cases",
-          "types-of-levels": "Cases by level",
-          "reports-per-month": "Timeline of reports",
-          "logout": "Logout"
-        }
+      "integral-management-section": {
+        "integral-tittle": "Integral management",
+        "reports": "Reports",
+        "map": "Map",
+        "agents": "Agents",
+        "users": "Users",
+        "cases": "Types of Cases",
+        "properties": "Properties"
       },
+      "graphical-insights-section": {
+        "graphical-tittle": "Report chart",
+        "report-bar": "Report bar",
+        "types-of-cases": "Types of cases",
+        "types-of-levels": "Cases by level",
+        "reports-per-month": "Timeline of reports",
+        "logout": "Logout"
+      }
+    },
     "dashboard-index": {
       "home": "Home",
       "number-reports": "Number of reports",
@@ -345,26 +345,25 @@
       "vandalized-cameras": "Vandalized Cameras"
     },
     "reports": {
+      "reports-of": "reports of - ",
       "reports-tittle": "Reports",
-      "reports-of": "Reports of - ",
       "add-report": "Add report",
-      "eddit-report": "",
       "new-report": {
         "add-report": "New report",
         "property": "Property",
-        "agent": "Monitoring agent",
+        "agent": "Agent",
         "date": "Date",
-        "time": "Hour",
+        "time": "Time",
         "incident": "Incident",
-        "level": "Case level",
-        "monitoring-team": "Monitoring Team",
-        "number-case": "Number of case",
-        "images": "images",
+        "level": "Level",
+        "monitoring-team": "Monitoring team",
+        "number-case": "Number case",
+        "images": "Images",
         "cancel": "Cancel",
         "send": "Send",
         "footer": {
           "information": "Information",
-          "evidences":  "Evidences"
+          "evidences": "Evidences"
         }
       }
     },

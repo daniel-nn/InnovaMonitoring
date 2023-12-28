@@ -1,5 +1,5 @@
 .header{
-    background-image: url('../../assets/images/Pages/Header/screen_2x\ \(2\).jpg'),  linear-gradient(rgba(6, 6, 6, 0.705),rgba(16, 16, 16, 0.708));
+    background-image: url('/src/assets/images/Pages/Header/screen_2x\ \(2\).jpg'),  linear-gradient(rgba(6, 6, 6, 0.705),rgba(16, 16, 16, 0.708));
     background-blend-mode: overlay;
     background-repeat: no-repeat;
     background-size: cover;    
@@ -50,11 +50,9 @@
 }
 
 .social2 {
-   
     display: flex;
     flex-direction: column;
-    align-items: start;
-   
+    align-items: flex-start;
     justify-content: space-between;
     height: 80px;
     margin-left: 20px;

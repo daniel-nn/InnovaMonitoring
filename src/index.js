@@ -11,12 +11,13 @@ import { ThemeProvider } from "@material-ui/core/styles";
 import { createTheme } from "@material-ui/core";
 import { UserProvider } from "./context/UserProvider";
 
-const idioma = navigator.language || navigator.userLanguage;
+const savedLanguage = localStorage.getItem('appLanguage');
+const browserLanguage = navigator.language || navigator.userLanguage;
+const language = savedLanguage || browserLanguage;
 
 i18next.init({
-  
   interpolation: { escapeValue: false },
-  lng: idioma,
+  lng: language,
   resources: {
     en: {
       global: global_en,
@@ -25,6 +26,10 @@ i18next.init({
       global: global_es,
     },
   },
+});
+
+i18next.on('languageChanged', (lng) => {
+  localStorage.setItem('appLanguage', lng);
 });
 
 const theme = createTheme({

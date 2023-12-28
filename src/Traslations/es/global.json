@@ -303,11 +303,11 @@
   "dashboard": {
     "dashboard-navbar": {
       "hi": "Hola,",
-        "user-profile": {
-      "profile":"Mi perfil",
-      "account": "Configuraciones de la cuenta",
-      "logout-button": "Cerrar sesión"
-    }
+      "user-profile": {
+        "profile": "Mi perfil",
+        "account": "Configuraciones de la cuenta",
+        "logout-button": "Cerrar sesión"
+      }
     },
     "dashboard-sliderbar": {
       "dashboard-section": {
@@ -315,7 +315,6 @@
         "home": "Inicio"
       },
       "integral-management-section": {
-
         "integral-tittle": "Gestión Integral",
         "reports": "Informes",
         "map": "Mapa",
@@ -324,7 +323,7 @@
         "cases": "Categoria de casos",
         "properties": "Propiedades"
       },
-      "graphical-insights-section":{
+      "graphical-insights-section": {
         "graphical-tittle": "Informes gráficos",
         "report-bar": "Barra de reportes",
         "types-of-cases": "Tipos de casos",
@@ -341,19 +340,18 @@
       "cameras-off": "Cámaras fuera de línea",
       "vandalized-cameras": "Cámaras vandalizadas"
     },
-    "reports":{
-      "reports-tittle": "Informes",
+    "reports": {
       "reports-of": "Reportes de - ",
-      "add-report": "Agregar informe",
-      "eddit-report": "",
+      "reports-tittle": "Informes",
+      "add-report": "Agregar reporte",
       "new-report": {
-        "add-report": "Nuevo informe",
+        "add-report": "Nuevo reporte",
         "property": "Propiedad",
-        "agent": "Agente de monitoreo",
-        "date": "Fecha",
-        "time": "Hora",
+        "agent": "Monitor",
+        "date": "Dia",
+        "time": "hora",
         "incident": "Incidente",
-        "level": "Nivel del caso",
+        "level": "Nivel",
         "monitoring-team": "Equipo de monitoreo",
         "number-case": "Numero de caso",
         "images": "Imagenes",
@@ -364,10 +362,7 @@
           "evidences": "Evidencias"
         }
       }
-
     },
-
     "footer": "Todos los derechos reservados por Innova Monitioring"
-    
   }
 }
