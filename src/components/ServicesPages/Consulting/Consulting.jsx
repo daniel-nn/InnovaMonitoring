@@ -4,6 +4,9 @@ import Navbar from "../../Navbar/Navbar";
 import Footer from "../../Footer/Footer";
 import { Link } from "react-router-dom";
 import { Button2 } from "../../button/button";
+import HeadShake from 'react-reveal/HeadShake';
+import Fade from "react-reveal/Fade";
+import Flash from 'react-reveal/Flash';
 import { useTranslation } from "react-i18next";
 import CTA from "../../CTA/CTA";
 const Consulting = () => {
@@ -17,74 +20,89 @@ const Consulting = () => {
           <div className="lg:flex lg:items-center">
             <div className="w-full space-y-12 lg:w-1/2 ">
               <div>
-                <h1 className="text-2xl font-semibold text-gray-800 capitalize lg:text-3xl ">
-                  {t("consulting.title")}
-                </h1>
-
+                <HeadShake>
+                  <h1 className="text-2xl font-semibold text-gray-800 capitalize lg:text-3xl ">
+                    {t("consulting.title")}
+                  </h1>
+                </HeadShake>
                 <div className="m">
-                  <span className="inline-block w-40 h-1 bg-yellow-600 rounded-full"></span>
-                  <span className="inline-block w-3 h-1 ml-1 bg-yellow-600 rounded-full"></span>
-                  <span className="inline-block w-1 h-1 ml-1 bg-yellow-600 rounded-full"></span>
+                  <Fade left>
+                    <span className="inline-block w-40 h-1 bg-yellow-600 rounded-full"></span>
+                  </Fade>
+                  <Fade left>
+                    <span className="inline-block w-3 h-1 ml-1 bg-yellow-600 rounded-full"></span>
+                  </Fade>
+                  <Fade left>
+                    <span className="inline-block w-1 h-1 ml-1 bg-yellow-600 rounded-full"></span>
+                  </Fade>
                 </div>
               </div>
 
               <div className="md:flex md:items-start md:-mx-4">
-                <span className="inline-block p-2 bg-yellow-600 bg-blue-100 rounded-xl md:mx-4 ">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-6 h-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                   
-                    
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
-                    />
-                  </svg>
-                </span>
+                <Fade left>
+                  <span className="inline-block p-2 bg-yellow-600 bg-blue-100 rounded-xl md:mx-4 ">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-6 h-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+                      />
+                    </svg>
+                  </span>
+                </Fade>
 
                 <div className="mt-4 md:mx-4 md:mt-0">
                   <h1 className="text-xl font-semibold text-gray-700 capitalize ">
-                    {t("consulting.Itemtitle1")}
+                    <Fade left>
+                      {t("consulting.Itemtitle1")}
+                    </Fade>
                   </h1>
-
-                  <p className=" text-gray-500 p-2">{t("consulting.ItemDesc1")}</p>
+                  <Fade left>
+                    <p className=" text-gray-500 p-2">{t("consulting.ItemDesc1")}</p>
+                  </Fade>
                 </div>
               </div>
 
               <div className="md:flex md:items-start md:-mx-4">
-                <span className="inline-block p-2 bg-yellow-600 bg-blue-100 rounded-xl md:mx-4  ">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-6 h-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
-                    />
-                  </svg>
-                </span>
-
+                <Fade left>
+                  <span className="inline-block p-2 bg-yellow-600 bg-blue-100 rounded-xl md:mx-4  ">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-6 h-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
+                      />
+                    </svg>
+                  </span>
+                </Fade>
                 <div className=" md:mx-4 md:mt-0">
                   <h1 className="text-xl font-semibold text-gray-700 capitalize ">
-                    {t("consulting.Itemtitle2")}
+                    <Fade left>
+                      {t("consulting.Itemtitle2")}
+                    </Fade>
                   </h1>
-
-                  <p className=" text-gray-500 p-2">{t("consulting.ItemDesc2")}</p>
+                  <Fade left>
+                    <p className=" text-gray-500 p-2">{t("consulting.ItemDesc2")}</p>
+                  </Fade>
                 </div>
               </div>
 
               <div className="md:flex md:items-start md:-mx-4">
+                <Fade left>
                 <span className="inline-block p-2 bg-yellow-600 bg-blue-100 rounded-xl md:mx-4 ">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -107,23 +125,25 @@ const Consulting = () => {
                     />
                   </svg>
                 </span>
+                </Fade>
 
                 <div className="md:mx-4 md:mt-0">
+                  <Fade left>
                   <h1 className="text-xl font-semibold text-gray-700 capitalize ">
                     {t("consulting.Itemtitle3")}
                   </h1>
-
+                  </Fade>
+                  <Fade left>
                   <p className=" text-gray-500 p-2">{t("consulting.ItemDesc3")} </p>
+                  </Fade>
                 </div>
               </div>
             </div>
 
             <div className="hidden lg:flex lg:items-center lg:w-1/2 lg:justify-center">
-              <img
-                className="w-[28rem] h-[28rem] object-cover xl:w-[34rem] xl:h-[34rem] rounded-full"
-                src={consulting}
-                alt="consulting"
-              />
+              <Fade right>
+              <img className="w-[28rem] h-[28rem] object-cover xl:w-[34rem] xl:h-[34rem] rounded-full" src={consulting} alt="consulting"/>
+              </Fade>
             </div>
           </div>
 

@@ -199,7 +199,12 @@
     "required_fields": "All fields are requiered",
     "acount_yet": "Don't have an account yet?",
     "join_us": "Join us!",
-    "IDS": "Log into our dashboard."
+    "IDS": "Log into our dashboard.",
+    "swal-fire": {
+      "properties-don't-assigned": "the user does not have any properties assigned",
+      "empty-text": "",
+      "resolution-higher-900px": "To access the portal you must enter from a computer with a resolution equal to or greater than 900px."
+    }
   },
   "buttons": {
     "contact": "CONTACT US",
@@ -361,6 +366,10 @@
         "images": "Images",
         "cancel": "Cancel",
         "send": "Send",
+        "swal": {
+          "empty": "",
+          "edit": "Report has been successfully saved"
+        },
         "footer": {
           "information": "Information",
           "evidences": "Evidences"

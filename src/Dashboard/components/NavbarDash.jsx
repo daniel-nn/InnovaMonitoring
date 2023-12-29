@@ -69,9 +69,7 @@ const Navbar = () => {
 
 
   return (
-
     <div className="flex justify-between p-2 md:ml-6 md:mr-6 relative">
-
       <NavButton title="Menu" customFunc={handleActiveMenu} color={currentColor} icon={<AiOutlineMenu />} />
       <div className="flex">
         <button
@@ -87,8 +85,7 @@ const Navbar = () => {
           ESP
         </button>
         <NavButton title="Property" customFunc={() => handleClick('cart')} color={currentColor} icon={<BsBuildings />} />
-        <NavButton title="Chat" dotColor="red" customFunc={() => handleClick('chat')} color={currentColor} icon={<BsChatLeft />} />
-
+        {/* <NavButton title="Chat" dotColor="red" customFunc={() => handleClick('chat')} color={currentColor} icon={<BsChatLeft />} /> */}
         <TooltipComponent content="Profile" position="BottomCenter">
           <div className="flex items-center gap-2 cursor-pointer p-1 hover:bg-light-gray rounded-lg mt-2" onClick={() => handleClick('userProfile')}>
             <p className='p-0'>

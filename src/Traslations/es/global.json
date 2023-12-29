@@ -199,7 +199,12 @@
     "required_fields": "Todos los campos son requeridos.",
     "acount_yet": "¿aun no tienes cuenta?",
     "join_us": "¡unete!",
-    "IDS": "Inicia sesión en nuestro Dashboard"
+    "IDS": "Inicia sesión en nuestro Dashboard",
+      "swal-fire":{
+        "properties-don't-assigned": "El usuario no tiene ninguna propiedad asignada",
+        "empty-text": "",
+        "resolution-higher-900px": "Para acceder al portal deberá ingresar desde una computadora con una resolución igual o superior a 900px."
+      }
   },
   "buttons": {
     "contact": "CONTACTO",
@@ -224,7 +229,7 @@
       "other": "Otros",
       "tell_us": "Cuéntennos, ¿que es lo mas importante para ti en el servicio de monitoreo?",
       "text_box": "Obtener información precisa y en tiempo real sobre los eventos que ocurran en mi propiedad en cualquier momento.",
-      "oneAtLeast": "Selecciona al menos un motivo que lo inspire a aprovechar nuestras soluciones excepcionales"
+      "oneAtLeast": "Selecciona al menos un motivo que lo inspire a aprovechar nuestras soluciones"
     },
     "multiple_step_form": {
       "step_one": "Primer paso",
@@ -349,7 +354,7 @@
         "property": "Propiedad",
         "agent": "Monitor",
         "date": "Dia",
-        "time": "hora",
+        "time": "Hora",
         "incident": "Incidente",
         "level": "Nivel",
         "monitoring-team": "Equipo de monitoreo",
@@ -357,6 +362,10 @@
         "images": "Imagenes",
         "cancel": "Cancelar",
         "send": "Enviar",
+        "swal": {
+          "empty": "",
+          "edit": "El informe se ha guardado correctamente."
+        },
         "footer": {
           "information": "Información",
           "evidences": "Evidencias"

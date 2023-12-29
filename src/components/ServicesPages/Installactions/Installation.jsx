@@ -16,6 +16,8 @@ import smartPSS from "../../../assets/images/Logos/smartPSS.jpg";
 import vms from "../../../assets/images/Logos/vms.png";
 import techTeam from "../../../assets/images/ServicesPages/Installation/tech-team.jpg";
 import { useTranslation } from "react-i18next";
+import Fade from "react-reveal/Fade";
+import HeadShake from 'react-reveal/HeadShake';
 import CTA from "../../CTA/CTA";
 
 const Installation = () => {
@@ -25,87 +27,114 @@ const Installation = () => {
       <Navbar efecto="efecto2"></Navbar>
       <section className="bg-white dark:bg-gray-900">
         <div className="container px-12 py-10 mx-auto">
-          <h1 className="text-2xl font-semibold text-gray-800 capitalize lg:text-3xl dark:text-white">
-            {t("support.support")}
-          </h1>
-
+          <HeadShake>
+            <h1 className="text-2xl font-semibold text-gray-800 capitalize lg:text-3xl dark:text-white">
+              {t("support.support")}
+            </h1>
+          </HeadShake>
           <div className="mt-2">
-            <span className="inline-block w-40 h-1 bg-yellow-600 rounded-full"></span>
-            <span className="inline-block w-3 h-1 ml-1 bg-yellow-600 rounded-full"></span>
-            <span className="inline-block w-1 h-1 ml-1 bg-yellow-600 rounded-full"></span>
+            <Fade left>
+              <span className="inline-block w-40 h-1 bg-yellow-600 rounded-full"></span>
+            </Fade>
+            <Fade left>
+              <span className="inline-block w-3 h-1 ml-1 bg-yellow-600 rounded-full"></span>
+            </Fade>
+            <Fade left>
+              <span className="inline-block w-1 h-1 ml-1 bg-yellow-600 rounded-full"></span>
+            </Fade>
           </div>
 
           <div className="mt-8 xl:mt-12 lg:flex lg:items-center">
             <div className="grid w-full grid-cols-1 gap-8 lg:w-2/3 xl:gap-16 md:grid-cols-2 ">
               <div className="space-y-3">
-                <span className="inline-block p-3 text-yellow-600 bg-gray-100 rounded-xl dark:text-white dark:bg-yellow-600">
-                  <BiSupport className="w-8 h-8 p-0 object-cover"></BiSupport> 
-                </span>
-
-                <h1 className="text-xl font-semibold text-gray-700 capitalize dark:text-white">
-                  {t("support.title1")}
-                </h1>
-
-                <p className="text-gray-500 dark:text-gray-300">
-                  {t("support.item1Desc")}
-                </p>
+                <Fade top>
+                  <span className="inline-block p-3 text-yellow-600 bg-gray-100 rounded-xl dark:text-white dark:bg-yellow-600">
+                    <BiSupport className="w-8 h-8 p-0 object-cover"></BiSupport>
+                  </span>
+                </Fade>
+                <Fade left>
+                  <h1 className="text-xl font-semibold text-gray-700 capitalize dark:text-white">
+                    {t("support.title1")}
+                  </h1>
+                  <p className="text-gray-500 dark:text-gray-300">
+                    {t("support.item1Desc")}
+                  </p>
+                </Fade>
               </div>
 
               <div className="space-y-3">
-                <span className="inline-block p-3 text-yellow-600 bg-gray-100 rounded-xl dark:text-white dark:bg-yellow-600">
-                  <MdOutlineInstallDesktop className="w-8 h-8 p-0 object-cover"></MdOutlineInstallDesktop>
-                </span>
+                <Fade top>
+                  <span className="inline-block p-3 text-yellow-600 bg-gray-100 rounded-xl dark:text-white dark:bg-yellow-600">
+                    <MdOutlineInstallDesktop className="w-8 h-8 p-0 object-cover"></MdOutlineInstallDesktop>
+                  </span>
+                </Fade>
+                <Fade right>
+                  <h1 className="text-xl font-semibold text-gray-700 capitalize dark:text-white">
+                    {t("support.title2")}
+                  </h1>
 
-                <h1 className="text-xl font-semibold text-gray-700 capitalize dark:text-white">
-                  {t("support.title2")}
-                </h1>
-
-                <p className="text-gray-500 dark:text-gray-300">
-                  {t("support.item2Desc")}
-                </p>
+                  <p className="text-gray-500 dark:text-gray-300">
+                    {t("support.item2Desc")}
+                  </p>
+                </Fade>
               </div>
 
               <div className="space-y-3">
-                <span className="inline-block p-3 text-yellow-600 bg-gray-100 rounded-xl dark:text-white dark:bg-yellow-600">
-                  <BsCameraVideo className="w-8 h-8 p-0 object-cover"></BsCameraVideo>
-                </span>
-
-                <h1 className="text-xl font-semibold text-gray-700 capitalize dark:text-white">
-                  {t("support.title3")}
-                </h1>
-
-                <p className="text-gray-500 dark:text-gray-300">
-                  {t("support.item3Desc")}
-                </p>
+                <Fade top>
+                  <span className="inline-block p-3 text-yellow-600 bg-gray-100 rounded-xl dark:text-white dark:bg-yellow-600">
+                    <BsCameraVideo className="w-8 h-8 p-0 object-cover"></BsCameraVideo>
+                  </span>
+                </Fade>
+                <Fade right>
+                  <h1 className="text-xl font-semibold text-gray-700 capitalize dark:text-white">
+                    {t("support.title3")}
+                  </h1>
+                  <p className="text-gray-500 dark:text-gray-300">
+                    {t("support.item3Desc")}
+                  </p>
+                </Fade>
               </div>
 
               <div className="space-y-3">
-                <span className="inline-block p-3 text-yellow-600 bg-gray-100 rounded-xl dark:text-white dark:bg-yellow-600">
-                  <MdUpdate className="w-8 h-8 p-0 object-cover"></MdUpdate>
-                </span>
+                <Fade top>
+                  <span className="inline-block p-3 text-yellow-600 bg-gray-100 rounded-xl dark:text-white dark:bg-yellow-600">
+                    <MdUpdate className="w-8 h-8 p-0 object-cover"></MdUpdate>
+                  </span>
+                </Fade>
+                <Fade right>
+                  <h1 className="text-xl font-semibold text-gray-700 capitalize dark:text-white">
+                    {t("support.title4")}
+                  </h1>
 
-                <h1 className="text-xl font-semibold text-gray-700 capitalize dark:text-white">
-                  {t("support.title4")}
-                </h1>
-
-                <p className="text-gray-500 dark:text-gray-300">
-                  {t("support.item4Desc")}
-                </p>
+                  <p className="text-gray-500 dark:text-gray-300">
+                    {t("support.item4Desc")}
+                  </p>
+                </Fade>
               </div>
             </div>
 
             <div className="hidden lg:flex lg:w-1/2 lg:justify-center">
-              <img className="w-[28rem] h-[28rem] flex-shrink-0 object-cover  rounded-full" src={techTeam} alt="techTeam"/>
+              <Fade right>
+                <img className="w-[28rem] h-[28rem] flex-shrink-0 object-cover  rounded-full" src={techTeam} alt="techTeam" />
+              </Fade>
             </div>
           </div>
           <hr className="my-12 border-gray-200 dark:border-gray-700" />
-          <h1 className="text-2xl font-semibold text-gray-800 capitalize lg:text-3xl dark:text-white">
-            {t("support.softwares")}
-          </h1>
+          <Fade left>
+            <h1 className="text-2xl font-semibold text-gray-800 capitalize lg:text-3xl dark:text-white">
+              {t("support.softwares")}
+            </h1>
+          </Fade>
           <div className="mt-2">
-            <span className="inline-block w-40 h-1 bg-yellow-600 rounded-full"></span>
-            <span className="inline-block w-3 h-1 ml-1 bg-yellow-600 rounded-full"></span>
-            <span className="inline-block w-1 h-1 ml-1 bg-yellow-600 rounded-full"></span>
+            <Fade left>
+              <span className="inline-block w-40 h-1 bg-yellow-600 rounded-full"></span>
+            </Fade>
+            <Fade left>
+              <span className="inline-block w-3 h-1 ml-1 bg-yellow-600 rounded-full"></span>
+            </Fade>
+            <Fade left>
+              <span className="inline-block w-1 h-1 ml-1 bg-yellow-600 rounded-full"></span>
+            </Fade>
           </div>
           <hr className="my-8 border-gray-200 dark:border-gray-700" />
           <Swiper
@@ -131,7 +160,7 @@ const Installation = () => {
             </SwiperSlide>
             <SwiperSlide>
               <div className="flex flex-col items-center justify-center col-span-1 md:col-span-2 lg:col-span-1">
-                <img className="w-28 h-16 object-contain" src={OpenEye} alt="OpenEye"/>
+                <img className="w-28 h-16 object-contain" src={OpenEye} alt="OpenEye" />
                 <span className=" text-gray-600 text-sm">Open Eye</span>
               </div>
             </SwiperSlide>
@@ -150,7 +179,7 @@ const Installation = () => {
           </Swiper>
         </div>
       </section>
-      
+
       <CTA></CTA>
       <Footer></Footer>
     </>

@@ -15,7 +15,6 @@ const AboutPage = () => {
     color: "#ebedef",
     fontSize: "60px",
   };
-  console.log()
   const [t] = useTranslation("global");
 
   return (

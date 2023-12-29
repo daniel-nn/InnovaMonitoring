@@ -1,6 +1,8 @@
 
 import React from 'react'
 import Swal from 'sweetalert2';
+import { useTranslation } from "react-i18next"; 
+
 
 export const postReport = async(report) => {
 
@@ -24,7 +26,6 @@ export const postReport = async(report) => {
         icon: 'success',
         title: 'Success',
         text:"Report has been successfully saved",
-  
       })
    } catch (error) {
     Swal.fire({

@@ -63,7 +63,7 @@ const Login = () => {
   
     } 
   }else{
-    Swal.fire('Warning', 'To access the portal you must enter from a computer with a resolution equal to or greater than 900px.', 'info')
+    Swal.fire(t("login.swal-fire.empty-text"), t("login.swal-fire.resolution-higher-900px"), 'info')
     navigate("/")
   }
  

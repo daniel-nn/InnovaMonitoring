@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import "./style.css";
-import  Sidebar  from "./components/Sidebar/Sidebar.jsx";
+import Sidebar from "./components/Sidebar/Sidebar.jsx";
 import { FooterDash, NavbarDash } from "./components";
 import { UserContext } from "../context/UserContext";
 import { useStateContext } from "../context/ContextProvider";
@@ -11,24 +11,27 @@ const Dashboard = () => {
   const { activeMenu } = useStateContext();
   const { propertyContext, setPropertyContext } = useContext(UserContext);
   const navigate = useNavigate();
-  const propertyStorage = JSON.parse(localStorage.getItem("propertySelected"));
 
-/*   if(!propertyStorage.id){
-    alert("Hola")
-    navigate("/")
-  } */
+  // Asumiendo que "propertySelected" está correctamente almacenado en localStorage
+  const propertyStorage = JSON.parse(localStorage.getItem("propertySelected")) || {};
+  const propertyId = propertyStorage.id || 0;
+  const { property, isLoading } = useFetchProperty(propertyId, navigate);
 
-  const propertyid = propertyStorage.id || 0;
-  const { property, isLoading } = useFetchProperty(propertyid, navigate);
+  // Use useEffect para manejar efectos basados en el cambio de propiedades
+  useEffect(() => {
+    // Si propertyContext está vacío y property tiene datos, actualiza el context
+    if (Object.keys(propertyContext).length === 0 && Object.keys(property).length > 0) {
+      setPropertyContext(property);
+    }
+    if (!propertyId) {
+      navigate("/");
+    }
+  }, [property, propertyContext, setPropertyContext, navigate, propertyId]);
 
-
-  if (Object.keys(propertyContext).length === 0) {
-    setPropertyContext(property);
-  }
 
   return (
     <div className="flex relative dark:bg-main-dark-bg">
-      {/*  <div className="fixed right-4 bottom-4" style={{ zIndex: "1000" }}>
+       {/* <div className="fixed right-4 bottom-4" style={{ zIndex: "1000" }}>
         <TooltipComponent content="Settings" position="Top">
           <button
             type="button"

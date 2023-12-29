@@ -22,6 +22,7 @@ import { verifyReport } from "../helper/verifyReport";
 import { getReportId } from "../helper/getReportId";
 import { deleteItem } from "../helper/delete";
 import Swal from "sweetalert2";
+import { useTranslation } from "react-i18next";
 
 let url = `${process.env.REACT_APP_SERVER_IP}/reports`;
 let noImages = [
@@ -36,6 +37,7 @@ let noImages = [
 let images = [];
 let videos = [];
 export const ReportDatails = () => {
+  const [t] = useTranslation("global");
   let dataImages = [];  
   let dataVideos = [];  
   const navigate = useNavigate();
