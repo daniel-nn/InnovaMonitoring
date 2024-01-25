@@ -13,7 +13,7 @@ const AchievementsSection = () => {
     return (
 
         <div className="container mx-auto text-center lg:px-8 margin ">
-            <div className="container text-center">
+            <div className="flex justify-center items-center h-full margin-title">
                 <Fade top>
                     <h1 className="tittle">{t("achievments.tittle")}</h1>
                 </Fade>

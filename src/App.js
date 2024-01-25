@@ -34,7 +34,7 @@ import React, { useEffect } from "react";
 function App() {
 
 
-// No activar wrapper, genera un error al entrar al dashboard
+// No activar wrapper, genera un error al entrar al dashboard, (apaga el equipo)
   // const Wrapper = ({ children }) => {
   //   const location = useLocation();
   //   useEffect(() => {
@@ -42,6 +42,7 @@ function App() {
   //   }, [location.pathname]);
   //   return children;
   // };
+  
   const {userLogged} = useContext(UserContext);
   return (
       <BrowserRouter>

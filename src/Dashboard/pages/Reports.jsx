@@ -10,7 +10,6 @@ import { Dialog } from "primereact/dialog";
 import { useNavigate } from "react-router-dom";
 import { FooterReportForm } from "../components/Forms/FooterReportForm/FooterReportForm";
 import { ReportFormEvidences } from "../components/Forms/ReportFormEvidences";
-import useFetchProperties from "../Hooks/useFetchProperties";
 import { useFetchIncidents } from "../Hooks/useFetchIncidents";
 import { useFetchAgents } from "../Hooks/useFetchAgents";
 import { GetReports } from "../helper/GetReports";
@@ -40,35 +39,70 @@ const Reports = () => {
   let userRole = user.rol?.rolName || "";
   let idStorage = propertyStorage.id;
   let id = propertyContext.id || idStorage;
-  useEffect(() => {
+  const [t, i18n] = useTranslation("global");
+  const [clientGridColumns, setClientGridColumns] = useState([]);
+  const [adminGridColumns, setAdminGridColumns] = useState([]); // Estado para las columnas de admin
+  const [activeIndex, setActiveIndex] = useState(0);
 
-    GetReports(propertyContext.id || id, userRole ).then((data) => {
+  // Función para abrir el formulario
+  const openForm = () => {
+    setReportFormVisible(true);
+    setActiveIndex(0); 
+  };
+  // Función para cerrar el formulario
+  const closeForm = () => {
+    setReportFormVisible(false);
+    setReportForm({}); // Limpia el formulario
+    setActiveIndex(0); // Restablece el paso activo
+  };
+
+  useEffect(() => {
+    const updateAdminColumns = () => {
+      setAdminGridColumns(reportsGridAdmin(t));
+    };
+    const updateClientColumns = () => {
+      setClientGridColumns(reportsGrid(t)); 
+    };
+    GetReports(propertyContext.id || id, userRole).then((data) => {
       if (userRole == "Admin") {
         setReportes(data);
+        updateAdminColumns();
       }
-
       if (userRole == "Client") {
         let verifiedReports = data.filter((rep) => rep.isVerified);
         setReportes(verifiedReports);
+        updateClientColumns();
       }
     });
-    
-  }, [propertyContext, reportSaved]);
+    const updateColumns = () => {
+      if (userRole === "Admin") {
+        setAdminGridColumns(reportsGridAdmin(t));
+      } else if (userRole === "Client") {
+        setClientGridColumns(reportsGrid(t));
+      }
+    };
+    i18n.on('languageChanged', updateColumns);
+    updateColumns();
+    return () => {
+      i18n.off('languageChanged', updateColumns);
+    };
+  }, [t, i18n.language, propertyContext, reportSaved]);
 
-  const [t] = useTranslation("global");
 
+  
   return (
 
     <>
       <Dialog
-        header={t("dashboard.reports.new-report.add-report")} 
+        header={t("dashboard.reports.new-report.add-report")}
         visible={reportFormVisible}
         style={{ width: "50vw" }}
-        onHide={() => {
-          setReportFormVisible(false);
-          setReportForm({});
-        }}
-        footer={<FooterReportForm setInformation={setInformation} />}
+        onHide={closeForm}
+        footer={<FooterReportForm
+          setInformation={setInformation}
+          activeIndex={activeIndex}
+          setActiveIndex={setActiveIndex}
+        />}
       >
         {information ? (
           <ReportForm
@@ -86,14 +120,18 @@ const Reports = () => {
       </Dialog>
 
       <Dialog
-        header="Edit Report"
+        header={t("dashboard.reports.edit-report.edit-tittle")}
         visible={editReportFormVisible}
         style={{ width: "50vw" }}
         onHide={() => {
           setEditReportFormVisible(false);
           setReportForm({});
         }}
-        footer={<FooterReportForm setInformation={setInformation} />}
+        footer={<FooterReportForm
+          setInformation={setInformation}
+          activeIndex={activeIndex}
+          setActiveIndex={setActiveIndex} // Esto es crítico para evitar el error
+        />}
       >
         {information ? (
           <ReportFormEdit
@@ -128,6 +166,7 @@ const Reports = () => {
         {/* Esta es la tabla */}
         <GridComponent
           id="gridcomp"
+          key={i18n.language}
           dataSource={reportes}
           allowPaging
           allowSorting
@@ -139,10 +178,10 @@ const Reports = () => {
           <ColumnsDirective>
             {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             {userRole === "Admin"
-              ? reportsGridAdmin.map((item, index) => (
+              ? adminGridColumns.map((item, index) => (
                 <ColumnDirective key={index} {...item} />
               ))
-              : reportsGrid.map((item, index) => (
+              : clientGridColumns.map((item, index) => (
                 <ColumnDirective key={index} {...item} />
               ))}
           </ColumnsDirective>

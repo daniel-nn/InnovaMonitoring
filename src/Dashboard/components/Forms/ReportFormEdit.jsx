@@ -1,13 +1,14 @@
 import React, { useContext, useState } from "react";
-
 import { InputText } from "primereact/inputtext";
 import { InputNumber } from "primereact/inputnumber";
 import { Dropdown } from "primereact/dropdown";
 import { Calendar } from "primereact/calendar";
 import { UserContext } from "../../../context/UserContext";
+import { useTranslation } from "react-i18next";
+
 
 export const ReportFormEdit = ({properties, agents, incidents}) => {
-
+  const [t] = useTranslation("global");
   const { reportForm, setReportForm } = useContext(UserContext);
   const { property, agent, date, time, caseType, evidences,level, company, numerCase, images, videos} = reportForm;
 
@@ -48,7 +49,7 @@ let fecha2 = new Date(`09-24-2023 ${time}:00`)
             options={properties}
             optionLabel="name" 
          /*    optionValue="name" */
-            placeholder="Property"
+            placeholder={t("dashboard.reports.edit-report.property")}
             className="w-full md:w-14rem"
           />
 
@@ -66,7 +67,7 @@ let fecha2 = new Date(`09-24-2023 ${time}:00`)
             })}
             options={agentsList}
             optionLabel="name"
-            placeholder="Monitoring Agents"
+            placeholder={t("dashboard.reports.edit-report.agent")}
             className="w-full md:w-14rem"
           />
         </div>
@@ -78,7 +79,7 @@ let fecha2 = new Date(`09-24-2023 ${time}:00`)
             <i className="pi pi-clock"></i>
           </span>
           <Calendar
-            placeholder="Date"
+            placeholder={t("dashboard.reports.edit-report.date")}
             value={fecha}
             onChange={(e) => setReportForm((i) => {
              
@@ -92,7 +93,7 @@ let fecha2 = new Date(`09-24-2023 ${time}:00`)
             <i className="pi pi-user"></i>
           </span>
           <Calendar
-            placeholder="Time"
+            placeholder={t("dashboard.reports.edit-report.time")}
             value={fecha2}
             onChange={(e) =>  {
               console.log(e.value)
@@ -116,7 +117,7 @@ let fecha2 = new Date(`09-24-2023 ${time}:00`)
             })}
             options={incidents}
             optionLabel="incident"
-            placeholder="Incident"
+            placeholder={t("dashboard.reports.edit-report.incident")}
             className="w-full md:w-14rem"
           />
         </div>
@@ -131,7 +132,7 @@ let fecha2 = new Date(`09-24-2023 ${time}:00`)
               return { ...reportForm, level:e.value };
             })}
             options={levels}
-            placeholder="Level"
+            placeholder={t("dashboard.reports.edit-report.level")}
             className="w-full md:w-14rem"
           />
         </div>
@@ -150,7 +151,7 @@ let fecha2 = new Date(`09-24-2023 ${time}:00`)
               return { ...reportForm, company:e.target.value };
             })}
             options={team}
-            placeholder="Monitoring Team"
+            placeholder={t("dashboard.reports.edit-report.monitoring-team")}
             className="w-full md:w-14rem"
           />
         </div>
@@ -161,7 +162,7 @@ let fecha2 = new Date(`09-24-2023 ${time}:00`)
           </span>
           <InputText value={numerCase} onChange={(e) => setReportForm((i) => {
               return { ...reportForm, numerCase:e.target.value };
-            })} placeholder="Number Case" />
+          })} placeholder={t("dashboard.reports.edit-report.number-case")} />
         </div>
       </div>
     </div>

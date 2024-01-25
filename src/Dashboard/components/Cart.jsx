@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import { MdOutlineCancel } from "react-icons/md";
-
 import { Button } from ".";
 import { chatData } from "../data/dummy";
 import { useStateContext } from "../../context/ContextProvider";
@@ -29,7 +28,7 @@ const Chat = ({ properties }) => {
     <div className="nav-item absolute z-10 overflow-visible right-5 md:right-52 top-16 bg-white dark:bg-[#42464D] p-8 rounded-lg w-96">
       <div className="flex justify-between items-center">
         <div className="flex gap-3">
-          <p className="font-semibold text-lg dark:text-gray-200">Properties</p>
+          <p className="font-semibold text-lg dark:text-gray-200">Properties</p>  {/*acá falta traducir*/}
           <button
             type="button"
             className="text-white  text-xs rounded p-1 px-2 bg-orange"

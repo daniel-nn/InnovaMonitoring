@@ -4,6 +4,7 @@ import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { UserContext } from "../../../context/UserContext";
 import { postReport } from "../../helper/postReport";
+import { useTranslation } from "react-i18next";
 
 export const ReportFormEvidencesEdit = ({
   reportFormVisible,
@@ -15,6 +16,7 @@ export const ReportFormEvidencesEdit = ({
   const { pdf, images, videos, evidences } = reportForm;
 const [imageInput, setImageInput] = useState("")
 const [videosInput, setVideosInput] = useState("")
+  const [t] = useTranslation("global");
   let imagenesEvidence = evidences?.filter((evi) => evi.name == "Img");
   let videosEvidence = evidences?.filter((evi) => evi.name == "Vid");
   imagenesEvidence = imagenesEvidence?.map((i) => i.link);
@@ -145,7 +147,7 @@ console.log("Evidences")
           onChange={(e) =>
            setImageInput(e.target.value)
           }
-          placeholder="Images"
+          placeholder={t("dashboard.reports.edit-report.images")}
           rows={5}
           cols={30}
         />

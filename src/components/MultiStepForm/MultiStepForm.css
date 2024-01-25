@@ -8,3 +8,11 @@
  -webkit-background-clip: text;
  -webkit-text-fill-color: transparent;
 }
+
+.custom-height {
+  height: 2.5rem; /* o cualquier otra altura que funcione bien con tu diseño */
+}
+
+.custom-margin{
+  margin-left: 5%;
+}

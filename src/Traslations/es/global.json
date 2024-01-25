@@ -78,8 +78,8 @@
     "click_here": "¡Haga click aqui!",
     "location": "Nuestra ubicación",
     "locationDesc": "Sabaneta, Antioquia",
-    "phone": "Teléfono",
-    "phoneNumber": "(en espera del numero)",
+    "phone": "Numero teléfonico",
+    "phoneNumber": "+57 300 6304401",
     "Email": "Correo Electrónico",
     "EmailAdress": "info@innovatechcorp.net",
     "name_form": "Nombre",
@@ -200,11 +200,11 @@
     "acount_yet": "¿aun no tienes cuenta?",
     "join_us": "¡unete!",
     "IDS": "Inicia sesión en nuestro Dashboard",
-      "swal-fire":{
-        "properties-don't-assigned": "El usuario no tiene ninguna propiedad asignada",
-        "empty-text": "",
-        "resolution-higher-900px": "Para acceder al portal deberá ingresar desde una computadora con una resolución igual o superior a 900px."
-      }
+    "swal-fire": {
+      "properties-don't-assigned": "El usuario no tiene ninguna propiedad asignada",
+      "empty-text": "",
+      "resolution-higher-900px": "Para acceder al portal deberá ingresar desde una computadora con una resolución igual o superior a 900px."
+    }
   },
   "buttons": {
     "contact": "CONTACTO",
@@ -226,6 +226,7 @@
       "compliance_with_regulations": "Cumplimiento de las normas",
       "theft_prevention": "Prevención de robos",
       "protection_of_assets": "Protección de activos de alto valor",
+      "remote-monitoring": "Monitoreo Remoto de Activos",
       "other": "Otros",
       "tell_us": "Cuéntennos, ¿que es lo mas importante para ti en el servicio de monitoreo?",
       "text_box": "Obtener información precisa y en tiempo real sobre los eventos que ocurran en mi propiedad en cualquier momento.",
@@ -243,8 +244,61 @@
       "hours": "Horas",
       "number_cameras": "Ingresa el número de cámaras a monitorear.",
       "hours_monitoring": "Horas de monitoreo por dia",
-      "cameras_property": "¿Actualmente cuentas con camaras en tu propiedad?",
-      "property_internet": "¿Tu propiedad cuenta con servicio de internet?"
+      "cameras-property": {
+        "cameras-in-property": "¿Actualmente cuentas con camaras en tu propiedad?",
+        "existing-cameras": "¿Cuantas camaras?",
+        "camera-type": {
+          "camera-type-tittle": "Tipo de camara",
+          "camera-type-ip": "Camar Ip (Digital)",
+          "camera-type-analog": "Analoga"
+        },
+        "camera-brand": {
+          "title": "Marca de las cámaras",
+          "placeholder": "Ingrese la marca"
+        }
+      },
+      "property-internet": {
+        "property-internet-tittle": "¿Tu propiedad cuenta con servicio de internet?",
+        "internet-speed": {
+          "title": "¿cual es tu velocidad de internet?",
+          "placeholder": "Velocidad de internet",
+          "options": {
+            "0-50mbps": "0-50 mbps",
+            "50-100mbps": "50-100 mbps",
+            "100-200mbps": "100-200 mbps",
+            "200-500mbps": "200-500 mbps",
+            "500-900mbps": "500-900 mbps",
+            "more-1gb": "Más de 1 gb"
+          }
+        },
+        "internet-provider": {
+          "title": "Compañía de internet",
+          "placeholder": "Escribe tu compañía de internet",
+          "options": {
+            "CenturyLink": "CenturyLink",
+            "AT&T": "AT&T",
+            "GoogleFiber": "Google Fiber",
+            "Verizon": "Verizon",
+            "Xfinity": "Xfinity",
+            "Spectrum": "Spectrum",
+            "Cox": "Cox",
+            "Optimum": "Optimum",
+            "Tigo": "Tigo",
+            "Movistar": "Movistar",
+            "Claro": "Claro",
+            "ETB": "ETB",
+            "otros": "Otros"
+          }
+        },
+        "locations-count": "¿Cuántas ubicaciones?",
+        "type-of-internet": {
+          "title": "¿El internet es compartido o dedicado para las cámaras?",
+          "placeholder": "Tipo de internet",
+          "shared": "Compartido",
+          "dedicated": "Dedicado"
+        }
+      },
+      "control-acces": "¿Cuentas con control de acceso?"
     },
     "personal_section": {
       "name_label": "Primer nombre",
@@ -254,17 +308,50 @@
       "country_label": "Pais",
       "country_placeholder": "Ingresa tu pais",
       "state_label": "Estado",
-      "state_placeholder": "Ingresa tu estado/departamento"
+      "state_placeholder": "Ingresa tu estado/departamento",
+      "city-label": "Ciudad",
+      "city-placeholder": "Ingresa tu ciudad"
     },
-    "property_section": {
-      "property_header": "Tipo de propiedad",
-      "property_placeholder": "Seleccione el tipo de propiedad",
-      "property_type_list1": "Complejo residencial",
-      "property_type_list2": "Edificio",
-      "property_type_list3": "Fábrica o almacén",
-      "property_type_list4": "Propiedad en construccion",
-      "property_type_list5": "Casa",
-      "property_type_list6": "Otro",
+    "property-section": {
+      "property-type":{
+        "property-header": "Tipo de propiedad",
+        "property-placeholder": "Seleccione el tipo de propiedad",
+        "property-type-list1": "Complejo residencial",
+        "property-type-list2": "Edificio comercial",
+        "property-type-list3": "Fábrica o almacén",
+        "property-type-list4": "Propiedad en construccion",
+        "property-type-list5": "Casa",
+        "property-type-list6": "Sitio de construcción",
+        "property-type-list7": "Negocio",
+        "property-type-list8": "Guarderia",
+        "property-type-list9": "Sitios del gobierno",
+        "property-type-list10": "Escuelas o universidades",
+        "property-type-list11": "Otro"
+      },
+      "residential": {
+        "property-detail-label": "Tipo de complejo residencial",
+        "property-detail-placeholder": "Ingrese el tipo de complejo recidencial",
+        "Govermental": "propiedad del gobierno",
+        "hud-property": "HUD",
+        "section-8": "Propiedad seccion 8",
+        "private-property": "Propiedad privada",
+        "units-label": "¿Cuántas unidades tiene la propiedad?",
+        "units-placeholder": "¿Cuántas unidades tiene la propiedad?"
+      },
+      "construction": {
+        "construction-type-label": "Tipo de construccion",
+        "construction-type-placeholder": "Tipo de construccion",
+        "type": {
+          "building": "Edificio",
+          "home": "Casa",
+          "business": "Negocio",
+          "other": "Otro"
+        }
+      },
+      "business": {
+        "business-type-label": "Tipo de negocio",
+        "business-type-placeholder": "¿Cual es tu tipo de negocio?"
+      },
       "property_name_label": "Nombre de la propiedad",
       "property_name_placeholder": "Ingresa el nombre de la propiedad",
       "property_address_label": "Direccion de la propiedad",
@@ -274,6 +361,7 @@
       "empty_property_text": "Selecciona un tipo de propiedad"
     },
     "contact_section": {
+      "title": "Datos de contacto",
       "e_mail_label": "Correo electrónico",
       "e_mail_placeholder": "Ingresa tu correo electrónico",
       "phone_number_label": "Numero de celular",
@@ -289,7 +377,8 @@
       "back": "Anterior",
       "next": "Siguiente",
       "finish": "Finalizar",
-      "back_home": "volver al inicio"
+      "back_home": "volver al inicio",
+      "recaptcha": "Por favor, verifica que no eres un robot."
     }
   },
   "not_found": {
@@ -301,7 +390,7 @@
   },
   "achievments": {
     "tittle": "Reconocimientos y logros",
-    "paragraph": "Innova Monitoring se enorgullece de sus distinguidos logros y reconocimientos, exhibiendo una rica historia de colaboración con prestigiosas entidades de seguridad como la DEA y el FBI. Nuestro compromiso con la excelencia nos ha valido el reconocimiento de agencias de aplicación de la ley. Explore nuestros premios y hitos, un testimonio de nuestra dedicación inquebrantable a soluciones de seguridad de vanguardia.",
+    "paragraph": "Innova Monitoring se enorgullece de sus distinguidos logros y reconocimientos, exhibiendo una rica historia de colaboración con prestigiosas entidades de seguridad. Nuestro compromiso con la excelencia nos ha valido el reconocimiento de agencias de aplicación de la ley. Explore nuestros premios y hitos, un testimonio de nuestra dedicación inquebrantable a soluciones de seguridad de vanguardia.",
     "paragraph2": "Al empoderar a las fuerzas del orden, nuestros esfuerzos de colaboración con las entidades policiales han sido fundamentales para mejorar las medidas de seguridad. Juntos, hemos logrado hitos en la creación de comunidades más seguras a través de soluciones de vanguardia y asociaciones estratégicas.",
     "tittle_carrousel": "Entidades policiales con las cuales hemos trabajado:"
   },
@@ -349,14 +438,39 @@
       "reports-of": "Reportes de - ",
       "reports-tittle": "Informes",
       "add-report": "Agregar reporte",
+      "table": {
+        "admin": {
+          "CaseImage": "Imagen",
+          "Case": "Incidente",
+          "CaseLevel": "Nivel",
+          "CaseStatus": "Estatus caso",
+          "DateCase": "Fecha",
+          "TimeCase": "Hora",
+          "IdCase": "ID caso",
+          "CaseVerified": "Verificado",
+          "CaseEdit": "Editar",
+          "CaseDetails": "Detalles",
+          "no-pdf": "Este informe no tiene pdf"
+        },
+        "client": {
+          "CaseImage": "Imagen",
+          "Case": "Caso  de",
+          "CaseLevel": "Nivel del caso",
+          "DateCase": "Fecha",
+          "TimeCase": "Hora",
+          "IdCase": "Id caso",
+          "CaseDetails": "Detalles",
+          "no-pdf": "Este informe no tiene pdf"
+        }
+      },
       "new-report": {
         "add-report": "Nuevo reporte",
         "property": "Propiedad",
         "agent": "Monitor",
-        "date": "Dia",
+        "date": "Fecha del reporte",
         "time": "Hora",
         "incident": "Incidente",
-        "level": "Nivel",
+        "level": "Nivel del reporte",
         "monitoring-team": "Equipo de monitoreo",
         "number-case": "Numero de caso",
         "images": "Imagenes",
@@ -366,12 +480,34 @@
           "empty": "",
           "edit": "El informe se ha guardado correctamente."
         },
+        "error": {
+          "property": "Complete el campo de propiedad.",
+          "agent": "Seleccione un Monitor.",
+          "date": "Elija una fecha.",
+          "time": "Especifique la hora.",
+          "caseType": "Seleccione el tipo de incidente.",
+          "level": "Seleccione el nivel del reporte.",
+          "company": "Especifique el equipo de monitoreo.",
+          "numerCase": "Ingresa el número de caso."
+        },
         "footer": {
           "information": "Información",
           "evidences": "Evidencias"
         }
+      },
+      "edit-report": {
+        "edit-tittle": "Editar reporte",
+        "agent": "Monitor",
+        "property": "Propiedad",
+        "date": "Fecha del reporte",
+        "time": "Hora",
+        "incident": "Incidente",
+        "level": "Nivel del reporte",
+        "monitoring-team": "Equipo de monitoreo",
+        "number-case": "Numero de caso",
+        "images": "Imagenes"
       }
     },
-    "footer": "Todos los derechos reservados por Innova Monitioring"
+    "footer": "Todos los derechos reservados Innova Monitioring"
   }
 }

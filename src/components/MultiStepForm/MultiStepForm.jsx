@@ -1,12 +1,5 @@
-import React, { useContext, useState } from "react";
-import {
-  Typography,
-  TextField,
-  Button,
-  Stepper,
-  Step,
-  StepLabel,
-} from "@material-ui/core";
+import React, { useContext, useState, useCallback  } from "react";
+import { Typography, TextField,Button, Stepper, Step,StepLabel,} from "@material-ui/core";
 import "./MultiStepForm.css";
 import { Dropdown } from "primereact/dropdown";
 import { InputSwitch } from "primereact/inputswitch";
@@ -30,8 +23,11 @@ import { Resend } from "resend";
 import { useTranslation } from "react-i18next";
 import { t } from "i18next";
 import Swal from "sweetalert2";
+import Input from '@material-ui/core/Input';
+import ReCAPTCHA from "react-google-recaptcha";
+import AddressAutocompleteMap from "../../Dashboard/components/Map/AddressAutocompleteMap";
 
-
+// el Contexto para los Formularios viene de FormProvide.jsx
 
 
 const TextAnimation = () => {
@@ -87,7 +83,8 @@ const First = ({ formPlan, setformPlan }) => {
     { name: t("plan.categories.compliance_with_regulations"), key: "3" },
     { name: t("plan.categories.theft_prevention"), key: "4" },
     { name: t("plan.categories.protection_of_assets"), key: "5" },
-    { name: t("plan.categories.other"), key: "6" },
+    { name: t("plan.categories.remote-monitoring"), key: "6" },
+    { name: t("plan.categories.other"), key: "7" },
   ];
 
 
@@ -149,6 +146,7 @@ function getSteps(t) {
     t("plan.multiple_step_form.step_five")
   ];
 }
+
 const BasicForm = ({ formPlan, setformPlan }) => {
   const [t, i18n] = useTranslation("global");
   return (
@@ -200,14 +198,29 @@ const BasicForm = ({ formPlan, setformPlan }) => {
           value={formPlan.state}
           onChange={(e) => setformPlan({ ...formPlan, state: e.target.value })}
         />
+        <TextField
+          id="city"
+          label={t("plan.personal_section.city-label")}
+          variant="outlined"
+          required
+          placeholder={t("plan.personal_section.city-placeholder")}
+          fullWidth
+          margin="normal"
+          value={formPlan.city}
+          onChange={(e) => setformPlan({ ...formPlan, city: e.target.value })}
+        />
       </div>
     </>
   );
 };
+
 const ContactForm = ({ formPlan, setformPlan }) => {
   const { t, i18n } = useTranslation("global");
   return (
     <>
+      <label htmlFor="propertyType" className="font-bold block mb-2">
+        {t("plan.contact_section.title")}
+      </label>
       <TextField
         id="email"
         label={t("plan.contact_section.e_mail_label")}
@@ -248,90 +261,234 @@ const ContactForm = ({ formPlan, setformPlan }) => {
     </>
   );
 };
+
 const PropertyForm = ({ formPlan, setformPlan }) => {
-  const [selectedProperty, setSelectedProperty] = useState(null);
   const { t, i18n } = useTranslation("global");
   const properties = [
-    { name: t("plan.property_section.property_type_list1"), code: "1" },
-    { name: t("plan.property_section.property_type_list2"), code: "2" },
-    { name: t("plan.property_section.property_type_list3"), code: "3" },
-    { name: t("plan.property_section.property_type_list4"), code: "4" },
-    { name: t("plan.property_section.property_type_list5"), code: "5" },
-    { name: t("plan.property_section.property_type_list6"), code: "6" },
+    { name: t("plan.property-section.property-type.property-type-list1"), code: "1" },
+    { name: t("plan.property-section.property-type.property-type-list2"), code: "2" },
+    { name: t("plan.property-section.property-type.property-type-list3"), code: "3" },
+    { name: t("plan.property-section.property-type.property-type-list4"), code: "4" },
+    { name: t("plan.property-section.property-type.property-type-list5"), code: "5" },
+    { name: t("plan.property-section.property-type.property-type-list6"), code: "6" },
+    { name: t("plan.property-section.property-type.property-type-list7"), code: "7" },
+    { name: t("plan.property-section.property-type.property-type-list8"), code: "8" },
+    { name: t("plan.property-section.property-type.property-type-list9"), code: "9" },
+    { name: t("plan.property-section.property-type.property-type-list10"), code: "10" },
+    { name: t("plan.property-section.property-type.property-type-list11"), code: "11" },
   ];
 
+  const handlePropertyTypeChange = (e) => {
+    setformPlan({ ...formPlan, propertyType: e.value });
+    // Restablece los campos adicionales antes de establecer el nuevo tipo de propiedad
+    setformPlan(prevState => ({
+      ...prevState,
+      propertyDetail: '',
+      businessType: '',
+      constructionType: '',
+    }));
+
+    // Lógica para campos adicionales basada en la selección del tipo de propiedad
+    if (e.value.code === "1") {} 
+    else if (e.value.code === "4") {}
+    else if (e.value.code === "7") {} 
+  };
+
+  const handleSelectAddress = (address) => {
+    // Aquí manejarías la selección de la dirección, por ejemplo:
+    setformPlan({ ...formPlan, propertyAddress: address });
+  };
   return (
     <>
       <div className="card flex flex-col justify-content-center mb-2">
-        <label htmlFor="integeronly" className="font-bold block mb-2">
-          {t("plan.property_section.property_header")}
+        <label htmlFor="propertyType" className="font-bold block mb-2">
+          {t("plan.property-section.property-type.property-header")}
         </label>
         <Dropdown
+          id="propertyType"
           value={formPlan.propertyType}
-          onChange={(e) => setformPlan({ ...formPlan, propertyType: e.value })}
+          onChange={handlePropertyTypeChange}
           options={properties}
           optionLabel="name"
-          placeholder={t("plan.property_section.property_placeholder")}
+          placeholder={t("plan.property-section.property-type.property-placeholder")}
           className="w-full md:w-14rem"
-          
         />
       </div>
 
+      {/* Campos condicionales basados en la selección del tipo de propiedad */}
+      {formPlan.propertyType?.code === "1" && (
+        <>
+          <div className="mb-4">
+            <label htmlFor="propertyDetail" className="block mb-2">
+              {t("plan.property-section.residential.property-detail-label")}
+            </label>
+            <Dropdown
+              id="propertyDetail"
+              value={formPlan.propertyDetail}
+              onChange={(e) => setformPlan({ ...formPlan, propertyDetail: e.value })}
+              options={[
+                { label: t("plan.property-section.residential.Govermental"), value: 'HUD' },
+                { label: t("plan.property-section.residential.hud-property"), value: 'HUD' },
+                { label: t("plan.property-section.residential.section-8"), value: 'Section-8' },
+                { label: t("plan.property-section.residential.private-property"), value: 'Private' }
+              ]}
+              optionLabel="label"
+              placeholder={t("plan.property-section.residential.property-detail-placeholder")}
+              className="w-full"
+            />
+          </div>
+
+          <div className="mb-4">
+            <TextField
+              id="units"
+              label={t("plan.property-section.residential.units-label")}
+              variant="outlined"
+              placeholder={t("plan.property-section.residential.units-placeholder")}
+              fullWidth
+              value={formPlan.units}
+              onChange={(e) => {
+                if (e.target.value >= 1) {
+                  setformPlan({ ...formPlan, units: e.target.value });
+                }
+              }}
+              margin="normal"
+              type="number"
+            />
+          </div>
+        </>
+      )}
+      
+      {formPlan.propertyType?.code !== "4" && (
+        <TextField
+          id="propertyName"
+          label={t("plan.property-section.property_name_label")}
+          variant="outlined"
+          placeholder={t("plan.property-section.property_name_placeholder")}
+          fullWidth
+          value={formPlan.propertyName}
+          required
+          onChange={(e) => setformPlan({ ...formPlan, propertyName: e.target.value })}
+          margin="normal"
+        />
+      )}
+
+      {formPlan.propertyType?.code === "4" && (
+        <Dropdown
+          id="constructionType"
+          value={formPlan.constructionType}
+          options={[
+            { label: t("plan.property-section.construction.type.building"), value: 'building' },
+            { label: t("plan.property-section.construction.type.home"), value: 'home' },
+            { label: t("plan.property-section.construction.type.business"), value: 'business' },
+            { label: t("plan.property-section.construction.type.other"), value: 'other' }
+          ]}
+          onChange={(e) => setformPlan({ ...formPlan, constructionType: e.value })}
+          placeholder={t("plan.property-section.construction.construction-type-placeholder")}
+          className="w-full"
+        />
+      )}
+
+      {formPlan.propertyType?.code === "7" && (
+        <>
+          <div className="mb-4">
+            <TextField
+              id="businessType"
+              label={t("plan.property-section.business.business-type-label")}
+              variant="outlined"
+              placeholder={t("plan.property-section.business.business-type-placeholder")}
+              fullWidth
+              value={formPlan.businessType}
+              onChange={(e) => setformPlan({ ...formPlan, businessType: e.target.value })}
+              margin="normal"
+            />
+          </div>
+        </>
+      )}
+      
+      {/* Campo de texto para la dirección de la propiedad */}
       <TextField
-        id="country"
-        label={t("plan.property_section.property_name_label")}
+        id="propertyAddress"
+        label={t("plan.property-section.property_address_label")}
         variant="outlined"
-        placeholder={t("plan.property_section.property_name_label")}
+        placeholder={t("plan.property-section.property_address_placeholder")}
         fullWidth
-        value={formPlan.propertyName}
-        required
-        onChange={(e) =>
-          setformPlan({ ...formPlan, propertyName: e.target.value })
-        }
         margin="normal"
+        required
+        value={formPlan.propertyAddress}
+        onChange={(e) => setformPlan({ ...formPlan, propertyAddress: e.target.value })}
       />
 
-      <div className="">
-        <TextField
-          id=""
-          label={t("plan.property_section.property_address_label")}
-          variant="outlined"
-          placeholder={t("plan.property_section.property_address_label")}
-          fullWidth
-          margin="normal"
-          required
-          value={formPlan.propertyAddress}
-          onChange={(e) =>
-            setformPlan({ ...formPlan, propertyAddress: e.target.value })
-          }
-        />
+      {/* Componente del mapa para seleccionar la dirección */}
+      <div className="my-5">
+        <AddressAutocompleteMap onSelectAddress={handleSelectAddress} />
       </div>
-
-      <div className="mb-4">
-        <TextField
-          id=""
-          label={t("plan.property_section.property_size_label")}
-          variant="outlined"
-          placeholder={t("plan.property_section.property_size_placeholder")}
-          fullWidth
-          margin="normal"
-          required
-          value={formPlan.propertySize}
-          onChange={(e) =>
-            setformPlan({ ...formPlan, propertySize: e.target.value })
-          }
-        />
-      </div>
+      
+      <TextField
+        id="propertySize"
+        label={t("plan.property-section.property_size_label")}
+        variant="outlined"
+        placeholder={t("plan.property-section.property_size_placeholder")}
+        fullWidth
+        margin="normal"
+        required
+        value={formPlan.propertySize}
+        onChange={(e) => setformPlan({ ...formPlan, propertySize: e.target.value })}
+      />
     </>
   );
 };
+
 const PlanInformation = ({ formPlan, setformPlan }) => {
   const { t, i18n } = useTranslation("global");
+  const cameraOptions = [
+    { label: t("plan.plan_section.cameras-property.camera-type.camera-type-ip"), value: 'IP' },
+    { label: t("plan.plan_section.cameras-property.camera-type.camera-type-analog"), value: 'Analog' }
+  ];
+  const InternetSharedOptions = [
+    { label: t("plan.plan_section.property-internet.type-of-internet.shared"), value: 'Shared' },
+    { label: t("plan.plan_section.property-internet.type-of-internet.dedicated"), value: 'Dedicated' }
+  ];
+
+  const internetSpeedOptions = [
+    { label: t("plan.plan_section.property-internet.internet-speed.options.0-50mbps"), value: '0-50mbps' },
+    { label: t("plan.plan_section.property-internet.internet-speed.options.50-100mbps"), value: '50-100mbps' },
+    { label: t("plan.plan_section.property-internet.internet-speed.options.100-200mbps"), value: '100-200mbps' },
+    { label: t("plan.plan_section.property-internet.internet-speed.options.200-500mbps"), value: '200-500mbps' },
+    { label: t("plan.plan_section.property-internet.internet-speed.options.500-900mbps"), value: '500-900mbps' },
+    { label: t("plan.plan_section.property-internet.internet-speed.options.more-1gb"), value: 'more-1gb' }
+  ];
+
+  const internetProviderOptions = [
+    { label: t("plan.plan_section.property-internet.internet-provider.options.CenturyLink"), value: 'CenturyLink' },
+    { label: t("plan.plan_section.property-internet.internet-provider.options.AT&T"), value: 'AT&T' },
+    { label: t("plan.plan_section.property-internet.internet-provider.options.GoogleFiber"), value: 'GoogleFiber' },
+    { label: t("plan.plan_section.property-internet.internet-provider.options.Verizon"), value: 'Verizon' },
+    { label: t("plan.plan_section.property-internet.internet-provider.options.Xfinity"), value: 'Xfinity' },
+    { label: t("plan.plan_section.property-internet.internet-provider.options.Spectrum"), value: 'Spectrum' },
+    { label: t("plan.plan_section.property-internet.internet-provider.options.Cox"), value: 'Cox' },
+    { label: t("plan.plan_section.property-internet.internet-provider.options.Optimum"), value: 'Optimum' },
+    { label: t("plan.plan_section.property-internet.internet-provider.options.Tigo"), value: 'Tigo' },
+    { label: t("plan.plan_section.property-internet.internet-provider.options.Movistar"), value: 'Movistar' },
+    { label: t("plan.plan_section.property-internet.internet-provider.options.Claro"), value: 'Claro' },
+    { label: t("plan.plan_section.property-internet.internet-provider.options.ETB"), value: 'ETB' },
+    { label: t("plan.plan_section.property-internet.internet-provider.options.otros"), value: 'otros' }
+  ];
+
+  // Manejador para el cambio en el estado del Camaras
+  const handleCamerasInstalledChange = (e) => {
+    setformPlan({ ...formPlan, camerasInstalled: e.value });
+  };
+
+  // Manejador para el cambio en el estado del servicio de internet
+  const handleInternetChange = (e) => {
+    setformPlan({ ...formPlan, internet: e.value });
+  };
+
   return (
     <>
       <div className=" flex  flex-col lg:flex-row gap-3 w-full">
         <div className=" flex flex-col">
-          <label htmlFor="username">{t("plan.plan_section.cameras")}</label>
+          <label htmlFor="username">{t("plan.plan_section.number_cameras")}</label>
           <InputNumber
             inputStyle={{ width: "130px" }}
             className="w-2/3"
@@ -340,22 +497,23 @@ const PlanInformation = ({ formPlan, setformPlan }) => {
             mode="decimal"
             required
             showButtons
-            min={1}
+            min={5}
             max={24}
             value={formPlan.numCameras}
-            onValueChange={(e) =>
-              setformPlan({ ...formPlan, numCameras: e.value })
-            }
+            onValueChange={(e) => {
+              const newValue = Math.max(e.value, 5);
+              setformPlan({ ...formPlan, numCameras: newValue });
+            }}
           />
           <small id="username-help">
-            {t("plan.plan_section.number_cameras")}
+            {t("plan.plan_section.cameras")}
           </small>
         </div>
 
         <div className="w-5"> </div>
 
         <div className=" flex flex-col ">
-          <label htmlFor="username">{t("plan.plan_section.hours")}</label>
+          <label htmlFor="username">{t("plan.plan_section.hours_monitoring")}</label>
           <InputNumber
             inputStyle={{ width: "130px" }}
             className="w-2/3"
@@ -367,32 +525,148 @@ const PlanInformation = ({ formPlan, setformPlan }) => {
             onValueChange={(e) =>
               setformPlan({ ...formPlan, numHours: e.value })
             }
-            min={1}
+            min={6}
             max={24}
           />
-          <small id="username-help">{t("plan.plan_section.hours_monitoring")}</small>
+          <small id="username-help">{t("plan.plan_section.hours")}</small>
         </div>
       </div>
 
       <div className="my-5">
-        <div>{t("plan.plan_section.cameras_property")}</div>
+        <div>{t("plan.plan_section.cameras-property.cameras-in-property")}</div>
         <InputSwitch
-          // yo
           checked={formPlan.camerasInstalled}
-          onChange={(e) =>
-            setformPlan({ ...formPlan, camerasInstalled: e.value })
-          }
-          id="value"
-          name="value"
+          onChange={handleCamerasInstalledChange}
+          id="cameras-installed"
+          name="cameras-installed"
         />
       </div>
 
-      <div className="my-5">
-        <div>{t("plan.plan_section.property_internet")}</div>
+      {/* Condición para mostrar campos adicionales si camerasInstalled es true */}
+      {formPlan.camerasInstalled && (
+        <div className="flex flex-col lg:flex-row gap-3 w-full">
+          {/* Campo para el número de cámaras ya instaladas */}
+          <div className="flex flex-col">
+            <label htmlFor="existing-cameras">{t("plan.plan_section.cameras-property.existing-cameras")}</label>
+            <InputNumber
+              inputStyle={{ width: "130px" }}
+              className="w-2/3"
+              id="existing-cameras"
+              value={formPlan.existingCameras}
+              onValueChange={(e) => setformPlan({ ...formPlan, existingCameras: e.value })}
+              required
+              min={1}
+              showButtons
+            />
+          </div>
 
+          {/* Dropdown para seleccionar IP o Análoga */}
+          <div className="flex flex-col">
+            <label htmlFor="camera-type">{t("plan.plan_section.cameras-property.camera-type.camera-type-tittle")}</label>
+            <Dropdown
+              value={formPlan.cameraType}
+              options={cameraOptions}
+              onChange={(e) => setformPlan({ ...formPlan, cameraType: e.value })}
+              placeholder={t("plan.plan_section.cameras-property.camera-type.camera-type-tittle")}
+            />
+          </div>
+
+          {/* Nuevo campo para la marca de las cámaras */}
+          <div className="flex flex-col">
+            <label htmlFor="camera-brand">{t("plan.plan_section.cameras-property.camera-brand.title")}</label>
+            <InputText
+              id="camera-brand"
+              value={formPlan.cameraBrand}
+              onChange={(e) => setformPlan({ ...formPlan, cameraBrand: e.target.value })}
+              placeholder={t("plan.plan_section.cameras-property.camera-brand.placeholder")}
+            />
+          </div>
+
+        </div>
+      )}
+
+      {/* Interruptor para servicio de internet */}
+      <div className="my-5">
+        <div>{t("plan.plan_section.property-internet.property-internet-tittle")}</div>
         <InputSwitch
           checked={formPlan.internet}
-          onChange={(e) => setformPlan({ ...formPlan, internet: e.value })}
+          onChange={handleInternetChange}
+          id="internet-service"
+          name="internet-service"
+        />
+      </div>
+
+      {/* Condición para mostrar campos adicionales si internet es true */}
+      {formPlan.internet && (
+        <div className="flex flex-wrap w-full">
+          {/* Contenedor para la primera fila de dropdowns */}
+          <div className="flex flex-row w-full">
+            {/* Campo para la velocidad del internet */}
+            <div className="w-1/2 p-2">
+              <label htmlFor="internet-speed">{t("plan.plan_section.property-internet.internet-speed.title")}</label>
+              <Dropdown
+                value={formPlan.internetSpeed}
+                options={internetSpeedOptions}
+                onChange={(e) => setformPlan({ ...formPlan, internetSpeed: e.value })}
+                placeholder={t("plan.plan_section.property-internet.internet-speed.placeholder")}
+                className="w-full"
+              />
+            </div>
+
+            {/* Campo para la compañía de internet */}
+            <div className="w-1/2 p-2">
+              <label htmlFor="internet-provider">{t("plan.plan_section.property-internet.internet-provider.title")}</label>
+              <Dropdown
+                id="internet-provider"
+                value={formPlan.internetProvider}
+                options={internetProviderOptions}
+                onChange={(e) => setformPlan({ ...formPlan, internetProvider: e.value })}
+                placeholder={t("plan.plan_section.property-internet.internet-provider.placeholder")}
+                className="w-full"
+              />
+            </div>
+          </div>
+
+          {/* Contenedor para la segunda fila de dropdowns */}
+          <div className="flex flex-row w-full items-center">
+            {/* Campo para la cantidad de ubicaciones */}
+            <div className="w-1/2 p-2">
+              <label htmlFor="locations-count">
+                {t("plan.plan_section.property-internet.locations-count")}
+              </label>
+              <InputNumber
+                id="locations-count"
+                inputStyle={{ width: "100%" }}
+                value={formPlan.locationsCount}
+                onValueChange={(e) => setformPlan({ ...formPlan, locationsCount: e.value })}
+                required
+                min={1}
+                showButtons
+                className="w-full custom-height" // Clase CSS personalizada para la altura
+              />
+            </div>
+
+            {/* Campo para determinar si el internet es compartido o dedicado */}
+            <div className="w-1/2 p-2">
+              <label htmlFor="internet-type">
+                {t("plan.plan_section.property-internet.type-of-internet.title")}
+              </label>
+              <Dropdown
+                value={formPlan.internetType}
+                options={InternetSharedOptions}
+                onChange={(e) => setformPlan({ ...formPlan, internetType: e.value })}
+                placeholder={t("plan.plan_section.property-internet.type-of-internet.placeholder")}
+                className="custom-margin" // Clase CSS personalizada para la altura
+              />
+            </div>
+          </div>
+        </div>
+      )}
+      <div className="my-5">
+        <div>{t("plan.plan_section.control-acces")}</div>
+        <InputSwitch
+          checked={formPlan.ControlAcces}
+          onChange={(e) => setformPlan({ ...formPlan, ControlAcces: e.value })}
           id="value"
           name="value"
         />
@@ -422,31 +696,34 @@ function GetStepContent(step) {
 
 export const MultiStepForm = () => {
   const { t, i18n } = useTranslation("global");
-  const serviceId = "service_nk6ddhp";
-  const templateId = "template_qb25ll4";
-  const apiKey = "W_IsG6K1IaAL7xkOS";
+  const serviceId = "service_l6maf0k";
+  const templateId = "template_7pr1w3x";
+  const apiKey = "VeGC0aUoLOir8Ht3J";
 
   //  const [formPlan, setformPlan] = useState({
   //   selectedCategories:[],
   //   textArea:"",
-  //   numCameras:0,
-  //   numHours:0,
-  //   camerasInstalled:true,
-  //   internet:true,
-  //   name:"",
-  //   lastName:"",
-  //   country:"",
-  //   state:"",
-  //   propertyType:"",
-  //   propertyName:"",
-  //   propertyAddress:"",
-  //   propertySize:"",
-  //   email:"",
-  //   phone:"",
-  //   alternativePhone:"",
-  // }) 
+  // numCameras:5
+  // numHours:0,
+  // camerasInstalled:true,
+  // internet:true,
+  // name:"",
+  // lastName:"",
+  // country:"",
+  // state:"",
+  // propertyType:"",
+  // propertyName:"",
+  // propertyAddress:"",
+  // propertySize:"",
+  // email:"",
+  // phone:"",
+  // alternativePhone:"",
+  // });
+
+
 
   const sendEmail = () => {
+
     let formulario = document.createElement("form");
     let inputName = document.createElement("input");
     inputName.setAttribute("value", formPlan.name)
@@ -480,6 +757,62 @@ export const MultiStepForm = () => {
     let numCameras = document.createElement("input");
     numCameras.setAttribute("value", formPlan.numCameras)
     numCameras.setAttribute("name", "numCameras")
+
+    let existingCamerasInput = document.createElement("input");
+    existingCamerasInput.setAttribute("name", "existingCameras");
+    existingCamerasInput.setAttribute("value", formPlan.existingCameras);
+    formulario.appendChild(existingCamerasInput);
+
+    let cameraTypeInput = document.createElement("input");
+    cameraTypeInput.setAttribute("name", "cameraType");
+    cameraTypeInput.setAttribute("value", formPlan.cameraType);
+    formulario.appendChild(cameraTypeInput);
+
+    let cameraBrandInput = document.createElement("input");
+    cameraBrandInput.setAttribute("name", "cameraBrand");
+    cameraBrandInput.setAttribute("value", formPlan.cameraBrand);
+    formulario.appendChild(cameraBrandInput);
+
+    let internetSpeedInput = document.createElement("input");
+    internetSpeedInput.setAttribute("name", "internetSpeed");
+    internetSpeedInput.setAttribute("value", formPlan.internetSpeed);
+    formulario.appendChild(internetSpeedInput);
+
+
+    let internetTypeInput = document.createElement("input");
+    internetTypeInput.setAttribute("name", "internetType");
+    internetTypeInput.setAttribute("value", formPlan.internetType);
+    formulario.appendChild(internetTypeInput);
+
+    let locationsCountInput = document.createElement("input");
+    locationsCountInput.setAttribute("name", "locationsCount");
+    locationsCountInput.setAttribute("value", formPlan.locationsCount);
+    formulario.appendChild(locationsCountInput);
+
+    const propertyDetailInput = document.createElement("input");
+    propertyDetailInput.setAttribute("name", "propertyDetail");
+    propertyDetailInput.setAttribute("value", formPlan.propertyDetail);
+    formulario.appendChild(propertyDetailInput);
+
+    const unitsInput = document.createElement("input");
+    unitsInput.setAttribute("name", "units");
+    unitsInput.setAttribute("value", formPlan.units);
+    formulario.appendChild(unitsInput);
+
+    const businessTypeInput = document.createElement("input");
+    businessTypeInput.setAttribute("name", "businessType");
+    businessTypeInput.setAttribute("value", formPlan.businessType);
+    formulario.appendChild(businessTypeInput);
+
+    let internetProviderInput = document.createElement("input");
+    internetProviderInput.setAttribute("name", "internetProvider");
+    internetProviderInput.setAttribute("value", formPlan.internetProvider);
+    formulario.appendChild(internetProviderInput);
+
+    let constructionTypeInput = document.createElement("input");
+    constructionTypeInput.setAttribute("name", "constructionType");
+    constructionTypeInput.setAttribute("value", formPlan.constructionType);
+    formulario.appendChild(constructionTypeInput);
 
 
     let email = document.createElement("input");
@@ -544,8 +877,7 @@ export const MultiStepForm = () => {
 
 
 
-    emailjs
-      .sendForm(serviceId, templateId, formulario, apiKey)
+    emailjs.sendForm(serviceId, templateId, formulario, apiKey)
       .then((res) => console.log("Good"))
       .catch((error) => console.log("Bad"));
   };
@@ -582,15 +914,15 @@ export const MultiStepForm = () => {
 
   const handleNext = (data) => {
     const categorySelected = formPlan.selectedCategories.length > 0;
-      if (!categorySelected) {
-        Swal.fire("", t("plan.categories.oneAtLeast"), "info")
-        return;
-      } 
+    if (!categorySelected) {
+      Swal.fire("", t("plan.categories.oneAtLeast"), "info")
+      return;
+    }
     if (activeStep === 3) {
       if (formPlan.propertyType === "") {
-        Swal.fire("", t("plan.property_section.empty_property_text"), "info")
+        Swal.fire("", t("plan.property-section.empty_property_text"), "info")
         return;
-      } 
+      }
     }
 
     if (activeStep === steps.length - 1) {
@@ -616,11 +948,25 @@ export const MultiStepForm = () => {
       setActiveStep(activeStep - 1);
     }, 150);
   };
+
   const handleSkip = () => {
     if (!isStepSkipped(activeStep)) {
       setSkippedSteps([...skippedSteps, activeStep]);
     }
     setActiveStep(activeStep + 1);
+  };
+  
+  const [captchaVerified, setCaptchaVerified] = useState(false);
+  const onCaptchaChange = (value) => {
+    setCaptchaVerified(value ? true : false);
+    
+  };
+  const handleFinishClick = () => {
+    if (captchaVerified) {
+      sendEmail();
+    } else {
+      alert(t("plan.form_button.recaptcha"));
+    }
   };
   const { formPlan, setformPlan } = useContext(FormContext);
   return (
@@ -654,7 +1000,6 @@ export const MultiStepForm = () => {
         </div>
 
         {activeStep === steps.length ? (
-
           <div className="flex flex-col items-center justify-center my-10">
             <div>
               <TextAnimation />
@@ -673,32 +1018,43 @@ export const MultiStepForm = () => {
             <form onSubmit={methods.handleSubmit(handleNext)}>
               {GetStepContent(activeStep)}
 
-              <Button
-                className={classes.button}
-                disabled={activeStep === 0}
-                onClick={handleBack}
-              >
-                {t("plan.form_button.back")}
-              </Button>
-
-              {activeStep === steps.length - 1 ? (
-                <Button
-                  className={classes.button}
-                  variant="contained"
-                  type="submit"
-                  onClick={sendEmail}
-                >
-                  {t("plan.form_button.finish")}
-                </Button>
-              ) : (
-                <Button
-                  className={classes.button}
-                  variant="contained"
-                  type="submit"
-                >
-                  {t("plan.form_button.next")}
-                </Button>
+              {activeStep === steps.length - 1 && (
+                // Componente ReCAPTCHA justo antes de los botones
+                <ReCAPTCHA
+                  sitekey="6LcxI1gpAAAAAEh-Qqt8Ix_FZiGntDZARU-TceYJ"
+                  onChange={onCaptchaChange}
+                />
               )}
+
+              <div className="flex justify-between"> {/* Asegúrate de que los botones estén en un contenedor flex */}
+                <Button
+                  className={classes.button}
+                  disabled={activeStep === 0}
+                  onClick={handleBack}
+                >
+                  {t("plan.form_button.back")}
+                </Button>
+
+                {activeStep === steps.length - 1 ? (
+                  <Button
+                    className={classes.button}
+                    variant="contained"
+                    type="submit"
+                    onClick={handleFinishClick}
+                    disabled={!captchaVerified}
+                  >
+                    {t("plan.form_button.finish")}
+                  </Button>
+                ) : (
+                  <Button
+                    className={classes.button}
+                    variant="contained"
+                    type="submit"
+                  >
+                    {t("plan.form_button.next")}
+                  </Button>
+                )}
+              </div>
             </form>
           </FormProvider>
         )}

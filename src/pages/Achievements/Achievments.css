@@ -46,6 +46,10 @@
     width: 100%;
 }
 
+.margin-title {
+    margin-right: 25rem;
+}
+
 .img:hover {
     transform: translate(20px);
 }
@@ -68,9 +72,7 @@
 .tittle {
     color: chocolate;
     font-size: 40px;
-    margin-top: 10px;
-    margin-bottom: -30px;
-    margin-left: -50px;
+
 }
 
 .container-carrousel{

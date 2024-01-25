@@ -13,3 +13,23 @@
 /* .formulario{
     background-color: rebeccapurple;
 } */
+
+.phone-number {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.location {
+     white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.email {
+    margin-top: 5%;
+}
+
+.email-address {
+    padding-top: 10%;
+}

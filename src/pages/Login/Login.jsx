@@ -8,6 +8,7 @@ import "./Login.css";
 import logo from "../../assets/images/Logos/innova-monitoring.png";
 import Swal from "sweetalert2";
 import Reveal from "react-reveal/Reveal";
+import { Link } from 'react-router-dom';
 
 const Login = () => {
   localStorage.clear("propertySelected")
@@ -55,7 +56,7 @@ const Login = () => {
         setUserLogged(!userLogged)
         navigate("/dashboard");
       }else{
-        Swal.fire("info", "This user does not have any properties assigned", "info")
+        Swal.fire("info", t("login.swal-fire.properties-don't-assigned"), "info")
         navigate("/");
       }
 
@@ -170,12 +171,12 @@ const Login = () => {
                 <p className="mt-6 text-sm text-center text-gray-400">
                   {t("login.acount_yet")}
                  <br></br>
-                  <a
-                    href="http://localhost:3000/plan"
+                  <Link
+                    to="/plan"
                     className="text-yellow-600 focus:outline-none focus:underline hover:underline"
                   >
                     {t("login.join_us")}
-                  </a>
+                  </Link>
 
                 </p>
               </div>

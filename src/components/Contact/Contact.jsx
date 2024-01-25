@@ -14,9 +14,9 @@ const Contact = () => {
   const refForm = useRef();
   const [t] = useTranslation("global");
 
-  const serviceId = "service_4j6ulup";
-  const templateId = "template_mgdlvbj";
-  const apiKey = "W_IsG6K1IaAL7xkOS";
+  const serviceId = "service_l6maf0k";
+  const templateId = "template_7pr1w3x";
+  const apiKey = "VeGC0aUoLOir8Ht3J";
 
   const sendEmail = (e) => {
     e.preventDefault();
@@ -36,10 +36,10 @@ const Contact = () => {
             <div className="w-full px-4 lg:w-1/2 xl:w-6/12 ">
               <div className="mb-12 max-w-[570px] lg:mb-0">
                 <Fade left>
-                  <span className="text-yellow-600 mb-4 block text-base font-semibold tamañot">
+                  <span className="text-yellow-600 mb-4 block text-4xl font-semibold tamañot">
                     {t("Contact.contact")}
                   </span>
-                  <h2 className="text-gray-700 mb-6 text-[32px] font-bold uppercase sm:text-[40px] lg:text-[36px] xl:text-[40px]">
+                  <h2 className="text-gray-700 mb-6 text-[32px] font-bold uppercase sm:text-[35px] lg:text-[31px] xl:text-[35px]">
                     {t("Contact.title")}
                   </h2>
                   <p className="text-gray-700 mb-9 text-base leading-relaxed py-0">
@@ -77,7 +77,7 @@ const Contact = () => {
                         </h4>
                       </Fade>
                       <Fade right>
-                        <p className="text-gray-700 text-base py-0">
+                        <p className="text-gray-700 text-base py-0 location">
                           {t("Contact.locationDesc")}
                         </p>
                       </Fade>
@@ -106,7 +106,7 @@ const Contact = () => {
                         </h4>
                       </Fade>
                       <Fade right>
-                        <p className="text-gray-700 text-base py-0">{t("Contact.phoneNumber")}</p>
+                        <p className="text-gray-700 text-base py-0 phone-number">{t("Contact.phoneNumber")}</p>
                       </Fade>
                     </div>
                   </div>
@@ -125,7 +125,7 @@ const Contact = () => {
                     </Fade>
                     <div className="w-full">
                       <Fade left>
-                        <h4 className="text-gray-700 mb-1 text-xl font-bold">
+                        <h4 className="text-gray-700 mb-1 text-2xl font-bold">
                           {t("Contact.Email")}
                         </h4>
                       </Fade>

@@ -67,11 +67,11 @@
     "title": "ALREADY A CLIENT OF INNOVA MONITORING?",
     "desc": "If you are already an Innova Monitoring customer you will have an excellent technical team available to provide the most efficient support. By clicking on the following link you can request assistance from our technical operations center.",
     "01": "IT Support",
-    "02": "Installation assistance",
-    "03": "Guidance and technical advice",
-    "04": "Device configuration",
-    "05": "Network and connection configuration",
-    "06": "Personalized assistance"
+    "02": "Installation Assistance",
+    "03": "Guidance and Technical Advice",
+    "04": "Device Configuration",
+    "05": "Network and Connection Configuration",
+    "06": "Personalized Assistance"
   },
   "Contact": {
     "contact": "Contact Us",
@@ -79,9 +79,9 @@
     "desc": "We are enthusiastic about addressing your inquiries. Should you have any questions, comments, or require additional details about our services, please feel free to reach out. Our customer care team is prepared to offer personalized assistance. Contact us through the provided form, email, or phone. We are dedicated to fulfilling all your needs and eagerly anticipate receiving your message soon. if you want to start your plan with us ",
     "click_here": "¡Click here!",
     "location": "Our Location",
-    "locationDesc": "Hollywood, FL, EE. UU.",
+    "locationDesc": "Hollywood, FL.",
     "phone": "Phone Number",
-    "phoneNumber": "(waiting for the phone number to place)",
+    "phoneNumber": "+1 954 400 1317",
     "Email": "Email Address",
     "EmailAdress": "info@innovatechcorp.net",
     "name_form": "Name",
@@ -220,14 +220,15 @@
   },
   "plan": {
     "categories": {
-      "title": "What motivated you to hire a monitoring service?",
-      "personal_security": "Personal security",
-      "decrease_property_crime": "Decrease property crime",
-      "compliance_with_regulations": "Compliance with regulations and norms",
+      "title": "What factors drive your decision to engage the services our monitoring company?",
+      "personal_security": "Secure Property Assets",
+      "decrease_property_crime": "Decrease Property Crime",
+      "compliance_with_regulations": "Compliance or Requirement",
       "theft_prevention": "Theft Prevention",
       "protection_of_assets": "Protection of high-value assets",
+      "remote-monitoring": "Remote Monitoring Assets",
       "other": "Other",
-      "tell_us": "Tell us, what is the most important thing for you in a monitoring service?",
+      "tell_us": "Could you provide additional insights into why you are considering our firm to oversee the monitoring of your assets",
       "text_box": "Obtain precise, real-time information about events occurring on my property at any moment.",
       "oneAtLeast": "Tell us one reason that motivated you to choose us"
     },
@@ -241,39 +242,126 @@
     "plan_section": {
       "cameras": "Cameras",
       "hours": "Hours",
-      "number_cameras": "Enter the number of cameras to monitor",
+      "number_cameras": "Enter The Number of Cameras to Monitor",
       "hours_monitoring": "Hours of monitoring per day",
-      "cameras_property": "Already have cameras on your property?",
-      "property_internet": "Does your property have internet service?"
+      "cameras-property": {
+        "cameras-in-property": "Already have cameras on your property?",
+        "existing-cameras": "How Many Cameras?",
+        "camera-type": {
+          "camera-type-tittle": "Camera Type",
+          "camera-type-ip": "Ip (Digital)",
+          "camera-type-analog": "Analog"
+        },
+        "camera-brand": {
+          "title": "Camera Brand",
+          "placeholder": "Enter the brand"
+        }
+      },
+      "property-internet": {
+        "property-internet-tittle": "Does your property have internet service?",
+        "internet-speed": {
+          "title": "What Is Your Internet Speed?",
+          "placeholder": "Internet Speed",
+          "options": {
+            "0-50mbps": "0-50 mbps",
+            "50-100mbps": "50-100 mbps",
+            "100-200mbps": "100-200 mbps",
+            "200-500mbps": "200-500 mbps",
+            "500-900mbps": "500-900 mbps",
+            "more-1gb": "More than 1 gb"
+          }
+        },
+        "internet-provider": {
+          "title": "Internet Company",
+          "placeholder": "Write your Internet Company",
+          "options": {
+            "CenturyLink": "CenturyLink",
+            "AT&T": "AT&T",
+            "GoogleFiber": "Google Fiber",
+            "Verizon": "Verizon",
+            "Xfinity": "Xfinity",
+            "Spectrum": "Spectrum",
+            "Cox": "Cox",
+            "Optimum": "Optimum",
+            "Tigo": "Tigo",
+            "Movistar": "Movistar",
+            "Claro": "Claro",
+            "ETB": "ETB",
+            "otros": "OTher"
+          }
+        },
+        "locations-count": "How Many Locations?",
+        "type-of-internet": {
+          "title": "Is The Internet Shared or Dedicated For Cameras?",
+          "placeholder": "Type of Internet",
+          "shared": "Shared",
+          "dedicated": "Dedicated"
+        }
+      }, 
+      "control-acces": "Do you have control acces?"
     },
     "personal_section": {
-      "name_label": "First name",
-      "name_placeholder": "Enter your first name",
-      "last_name_label": "Last name",
-      "last_name_placeholder": "Enter your last name",
+      "name_label": "First Name",
+      "name_placeholder": "Enter Your First Name",
+      "last_name_label": "Last Name",
+      "last_name_placeholder": "Enter Your Last Name",
       "country_label": "Country",
-      "country_placeholder": "Enter your country",
+      "country_placeholder": "Enter Your Country",
       "state_label": "State",
-      "state_placeholder": "Enter your state"
+      "state_placeholder": "Enter Your State",
+      "city-label": "City",
+      "city-placeholder": "Enter Your City"
     },
-    "property_section": {
-      "property_header": "Type of property",
-      "property_placeholder": "Select the type of property",
-      "property_type_list1": "Residential complex",
-      "property_type_list2": "Building",
-      "property_type_list3": "Factory or warehouse",
-      "property_type_list4": "Property under construction",
-      "property_type_list5": "House",
-      "property_type_list6": "Other",
-      "property_name_label": "Property name",
-      "property_name_placeholder": "Enter the property name",
-      "property_address_label": "Property address",
-      "property_address_placeholder": "Enter the property address",
-      "property_size_label": "Property size",
-      "property_size_placeholder": "Enter the property size",
-      "empty_property_text": "Select a type of property"
+    "property-section": {
+      "property-type": {
+        "property-header": "Type of Property",
+        "property-placeholder": "Select the type of property",
+        "property-type-list1": "Residential Building",
+        "property-type-list2": "Comercial Building",
+        "property-type-list3": "Factory or Warehouse",
+        "property-type-list4": "Property Under Construction",
+        "property-type-list5": "Home",
+        "property-type-list6": "Construction Site",
+        "property-type-list7": "Business",
+        "property-type-list8": "Kindergarten",
+        "property-type-list9": "Government Sites",
+        "property-type-list10": "Schools or Universities",
+        "property-type-list11": "Other"
+      },
+      "residential": {
+        "property-detail-label": "Type of Residential Building",
+        "property-detail-placeholder": "Select the Type of Residential Building ",
+        "Govermental": "Govermental Property",
+        "hud-property": "HUD Property",
+        "section-8": "Section 8 Property",
+        "private-property": "Private Property",
+        "units-label": "How Many Units Does The Property Have?",
+        "units-placeholder": "How many units does the property have?"
+      },
+      "construction": {
+        "construction-type-label": "Type Of Construction",
+        "construction-type-placeholder": "Type Of Construction",
+        "type": {
+          "building": "Building",
+          "home": "Home",
+          "business": "Business",
+          "other": "Other"
+        }
+      },
+      "business": {
+        "business-type-label": "Type of Business",
+        "business-type-placeholder": "What Is Your Type Of Business?"
+      },
+      "property_name_label": "Property Name",
+      "property_name_placeholder": "Enter The Property Name",
+      "property_address_label": "Property Address",
+      "property_address_placeholder": "Enter The Property Address",
+      "property_size_label": "Square Footage Of The Property",
+      "property_size_placeholder": "Enter The Property Size",
+      "empty_property_text": "Select a Type of Property"
     },
     "contact_section": {
+      "title": "Contact Information",
       "e_mail_label": "E-mail",
       "e_mail_placeholder": "Enter your email address",
       "phone_number_label": "Phone number",
@@ -289,7 +377,8 @@
       "back": "Back",
       "next": "Next",
       "finish": "Finish",
-      "back_home": "Back home!"
+      "back_home": "Back home!",
+      "recaptcha": "Please verify that you are not a robot."
     },
     "credentials_error": {
       "header": "Credentials error",
@@ -305,7 +394,7 @@
   },
   "achievments": {
     "tittle": "Recognitions and achievements",
-    "paragraph": "Innova Monitoring takes pride in its distinguished achievements and recognitions, showcasing a rich history of collaboration with esteemed security entities such as the DEA and FBI. Our commitment to excellence has earned us commendation from law enforcement agencies. Explore our awards and milestones, a testament to our unwavering dedication to cutting-edge security solutions.",
+    "paragraph": "Innova Monitoring takes pride in its distinguished achievements and recognitions, showcasing a rich history of collaboration with esteemed security entities. Our commitment to excellence has earned us commendation from law enforcement agencies. Explore our awards and milestones, a testament to our unwavering dedication to cutting-edge security solutions.",
     "paragraph2": "Empowering law enforcement, our collaborative efforts with police entities have been instrumental in enhancing security measures. Together, we've achieved milestones in creating safer communities through cutting-edge solutions and strategic partnerships",
     "tittle_carrousel": "Entities with which we have collaborated:"
   },
@@ -353,6 +442,31 @@
       "reports-of": "reports of - ",
       "reports-tittle": "Reports",
       "add-report": "Add report",
+      "table": {
+        "admin": {
+          "CaseImage": "Image",
+          "Case": "incident",
+          "CaseLevel": "Case Level",
+          "CaseStatus": "Status",
+          "DateCase": "Date Incident",
+          "TimeCase": "Time",
+          "IdCase": "Report ID",
+          "CaseVerified": "Verified",
+          "CaseEdit": "Edit",
+          "CaseDetails": "Details",
+          "no-pdf": "This report does not have a pdf"
+        },
+        "client": {
+          "CaseImage": "Image",
+          "Case": "Case off",
+          "CaseLevel": "Case level",
+          "DateCase": "Date incident",
+          "TimeCase": "Time",
+          "IdCase": "Report ID",
+          "CaseDetails": "Details",
+          "no-pdf": "This report does not have a pdf"
+        }
+      },
       "new-report": {
         "add-report": "New report",
         "property": "Property",
@@ -360,7 +474,7 @@
         "date": "Date",
         "time": "Time",
         "incident": "Incident",
-        "level": "Level",
+        "level": "Report level",
         "monitoring-team": "Monitoring team",
         "number-case": "Number case",
         "images": "Images",
@@ -370,12 +484,34 @@
           "empty": "",
           "edit": "Report has been successfully saved"
         },
+        "error": {
+          "property": "Fill the property field.",
+          "agent": "Select an agent.",
+          "date": "Choose a date.",
+          "time": "Specify the time.",
+          "caseType": "Select the type of case.",
+          "level": "Select the level.",
+          "company": "Specify the company.",
+          "numerCase": "Enter the case number."
+        },
         "footer": {
           "information": "Information",
           "evidences": "Evidences"
         }
+      },
+      "edit-report": {
+        "edit-tittle": "Edit report",
+        "agent": "Agent",
+        "property": "Property",
+        "date": "Date",
+        "time": "Time",
+        "incident": "Incident",
+        "level": "Level",
+        "monitoring-team": "Monitoring team",
+        "number-case": "Number case",
+        "images": "Images"
       }
     },
-    "footer": "All rights reserved by Innova Monitoring"
+    "footer": "All rights reserved Innova Monitoring"
   }
 }

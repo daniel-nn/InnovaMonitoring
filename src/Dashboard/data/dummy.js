@@ -1,32 +1,11 @@
 import React, { useContext, useRef } from "react";
 import { useTranslation } from "react-i18next";
-
-import { AiOutlineBarChart, AiFillFilePdf, AiFillEdit, AiFillCheckCircle } from "react-icons/ai";
-import {
-  FiShoppingBag,
-  FiPieChart,
-  FiCreditCard,
-  FiStar,
-  FiShoppingCart,
-  FiUsers,
-} from "react-icons/fi";
-import {
-  BsCurrencyDollar,
-  BsShield,
-  BsChatLeft,
-  BsMap,
-  BsFillBuildingsFill,
-} from "react-icons/bs";
-
-import {
-  HiDocumentReport,
-  HiOutlineEye,
-  HiStatusOffline,
-  HiStatusOnline,
-  HiUserCircle,
-} from "react-icons/hi";
+import { AiFillFilePdf, AiFillEdit, AiFillCheckCircle } from "react-icons/ai";
+import { FiCreditCard, FiStar, FiShoppingCart, } from "react-icons/fi";
+import { BsCurrencyDollar, BsShield, BsChatLeft, } from "react-icons/bs";
+import { HiOutlineEye, HiStatusOffline, HiStatusOnline, } from "react-icons/hi";
 import { TiDeleteOutline, TiTick } from "react-icons/ti";
-import { GiCctvCamera, GiPoliceBadge, GiPoliceCar } from "react-icons/gi";
+import { GiPoliceCar } from "react-icons/gi";
 import { GrLocation } from "react-icons/gr";
 import avatar from "./avatar.jpg";
 import avatar2 from "./avatar2.jpg";
@@ -39,28 +18,20 @@ import product4 from "./product4.jpg";
 import product5 from "./product5.jpg";
 import product6 from "./product6.jpg";
 import product7 from "./product7.jpg";
-
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
 import { TbDeviceCctv } from "react-icons/tb";
 import { MdDelete } from "react-icons/md";
-import {
-  DeleteCase,
-  deleteCamera,
-  deleteCase,
-  deleteItem,
-  deleteProperty,
-} from "../helper/delete";
+import { deleteCamera, deleteItem, deleteProperty, } from "../helper/delete";
 import { GetPropertyInfo } from "../helper/getPropertyInfo";
-import { Toast } from "reactstrap";
-import { Button } from "primereact/button";
 import Swal from "sweetalert2";
-import { columnSelectionComplete } from "@syncfusion/ej2-react-grids";
 import { SiDialogflow } from "react-icons/si";
-import { getAgents } from "../helper/getAgents";
 import { postNewAgent } from "../helper/postNewAgent";
 import { postIncident } from "../helper/postIncident";
 
+export const useGlobalTranslation = () => {
+  return useTranslation("global");
+};
 
 export const gridOrderImage = (props) => (
   <div>
@@ -77,49 +48,53 @@ export const gridOrderImage = (props) => (
 
 export const gridOrderProperties = (props) => {
 
-  if(props.lenght>3){
-  return (
-    <ol>
-      {props?.map((i) => {(
-        <li> {i.name}</li>
-      )})}
-    </ol>)
+  if (props.lenght > 3) {
+    return (
+      <ol>
+        {props?.map((i) => {
+          (
+            <li> {i.name}</li>
+          )
+        })}
+      </ol>)
 
-  }else{
+  } else {
     return (
       <li className="flex justify-center m-0 p-0 cursor-pointer">
-        <SiDialogflow onClick={()=> { 
+        <SiDialogflow onClick={() => {
 
 
-            let propertiesList = []
-            console.log(props.user)
-            console.log(props.user.properties)
-            propertiesList = props.user.properties?.map(property => (`<li>${property.name}</li>`))
-            console.log(propertiesList)
-Swal.fire({
-  title: '<strong>Properties</strong>',
-  icon: 'success',
-  html:
-    '<h1 class=""></h1>'+
-    propertiesList
- 
-})
-         }}></SiDialogflow>
+          let propertiesList = []
+          console.log(props.user)
+          console.log(props.user.properties)
+          propertiesList = props.user.properties?.map(property => (`<li>${property.name}</li>`))
+          console.log(propertiesList)
+          Swal.fire({
+            title: '<strong>Properties</strong>',
+            icon: 'success',
+            html:
+              '<h1 class=""></h1>' +
+              propertiesList
+
+          })
+        }}></SiDialogflow>
       </li>
     );
 
   }
 
 };
+
 export const GridPdf = (props) => {
+  const { t } = useGlobalTranslation(); 
   let url = props.PDF;
   const toast = useRef(null);
 
-  if (url == "/dashboard/reports") {
+  if (url === "/dashboard/reports") {
     return (
       <Link
         onClick={() => {
-          Swal.fire("This report does not have a pdf");
+          Swal.fire(t("dashboard.reports.table.admin.no-pdf")); 
         }}
         className="flex justify-center m-0 p-0 "
       >
@@ -5062,14 +5037,14 @@ export const GridEditReport = ({ Details }) => {
       name,
       reports,
     };
-  
+
     setEditReportFormVisible(!editReportFormVisible);
     setReportForm({ ...Details, property: propertyToMapForm });
   };
 
 
   let newProperty = { ...Details.property, reports: reportes };
- 
+
   const {
     reportForm,
     setReportForm,
@@ -5089,13 +5064,13 @@ export const GridEditReport = ({ Details }) => {
 };
 export const GridEditCamera = ({ camera }) => {
   const { cameraForm, setCameraForm, cameraSaved, setCameratSaved, cameraFormFlag, setCameraFormFlag } = useContext(UserContext);
-  const showCameraToEdit = ()=> {
+  const showCameraToEdit = () => {
 
     setCameraForm(camera)
     setCameraFormFlag(!cameraFormFlag)
   }
   return (
-    <div className="cursor-pointe flex justify-center m-0 p-0" onClick={() => {showCameraToEdit()}}>
+    <div className="cursor-pointe flex justify-center m-0 p-0" onClick={() => { showCameraToEdit() }}>
       <AiFillEdit className="text-lg"></AiFillEdit>
     </div>
   );
@@ -5132,7 +5107,7 @@ export const GridUserEdit = ({ user }) => {
     <div
       onClick={() => {
         setUserProvider(user);
-  
+
         setUserDialog(!userDialog);
       }}
       className="flex justify-center m-0 p-0 cursor-pointer"
@@ -5166,7 +5141,7 @@ export const GridPropertyEdit = ({ property }) => {
     <div
       onClick={() => {
         setPropertyProvider(property);
-    
+
         setAgentDialog(!agentDialog);
       }}
       className="flex justify-center m-0 p-0 cursor-pointer"
@@ -5181,25 +5156,25 @@ export const GridDelete = ({ id }) => {
   const { flag, setFlag } = useContext(UserContext);
 
 
-const deleteItemFunction=()=>{
+  const deleteItemFunction = () => {
 
-  Swal.fire({
-    title: "Are you sure?",
-    text: "You won't be able to revert this!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#e6c200",
-    cancelButtonColor: "gray",
-    confirmButtonText: "Yes, delete it!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      deleteItem(url, id, flag, setFlag).then(
-      );
-    }
-  });
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#e6c200",
+      cancelButtonColor: "gray",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteItem(url, id, flag, setFlag).then(
+        );
+      }
+    });
 
 
-}
+  }
 
   return (
     <div
@@ -5217,8 +5192,8 @@ export const GridDeleteAgents = ({ agent }) => {
   const { navigate } = useNavigate();
   const { flag, setFlag } = useContext(UserContext);
 
-  const deleteAgent=async() =>{
-    agent.deleted=true;
+  const deleteAgent = async () => {
+    agent.deleted = true;
     console.log(agent)
     Swal.fire({
       title: "Are you sure?",
@@ -5235,8 +5210,8 @@ export const GridDeleteAgents = ({ agent }) => {
         setFlag(!flag)
       }
     });
-    
-     
+
+
   }
   return (
     <div
@@ -5249,15 +5224,15 @@ export const GridDeleteAgents = ({ agent }) => {
     </div>
   );
 };
-export const GridDeleteCase = ({ caseType}) => {
+export const GridDeleteCase = ({ caseType }) => {
   const {
     setreportSaved, reportSaved
   } = useContext(UserContext);
   let url = `${process.env.REACT_APP_SERVER_IP}/cases`;
 
-  const deleteIncident= async()=> {
+  const deleteIncident = async () => {
 
-    caseType.deleted=true;
+    caseType.deleted = true;
     await postIncident(caseType, setreportSaved, reportSaved);
 
   }
@@ -5299,25 +5274,25 @@ export const GridDeleteProperty = ({ id }) => {
 export const GridDeleteCamera = ({ id }) => {
   let url = `${process.env.REACT_APP_SERVER_IP}/cameras`;
   const { cameraSaved, setCameratSaved } = useContext(UserContext);
-const deleteCameraFunction=()=>{
-  
-  Swal.fire({
-    title: "Are you sure?",
-    text: "You won't be able to revert this!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#e6c200",
-    cancelButtonColor: "gray",
-    confirmButtonText: "Yes, delete it!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      deleteCamera(url, id, cameraSaved, setCameratSaved).then(
-      
-      );
-      Swal.fire("Deleted!", "Successfully removed.", "success");
-    }
-  });
-}
+  const deleteCameraFunction = () => {
+
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#e6c200",
+      cancelButtonColor: "gray",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteCamera(url, id, cameraSaved, setCameratSaved).then(
+
+        );
+        Swal.fire("Deleted!", "Successfully removed.", "success");
+      }
+    });
+  }
   return (
     <div
       onClick={() => {
@@ -5739,7 +5714,7 @@ export const cameraGrid = [
     textAlign: "Center",
     template: GridLiveView,
   },
-  
+
 ];
 export const cameraGridAdmin = [
   {
@@ -6001,7 +5976,6 @@ const useUserProfileData = () => {
 
   return userProfileData;
 };
-
 export default useUserProfileData;
 
 
@@ -6314,139 +6288,143 @@ export const propertyGridAdmin = [
     } */
 ];
 
-export const reportsGrid = [
-  {
-    headerText: "Image",
-    template: gridOrderImage,
-    textAlign: "Center",
-    width: "120",
-  },
-  {
-    field: "OrderItems",
-    headerText: "Case",
-    width: "200",
-    editType: "dropdownedit",
-    textAlign: "Center",
-  },
-  {
-    field: "Status",
-    headerText: "Level",
-    width: "130",
-    format: "yMd",
-    textAlign: "Center",
-    template: customerGridStatus,
-  },
 
-  {
-    field: "dateIncident",
-    headerText: "Date Incident",
-    width: "130",
-    textAlign: "Center",
-  },
-  {
-    field: "Time",
-    headerText: "Time",
-    width: "100",
-    editType: "dropdownedit",
-    textAlign: "Center",
-  },
-  {
-    field: "OrderID",
-    headerText: "Report ID",
-    width: "110",
-    textAlign: "Center",
-  },
+export const reportsGrid = (t) => {
+  return [
+    {
+      headerText: t("dashboard.reports.table.client.CaseImage"),
+      template: gridOrderImage,
+      textAlign: "Center",
+      width: "120",
+    },
+    {
+      field: "OrderItems",
+      headerText: "Case",
+      width: "200",
+      editType: "dropdownedit",
+      textAlign: "Center",
+    },
+    {
+      field: "Status",
+      headerText: "Level",
+      width: "130",
+      format: "yMd",
+      textAlign: "Center",
+      template: customerGridStatus,
+    },
 
-  {
-    field: "PDF",
-    headerText: "PDF",
-    width: "80",
-    textAlign: "Center",
-    template: GridPdf,
-  },
+    {
+      field: "dateIncident",
+      headerText: "Date Incident",
+      width: "130",
+      textAlign: "Center",
+    },
+    {
+      field: "Time",
+      headerText: "Time",
+      width: "100",
+      editType: "dropdownedit",
+      textAlign: "Center",
+    },
+    {
+      field: "OrderID",
+      headerText: "Report ID",
+      width: "110",
+      textAlign: "Center",
+    },
 
-  {
-    field: "Details",
-    headerText: "Details",
-    width: "105",
-    textAlign: "Center",
-    template: GridDetails,
-  },
-];
+    {
+      field: "PDF",
+      headerText: "PDF",
+      width: "80",
+      textAlign: "Center",
+      template: GridPdf,
+    },
 
-export const reportsGridAdmin = [
+    {
+      field: "Details",
+      headerText: "Details",
+      width: "105",
+      textAlign: "Center",
+      template: GridDetails,
+    },
+  ];
+};
 
-  {
-    headerText: "Image",
-    template: gridOrderImage,
-    textAlign: "Center",
-    width: "120",
-  },
-  {
-    field: "OrderItems",
-    headerText: "Case",
-    width: "200",
-    editType: "dropdownedit",
-    textAlign: "Center",
-  },
-  {
-    field: "Status",
-    headerText: "Level",
-    width: "130",
-    format: "yMd",
-    textAlign: "Center",
-    template: customerGridStatus,
-  },
+export const reportsGridAdmin = (t) => {
+  return [
+    {
+      headerText: t("dashboard.reports.table.admin.CaseImage"),
+      template: gridOrderImage,
+      textAlign: "Center",
+      width: "120",
+    },
+    {
+      field: "OrderItems",
+      headerText: t("dashboard.reports.table.admin.Case"),
+      width: "200",
+      editType: "dropdownedit",
+      textAlign: "Center",
+    },
+    {
+      field: "Status",
+      headerText: t("dashboard.reports.table.admin.CaseLevel"),
+      width: "130",
+      format: "yMd",
+      textAlign: "Center",
+      template: customerGridStatus,
+    },
 
-  {
-    field: "dateIncident",
-    headerText: "Datse Incident",
-    width: "130",
-    textAlign: "Center",
-  },
-  {
-    field: "Time",
-    headerText: "Time",
-    width: "100",
-    editType: "dropdownedit",
-    textAlign: "Center",
-  },
-  {
-    field: "OrderID",
-    headerText: "Report ID",
-    width: "110",
-    textAlign: "Center",
-  },
+    {
+      field: "dateIncident",
+      headerText: t("dashboard.reports.table.admin.DateCase"),
+      width: "130",
+      textAlign: "Center",
+    },
+    {
+      field: "Time",
+      headerText: t("dashboard.reports.table.admin.TimeCase"),
+      width: "100",
+      editType: "dropdownedit",
+      textAlign: "Center",
+    },
+    {
+      field: "OrderID",
+      headerText: t("dashboard.reports.table.admin.IdCase"),
+      width: "110",
+      textAlign: "Center",
+    },
 
-  {
-    field: "PDF",
-    headerText: "PDF",
-    width: "80",
-    textAlign: "Center",
-    template: GridPdf,
-  },
-  {
-    field: "isVerified",
-    headerText: "Verified",
-    width: "95",
-    textAlign: "Center",
-    template: GridIsVerified,
-  },
-  {
-    field: "Edit",
-    headerText: "Edit",
-    width: "80",
-    textAlign: "Center",
-    template: GridEditReport,
-  },
-  {
-    field: "Details",
-    headerText: "Details",
-    width: "105",
-    textAlign: "Center",
-    template: GridDetails,
-  },
-];
+    {
+      field: "PDF",
+      headerText: "Pdf",
+      width: "80",
+      textAlign: "Center",
+      template: GridPdf,
+    },
+    {
+      field: "isVerified",
+      headerText: t("dashboard.reports.table.admin.CaseVerified"),
+      width: "95",
+      textAlign: "Center",
+      template: GridIsVerified,
+    },
+    {
+      field: "Edit",
+      headerText: t("dashboard.reports.table.admin.CaseEdit"),
+      width: "80",
+      textAlign: "Center",
+      template: GridEditReport,
+    },
+    {
+      field: "Details",
+      headerText: t("dashboard.reports.table.admin.CaseDetails"),
+      width: "105",
+      textAlign: "Center",
+      template: GridDetails,
+    },
+  ];
+};
 
 export const ordersData = [
   {
