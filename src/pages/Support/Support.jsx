@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button2 } from "../../components/button/button";
 import "./Support.css";
 import support from "../../assets/images/Pages/Support/support.png";
@@ -8,39 +8,37 @@ import { Link } from "react-router-dom";
 import Fade from "react-reveal/Fade";
 import Footer from "../../components/Footer/Footer";
 import { useTranslation } from "react-i18next";
+import DynamicSupportForm from "../../components/DynamicSupportForm/DynamicSupportForm";
+
 const Support = () => {
   const {t} = useTranslation("global");
-  
+  const [showForm, setShowForm] = useState(false);
+  const handleButtonClick = () => {
+    setShowForm(prevShowForm => !prevShowForm); // Alternar el estado entre true y false
+  };
   return (
     <>
         <Navbar efecto="efecto2"></Navbar>
-      <section className=" 2xl:py-12 2xl:bg-gray-50">
-        <div className="px-4 mx-auto  max-w-7xl sm:px-6 lg:px-8 2xl:rounded-xl">
-          <div className="py-10 sm:py-10 ">
-            <div className="grid items-center grid-cols-1 gap-y-8 lg:grid-cols-2 lg:gap-x-8 2xl:gap-x-20">
-              <Fade top>
-                <div className="lg:order-2 2xl:-mr-24 support-image">
-                  <img className="w-full" src={support} alt="support"/>
-                </div>
-              </Fade>
-             
-              <div className="lg:order-1">
-                <Fade left>
+        <section className="bg-gray-50 py-12">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row items-center gap-8">
+            <div className="md:w-1/2">
+              <Fade left>
                 <p className="inline-block px-1 py-px mb-4 text-xs font-semibold tracking-wider text-yellow-600 uppercase rounded-full bg-teal-accent-400 tamaño">
                   {t("support1.prev")}
                 </p>
                 <h2 className="max-w-lg text-3xl font-bold  text-gray-700 sm:text-4xl ">
                   {t("support1.title")}
                 </h2>
-               
+
                 <Reveal>
-                <p className="text-base py-4 text-gray-700 md:text-lg">
-                  {t("support1.desc")}
-                </p>
+                  <p className="text-base py-4 text-gray-700 md:text-lg">
+                    {t("support1.desc")}
+                  </p>
                 </Reveal>
-                 </Fade>
-                <ul className="grid grid-cols-1 mt-4 sm:mt-10 sm:grid-cols-2 gap-x-10 xl:gap-x-16 gap-y-4 xl:gap-y-6">
-                  <Fade left>
+              </Fade>
+              <ul className="grid grid-cols-1 mt-4 sm:mt-10 sm:grid-cols-2 gap-x-10 xl:gap-x-16 gap-y-4 xl:gap-y-6">
+                <Fade left>
                   <li className="flex items-center">
                     <svg
                       className="flex-shrink-0 w-5 h-5 text-yellow-600"
@@ -59,8 +57,8 @@ const Support = () => {
                       {t("support1.01")}
                     </span>
                   </li>
-                  </Fade>
-                  <Fade right>
+                </Fade>
+                <Fade right>
                   <li className="flex items-center">
                     <svg
                       className="flex-shrink-0 w-5 h-5 text-yellow-600"
@@ -79,8 +77,8 @@ const Support = () => {
                       {t("support1.02")}
                     </span>
                   </li>
-                  </Fade>
-                  <Fade left>
+                </Fade>
+                <Fade left>
                   <li className="flex items-center">
                     <svg
                       className="flex-shrink-0 w-5 h-5 text-yellow-600"
@@ -99,8 +97,8 @@ const Support = () => {
                       {t("support1.03")}
                     </span>
                   </li>
-                  </Fade>
-                  <Fade right>
+                </Fade>
+                <Fade right>
                   <li className="flex items-center">
                     <svg
                       className="flex-shrink-0 w-5 h-5 text-yellow-600"
@@ -119,8 +117,8 @@ const Support = () => {
                       {t("support1.04")}
                     </span>
                   </li>
-                  </Fade>
-                  <Fade left>
+                </Fade>
+                <Fade left>
                   <li className="flex items-center">
                     <svg
                       className="flex-shrink-0 w-5 h-5 text-yellow-600"
@@ -135,12 +133,11 @@ const Support = () => {
                       />
                     </svg>
                     <span className="ml-3 font-medium text-gray-700">
-                      {" "}
                       {t("support1.05")}
                     </span>
                   </li>
-                  </Fade>
-                  <Fade right>
+                </Fade>
+                <Fade right>
                   <li className="flex items-center">
                     <svg
                       className="flex-shrink-0 w-5 h-5 text-yellow-600"
@@ -159,22 +156,15 @@ const Support = () => {
                       {t("support1.06")}
                     </span>
                   </li>
-                  </Fade>
-                </ul>
+                </Fade>
+              </ul>
 
-                <Link
-                  target="_top"
-                  to={
-                    "https://assist.innovatechcorp.net/login/join.jsp?language=es"
-                  }
-                  className="flex flex-col items-start mt-8 sm:space-x-4 sm:flex-row sm:items-center lg:mt-12"
-                >
-                  <Fade bottom>
-                  <Button2 text="buttons.talk"></Button2>
-                  </Fade>
-                </Link>
-              </div>
-             
+                <Fade bottom>
+                <Button2 text="buttons.talk" onClick={handleButtonClick}></Button2>
+                </Fade>
+            </div>
+            <div className="md:w-1/2">
+              <DynamicSupportForm showForm={showForm} />
             </div>
           </div>
         </div>
@@ -183,5 +173,4 @@ const Support = () => {
     </>
   );
 };
-
 export default Support;

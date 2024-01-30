@@ -301,10 +301,10 @@
       "control-acces": "¿Cuentas con control de acceso?"
     },
     "personal_section": {
-      "name_label": "Primer nombre",
-      "name_placeholder": "Ingresa tu primer nombre",
-      "last_name_label": "Segundo nombre",
-      "last_name_placeholder": "Ingresa tu segundo nombre",
+      "name_label": "Nombre",
+      "name_placeholder": "Ingresa tu Nombre",
+      "last_name_label": "Apellido",
+      "last_name_placeholder": "Ingresa tu apellido",
       "country_label": "Pais",
       "country_placeholder": "Ingresa tu pais",
       "state_label": "Estado",
@@ -319,7 +319,7 @@
         "property-type-list1": "Complejo residencial",
         "property-type-list2": "Edificio comercial",
         "property-type-list3": "Fábrica o almacén",
-        "property-type-list4": "Propiedad en construccion",
+        "property-type-list4": "Propiedad en construcción",
         "property-type-list5": "Casa",
         "property-type-list6": "Sitio de construcción",
         "property-type-list7": "Negocio",
@@ -339,8 +339,8 @@
         "units-placeholder": "¿Cuántas unidades tiene la propiedad?"
       },
       "construction": {
-        "construction-type-label": "Tipo de construccion",
-        "construction-type-placeholder": "Tipo de construccion",
+        "construction-type-label": "Tipo de construcción",
+        "construction-type-placeholder": "Tipo de construcción",
         "type": {
           "building": "Edificio",
           "home": "Casa",
@@ -358,7 +358,8 @@
       "property_address_placeholder": "Ingresa la direccion de la propiedad",
       "property_size_label": "Tamaño de la propiedad",
       "property_size_placeholder": "Ingresa el tamaño de la propiedad",
-      "empty_property_text": "Selecciona un tipo de propiedad"
+      "empty_property_text": "Selecciona un tipo de propiedad",
+      "maps-title": "Busca tu direccion en el mapa"
     },
     "contact_section": {
       "title": "Datos de contacto",

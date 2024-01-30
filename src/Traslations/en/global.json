@@ -358,7 +358,8 @@
       "property_address_placeholder": "Enter The Property Address",
       "property_size_label": "Square Footage Of The Property",
       "property_size_placeholder": "Enter The Property Size",
-      "empty_property_text": "Select a Type of Property"
+      "empty_property_text": "Select a Type of Property",
+      "maps-title": "Find your address on the map"
     },
     "contact_section": {
       "title": "Contact Information",

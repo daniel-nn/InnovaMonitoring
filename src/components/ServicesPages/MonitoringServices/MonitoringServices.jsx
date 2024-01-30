@@ -1,7 +1,7 @@
 import "./MonitoringPage.css";
 import { useState } from "react";
 import { Button, Button2 } from "../../button/button";
-import monitoring from "../../../assets/images/ServicesPages/MonitoringServices/medellin.jpg";
+import monitoringSpace from "../../../assets/images/ServicesPages/MonitoringServices/medellin.jpg";
 import Navbar from "../../Navbar/Navbar";
 import garbage from "../../../assets/images/ServicesPages/MonitoringServices/monitoring-garbage.jpg";
 import { HiDocumentReport } from "react-icons/hi";
@@ -104,9 +104,9 @@ export default function MonitoringService() {
               <Fade top>
                 <div className="monitoring-images">
                   <img
-                    src={monitoring}
+                    src={monitoringSpace}
                     alt="Product screenshot"
-                    className=" duration-700 w-[48rem] max-w-none rounded-xl shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0"
+                    className=" duration-700 w-[48rem] max-w-none rounded-xl shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0 monitoringSpace-suport"
                     width={2432}
                     height={1442}
                     onMouseOver={hoverImageFunction}

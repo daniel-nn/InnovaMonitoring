@@ -115,7 +115,7 @@ const Installation = () => {
 
             <div className="hidden lg:flex lg:w-1/2 lg:justify-center">
               <Fade right>
-                <img className="w-[28rem] h-[28rem] flex-shrink-0 object-cover  rounded-full" src={techTeam} alt="techTeam" />
+                <img className="w-[28rem] h-[28rem] flex-shrink-0 object-cover  rounded-full tech-team-shadow" src={techTeam} alt="techTeam" />
               </Fade>
             </div>
           </div>

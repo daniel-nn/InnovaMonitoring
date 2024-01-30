@@ -8,32 +8,32 @@ import { useTranslation } from "react-i18next";
 import Fade from "react-reveal/Fade";
 import Swing from 'react-reveal/Swing';
 import { Link } from "react-router-dom";
-
+import FormLanguageSwitcher from "../FormLanguageSwitcher/FormLanguageSwitcher";
 const Contact = () => {
 
   const refForm = useRef();
   const [t] = useTranslation("global");
 
-  const serviceId = "service_l6maf0k";
-  const templateId = "template_7pr1w3x";
-  const apiKey = "VeGC0aUoLOir8Ht3J";
+  // const serviceId = "service_l6maf0k";
+  // const templateId = "template_7pr1w3x";
+  // const apiKey = "VeGC0aUoLOir8Ht3J";
 
-  const sendEmail = (e) => {
-    e.preventDefault();
-
-    emailjs
-      .sendForm(serviceId, templateId, refForm.current, apiKey)
-      .then((res) => Swal.fire({ title: "Your message has been sent!", text: "Thank you for contacting us, we will get in touch with you as soon as possible.", icon: 'success', confirmButtonColor: "#B78607", }))
-      .catch(error => Swal.fire("Something went wrong!", "Sorry an error occurred, please check your internet connection or try again later. You can also contact us via Whatsapp. ", "error"))
-      .finally(() => refForm.current.reset());
-  };
+  // const sendEmail = (e) => {
+    //   e.preventDefault();
+    
+  //   emailjs
+  //     .sendForm(serviceId, templateId, refForm.current, apiKey)
+  //     .then((res) => Swal.fire({ title: "Your message has been sent!", text: "Thank you for contacting us, we will get in touch with you as soon as possible.", icon: 'success', confirmButtonColor: "#B78607", }))
+  //     .catch(error => Swal.fire("Something went wrong!", "Sorry an error occurred, please check your internet connection or try again later. You can also contact us via Whatsapp. ", "error"))
+  //     .finally(() => refForm.current.reset());
+  // };
   return (
     <>
       <Navbar efecto="efecto2"></Navbar>
       <section className="overflow-hidden  py-20 lg:pt-[95px] ">
         <div className="container mx-auto">
           <div className="mx-3 sm:mx-12 flex flex-wrap lg:justify-between">
-            <div className="w-full px-4 lg:w-1/2 xl:w-6/12 ">
+            <div className="w-full px-4 md:w-1/2">
               <div className="mb-12 max-w-[570px] lg:mb-0">
                 <Fade left>
                   <span className="text-yellow-600 mb-4 block text-4xl font-semibold tamañot">
@@ -56,7 +56,7 @@ const Contact = () => {
                     </p>
                   </Swing>
                 </Fade>
-                <div className="flex">
+                <div className="flex ">
                   <div className="mb-8 flex w-full max-w-[370px]">
                     <Fade left>
                       <div className="text-primary mr-6 flex h-[60px] w-full max-w-[60px] items-center justify-center overflow-hidden rounded bg-opacity-5 sm:h-[70px] sm:max-w-[70px]">
@@ -77,14 +77,14 @@ const Contact = () => {
                         </h4>
                       </Fade>
                       <Fade right>
-                        <p className="text-gray-700 text-base py-0 location">
+                        <p className="text-gray-700 text-base py-0">
                           {t("Contact.locationDesc")}
                         </p>
                       </Fade>
                     </div>
 
                   </div>
-                  <div className="mb-8 flex ml-10 mr-10 w-full max-w-[370px]">
+                  <div className="mb-8 flex  ml-10 mr-10 w-full max-w-[370px]">
                     <Fade left>
                       <div className="text-primary mr-6 flex h-[60px] w-full max-w-[60px] items-center justify-center overflow-hidden rounded bg-opacity-5 sm:h-[70px] sm:max-w-[70px]">
                         <svg
@@ -106,7 +106,7 @@ const Contact = () => {
                         </h4>
                       </Fade>
                       <Fade right>
-                        <p className="text-gray-700 text-base py-0 phone-number">{t("Contact.phoneNumber")}</p>
+                        <p className="text-gray-700 text-base py-0">{t("Contact.phoneNumber")}</p>
                       </Fade>
                     </div>
                   </div>
@@ -117,7 +117,7 @@ const Contact = () => {
                           width="30"
                           height="19"
                           viewBox="0 0 28 19"
-                          className="fill-yellow-600"
+                          className="fill-yellow-600 "
                         >
                           <path d="M25.3636 0H2.63636C1.18182 0 0 1.16785 0 2.6052V16.3948C0 17.8322 1.18182 19 2.63636 19H25.3636C26.8182 19 28 17.8322 28 16.3948V2.6052C28 1.16785 26.8182 0 25.3636 0ZM25.3636 1.5721C25.5909 1.5721 25.7727 1.61702 25.9545 1.75177L14.6364 8.53428C14.2273 8.75886 13.7727 8.75886 13.3636 8.53428L2.04545 1.75177C2.22727 1.66194 2.40909 1.5721 2.63636 1.5721H25.3636ZM25.3636 17.383H2.63636C2.09091 17.383 1.59091 16.9338 1.59091 16.3499V3.32388L12.5 9.8818C12.9545 10.1513 13.4545 10.2861 13.9545 10.2861C14.4545 10.2861 14.9545 10.1513 15.4091 9.8818L26.3182 3.32388V16.3499C26.4091 16.9338 25.9091 17.383 25.3636 17.383Z" />
                         </svg>
@@ -137,58 +137,12 @@ const Contact = () => {
                     </div>
                   </div>
                 </div>
-
               </div>
             </div>
             <Fade right>
-              <div className="w-full  px-4 lg:w-1/2 xl:w-5/12 ">
-                <div className="relative rounded-lg p-8 shadow-lg sm:p-12 contact">
-                  <form ref={refForm} onSubmit={sendEmail} >
-                    <div className="mb-6">
-                      <input
-                        type="text"
-                        placeholder={t("Contact.name_form")}
-                        name="from_name"
-                        required
-                        className="bg-transparent text-white border-[f0f0f0] focus:border-primary w-full rounded border py-3 px-[14px] text-base outline-none focus-visible:shadow-none"
-                      />
-                    </div>
-                    <div className="mb-6">
-                      <input
-                        type="email"
-                        name="email"
-                        required
-                        placeholder={t("Contact.email_form")}
-                        className="bg-transparent   border-[f0f0f0] focus:border-primary w-full rounded border py-3 px-[14px] text-base outline-none focus-visible:shadow-none text-white"
-                      />
-                    </div>
-                    <div className="mb-6">
-                      <input
-                        type="text"
-                        name="phone"
-                        required
-                        placeholder={t("Contact.phone_form")}
-                        className="bg-transparent text-white border-[f0f0f0] focus:border-primary w-full rounded border py-3 px-[14px] text-base outline-none focus-visible:shadow-none text-white"
-                      />
-                    </div>
-                    <div className="mb-6">
-                      <textarea
-                        rows="6"
-                        name="message"
-                        placeholder={t("Contact.message_form")}
-                        required
-                        className="bg-transparent text-white border-[f0f0f0] focus:border-primary w-full resize-none rounded border py-3 px-[14px] text-base outline-none focus-visible:shadow-none"
-                      ></textarea>
-                    </div>
-                    <div>
-                      <button
-                        type="submit"
-                        className="bg-yellow-700  w-full rounded  p-3 text-white transition hover:bg-opacity-90"
-                      >
-                        {t("buttons.message")}
-                      </button>
-                    </div>
-                  </form>
+              <div className="w-full px-4 md:w-1/2">
+                <div className="relative rounded-lg p-8  sm:p-12 ">
+                    <FormLanguageSwitcher />
                 </div>
               </div>
             </Fade>

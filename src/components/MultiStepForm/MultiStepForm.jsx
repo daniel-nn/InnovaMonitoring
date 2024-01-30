@@ -280,7 +280,6 @@ const PropertyForm = ({ formPlan, setformPlan }) => {
 
   const handlePropertyTypeChange = (e) => {
     setformPlan({ ...formPlan, propertyType: e.value });
-    // Restablece los campos adicionales antes de establecer el nuevo tipo de propiedad
     setformPlan(prevState => ({
       ...prevState,
       propertyDetail: '',
@@ -295,9 +294,14 @@ const PropertyForm = ({ formPlan, setformPlan }) => {
   };
 
   const handleSelectAddress = (address) => {
-    // Aquí manejarías la selección de la dirección, por ejemplo:
     setformPlan({ ...formPlan, propertyAddress: address });
   };
+
+  const [isAddressFieldFocused, setIsAddressFieldFocused] = useState(false);
+  const handleAddressFieldFocus = () => {
+    setIsAddressFieldFocused(true);
+  };
+
   return (
     <>
       <div className="card flex flex-col justify-content-center mb-2">
@@ -327,10 +331,10 @@ const PropertyForm = ({ formPlan, setformPlan }) => {
               value={formPlan.propertyDetail}
               onChange={(e) => setformPlan({ ...formPlan, propertyDetail: e.value })}
               options={[
-                { label: t("plan.property-section.residential.Govermental"), value: 'HUD' },
+                { label: t("plan.property-section.residential.Govermental"), value: 'Propiedad del gobierno' },
                 { label: t("plan.property-section.residential.hud-property"), value: 'HUD' },
                 { label: t("plan.property-section.residential.section-8"), value: 'Section-8' },
-                { label: t("plan.property-section.residential.private-property"), value: 'Private' }
+                { label: t("plan.property-section.residential.private-property"), value: 'Propiedad privada' }
               ]}
               optionLabel="label"
               placeholder={t("plan.property-section.residential.property-detail-placeholder")}
@@ -404,25 +408,7 @@ const PropertyForm = ({ formPlan, setformPlan }) => {
           </div>
         </>
       )}
-      
-      {/* Campo de texto para la dirección de la propiedad */}
-      <TextField
-        id="propertyAddress"
-        label={t("plan.property-section.property_address_label")}
-        variant="outlined"
-        placeholder={t("plan.property-section.property_address_placeholder")}
-        fullWidth
-        margin="normal"
-        required
-        value={formPlan.propertyAddress}
-        onChange={(e) => setformPlan({ ...formPlan, propertyAddress: e.target.value })}
-      />
 
-      {/* Componente del mapa para seleccionar la dirección */}
-      <div className="my-5">
-        <AddressAutocompleteMap onSelectAddress={handleSelectAddress} />
-      </div>
-      
       <TextField
         id="propertySize"
         label={t("plan.property-section.property_size_label")}
@@ -434,6 +420,32 @@ const PropertyForm = ({ formPlan, setformPlan }) => {
         value={formPlan.propertySize}
         onChange={(e) => setformPlan({ ...formPlan, propertySize: e.target.value })}
       />
+      
+      {/* Campo de texto para la dirección de la propiedad */}
+ 
+      <TextField
+        id="propertyAddress"
+        label={t("plan.property-section.property_address_label")}
+        variant="outlined"
+        placeholder={t("plan.property-section.property_address_placeholder")}
+        fullWidth
+        margin="normal"
+        required
+        value={formPlan.propertyAddress}
+        onFocus={handleAddressFieldFocus}
+        onChange={(e) => setformPlan({ ...formPlan, propertyAddress: e.target.value })}
+      />
+
+      {/* Renderiza condicionalmente el componente del mapa */}
+      {isAddressFieldFocused && (
+        <div className="my-5">
+          <label className="font-bold block mb-2">
+            {t("plan.property-section.maps-title")}
+          </label>
+          <AddressAutocompleteMap onSelectAddress={handleSelectAddress} />
+        </div>
+      )}
+     
     </>
   );
 };
@@ -498,16 +510,13 @@ const PlanInformation = ({ formPlan, setformPlan }) => {
             required
             showButtons
             min={5}
-            max={24}
+            max={500}
             value={formPlan.numCameras}
             onValueChange={(e) => {
               const newValue = Math.max(e.value, 5);
               setformPlan({ ...formPlan, numCameras: newValue });
             }}
           />
-          <small id="username-help">
-            {t("plan.plan_section.cameras")}
-          </small>
         </div>
 
         <div className="w-5"> </div>
@@ -528,7 +537,7 @@ const PlanInformation = ({ formPlan, setformPlan }) => {
             min={6}
             max={24}
           />
-          <small id="username-help">{t("plan.plan_section.hours")}</small>
+
         </div>
       </div>
 
@@ -544,7 +553,7 @@ const PlanInformation = ({ formPlan, setformPlan }) => {
 
       {/* Condición para mostrar campos adicionales si camerasInstalled es true */}
       {formPlan.camerasInstalled && (
-        <div className="flex flex-col lg:flex-row gap-3 w-full">
+        <div className="flex flex-col lg:flex-row grid gap-4 grid-cols-2 w-full">
           {/* Campo para el número de cámaras ya instaladas */}
           <div className="flex flex-col">
             <label htmlFor="existing-cameras">{t("plan.plan_section.cameras-property.existing-cameras")}</label>
@@ -556,6 +565,7 @@ const PlanInformation = ({ formPlan, setformPlan }) => {
               onValueChange={(e) => setformPlan({ ...formPlan, existingCameras: e.value })}
               required
               min={1}
+              max={500}
               showButtons
             />
           </div>
@@ -573,6 +583,7 @@ const PlanInformation = ({ formPlan, setformPlan }) => {
 
           {/* Nuevo campo para la marca de las cámaras */}
           <div className="flex flex-col">
+     
             <label htmlFor="camera-brand">{t("plan.plan_section.cameras-property.camera-brand.title")}</label>
             <InputText
               id="camera-brand"
@@ -580,6 +591,8 @@ const PlanInformation = ({ formPlan, setformPlan }) => {
               onChange={(e) => setformPlan({ ...formPlan, cameraBrand: e.target.value })}
               placeholder={t("plan.plan_section.cameras-property.camera-brand.placeholder")}
             />
+
+            
           </div>
 
         </div>
@@ -699,154 +712,53 @@ export const MultiStepForm = () => {
   const serviceId = "service_l6maf0k";
   const templateId = "template_7pr1w3x";
   const apiKey = "VeGC0aUoLOir8Ht3J";
-
-  //  const [formPlan, setformPlan] = useState({
-  //   selectedCategories:[],
-  //   textArea:"",
-  // numCameras:5
-  // numHours:0,
-  // camerasInstalled:true,
-  // internet:true,
-  // name:"",
-  // lastName:"",
-  // country:"",
-  // state:"",
-  // propertyType:"",
-  // propertyName:"",
-  // propertyAddress:"",
-  // propertySize:"",
-  // email:"",
-  // phone:"",
-  // alternativePhone:"",
-  // });
-
-
-
+  
   const sendEmail = () => {
 
     let formulario = document.createElement("form");
     let inputName = document.createElement("input");
-    inputName.setAttribute("value", formPlan.name)
     inputName.setAttribute("name", "name")
+    inputName.setAttribute("value", formPlan.name)
 
     let inputLastName = document.createElement("input");
-    inputLastName.setAttribute("value", formPlan.lastName)
     inputLastName.setAttribute("name", "lastName")
+    inputLastName.setAttribute("value", formPlan.lastName)
+  
+    let propertyName = document.createElement("input");
+    propertyName.setAttribute("name", "propertyName")
+    propertyName.setAttribute("value", formPlan.propertyName)
 
     let propertyType = document.createElement("input");
     propertyType.setAttribute("name", "propertyType")
     propertyType.setAttribute("value", formPlan.propertyType.name)
 
-    let propertyAddress = document.createElement("input");
-    propertyAddress.setAttribute("value", formPlan.propertyAddress)
-    propertyAddress.setAttribute("name", "propertyAddress")
-
-
-    let state = document.createElement("input");
-    state.setAttribute("value", formPlan.state)
-    state.setAttribute("name", "state")
-
     let country = document.createElement("input");
     country.setAttribute("value", formPlan.country)
     country.setAttribute("name", "country")
 
-    let numHours = document.createElement("input");
-    numHours.setAttribute("value", formPlan.numHours)
-    numHours.setAttribute("name", "numHours")
+    let state = document.createElement("input");
+    state.setAttribute("name", "state")
+    state.setAttribute("value", formPlan.state)
 
-    let numCameras = document.createElement("input");
-    numCameras.setAttribute("value", formPlan.numCameras)
-    numCameras.setAttribute("name", "numCameras")
+    let city = document.createElement("input");
+    city.setAttribute("name", "city")
+    city.setAttribute("value", formPlan.city)
 
-    let existingCamerasInput = document.createElement("input");
-    existingCamerasInput.setAttribute("name", "existingCameras");
-    existingCamerasInput.setAttribute("value", formPlan.existingCameras);
-    formulario.appendChild(existingCamerasInput);
-
-    let cameraTypeInput = document.createElement("input");
-    cameraTypeInput.setAttribute("name", "cameraType");
-    cameraTypeInput.setAttribute("value", formPlan.cameraType);
-    formulario.appendChild(cameraTypeInput);
-
-    let cameraBrandInput = document.createElement("input");
-    cameraBrandInput.setAttribute("name", "cameraBrand");
-    cameraBrandInput.setAttribute("value", formPlan.cameraBrand);
-    formulario.appendChild(cameraBrandInput);
-
-    let internetSpeedInput = document.createElement("input");
-    internetSpeedInput.setAttribute("name", "internetSpeed");
-    internetSpeedInput.setAttribute("value", formPlan.internetSpeed);
-    formulario.appendChild(internetSpeedInput);
-
-
-    let internetTypeInput = document.createElement("input");
-    internetTypeInput.setAttribute("name", "internetType");
-    internetTypeInput.setAttribute("value", formPlan.internetType);
-    formulario.appendChild(internetTypeInput);
-
-    let locationsCountInput = document.createElement("input");
-    locationsCountInput.setAttribute("name", "locationsCount");
-    locationsCountInput.setAttribute("value", formPlan.locationsCount);
-    formulario.appendChild(locationsCountInput);
-
-    const propertyDetailInput = document.createElement("input");
-    propertyDetailInput.setAttribute("name", "propertyDetail");
-    propertyDetailInput.setAttribute("value", formPlan.propertyDetail);
-    formulario.appendChild(propertyDetailInput);
-
-    const unitsInput = document.createElement("input");
-    unitsInput.setAttribute("name", "units");
-    unitsInput.setAttribute("value", formPlan.units);
-    formulario.appendChild(unitsInput);
-
-    const businessTypeInput = document.createElement("input");
-    businessTypeInput.setAttribute("name", "businessType");
-    businessTypeInput.setAttribute("value", formPlan.businessType);
-    formulario.appendChild(businessTypeInput);
-
-    let internetProviderInput = document.createElement("input");
-    internetProviderInput.setAttribute("name", "internetProvider");
-    internetProviderInput.setAttribute("value", formPlan.internetProvider);
-    formulario.appendChild(internetProviderInput);
-
-    let constructionTypeInput = document.createElement("input");
-    constructionTypeInput.setAttribute("name", "constructionType");
-    constructionTypeInput.setAttribute("value", formPlan.constructionType);
-    formulario.appendChild(constructionTypeInput);
-
-
-    let email = document.createElement("input");
-    email.setAttribute("value", formPlan.email)
-    email.setAttribute("name", "email")
-
-    let phone = document.createElement("input");
-    phone.setAttribute("value", formPlan.phone)
-    phone.setAttribute("name", "phone")
-
-    let alternativePhone = document.createElement("input");
-    alternativePhone.setAttribute("value", formPlan.alternativePhone)
-    alternativePhone.setAttribute("name", "alternativePhone")
-
-    let propertyName = document.createElement("input");
-    propertyName.setAttribute("value", formPlan.propertyName)
-    propertyName.setAttribute("name", "propertyName")
+    let propertyAddress = document.createElement("input");
+    propertyAddress.setAttribute("name", "propertyAddress")
+    propertyAddress.setAttribute("value", formPlan.propertyAddress)
 
     let propertySize = document.createElement("input");
-    propertySize.setAttribute("value", formPlan.propertySize)
     propertySize.setAttribute("name", "propertySize")
+    propertySize.setAttribute("value", formPlan.propertySize)
 
-    let camerasInstalled = document.createElement("input");
-    camerasInstalled.setAttribute("value", formPlan.camerasInstalled ? "Yes" : "No")
-    camerasInstalled.setAttribute("name", "camerasInstalled")
+    let propertyDetail = document.createElement("input");
+    propertyDetail.setAttribute("name", "propertyDetail");
+    propertyDetail.setAttribute("value", formPlan.propertyType?.code === "1" ? formPlan.propertyDetail : "N/A");
 
-    let internet = document.createElement("input");
-    internet.setAttribute("value", formPlan.internet ? "Yes" : "No")
-    internet.setAttribute("name", "internet")
-
-    let textArea = document.createElement("input");
-    textArea.setAttribute("value", formPlan.textArea)
-    textArea.setAttribute("name", "textArea")
-
+    let units = document.createElement("input");
+    units.setAttribute("name", "units");
+    units.setAttribute("value", formPlan.propertyType?.code === "1" ? formPlan.units : "N/A");
 
     let list = ""
     formPlan.selectedCategories?.forEach(element => {
@@ -854,17 +766,92 @@ export const MultiStepForm = () => {
     })
 
     let selectedCategories = document.createElement("input");
-    selectedCategories.setAttribute("value", list)
     selectedCategories.setAttribute("name", "selectedCategories")
+    selectedCategories.setAttribute("value", list)
+
+    let numHours = document.createElement("input");
+    numHours.setAttribute("name", "numHours")
+    numHours.setAttribute("value", formPlan.numHours)
+
+    let numCameras = document.createElement("input");
+    numCameras.setAttribute("name", "numCameras")
+    numCameras.setAttribute("value", formPlan.numCameras)
+
+    let existingCameras = document.createElement("input");
+    existingCameras.setAttribute("name", "existingCameras");
+    existingCameras.setAttribute("value", formPlan.camerasInstalled ? formPlan.existingCameras : "N/A");
+  
+    let cameraType = document.createElement("input");
+    cameraType.setAttribute("name", "cameraType");
+    cameraType.setAttribute("value", formPlan.camerasInstalled ? formPlan.cameraType : "N/A");
+   
+    let cameraBrand = document.createElement("input");
+    cameraBrand.setAttribute("name", "cameraBrand");
+    cameraBrand.setAttribute("value", formPlan.camerasInstalled ? formPlan.cameraBrand : "N/A");
+
+    let internetSpeed = document.createElement("input");
+    internetSpeed.setAttribute("name", "internetSpeed");
+    internetSpeed.setAttribute("value", formPlan.internet ? formPlan.internetSpeed : "N/A");
+   
+    let internetType = document.createElement("input");
+    internetType.setAttribute("name", "internetType");
+    internetType.setAttribute("value", formPlan.internet ? formPlan.internetType : "N/A");
+    
+    let locationsCount = document.createElement("input");
+    locationsCount.setAttribute("name", "locationsCount");
+    locationsCount.setAttribute("value", formPlan.internet ? formPlan.locationsCount : "N/A");
+    
+    let internetProvider = document.createElement("input");
+    internetProvider.setAttribute("name", "internetProvider");
+    internetProvider.setAttribute("value", formPlan.internet ? formPlan.internetProvider : "N/A");
+  
+    let businessType = document.createElement("input");
+    businessType.setAttribute("name", "businessType");
+    businessType.setAttribute("value", formPlan.propertyType?.code === "7" ? formPlan.businessType : "N/A");
+
+    let constructionType = document.createElement("input");
+    constructionType.setAttribute("name", "constructionType");
+    constructionType.setAttribute("value", formPlan.propertyType?.code === "4" ? formPlan.constructionType : "N/A");
+      
+    let ControlAcces = document.createElement("input")
+    ControlAcces.setAttribute("name", "ControlAcces")
+    ControlAcces.setAttribute("value", formPlan.ControlAcces)
+
+    let email = document.createElement("input");
+    email.setAttribute("name", "email")
+    email.setAttribute("value", formPlan.email)
+
+    let phone = document.createElement("input");
+    phone.setAttribute("name", "phone")
+    phone.setAttribute("value", formPlan.phone)
+
+    let alternativePhone = document.createElement("input");
+    alternativePhone.setAttribute("name", "alternativePhone")
+    alternativePhone.setAttribute("value", formPlan.alternativePhone)
+    
+    let camerasInstalled = document.createElement("input");
+    camerasInstalled.setAttribute("name", "camerasInstalled")
+    camerasInstalled.setAttribute("value", formPlan.camerasInstalled ? "Si" : "No")
+
+    let internet = document.createElement("input");
+    internet.setAttribute("name", "internet")
+    internet.setAttribute("value", formPlan.internet ? "Si" : "No")
+
+    let textArea = document.createElement("input");
+    textArea.setAttribute("name", "textArea")
+    textArea.setAttribute("value", formPlan.textArea)
 
     formulario.appendChild(inputName);
     formulario.appendChild(inputLastName);
     formulario.appendChild(propertyName);
     formulario.appendChild(propertyType);
-    formulario.appendChild(propertySize);
-    formulario.appendChild(propertyAddress);
-    formulario.appendChild(state);
     formulario.appendChild(country);
+    formulario.appendChild(state);
+    formulario.appendChild(city);
+    formulario.appendChild(propertyAddress);
+    formulario.appendChild(propertySize);
+    formulario.appendChild(propertyDetail);
+    formulario.appendChild(constructionType);
     formulario.appendChild(numHours);
     formulario.appendChild(numCameras);
     formulario.appendChild(email);
@@ -874,8 +861,16 @@ export const MultiStepForm = () => {
     formulario.appendChild(internet);
     formulario.appendChild(textArea);
     formulario.appendChild(selectedCategories);
-
-
+    formulario.appendChild(existingCameras);
+    formulario.appendChild(cameraType);
+    formulario.appendChild(cameraBrand);
+    formulario.appendChild(internetSpeed);
+    formulario.appendChild(internetType);
+    formulario.appendChild(locationsCount);
+    formulario.appendChild(units);
+    formulario.appendChild(businessType);
+    formulario.appendChild(internetProvider);
+    formulario.appendChild(ControlAcces);
 
     emailjs.sendForm(serviceId, templateId, formulario, apiKey)
       .then((res) => console.log("Good"))
