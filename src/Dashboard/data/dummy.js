@@ -6291,12 +6291,14 @@ export const propertyGridAdmin = [
 
 export const reportsGrid = (t) => {
   return [
+
     {
       headerText: t("dashboard.reports.table.client.CaseImage"),
       template: gridOrderImage,
       textAlign: "Center",
       width: "120",
     },
+
     {
       field: "OrderItems",
       headerText: "Case",
@@ -6304,6 +6306,7 @@ export const reportsGrid = (t) => {
       editType: "dropdownedit",
       textAlign: "Center",
     },
+
     {
       field: "Status",
       headerText: "Level",
@@ -6319,6 +6322,7 @@ export const reportsGrid = (t) => {
       width: "130",
       textAlign: "Center",
     },
+
     {
       field: "Time",
       headerText: "Time",
@@ -6326,6 +6330,7 @@ export const reportsGrid = (t) => {
       editType: "dropdownedit",
       textAlign: "Center",
     },
+
     {
       field: "OrderID",
       headerText: "Report ID",
@@ -6348,7 +6353,9 @@ export const reportsGrid = (t) => {
       textAlign: "Center",
       template: GridDetails,
     },
+
   ];
+
 };
 
 export const reportsGridAdmin = (t) => {

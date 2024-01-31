@@ -23,6 +23,7 @@ const Reports = () => {
   const { cases } = useFetchIncidents(navigate);
   const { agents } = useFetchAgents(navigate);
   const toolbarOptions = ["Search"];
+
   let propertiesUser = JSON.parse(localStorage.getItem("user"));
  
   let listOfPropertiesByUser = propertiesUser.properties;
@@ -40,15 +41,12 @@ const Reports = () => {
   let idStorage = propertyStorage.id;
   let id = propertyContext.id || idStorage;
   const [t, i18n] = useTranslation("global");
+  
   const [clientGridColumns, setClientGridColumns] = useState([]);
   const [adminGridColumns, setAdminGridColumns] = useState([]); // Estado para las columnas de admin
   const [activeIndex, setActiveIndex] = useState(0);
 
-  // Función para abrir el formulario
-  const openForm = () => {
-    setReportFormVisible(true);
-    setActiveIndex(0); 
-  };
+  
   // Función para cerrar el formulario
   const closeForm = () => {
     setReportFormVisible(false);
@@ -74,6 +72,7 @@ const Reports = () => {
         updateClientColumns();
       }
     });
+
     const updateColumns = () => {
       if (userRole === "Admin") {
         setAdminGridColumns(reportsGridAdmin(t));

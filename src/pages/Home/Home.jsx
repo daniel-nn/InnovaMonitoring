@@ -10,7 +10,7 @@ import ReportsSection from "../ReportsSection/ReportsSection";
 const Home = () => {
 
   // localStorage.clear("propertySelected")  jjjjj
-  // localStorage.clear("user")  ijbiñij
+  // localStorage.clear("user")  
   return (
     <>
       <Header></Header> 
