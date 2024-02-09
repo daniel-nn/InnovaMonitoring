@@ -36,14 +36,15 @@ export const GetReports = async (id, userRol) => {
         OrderID: report.numerCase,
         ProductImage: reportImg || reportImgDefault,
         StatusBg: "#8BE78B",
-        dateIncident: report.date,
+        dateIncident: report.dateOfReport,
+        Time: report.timeOfReport,
         Status: report.level,
-        Time: report.time,
         OrderItems: report.caseType.incident,
         PDF: report.pdf || "/dashboard/reports",
         Details: report || { id: 1 },
         Edit: report || {  },
-        isVerified:report.verified
+        isVerified:report.verified,
+
       };
     });
   } catch (error) {
@@ -63,7 +64,7 @@ export const GetReports = async (id, userRol) => {
 
     return;
   }
-console.log(data)
-  console.log(reportsMapped);
+console.log(data, "hola")
+  console.log(reportsMapped, "lorem");
   return reportsMapped;
 };

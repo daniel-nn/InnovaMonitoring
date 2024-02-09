@@ -469,7 +469,9 @@
         }
       },
       "new-report": {
-        "add-report": "New report",
+        "add-report": "add report",
+        "new-report": "New report",
+        "new-report-of": "New report of -",
         "property": "Property",
         "agent": "Agent",
         "date": "Date",
@@ -514,5 +516,6 @@
       }
     },
     "footer": "All rights reserved Innova Monitoring"
-  }
+  },
+  "space": " "
 }

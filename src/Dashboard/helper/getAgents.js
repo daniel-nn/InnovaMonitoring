@@ -8,12 +8,9 @@ export const getAgents = async (navigate) => {
   const url = `${process.env.REACT_APP_SERVER_IP}/agents`;
   let data = {};
   try {
-
+    
     resp = await fetch(url);
-
     data = await resp.json();
-
-
     
     usersMapped = data.map((agent) => {
 

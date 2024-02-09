@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import "./button.css";
 import { MdKeyboardDoubleArrowRight } from "react-icons/md";
 import { useTranslation } from "react-i18next";
+
+
 export const Button = ({ text = "LEARN MORE", type }) => {
   const [t, i18n] = useTranslation("global");
   return (
@@ -11,7 +13,16 @@ export const Button = ({ text = "LEARN MORE", type }) => {
     </button>
   );
 };
-export const Button2 = ({ text, onClick }) => {
+export const Button2 = ({ text }) => {
+  const [t, i18n] = useTranslation("global");
+  return (
+    <button className="clase-base secondary flex justify-center items-cente ">
+      <p className="p-2">{t(text)}</p><MdKeyboardDoubleArrowRight />
+    </button>
+  );
+};
+
+export const FormButton = ({ text, onClick }) => {
   const [t, i18n] = useTranslation("global");
   const [move, setMove] = useState(false);
 

@@ -83,9 +83,8 @@ let propertyImage = ""
               key={1}
               className="bg-white/75
                    dar:text-gray-200 dark:bg-secondary-dark-bg
-                   md:w-52 p-4 pt-9 rounded-2xl">
-              <NavLink to="/dashboard/cameras"
-              >
+                   md:w-52 p-4 pt-9">
+              
               <button
             
             type="button"
@@ -93,12 +92,12 @@ let propertyImage = ""
                   color: "#03C9D7",
                   backgroundColor: "#E5FAFB",
                 }}
-                className="text-2xl opacity-0.9 rounded-full p-4 hover:drop-shadow-xl"
+                className="text-2xl opacity-0.9 rounded-full p-4"
               >
              
                   <TbDeviceCctv />
               </button>
-                </NavLink>
+              
               <p className="p-0 mt-3">
                 <span className="text-lg font-semibold">
                   {propertyFecthed.cameras?.length || 0}

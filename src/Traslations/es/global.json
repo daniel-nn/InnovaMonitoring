@@ -438,7 +438,8 @@
     "reports": {
       "reports-of": "Reportes de - ",
       "reports-tittle": "Informes",
-      "add-report": "Agregar reporte",
+      "add-report": "Agregar reporteeee",
+      
       "table": {
         "admin": {
           "CaseImage": "Imagen",
@@ -465,7 +466,9 @@
         }
       },
       "new-report": {
-        "add-report": "Nuevo reporte",
+        "add-report": "Agregar reporte",
+        "new-report": "Nuevo Reporte",
+        "new-report-of": "Nuevo reporte para -",
         "property": "Propiedad",
         "agent": "Monitor",
         "date": "Fecha del reporte",
@@ -510,5 +513,7 @@
       }
     },
     "footer": "Todos los derechos reservados Innova Monitioring"
-  }
+  },
+  "space": " "
+
 }

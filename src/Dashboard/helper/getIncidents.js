@@ -44,7 +44,6 @@ export const getIncidents = async (navigate) => {
   caseMapped=caseMapped.filter(function( element ) {
     return element !== undefined;
  });
-
-  console.log(caseMapped);
+ 
   return caseMapped;
 };

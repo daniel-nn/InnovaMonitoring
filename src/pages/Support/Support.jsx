@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button2 } from "../../components/button/button";
+import { FormButton } from "../../components/button/button";
 import "./Support.css";
 import support from "../../assets/images/Pages/Support/support.png";
 import Navbar from "../../components/Navbar/Navbar";
@@ -160,7 +160,7 @@ const Support = () => {
               </ul>
 
                 <Fade bottom>
-                <Button2 text="buttons.talk" onClick={handleButtonClick}></Button2>
+                <FormButton text="buttons.talk" onClick={handleButtonClick}></FormButton>
                 </Fade>
             </div>
             <div className="md:w-1/2">

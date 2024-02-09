@@ -87,7 +87,9 @@ const Reports = () => {
     };
   }, [t, i18n.language, propertyContext, reportSaved]);
 
-
+  const navigateToNewReport = () => {
+    navigate("/dashboard/NewReport");
+  };
   
   return (
 
@@ -150,16 +152,25 @@ const Reports = () => {
       <div className="m-20 md:m-10 mt-14 p-2 md:p-0 bg-white rounded-3xl">
         <Header category={t("dashboard.reports.reports-tittle")} title={t("dashboard.reports.reports-of") + propertyContext.name} />
         <div className="card flex justify-end py-2 mb-7">
-          {userRole == "Admin" ? (
-            <Button
-              onClick={() => setReportFormVisible(!reportFormVisible)}
-              severity="info"
-              label={t("dashboard.reports.add-report")}
-            >
-              <AiOutlinePlusCircle className="ml-2 "></AiOutlinePlusCircle>
-            </Button>
-          ) : (
-            <></>
+          {userRole === "Admin" && (
+            <>
+              <Button
+                onClick={() => setReportFormVisible(!reportFormVisible)}
+                severity="info"
+                label={t("dashboard.reports.add-report")}
+                className="p-button-text"
+              >
+                <AiOutlinePlusCircle className="ml-2"></AiOutlinePlusCircle>
+              </Button>
+              <Button
+                onClick={navigateToNewReport}
+                severity="info"
+                label={t("dashboard.reports.new-report.add-report")} // Asegúrate de tener esta traducción en tu archivo i18n
+                className="p-button-text ml-2" // Añadido ml-2 para dar margen entre botones
+              >
+                <AiOutlinePlusCircle className="ml-2"></AiOutlinePlusCircle>
+              </Button>
+            </>
           )}
         </div>
         {/* Esta es la tabla */}
