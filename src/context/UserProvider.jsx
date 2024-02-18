@@ -16,16 +16,20 @@ export const UserProvider = ({ children }) => {
   const [reportFormVisible, setReportFormVisible] = useState(false);
   const [flag, setFlag] = useState(false)
   const [cameraFormFlag, setCameraFormFlag] = useState("")
+  
   const [reportForm, setReportForm] = useState({
     id:"",
     property: {},
     agent: {},
-    date: new Date(),
-    time: new Date(),
+    dateOfReport: new Date(),
+    timeOfReport: new Date(),
     caseType: {},
     level: "",
     company: "",
     numerCase: "",
+    camerasFunctioning: true,
+    observerdViaCameras: true,
+    policeFirstResponderNotified: false,
     pdf: "",
     images: [],
     videos: [],

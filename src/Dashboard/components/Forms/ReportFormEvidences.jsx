@@ -19,21 +19,21 @@ export const ReportFormEvidences = ({
   let formatted_date;
 
 
-  const formatDate = (date) => {
-if(!date){
-  date = new Date()
+  const formatDate = (dateOfReport) => {
+    if (!dateOfReport){
+      dateOfReport = new Date()
 }
 
-   formatted_date = date.getMonth() + 1 + "-" + date.getDate() + "-" + date.getFullYear();
+    formatted_date = dateOfReport.getMonth() + 1 + "-" + dateOfReport.getDate() + "-" + dateOfReport.getFullYear();
     return formatted_date;
   };
 
-  const formatTime = (date) => {
-    if(!date){
-      date = new Date()
+  const formatTime = (dateOfReport) => {
+    if (!dateOfReport){
+      dateOfReport = new Date()
     }
 
-    let formatted_date = date.getHours() + ":" + date.getMinutes();
+    let formatted_date = dateOfReport.getHours() + ":" + dateOfReport.getMinutes();
     return formatted_date;
   };
 
@@ -67,8 +67,8 @@ if(!date){
       agent,
       caseType,
       company,
-      date,
-      time,
+      dateOfReport,
+      timeOfReport,
       level,
       pdf,
       numerCase,
@@ -78,16 +78,17 @@ if(!date){
       agent,
       caseType,
       company,
-      date,
-      time,
+      dateOfReport,
+      timeOfReport,
+      camerasFunctioning: reportForm.camerasFunctioning ? 1 : 0, 
       level,
       pdf,
       numerCase,
       property,
       evidences,
     };
-    reportDto.date = formatDate(reportForm.date);
-    reportDto.time = formatTime(reportForm.time);
+    reportDto.dateOfReport = formatDate(reportForm.dateOfReport);
+    reportDto.timeOfReport = formatTime(reportForm.timeOfReport);
 
   
     await postReport(reportDto);

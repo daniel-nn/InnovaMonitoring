@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 export const ReportForm = ({properties, agents, incidents}) => {
  
   const { reportForm, setReportForm } = useContext(UserContext);
-  const { property, agent, date, time, caseType, level, company, numerCase} = reportForm;
+  const { property, agent, dateOfReport, timeOfReport, caseType, level, company, numerCase} = reportForm;
 
 
   const levels = [
@@ -68,10 +68,10 @@ export const ReportForm = ({properties, agents, incidents}) => {
           </span>
           <Calendar
             placeholder={t("dashboard.reports.new-report.date")}
-            value={date}
+            value={dateOfReport}
             onChange={(e) => setReportForm((i) => {
              
-              return { ...reportForm, date:e.value };
+              return { ...reportForm, dateOfReport:e.value };
             })}
           />
         </div>
@@ -82,10 +82,10 @@ export const ReportForm = ({properties, agents, incidents}) => {
           </span>
           <Calendar
             placeholder={t("dashboard.reports.new-report.time")}
-            value={time}
+            value={timeOfReport}
             onChange={(e) => setReportForm((i) => {
            
-              return { ...reportForm, time:e.value };
+              return { ...reportForm, timeOfReport:e.value };
             })}
             timeOnly
           />

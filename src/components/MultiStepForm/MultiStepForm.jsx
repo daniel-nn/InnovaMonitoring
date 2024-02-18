@@ -711,7 +711,7 @@ export const MultiStepForm = () => {
   const { t, i18n } = useTranslation("global");
   const serviceId = "service_l6maf0k";
   const templateId = "template_7pr1w3x";
-  const apiKey = "VeGC0aUoLOir8Ht3J";
+  const apiKey = process.env.EMAILJS_API_KEY;
   
   const sendEmail = () => {
 
@@ -871,7 +871,6 @@ export const MultiStepForm = () => {
     formulario.appendChild(businessType);
     formulario.appendChild(internetProvider);
     formulario.appendChild(ControlAcces);
-
     emailjs.sendForm(serviceId, templateId, formulario, apiKey)
       .then((res) => console.log("Good"))
       .catch((error) => console.log("Bad"));

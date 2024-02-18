@@ -266,7 +266,7 @@ export const ReportDatails = () => {
                   <div className="flex items-center w-full ">
                     <p className=" text-lg font-bold ">Date</p>
                     <p className="text-lg text-gray-900 ml-3">
-                      {reportDetails?.date}
+                    {reportDetails?.dateOfReport}
                     </p>
                   </div>
                 </div>
@@ -279,7 +279,7 @@ export const ReportDatails = () => {
                   <div className="flex items-center w-full ">
                     <p className=" text-lg font-bold ">Time</p>
                     <p className="text-lg text-gray-900 ml-3">
-                      {reportDetails?.time}
+                    {reportDetails?.timeOfReport}
                     </p>
                   </div>
                 </div>

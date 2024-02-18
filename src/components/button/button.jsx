@@ -33,8 +33,7 @@ export const FormButton = ({ text, onClick }) => {
   return (
     <button
       className={`flex flex-col items-start mt-8 sm:space-x-4 sm:flex-row sm:items-center lg:mt-12 clase-base secondary flex justify-center items-center ${move ? "move-right" : "move-left"}`}
-      onClick={handleClick}
-    >
+      onClick={handleClick}>
       <p className="p-2">{t(text)}</p>
       <MdKeyboardDoubleArrowRight />
     </button>

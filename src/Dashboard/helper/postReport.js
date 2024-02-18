@@ -1,7 +1,5 @@
-
-import React from 'react'
 import Swal from 'sweetalert2';
-import { useTranslation } from "react-i18next"; 
+
 
 
 export const postReport = async(report) => {

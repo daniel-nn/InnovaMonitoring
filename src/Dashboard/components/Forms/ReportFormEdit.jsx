@@ -10,14 +10,14 @@ import { useTranslation } from "react-i18next";
 export const ReportFormEdit = ({properties, agents, incidents}) => {
   const [t] = useTranslation("global");
   const { reportForm, setReportForm } = useContext(UserContext);
-  const { property, agent, date, time, caseType, evidences,level, company, numerCase, images, videos} = reportForm;
+  const { property, agent, dateOfReport, timeOfReport, caseType, evidences,level, company, numerCase, images, videos} = reportForm;
 
   let agentsList = agents.map(agen => ({id:agen.id, image:agen.agent.image, lastName:agen.lastName, name:agen.name}))
 
 let caseTypeMapped = {...caseType, caseType};
 
-let fecha = new Date(date)
-let fecha2 = new Date(`09-24-2023 ${time}:00`)
+  let fecha = new Date(dateOfReport)
+  let fecha2 = new Date(`09-24-2023 ${timeOfReport}:00`)
 
 
 
@@ -83,7 +83,7 @@ let fecha2 = new Date(`09-24-2023 ${time}:00`)
             value={fecha}
             onChange={(e) => setReportForm((i) => {
              
-              return { ...reportForm, date:e.value };
+              return { ...reportForm, dateOfReport:e.value };
             })}
           />
         </div>

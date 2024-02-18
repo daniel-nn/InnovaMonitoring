@@ -30,18 +30,18 @@ const [videosInput, setVideosInput] = useState("")
   }, [])
   
 
-  const formatDate = (date) => {
-    console.log(date.getMonth());
-    console.log(date.getDate());
-    console.log(date.getFullYear());
+  const formatDate = (dateOfReport) => {
+    console.log(dateOfReport.getMonth());
+    console.log(dateOfReport.getDate());
+    console.log(dateOfReport.getFullYear());
     let formatted_date =
-      date.getMonth() + 1 + "-" + date.getDate() + "-" + date.getFullYear();
+      dateOfReport.getMonth() + 1 + "-" + dateOfReport.getDate() + "-" + dateOfReport.getFullYear();
     console.log(formatted_date);
     return formatted_date;
   };
 
-  const formatTime = (date) => {
-    let formatted_date = date.getHours() + ":" + date.getMinutes();
+  const formatTime = (dateOfReport) => {
+    let formatted_date = dateOfReport.getHours() + ":" + dateOfReport.getMinutes();
     return formatted_date;
   };
 
@@ -87,8 +87,8 @@ console.log("Evidences")
       agent,
       caseType,
       company,
-      date,
-      time,
+      dateOfReport,
+      timeOfReport,
       level,
       pdf,
       numerCase,
@@ -99,8 +99,8 @@ console.log("Evidences")
       agent,
       caseType,
       company,
-      date,
-      time,
+      dateOfReport,
+      timeOfReport,
       level,
       pdf,
       numerCase,
@@ -108,12 +108,12 @@ console.log("Evidences")
       evidences,
     };
 
-    let fecha = new Date(reportForm.date);
+    let fecha = new Date(reportForm.dateOfReport);
 
-    let fecha2 = new Date(`09-24-2023 ${reportForm.time}:00`);
+    let fecha2 = new Date(`09-24-2023 ${reportForm.timeOfReport}:00`);
 
-    reportDto.date = formatDate(fecha);
-    reportDto.time = formatTime(fecha2);
+    reportDto.dateOfReport = formatDate(fecha);
+    reportDto.timeOfReport = formatTime(fecha2);
 
     console.log("Dto");
     console.log(reportDto);

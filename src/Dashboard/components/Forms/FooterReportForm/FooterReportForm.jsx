@@ -26,7 +26,7 @@ export const FooterReportForm = ({ setInformation, activeIndex, setActiveIndex }
     const validateForm = () => {
         console.log('Validating form with values: ', reportForm);
         const requiredFields = [
-            'property', 'agent', 'date', 'time', 'caseType', 'level', 'company', 'numerCase'
+            'property', 'agent', 'dateOfReport', 'timeOfReport', 'caseType', 'level', 'company', 'numerCase'
         ];
         for (const field of requiredFields) {
             const value = reportForm[field];
