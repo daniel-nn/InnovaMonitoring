@@ -9,6 +9,9 @@ import { UserContext } from "../../context/UserContext";
 import { GetPropertyInfo } from "../helper/getPropertyInfo";
 
 const Chat = ({ properties }) => {
+  const formatImageName = (name) => {
+    return name.toLowerCase().split(' ').join('-') + '.jpg';
+  };
   const { currentColor } = useStateContext();
   const navigate = useNavigate();
   const { propertyContext, setPropertyContext } = useContext(UserContext);
@@ -46,13 +49,7 @@ const Chat = ({ properties }) => {
       </div>
       <div className="mt-5 ">
         {properties?.map((property, index) => {
-          let propertyImg = "";
-          let link = property.img?.split("/");
-          if (link) {
-            let idImg = "";
-            idImg = link[5];
-            propertyImg = "https://drive.google.com/uc?export=view&id=" + idImg;
-          }
+          const propertyImg = property.name ? `/images/${formatImageName(property.name)}` : '';
           return (
             <div
               key={index}
@@ -63,6 +60,7 @@ const Chat = ({ properties }) => {
                 <img
                   className="rounded-full h-16 w-16 object-cover"
                   src={propertyImg}
+                  alt={property.name}
                 />
                 <span
                   /* style={{ background: item.dotColor }} */

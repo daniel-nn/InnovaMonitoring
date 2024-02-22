@@ -40,7 +40,8 @@ const UserProfile = ({ userProfile }) => {
       <div className="flex gap-5 items-center mt-6 border-color border-b-1 pb-6">
         <img
           className="rounded-full h-24 w-24 userimg"
-          src={userImg}
+          src="https://previews.123rf.com/images/anwarsikumbang/anwarsikumbang1502/anwarsikumbang150200446/36649713-hombre-avatar-de-dibujos-animados-imagen-usuario-personaje-ilustraci%C3%B3n-vectorial.jpg"
+
           alt="user-profile"
         />
         <div>

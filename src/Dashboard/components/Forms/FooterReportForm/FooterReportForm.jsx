@@ -26,7 +26,7 @@ export const FooterReportForm = ({ setInformation, activeIndex, setActiveIndex }
     const validateForm = () => {
         console.log('Validating form with values: ', reportForm);
         const requiredFields = [
-            'property', 'agent', 'dateOfReport', 'timeOfReport', 'caseType', 'level', 'company', 'numerCase'
+            'property'
         ];
         for (const field of requiredFields) {
             const value = reportForm[field];
@@ -36,7 +36,7 @@ export const FooterReportForm = ({ setInformation, activeIndex, setActiveIndex }
             }
             // Si el campo es un objeto (como date), puedes querer hacer una validación adicional aquí
         }
-        return true; // Si todos los campos están llenos, retorna verdadero
+        return true; 
     };
 
 

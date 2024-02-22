@@ -40,7 +40,7 @@ const Navbar = () => {
   let userImg = "";
   if (link) {
     let idImg = link[5] ? link[5] : "";
-    userImg = "https://drive.google.com/uc?export=view&id=" + idImg;
+    userImg = "https://previews.123rf.com/images/anwarsikumbang/anwarsikumbang1502/anwarsikumbang150200446/36649713-hombre-avatar-de-dibujos-animados-imagen-usuario-personaje-ilustraci%C3%B3n-vectorial.jpg" + idImg;
   }
   useEffect(() => {
 

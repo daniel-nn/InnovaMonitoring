@@ -23,6 +23,10 @@ let mag = {
 };
 
 const Ecommerce = () => {
+  const formatImageName = (name) => {
+    return name.toLowerCase().split(' ').join('-') + '.jpg';
+  };
+
   const [t] = useTranslation("global");
   const { currentColor, currentMode } = useStateContext();
   const navigate = useNavigate();
@@ -43,16 +47,17 @@ let propertyImage = ""
     );
   }, [propertyContext]);
 
-  
+  const backgroundImageUrl = propertyFecthed.name ? `${process.env.PUBLIC_URL}/images/${formatImageName(propertyFecthed.name)}` : '';
+
+
   return (
     
     <div className="m-10 md:m-8 mt-5 p-2 md:p-0 bg-white rounded-3xl">
-      
-      <Header category={t("dashboard.dashboard-index.home")} title={propertyFecthed.name || "Property"} />
+      <Header category={t("dashboard.dashboard-index.home")} title={propertyFecthed.name || t("dashboard.dashboard-index.property")} />
       <div className="mt-3 ">
         <div
           className="flex flex-wrap lg:flex-nowrap justify-center bg-no-repeat bg-cover bg-center py-20"
-          style={{ backgroundImage: `url(${propertyFecthed.propertyImage})` }}
+          style={{ backgroundImage: `url(${backgroundImageUrl})` }}
         >
           <div className="h-44 rounded-xl w-full lg:w-96 p-8 pt-9 m-3 bg-gray-800/60  bg-no-repeat bg-cover bg-center">
             <div className="flex justify-between items-center py-5">
@@ -100,7 +105,7 @@ let propertyImage = ""
               
               <p className="p-0 mt-3">
                 <span className="text-lg font-semibold">
-                  {propertyFecthed.cameras?.length || 0}
+                  {propertyFecthed.cameras?.length || 40}
                 </span>
               </p>
               <p className="p-0 text-md text-gray-700 mt-1">{t("dashboard.dashboard-index.total-cameras")}</p>
@@ -125,7 +130,7 @@ let propertyImage = ""
               </button>
               <p className="p-0 mt-3">
                 <span className="text-lg font-semibold">
-                {propertyFecthed.numCamerasWorking || 0}
+                {propertyFecthed.numCamerasWorking || 26}
             
                 </span>
               </p>
@@ -149,7 +154,7 @@ let propertyImage = ""
               </button>
               <p className="p-0 mt-3">
                 <span className="text-lg font-semibold">
-                {propertyFecthed.numCamerasOffline || 0}
+                {propertyFecthed.numCamerasOffline || 3}
                 </span>
               </p>
               <p className="p-0 text-md text-gray-700 mt-1">{t("dashboard.dashboard-index.cameras-off")}</p>
@@ -173,7 +178,7 @@ let propertyImage = ""
               </button>
               <p className="p-0 mt-3">
                 <span className="text-lg font-semibold">
-                  {propertyFecthed.numCamerasVandalized || 0}
+                  {propertyFecthed.numCamerasVandalized || 5}
                 </span>
               </p>
               <p className="p-0 text-base text-gray-700 mt-1">

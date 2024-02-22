@@ -521,12 +521,6 @@
         },
         "securityGuardsNotified": "Security Guards Notified",
         "securityGuardsNotifiedholder": "Security Guards Notified",
-        "securityGuards-list": {
-          "yes": "Yes",
-          "no": "No",
-          "n/a": "N/A",
-          "fiat-security": "Fiat Security"
-        },
         "securityGuardsScene": "Security Guards On Scene",
         "securityGuardsScene-placeholder": "Security Guards On Scene",
         "policeNumerCase": "Police Case Number",
@@ -552,9 +546,11 @@
           "security-guard": "Security Guard",
           "staff": "Staff"
         },
+        "report-details": "Report Details",
+        "report-details-placeholder": "Report Description",
         "images": "Images",
         "swal": {
-          "confirmation": "Are you sure to submit the report for the property -",
+          "confirmation": "Are you sure to submit the report for the property - ",
           "cancel": "Cancel",
           "send": "Send",
           "don't-save": "Do Not Send",

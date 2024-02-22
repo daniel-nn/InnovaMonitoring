@@ -518,18 +518,12 @@
         },
         "securityGuardsNotified": "Guardias de seguridad notificados",
         "securityGuardsNotifiedholder": "Guardias de seguridad notificados",
-        "securityGuards-list": {
-          "yes": "Si",
-          "no": "No",
-          "n/a": "N/A",
-          "fiat-security": "Seguridad privada"
-        },
         "securityGuardsScene": "Guardias de seguridad en la escena",
         "securityGuardsScene-placeholder": "Guardias de seguridad en la escena",
         "policeNumerCase": "Numero de caso policial",
         "policeNumerCase-placeholder": "Numero de caso policial",
         "NotificationClient": "Forma de Notificación al Cliente",
-        "NotificationClient-placeholder": "Notificación al Cliente",
+        "NotificationClient-placeholder": "Notificación al Cliente:",
         "NotificationClient-list": {
           "email": "Correo Electrónico",
           "call-mgr": "Gerente de Llamadas",
@@ -549,6 +543,8 @@
           "security-guard": "Guardia de Seguridad",
           "staff": "Miembros el equipo"
         },
+        "report-details": "Detalles del reporte",
+        "report-details-placeholder": "Descripción del reporte",
         "images": "Imagenes",
         "swal": {
           "confirmation": "Estas seguro de enviar el reporte para la propiedad - ",
