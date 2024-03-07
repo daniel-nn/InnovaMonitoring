@@ -43,16 +43,11 @@ const Navbar = () => {
     userImg = "https://previews.123rf.com/images/anwarsikumbang/anwarsikumbang1502/anwarsikumbang150200446/36649713-hombre-avatar-de-dibujos-animados-imagen-usuario-personaje-ilustraci%C3%B3n-vectorial.jpg" + idImg;
   }
   useEffect(() => {
-
     const handleResize = () => setScreenSize(window.innerWidth);
-
     window.addEventListener('resize', handleResize);
-
     handleResize();
-
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
   useEffect(() => {
     if (screenSize <= 900) {
       setActiveMenu(false);
@@ -84,7 +79,7 @@ const Navbar = () => {
         >
           ESP
         </button>
-        <NavButton title="Property" customFunc={() => handleClick('cart')} color={currentColor} icon={<BsBuildings />} />
+        <NavButton title={t("dashboard.dashboard-navbar.property")} customFunc={() => handleClick('cart')} color={currentColor} icon={<BsBuildings />} />
         {/* <NavButton title="Chat" dotColor="red" customFunc={() => handleClick('chat')} color={currentColor} icon={<BsChatLeft />} /> */}
         <TooltipComponent content="Profile" position="BottomCenter">
           <div className="flex items-center gap-2 cursor-pointer p-1 hover:bg-light-gray rounded-lg mt-2" onClick={() => handleClick('userProfile')}>

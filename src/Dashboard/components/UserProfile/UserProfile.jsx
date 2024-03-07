@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { MdOutlineCancel } from "react-icons/md";
 import { Button } from "..";
 import { useStateContext } from "../../../context/ContextProvider";
@@ -9,6 +9,7 @@ import Shortlogo from "../../../assets/images/Logos/Logo short.png"
 import LogoutButton from "../LogoutButton";
 import { useTranslation } from "react-i18next";
 import './UserProfile.css'
+import useOutsideClick from "../../Hooks/useOutsideClick";
 
 
 const UserProfile = ({ userProfile }) => {
@@ -25,8 +26,12 @@ const UserProfile = ({ userProfile }) => {
   
   const translatedUserProfileData = useUserProfileData();
 
+  const userRef = useRef();
+  const { setIsClicked } = useStateContext();
+  useOutsideClick(userRef, () => setIsClicked(prev => ({ ...prev, userProfile: false })));
+
   return (
-    <div className="nav-item absolute right-1 top-16 bg-white dark:bg-[#42464D] p-8 rounded-lg w-96">
+    <div ref={userRef} className="nav-item absolute right-1 top-16 bg-white dark:bg-[#42464D] p-8 rounded-lg w-96">
       <div className="flex justify-between items-center">
         <img style={{ height: '10%', width: '10%', marginLeft: '10%', marginRight: '-15%' }} src={Shortlogo} alt="Logo" /><p className="font-semibold text-lg dark:text-gray-200">Innova Monitoring</p>
         <Button

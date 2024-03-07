@@ -403,6 +403,7 @@
   },
   "dashboard": {
     "dashboard-navbar": {
+      "property": "Property",
       "hi": "Hi,",
       "user-profile": {
         "profile": "My profile",

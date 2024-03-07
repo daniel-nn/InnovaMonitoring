@@ -40,15 +40,15 @@ const SidebarLinks = () => {
                 //     permit: "Yes",
                 // },
                 {
-                    name: t("dashboard.dashboard-sliderbar.integral-management-section.agents"),
-                    icon: <HiUserCircle />,
-                    url: "Agents",
-                    permit: "No",
-                },
-                {
                     name: t("dashboard.dashboard-sliderbar.integral-management-section.users"),
                     icon: <FiUsers />,
                     url: "Users",
+                    permit: "No",
+                },
+                {
+                    name: t("dashboard.dashboard-sliderbar.integral-management-section.agents"),
+                    icon: <HiUserCircle />,
+                    url: "Agents",
                     permit: "No",
                 },
                 {

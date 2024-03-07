@@ -24,9 +24,7 @@ const Login = () => {
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
-
- console.log(width)
-
+    console.log(width)
     if (email === "" || password === "") {
       setError(true);
       return;
@@ -35,43 +33,43 @@ const Login = () => {
       /* email,
       pasword: password */
       email,
-      pasword:password
+      pasword: password
     };
     try {
       newUser = await getUser(user);
     } catch (error) {
-   
+
     }
-    
-  const newUser = await getUser(user);
+
+    const newUser = await getUser(user);
 
 
-  if(width>800){
-    if (newUser != null) {
-      localStorage.setItem("user", JSON.stringify(newUser));
-      setUserContext(newUser);
+    if (width > 800) {
+      if (newUser != null) {
+        localStorage.setItem("user", JSON.stringify(newUser));
+        setUserContext(newUser);
 
-      if(newUser.properties?.length>0){
-        localStorage.setItem("propertySelected", JSON.stringify(newUser.properties[0] || {}))
-        setUserLogged(!userLogged)
-        navigate("/dashboard");
-      }else{
-        Swal.fire("info", t("login.swal-fire.properties-don't-assigned"), "info")
-        navigate("/");
+        if (newUser.properties?.length > 0) {
+          localStorage.setItem("propertySelected", JSON.stringify(newUser.properties[0] || {}))
+          setUserLogged(!userLogged)
+          navigate("/dashboard");
+        } else {
+          Swal.fire("info", t("login.swal-fire.properties-don't-assigned"), "info")
+          navigate("/");
+        }
+
+
+
       }
+    } else {
+      Swal.fire(t("login.swal-fire.empty-text"), t("login.swal-fire.resolution-higher-900px"), 'info')
+      navigate("/")
+    }
 
-
-  
-    } 
-  }else{
-    Swal.fire(t("login.swal-fire.empty-text"), t("login.swal-fire.resolution-higher-900px"), 'info')
-    navigate("/")
-  }
- 
 
     //setError(false)
-   /*  Swal.fire("info", "This functionality is not yet in development, in the meantime take a tour of our website.", "info")
-    navigate("/"); */
+    /*  Swal.fire("info", "This functionality is not yet in development, in the meantime take a tour of our website.", "info")
+     navigate("/"); */
   };
 
 
@@ -80,19 +78,19 @@ const Login = () => {
       <Navbar efecto="efecto2"></Navbar>
       <div className="bg-white my-8">
         <div className="flex justify-center h-screen">
-            <Reveal>
-          <div className="hidden bg-cover lg:block lg:w-3/5 photo-login img-container">
-            <div className="flex items-center h-full px-20 ">
-              <div>
-              <p className=" text-3xl font-bold tracking-tight text-yellow-600 sm:text-4xl text-center">
-                {t("login.IDS")}                
-              </p>
-          
-                <p className="max-w-xl mt-3 text-gray-300 text-center">{t("login.text")}</p>
+          <Reveal>
+            <div className="hidden bg-cover lg:block lg:w-3/5 photo-login img-container">
+              <div className="flex items-center h-full px-20 ">
+                <div>
+                  <p className=" text-3xl font-bold tracking-tight text-yellow-600 sm:text-4xl text-center">
+                    {t("login.IDS")}
+                  </p>
+
+                  <p className="max-w-xl mt-3 text-gray-300 text-center">{t("login.text")}</p>
+                </div>
               </div>
             </div>
-          </div>
-            </Reveal>
+          </Reveal>
 
           <div className="flex items-center w-full max-w-md px-6 mx-auto lg:w-2/6">
             <div className="flex-1">
@@ -135,7 +133,7 @@ const Login = () => {
                         href="#"
                         className="text-sm text-gray-400 focus:text-blue-500 hover:text-blue-500 hover:underline"
                       >
-                       {t("login.forgot_password")}
+                        {t("login.forgot_password")}
                       </p>
                     </div>
 
@@ -152,9 +150,9 @@ const Login = () => {
                   </div>
 
                   {error && (
-                   
-                      <div className="mt-6 text-red-700">{t("login.required_fields")}</div>
-                   
+
+                    <div className="mt-6 text-red-700">{t("login.required_fields")}</div>
+
                   )}
 
                   <div className="mt-6">
@@ -170,7 +168,7 @@ const Login = () => {
 
                 <p className="mt-6 text-sm text-center text-gray-400">
                   {t("login.acount_yet")}
-                 <br></br>
+                  <br></br>
                   <Link
                     to="/plan"
                     className="text-yellow-600 focus:outline-none focus:underline hover:underline"

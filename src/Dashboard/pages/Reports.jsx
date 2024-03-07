@@ -47,11 +47,11 @@ const Reports = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   
-  // Función para cerrar el formulario
+ 
   const closeForm = () => {
     setReportFormVisible(false);
-    setReportForm({}); // Limpia el formulario
-    setActiveIndex(0); // Restablece el paso activo
+    setReportForm({}); 
+    setActiveIndex(0); 
   };
 
   useEffect(() => {
@@ -152,7 +152,7 @@ const Reports = () => {
       <div className="m-20 md:m-10 mt-14 p-2 md:p-0 bg-white rounded-3xl">
         <Header category={t("dashboard.reports.reports-tittle")} title={t("dashboard.reports.reports-of") + propertyContext.name} />
         <div className="card flex justify-end py-2 mb-7">
-          {userRole === "Admin" && (
+          {(userRole === "Admin" || userRole === "Monitor") && (
             <>
               <Button
                 onClick={() => setReportFormVisible(!reportFormVisible)}
@@ -165,8 +165,8 @@ const Reports = () => {
               <Button
                 onClick={navigateToNewReport}
                 severity="info"
-                label={t("dashboard.reports.new-report.add-report")} // Asegúrate de tener esta traducción en tu archivo i18n
-                className="p-button-text ml-2" // Añadido ml-2 para dar margen entre botones
+                label={t("dashboard.reports.new-report.add-report")} 
+                className="p-button-text ml-2" 
               >
                 <AiOutlinePlusCircle className="ml-2"></AiOutlinePlusCircle>
               </Button>

@@ -6132,12 +6132,7 @@ export const orderAgents = [
     textAlign: "Center",
     width: "120",
   },
-  {
-    headerText: "LastName",
-    field: "lastName",
-    textAlign: "Center",
-    width: "120",
-  },
+  
   {
     headerText: "Email",
     field: "email",
@@ -6155,12 +6150,6 @@ export const orderAgentsAdmin = [
   {
     headerText: "Name",
     field: "name",
-    textAlign: "Center",
-    width: "120",
-  },
-  {
-    headerText: "LastName",
-    field: "lastName",
     textAlign: "Center",
     width: "120",
   },

@@ -15,6 +15,8 @@ import { InputNumber } from "primereact/inputnumber";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Calendar } from "primereact/calendar";
 import { RadioButton } from 'primereact/radiobutton';
+import  exportPDF from "../helper/exportPdf"
+
 
 const NewReport = () => {
     const { propertyContext, reportSaved, setreportSaved } = useContext(UserContext);
@@ -28,7 +30,8 @@ const NewReport = () => {
     const [incidents, setIncidents] = useState([]);
     const levels = ["1", "2", "3", "4"];
     const team = ["Innova Monitoring", "Impro",];
-
+    let user = JSON.parse(localStorage.getItem("user"));
+    let userRole = user.rol?.rolName || "";
     useEffect(() => {
         const fetchProperties = async () => {
             const propertiesData = await getPropertiesInfo(navigate);
@@ -41,11 +44,17 @@ const NewReport = () => {
 
     useEffect(() => {
         const fetchAgents = async () => {
-            const agentsData = await getAgents(navigate);
+            const agentsData = await getAgents();
             setAgents(agentsData);
+
+           
+            if (userRole === "Monitor") {
+                setReportForm(prev => ({ ...prev, agent: user.name })); // Asume que el nombre del usuario está almacenado en user.name
+            }
         };
+
         fetchAgents();
-    }, [navigate]);
+    }, [setReportForm, userRole, user.name]);
 
     useEffect(() => {
         const fetchIncidents = async () => {
@@ -54,6 +63,8 @@ const NewReport = () => {
         };
         fetchIncidents();
     }, [navigate]);
+
+    
 
 
     const malFunctionCameras = useMemo(() => [
@@ -120,35 +131,59 @@ const NewReport = () => {
             i18n.off('languageChanged', updateTitle);
         };
     }, [i18n, t, reportForm.property]);
-
-    // const validateForm = () => {
-    //     console.log('Validating form with values: ', reportForm);
-    //     const requiredFields = [
-    // 'property', 'agent', 'dateOfReport', 'timeOfReport', 'caseType', 'level', 'company', 'numerCase', 'camerasFunctioning', 'observerdViaCameras', 'policeFirstResponderNotified'
-    //         // Agrega otros campos necesarios aquí
-    //     ];
-
-    //     for (const field of requiredFields) {
-    //         const value = reportForm[field];
-    //         // Para campos de texto, dropdowns y números
-    //         if (value === null || value === undefined || (typeof value === 'string' && value.trim() === '') || (typeof value === 'object' && Object.keys(value).length === 0)) {
-    //             showMessage(field); // Muestra el mensaje para el campo específico
-    //             return false; // Retorna después de la primera validación fallida
-    //         }
-    //     }
-
-
-    //     const bitFields = ['camerasFunctioning', 'observerdViaCameras', 'policeFirstResponderNotified']; 
-    //     for (const field of bitFields) {
-    //         if (reportForm[field] !== true && reportForm[field] !== false) {
-    //             showMessage(field); 
-    //             return false; 
-    //         }
-    //     }
-
-    //     return true;
-    // };
     
+    const reportDtoPdf = async (reportForm) => {
+        console.log('reportForm recibido:', reportForm);
+        const {
+            agent,
+            caseType,
+            company,
+            level,
+            numerCase,
+            property,
+            camerasFunctioning,
+            listMalfuncioningCameras,
+            observerdViaCameras,
+            policeFirstResponderNotified,
+            policeFirstResponderScene,
+            securityGuardsNotified,
+            securityGuardsScene,
+            policeNumerCase,
+            formNotificationClient,
+            emailedReport,
+            reportDetails
+           
+        } = reportForm;      
+        let reportDtoPdf = {
+            agent: reportForm.agent.name,
+            caseType: reportForm.caseType.incident,
+            company,
+            level,
+            numerCase,
+            property,
+            propertyAddress: property ? property.direction : 'Dirección no proporcionada',
+            propertyrgb: property ? property.rgbcolor : '255, 255 ,255', 
+            listMalfuncioningCameras,
+            observerdViaCameras: observerdViaCameras ? 1 : 0,
+            policeFirstResponderNotified: policeFirstResponderNotified ? 1 : 0,
+            policeFirstResponderScene,
+            camerasFunctioning: camerasFunctioning ? 1 : 0,
+            securityGuardsNotified: securityGuardsNotified ? 1 : 0,
+            securityGuardsScene: securityGuardsScene ? 1 : 0,
+            policeNumerCase,
+            formNotificationClient,
+            emailedReport,
+            reportDetails,
+            dateOfReport: formatDate(reportForm.dateOfReport),
+            timeOfReport: formatTime(reportForm.timeOfReport),
+            incidentDate: formatDate(reportForm.incidentDate),
+            incidentStartTime: formatTime(reportForm.incidentStartTime),
+            incidentEndTime: formatTime(reportForm.incidentEndTime),
+         
+        };
+        return reportDtoPdf;
+    };
+
     const formatDate = (date) => {
         if (!date) date = new Date();
         const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -181,6 +216,8 @@ const NewReport = () => {
                 name: "Img",
             });
         });
+
+        
 
         videos.forEach((vid) => {
             evidences.push({
@@ -217,6 +254,7 @@ const NewReport = () => {
             numerCase,
             property,
             listMalfuncioningCameras,
+            camerasFunctioning: camerasFunctioning ? 1 : 0,
             observerdViaCameras: observerdViaCameras ? 1 : 0,
             policeFirstResponderNotified: policeFirstResponderNotified ? 1 : 0,
             policeFirstResponderScene,
@@ -273,7 +311,7 @@ const NewReport = () => {
         styleSheet.type = "text/css";
         styleSheet.innerText = swalStyles;
         document.head.appendChild(styleSheet);
-        const propertyName = reportForm.property?.name ?? 'Default Property Name';
+        const propertyName = reportForm.property?.name ?? ' ';
         const confirmationTitle = t("dashboard.reports.new-report.swal.confirmation") + propertyName;
         Swal.fire({
             title: confirmationTitle,
@@ -403,17 +441,26 @@ const NewReport = () => {
                         <span className="p-inputgroup-addon">
                             <i className="pi pi-user"></i>
                         </span>
-                        <Dropdown
-                            value={agent}
-                            onChange={(e) => setReportForm((prev) => ({ ...prev, agent: e.value }))}
-                            options={agents}
-                            optionLabel="name"
-                            placeholder={t("dashboard.reports.new-report.agent")}
-                            className="w-full"
-                        />
+                        {userRole === "Admin" ? (
+                            <Dropdown
+                                value={reportForm.agent}
+                                onChange={(e) => setReportForm((prev) => ({ ...prev, agent: e.value }))}
+                                options={agents}
+                                optionLabel="name"
+                                placeholder={t("dashboard.reports.new-report.agent")}
+                                className="w-full"
+                            />
+                        ) : (
+                            <input
+                                type="text"
+                                value={reportForm.agent}
+                                readOnly={true}
+                                className="w-full"
+                            />
+                        )}
                     </div>
                 </div>
-
+                
                 <div className="w-full md:w-1/3 px-3 mb-6">
                     <label htmlFor="level" className="font-bold block mb-2">
                         {t("dashboard.reports.new-report.select-number-case")}
@@ -908,7 +955,7 @@ const NewReport = () => {
                             rows={5}
                             cols={30}
                             autoResize
-                            placeholder={t("dashboard.reports.new-report.report-details-placeholder")}
+                            placeholder={t("Imagenes")}
                         />
                     </div>
                 </div>
@@ -927,7 +974,7 @@ const NewReport = () => {
                             rows={5}
                             cols={30}
                             autoResize
-                            placeholder={t("dashboard.reports.new-report.report-details-placeholder")}
+                            placeholder={t("Videos")}
                         />
                     </div>
                 </div>
@@ -958,6 +1005,19 @@ const NewReport = () => {
 
             <div className="flex justify-end mt-4 pr-20">
                 <Button label={t("dashboard.reports.new-report.swal.send")} severity="success" onClick={sendingreport} />
+                <Button
+                    label="pdf"
+                    severity="success"
+                    onClick={async () => {
+                        try {
+                            const dataForPdf = await reportDtoPdf(reportForm);
+                            console.log(dataForPdf);
+                            await exportPDF(dataForPdf);
+                        } catch (error) {
+                            console.error('Error al generar el PDF:', error);
+                        }
+                    }}
+                />
             </div>
         </div>
 

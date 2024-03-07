@@ -1,14 +1,17 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef } from "react";
 import { MdOutlineCancel } from "react-icons/md";
 import { Button } from ".";
 import { chatData } from "../data/dummy";
 import { useStateContext } from "../../context/ContextProvider";
+import useOutsideClick from "../Hooks/useOutsideClick";
 import useFetchProperty from "../Hooks/useFetchProperty";
 import { Outlet, useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
 import { GetPropertyInfo } from "../helper/getPropertyInfo";
+import { useTranslation, i18n } from "react-i18next";
 
 const Chat = ({ properties }) => {
+  const [t, i18n] = useTranslation("global")
   const formatImageName = (name) => {
     return name.toLowerCase().split(' ').join('-') + '.jpg';
   };
@@ -26,19 +29,29 @@ const Chat = ({ properties }) => {
     const propertyid = propertyArg.id || 0;
     setPropertyContext(propertyArg);
   };
+  const chatRef = useRef(); 
+  const { setIsClicked } = useStateContext(); 
+  useOutsideClick(chatRef, () => setIsClicked(prev => ({ ...prev, cart: false })));
 
   return (
-    <div className="nav-item absolute z-10 overflow-visible right-5 md:right-52 top-16 bg-white dark:bg-[#42464D] p-8 rounded-lg w-96">
+    <div ref={chatRef} className="nav-item absolute z-10 overflow-visible right-5 md:right-52 top-16 bg-white dark:bg-[#42464D] p-8 rounded-lg w-96">
       <div className="flex justify-between items-center">
         <div className="flex gap-3">
-          <p className="font-semibold text-lg dark:text-gray-200">Properties</p>  
+          <p className="font-semibold text-lg dark:text-gray-200">{t("dashboard.dashboard-navbar.property")}</p>  
           <button
             type="button"
             className="text-white  text-xs rounded p-1 px-2 bg-orange"
           >
-            5 New
+        
           </button>
         </div>
+  
+         
+          <div className="w-full text-center text-gray-400 text-sm">
+            Properties you have access to
+          </div>
+     
+       
         <Button
           icon={<MdOutlineCancel />}
           color="rgb(153, 171, 180)"
@@ -79,9 +92,6 @@ const Chat = ({ properties }) => {
             </div>
           );
         })}
-        <div className="mt-5 text-center text-gray-400 text-sm">
-          Properties you have access to
-        </div>
       </div>
     </div>
   );
