@@ -22,55 +22,57 @@ const Login = () => {
   const [error, setError] = useState(false);
   let newUser = null;
 
+
   const handleOnSubmit = async (e) => {
     e.preventDefault();
-    console.log(width)
+
     if (email === "" || password === "") {
       setError(true);
       return;
     }
     const user = {
-      /* email,
-      pasword: password */
-      email,
-      pasword: password
+      email: email,
+      pasword: password // Corrección aquí para coincidir con la estructura esperada en el backend.
     };
+    
     try {
-      newUser = await getUser(user);
-    } catch (error) {
+      const newUser = await getUser(user);
+      if (newUser && newUser.email) {
+        localStorage.setItem("user", JSON.stringify({
+          email: newUser.email,
+          name: newUser.name,
+          image: newUser.image,
+          role: newUser.role, // Asume que newUser.role contiene la estructura del rol
+          properties: newUser.properties // Asume que newUser.properties es un arreglo de propiedades
+        }));
+        // Actualiza el contexto de usuario con la nueva información
+        setUserContext({
+          ...userContext, // Preserva el estado previo si es necesario
+          email: newUser.email,
+          name: newUser.name,
+          image: newUser.image,
+          role: newUser.role,
+          properties: newUser.properties
+        });
 
-    }
-
-    const newUser = await getUser(user);
-
-
-    if (width > 800) {
-      if (newUser != null) {
-        localStorage.setItem("user", JSON.stringify(newUser));
-        setUserContext(newUser);
-
-        if (newUser.properties?.length > 0) {
-          localStorage.setItem("propertySelected", JSON.stringify(newUser.properties[0] || {}))
-          setUserLogged(!userLogged)
+        if (newUser.properties && newUser.properties.length > 0) {
+          localStorage.setItem("propertySelected", JSON.stringify(newUser.properties[0])); // Almacena la primera propiedad
+          setUserLogged(true); // Indica que el usuario está autenticado
           navigate("/dashboard");
         } else {
-          Swal.fire("info", t("login.swal-fire.properties-don't-assigned"), "info")
+          Swal.fire("Info", t("login.swal-fire.properties-don't-assigned"), "info");
           navigate("/");
         }
-
-
-
       }
-    } else {
-      Swal.fire(t("login.swal-fire.empty-text"), t("login.swal-fire.resolution-higher-900px"), 'info')
-      navigate("/")
+    } catch (error) {
+      setError(true);
+      Swal.fire("Error", error.toString(), "error");
     }
-
-
-    //setError(false)
-    /*  Swal.fire("info", "This functionality is not yet in development, in the meantime take a tour of our website.", "info")
-     navigate("/"); */
   };
+
+
+
+
 
 
   return (

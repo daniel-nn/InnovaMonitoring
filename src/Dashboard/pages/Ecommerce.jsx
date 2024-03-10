@@ -27,33 +27,36 @@ const Ecommerce = () => {
     return name.toLowerCase().split(' ').join('-') + '.jpg';
   };
 
+  const { currentColor } = useStateContext(); // Se eliminó currentMode ya que no se usa
   const [t] = useTranslation("global");
-  const { currentColor, currentMode } = useStateContext();
-  const navigate = useNavigate();
-  const { propertyContext, setPropertyContext, prueba, setPrueba } =
-    useContext(UserContext);
-  const [propertyFecthed, setPropertyFecthed] = useState({});
-  let user = JSON.parse(localStorage.getItem("user"));
-  let userRole = user.rol?.rolName || "";
-  let propertyStorage = JSON.parse(localStorage.getItem("propertySelected"));
-  let idStorage = propertyStorage.id;
-  let id = propertyContext.id || idStorage;
-let propertyImage = ""
+  const [propertyFetched, setPropertyFetched] = useState({});
   
-  useEffect(() => {
-    earningData[0].amount = propertyContext.cameras?.length || 0;
-    GetPropertyInfo(propertyContext.id || idStorage, userRole).then((data) =>
-      setPropertyFecthed(data)
-    );
-  }, [propertyContext]);
+  let user = JSON.parse(localStorage.getItem("user") || '{}'); // Se agrega un valor por defecto por si el parse falla
+  let userRole = user.role.roleName;
+  let propertyStorage = JSON.parse(localStorage.getItem("propertySelected") || '{}') || user.properties?.[0]; // Asegúrate de manejar correctamente cuando user.properties pueda ser undefined
+  const { propertyContext } = useContext(UserContext);
 
-  const backgroundImageUrl = propertyFecthed.name ? `${process.env.PUBLIC_URL}/images/${formatImageName(propertyFecthed.name)}` : '';
+  useEffect(() => {
+    if (propertyContext && propertyContext.id) {
+      console.log("Buscando información actualizada para la propiedad seleccionada:", propertyContext);
+      GetPropertyInfo(propertyContext.id, userRole).then((data) => {
+        if (data) {
+          setPropertyFetched(data);
+        } else {
+          console.error("No se pudo obtener la información de la propiedad.");
+        }
+      });
+    }
+  }, [propertyContext, userRole]);
+
+
+  const backgroundImageUrl = propertyFetched.name ? `${process.env.PUBLIC_URL}/images/${formatImageName(propertyFetched.name)}` : '';
 
 
   return (
     
     <div className="m-10 md:m-8 mt-5 p-2 md:p-0 bg-white rounded-3xl">
-      <Header category={t("dashboard.dashboard-index.home")} title={propertyFecthed.name || t("dashboard.dashboard-index.property")} />
+      <Header category={t("dashboard.dashboard-index.home")} title={propertyFetched.name || t("dashboard.dashboard-index.property")} />
       <div className="mt-3 ">
         <div
           className="flex flex-wrap lg:flex-nowrap justify-center bg-no-repeat bg-cover bg-center py-20"
@@ -64,7 +67,7 @@ let propertyImage = ""
               <div>
                 <p className="p-0 font-bold text-gray-300">{t("dashboard.dashboard-index.number-reports")}</p>
                 <p className="p-0 text-2xl rounded-md  text-gray-300">
-                  {propertyFecthed.numOfReports?.length || 0}
+                  {propertyFetched.numOfReports || 0}
                 </p>
               </div>
               <NavLink
@@ -105,7 +108,7 @@ let propertyImage = ""
               
               <p className="p-0 mt-3">
                 <span className="text-lg font-semibold">
-                  {propertyFecthed.cameras?.length || 40}
+                  {propertyFetched.cameras?.length || 40}
                 </span>
               </p>
               <p className="p-0 text-md text-gray-700 mt-1">{t("dashboard.dashboard-index.total-cameras")}</p>
@@ -130,7 +133,7 @@ let propertyImage = ""
               </button>
               <p className="p-0 mt-3">
                 <span className="text-lg font-semibold">
-                {propertyFecthed.numCamerasWorking || 26}
+                  {propertyFetched.numCamerasWorking || 26}
             
                 </span>
               </p>
@@ -154,7 +157,7 @@ let propertyImage = ""
               </button>
               <p className="p-0 mt-3">
                 <span className="text-lg font-semibold">
-                {propertyFecthed.numCamerasOffline || 3}
+                  {propertyFetched.numCamerasOffline || 3}
                 </span>
               </p>
               <p className="p-0 text-md text-gray-700 mt-1">{t("dashboard.dashboard-index.cameras-off")}</p>
@@ -178,7 +181,7 @@ let propertyImage = ""
               </button>
               <p className="p-0 mt-3">
                 <span className="text-lg font-semibold">
-                  {propertyFecthed.numCamerasVandalized || 5}
+                  {propertyFetched.numCamerasVandalized || 5}
                 </span>
               </p>
               <p className="p-0 text-base text-gray-700 mt-1">

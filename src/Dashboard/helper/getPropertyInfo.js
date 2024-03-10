@@ -1,93 +1,52 @@
-import React, { useContext } from "react";
 import Swal from "sweetalert2";
-import { UserContext } from "../../context/UserContext";
-import { Navigate, useNavigate } from "react-router-dom";
 
-export const GetPropertyInfo = async (id, userRol) => {
-  let resp = {};
-  let listOfReport=[]
-  let dataDto = {};
-let reportsMapped = []
+export const GetPropertyInfo = async (id, userRole) => {
   const url = `${process.env.REACT_APP_SERVER_IP}/properties/${id}`;
-  let data = {};
+
   try {
-    resp = await fetch(url);
-
-    data = await resp.json();
-
-    let propertyImage = "";
-    let link = data.img?.split("/");
-    if (link) {
-      let idImg = link[5] ? link[5] : "";
-      propertyImage = "https://drive.google.com/uc?export=view&id=" + idImg;
+    const resp = await fetch(url);
+    // Verifica si la respuesta es exitosa (status 200-299)
+    if (!resp.ok) {
+      // Lanzar un error detendrá la ejecución y llevará al bloque catch
+      throw new Error(`HTTP status ${resp.status}`);
     }
-console.log(data)
-    if(userRol=="Client"){
 
-      reportsMapped = data.reports?.filter(repo => repo.verified)
-    }else{
-      reportsMapped=data.reports
-    }
-    console.log("reportsMapped")
-    console.log(reportsMapped)
+    const data = await resp.json();
 
-    let camerasWorking = data.cameras?.filter(
-      (camera) => camera.status == "Working"
-    );
-    let camerasOffline = data.cameras?.filter(
-      (camera) => camera.status == "Offline"
-    );
-    let camerasVandalized = data.cameras?.filter(
-      (camera) => camera.status == "Vandalized"
-    );
+    // Manejar la lógica específica del rol
+    const reportsMapped = userRole === "Client"
+      ? data.reports?.filter(repo => repo.verified)
+      : data.reports;
 
+    // Procesamiento de imágenes y cámaras
+    const propertyImage = data.img?.split("/")[5]
+      ? `https://drive.google.com/uc?export=view&id=${data.img.split("/")[5]}`
+      : '';
 
-   /*  if(userRol=="Client"){
+    const camerasWorking = data.cameras?.filter(camera => camera.status === "Working");
+    const camerasOffline = data.cameras?.filter(camera => camera.status === "Offline");
+    const camerasVandalized = data.cameras?.filter(camera => camera.status === "Vandalized");
 
-      listOfReport = data.reports?.filter(
-        (report) => report.verified == true
-      );
-
-      console.log("listOfReport")
-      console.log(listOfReport)
-    }else{
-      
-      listOfReport = data.reports
-      console.log("listOfReport")
-      console.log(listOfReport)
-    }
-     */
-    dataDto = {
-      ...reportsMapped,
+   
+    const dataDto = {
+      ...data,
+      reportsMapped,
       numCamerasWorking: camerasWorking?.length,
       numCamerasOffline: camerasOffline?.length,
       numCamerasVandalized: camerasVandalized?.length,
-       numOfReports:reportsMapped, 
+      numOfReports: reportsMapped?.length, 
       propertyImage,
-      ...data
     };
 
+    return dataDto;
 
   } catch (error) {
-    /* Swal.fire({
-      icon: "error",
-      title: "Error",
-      text: error,
-    }); */
-   console.log(error)
-  }
-
-  if (resp.status == 404) {
+    console.error("Fetch error: ", error);
     Swal.fire({
       icon: "error",
       title: "Error",
-      text: "Error al buscar la informacion de la propiedad en la base de datos",
+      text: `Ha ocurrido un problema con la petición Fetch: ${error.message}`,
     });
-
-  
-    return;
+    return null; // Devuelve null o un objeto vacío para indicar que la petición falló
   }
-
-  console.log(dataDto);
-  return dataDto;
 };

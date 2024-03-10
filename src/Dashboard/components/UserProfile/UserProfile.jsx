@@ -16,13 +16,14 @@ const UserProfile = ({ userProfile }) => {
   const { currentColor } = useStateContext();
   let link = userProfile.image?.split("/");
   const [t] = useTranslation("global");
-  let userImg = "";
+  let userImg = userProfile.image ? userProfile.image : avatar;
+  let roleName = userProfile.role;
 
   if (link) {
     let idImg = link[5];
     userImg = "https://drive.google.com/uc?export=view&id=" + idImg;
   }
-  const [propertyFecthed, setPropertyFecthed] = useState({});
+  const [propertyFetched, setPropertyFetched] = useState({});
   
   const translatedUserProfileData = useUserProfileData();
 
@@ -51,17 +52,15 @@ const UserProfile = ({ userProfile }) => {
         />
         <div>
           <p className="font-semibold text-xl dark:text-gray-200">
-            {" "}
-            {userProfile.name}{" "}
+            {userProfile.name}
           </p>
           <p className="text-gray-500 text-sm dark:text-gray-400">
-            {" "}
-            {userProfile.rol.rolName || ""}{" "}
+            {userProfile.role ? userProfile.role.roleName : ""}
           </p>
           <p className="text-gray-500 text-sm font-semibold dark:text-gray-400">
-            {" "}
-            {userProfile.email || ""}{" "}
+            {userProfile.email}
           </p>
+
         </div>
       </div>
       <div>

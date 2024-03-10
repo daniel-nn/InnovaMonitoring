@@ -12,22 +12,21 @@ const Dashboard = () => {
   const { propertyContext, setPropertyContext } = useContext(UserContext);
   const navigate = useNavigate();
 
-  // Asumiendo que "propertySelected" está correctamente almacenado en localStorage
-  const propertyStorage = JSON.parse(localStorage.getItem("propertySelected")) || {};
-  const propertyId = propertyStorage.id || 0;
+
+  const propertyStorage = JSON.parse(localStorage.getItem("propertySelected"));
+  const propertyId = propertyStorage.id || 1;
   const { property, isLoading } = useFetchProperty(propertyId, navigate);
 
-  // Use useEffect para manejar efectos basados en el cambio de propiedades
+
   useEffect(() => {
-    // Si propertyContext está vacío y property tiene datos, actualiza el context
-    if (Object.keys(propertyContext).length === 0 && Object.keys(property).length > 0) {
+    // Asegúrate de que 'property' no sea null ni undefined antes de intentar usar 'Object.keys'
+    if (property && Object.keys(propertyContext).length === 0 && Object.keys(property).length > 0) {
       setPropertyContext(property);
     }
     if (!propertyId) {
       navigate("/");
     }
   }, [property, propertyContext, setPropertyContext, navigate, propertyId]);
-
 
   return (
     <div className="flex relative dark:bg-main-dark-bg">

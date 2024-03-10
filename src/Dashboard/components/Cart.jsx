@@ -24,11 +24,11 @@ const Chat = ({ properties }) => {
     return property;
   }; */
 
-  const handleClickProperty = (propertyArg) => {
-    localStorage.setItem("propertySelected", JSON.stringify(propertyArg));
-    const propertyid = propertyArg.id || 0;
-    setPropertyContext(propertyArg);
-  };
+const handleClickProperty = (propertyArg) => {
+  localStorage.setItem("propertySelected", JSON.stringify(propertyArg));
+  setPropertyContext(propertyArg); // Actualiza el contexto de la aplicación
+  // Considera la posibilidad de navegar a la página que muestra los detalles de la propiedad aquí.
+};
   const chatRef = useRef(); 
   const { setIsClicked } = useStateContext(); 
   useOutsideClick(chatRef, () => setIsClicked(prev => ({ ...prev, cart: false })));
@@ -48,7 +48,7 @@ const Chat = ({ properties }) => {
   
          
           <div className="w-full text-center text-gray-400 text-sm">
-            Properties you have access to
+            <p>{t("")} </p>
           </div>
      
        
