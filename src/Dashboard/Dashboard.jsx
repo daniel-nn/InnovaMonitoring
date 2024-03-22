@@ -28,6 +28,23 @@ const Dashboard = () => {
     }
   }, [property, propertyContext, setPropertyContext, navigate, propertyId]);
 
+  useEffect(() => {
+    const handleStorageChange = (event) => {
+      if (event.key === 'user' && !event.newValue) {
+        // Si la clave 'user' en localStorage se elimina o se limpia, redirigir a login
+        navigate('/login');
+      }
+    };
+
+    // Agrega el event listener al objeto window
+    window.addEventListener('storage', handleStorageChange);
+
+    // Retorna una función de limpieza que remueve el event listener
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, [navigate]);
+
   return (
     <div className="flex relative dark:bg-main-dark-bg">
        {/* <div className="fixed right-4 bottom-4" style={{ zIndex: "1000" }}>

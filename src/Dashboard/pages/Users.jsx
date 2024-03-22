@@ -53,7 +53,7 @@ export const Users = () => {
   const [propertiesList, setPropertiesList] = useState([]);
 
   let user = JSON.parse(localStorage.getItem("user"));
-  let userRole = user.rol?.rolName || "";
+  let userRole = user.role.roleName;
 
   useEffect(() => {
     getUsers().then((data) => setUsers(data));

@@ -403,7 +403,10 @@
   },
   "dashboard": {
     "dashboard-navbar": {
-      "property": "Property",
+      "cart": {
+        "property": "Property",
+        "search": "Search"
+      },
       "hi": "Hi,",
       "user-profile": {
         "profile": "My profile",

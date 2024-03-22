@@ -31,7 +31,7 @@ const NewReport = () => {
     const levels = ["1", "2", "3", "4"];
     const team = ["Innova Monitoring", "Impro",];
     let user = JSON.parse(localStorage.getItem("user"));
-    let userRole = user.rol?.rolName || "";
+    let userRole = user.role.roleName;
     useEffect(() => {
         const fetchProperties = async () => {
             const propertiesData = await getPropertiesInfo(navigate);
@@ -44,17 +44,37 @@ const NewReport = () => {
 
     useEffect(() => {
         const fetchAgents = async () => {
-            const agentsData = await getAgents();
-            setAgents(agentsData);
+            let agentsData = await getAgents();
 
-           
+            // Para Admin, con opción de auto-selección
+            if (userRole === "Admin") {
+                const adminOption = { id: user.id, name: user.name }; 
+                agentsData = [adminOption, ...agentsData];
+            }
+
+            // Estructurar datos para Dropdown
+            const formattedAgents = agentsData.map(agent => ({
+                label: agent.name, 
+                value: agent.name // O usa otro identificador único si es preferible
+            }));
+            setAgents(formattedAgents);
+
+            // Preseleccionar para el rol Monitor
             if (userRole === "Monitor") {
-                setReportForm(prev => ({ ...prev, agent: user.name })); // Asume que el nombre del usuario está almacenado en user.name
+       
+                // También verifica que 'setReportForm' actualice el estado como se espera.
+                setReportForm(prev => ({
+                    ...prev,
+                    agent: {
+                        ...prev.agent,
+                        name: user.name // Establece la propiedad 'name' del objeto 'agent' en 'reportForm'
+                    }
+                }));
             }
         };
 
         fetchAgents();
-    }, [setReportForm, userRole, user.name]);
+    }, [setReportForm, userRole, user.id, user.name]);
 
     useEffect(() => {
         const fetchIncidents = async () => {
@@ -445,18 +465,15 @@ const NewReport = () => {
                             <Dropdown
                                 value={reportForm.agent}
                                 onChange={(e) => setReportForm((prev) => ({ ...prev, agent: e.value }))}
-                                options={agents}
-                                optionLabel="name"
+                                options={agents} 
+                                optionLabel="label"  
                                 placeholder={t("dashboard.reports.new-report.agent")}
                                 className="w-full"
                             />
                         ) : (
-                            <input
-                                type="text"
-                                value={reportForm.agent}
-                                readOnly={true}
-                                className="w-full"
-                            />
+                                <div className="w-full p-inputtext p-component p-disabled" style={{ lineHeight: '1.5', padding: '0.5em 1em', border: '1px solid #c8c8c8', borderRadius: '4px', background: '#f8f8f8' }}>
+                                    <span>{reportForm.agent.name}</span>
+                                </div>
                         )}
                     </div>
                 </div>

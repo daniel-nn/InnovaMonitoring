@@ -42,6 +42,7 @@ const theme = createTheme({
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
+  
   <I18nextProvider i18n={i18next}>
     <ContextProvider>
       <ThemeProvider theme={theme}>

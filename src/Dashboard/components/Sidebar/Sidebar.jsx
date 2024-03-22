@@ -13,7 +13,7 @@ import './Siderbar.css'
 const Sidebar = () => {
   const { currentColor, activeMenu, setActiveMenu, screenSize } =
     useStateContext();
-  let user = JSON.parse(localStorage.getItem("user") || '{}'); // Asegura que user sea un objeto si no hay nada en localStorage.
+  let user = JSON.parse(localStorage.getItem("user") || '{}'); 
   let userRole = user.role.roleName;
   const navigate = useNavigate();
 
@@ -54,14 +54,6 @@ const Sidebar = () => {
                 <MdOutlineCancel />
               </button>
             </TooltipComponent>
-          </div>
-          <div className="mt-5">
-            <button
-              className="flex items-center justify-center gap-2 w-full px-4 py-2 bg-blue-500 text-white rounded-md"
-              onClick={() => console.log('El rol del usuario es:', userRole)}
-            >
-              Rol actual: <strong>{userRole}</strong>
-            </button>
           </div>
           <div className="mt-10">
             {links.map((item) => (

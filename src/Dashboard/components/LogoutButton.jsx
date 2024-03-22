@@ -2,15 +2,16 @@ import React from 'react';
 import { BiLogOut } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
 import { useStateContext } from '../../context/ContextProvider';
+import { UserContext } from '../../context/UserContext';
 
 const LogoutButton = ({ bgColor, color, bgHoverColor, size, text, borderRadius, width }) => {
     const { setIsClicked, initialState } = useStateContext();
     const navigate = useNavigate();
 
     const logout = () => {
-        localStorage.setItem('user', JSON.stringify({}));
-        localStorage.setItem('propertySelected', JSON.stringify({}));
-        navigate('/');
+        localStorage.removeItem('user');
+        localStorage.removeItem('propertySelected');
+        navigate('/login');
     };
 
     return (

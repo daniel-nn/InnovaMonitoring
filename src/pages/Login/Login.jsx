@@ -32,22 +32,24 @@ const Login = () => {
     }
     const user = {
       email: email,
-      pasword: password // Corrección aquí para coincidir con la estructura esperada en el backend.
+      pasword: password 
     };
     
     try {
       const newUser = await getUser(user);
       if (newUser && newUser.email) {
         localStorage.setItem("user", JSON.stringify({
+          id: newUser.id,
           email: newUser.email,
           name: newUser.name,
           image: newUser.image,
-          role: newUser.role, // Asume que newUser.role contiene la estructura del rol
-          properties: newUser.properties // Asume que newUser.properties es un arreglo de propiedades
+          role: newUser.role, 
+          properties: newUser.properties 
         }));
         // Actualiza el contexto de usuario con la nueva información
         setUserContext({
-          ...userContext, // Preserva el estado previo si es necesario
+          ...userContext, 
+          id: newUser.id,
           email: newUser.email,
           name: newUser.name,
           image: newUser.image,

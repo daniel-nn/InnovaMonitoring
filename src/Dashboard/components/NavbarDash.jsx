@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AiOutlineMenu } from 'react-icons/ai';
 import { BsBuildings, } from 'react-icons/bs';
 import { BsChatLeft } from 'react-icons/bs';
@@ -8,6 +8,9 @@ import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import { useTranslation, i18n } from "react-i18next";
 import { Cart, Chat, Notification, UserProfile } from '.';
 import { useStateContext } from '../../context/ContextProvider';
+import { useNavigate } from "react-router-dom";
+import { getPropertiesInfo } from '../helper/getProperties';
+
 import { UserProvider } from '../../context/UserProvider';
 import { styled } from '@material-ui/core';
 
@@ -33,7 +36,11 @@ const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
 const Navbar = () => {
   const { currentColor, activeMenu, setActiveMenu, handleClick, isClicked, setScreenSize, screenSize } = useStateContext();
   /* const { userContext, setUserContext } = useContext(UserContext); */
+  const navigate = useNavigate(); // Asegúrate de importar useNavigate de 'react-router-dom'
   const userProfile = JSON.parse(localStorage.getItem("user"))
+  const userRole = userProfile.role.roleName; // Asumiendo que userProfile.role contiene el objeto rol con una propiedad roleName.
+  const [properties, setProperties] = useState(userProfile.properties); // Inicializamos el estado con las propiedades del perfil del usuario.
+
   let userImage = "";
   
   let link = userProfile.image?.split("/");
@@ -62,6 +69,17 @@ const Navbar = () => {
     i18n.changeLanguage(lang);
   };
 
+  useEffect(() => {
+    // Función asíncrona para obtener las propiedades dependiendo del rol
+    const fetchProperties = async () => {
+      if (userRole === 'Admin' || userRole === 'Monitor') {
+        const propertiesData = await getPropertiesInfo(navigate);
+        setProperties(propertiesData); // Actualizamos el estado con todas las propiedades si es Admin o Monitor
+      }
+    };
+
+    fetchProperties();
+  }, [userRole, navigate]);
 
   return (
     <div className="flex justify-between p-2 md:ml-6 md:mr-6 relative">
@@ -79,7 +97,7 @@ const Navbar = () => {
         >
           ESP
         </button>
-        <NavButton title={t("dashboard.dashboard-navbar.property")} customFunc={() => handleClick('cart')} color={currentColor} icon={<BsBuildings />} />
+        <NavButton title={t("dashboard.dashboard-navbar.cart.property")} customFunc={() => handleClick('cart')} color={currentColor} icon={<BsBuildings />} />
         {/* <NavButton title="Chat" dotColor="red" customFunc={() => handleClick('chat')} color={currentColor} icon={<BsChatLeft />} /> */}
         <TooltipComponent content="Profile" position="BottomCenter">
           <div className="flex items-center gap-2 cursor-pointer p-1 hover:bg-light-gray rounded-lg mt-2" onClick={() => handleClick('userProfile')}>
@@ -92,8 +110,8 @@ const Navbar = () => {
             <MdKeyboardArrowDown className="text-gray-400 text-14" />
           </div>
         </TooltipComponent>
-        {isClicked.cart && (<Cart properties={userProfile.properties} />)}
-        {isClicked.chat && (<Chat />)}
+        {isClicked.cart && (<Cart properties={properties} />)} 
+         {isClicked.chat && (<Chat />)}
         {/* {isClicked.notification && (<Notification />)} */}
         {isClicked.userProfile && (<UserProfile userProfile={userProfile} />)}
       </div>

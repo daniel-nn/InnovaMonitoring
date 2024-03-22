@@ -124,8 +124,8 @@ export const GridDetails = ({ Details }) => {
     </Link>
   );
 };
-export const GridIsVerified = ({ isVerified }) => {
-  if (isVerified) {
+export const GridIsVerified = ({ verified }) => {
+  if (verified) {
     return (
       <div className="flex justify-center m-0 p-0 text-lg text-green-600">
         <AiFillCheckCircle></AiFillCheckCircle>
@@ -5023,46 +5023,54 @@ let reportes = [
     verified: false,
   },
 ];
-export const GridEditReport = ({ Details }) => {
-  const getPropertytoMapForm = async () => {
-    console.log(Details);
-    let data = await GetPropertyInfo(Details.property.id);
-    const { cameras, direction, id, img, mapImg, name, reports } = data;
 
-    let propertyToMapForm = {
-      cameras,
-      direction,
-      id,
-      img,
-      mapImg,
-      name,
-      reports,
-    };
+// export const GridEditReport = ({ Details }) => {
+//   const getPropertytoMapForm = async () => {
+//     // Verificar si Details o Details.property son undefined
+//     if (!Details || !Details.property) {
+//       console.error("Details o Details.property no está definido.");
+//       return; // Salir de la función si no están definidos
+//     }
+//     // Si están definidos, continúa con la lógica de la función
+//     console.log(Details);
+//     let data = await GetPropertyInfo(Details.property.id);
+//     const { cameras, direction, id, img, mapImg, name, reports } = data;
 
-    setEditReportFormVisible(!editReportFormVisible);
-    setReportForm({ ...Details, property: propertyToMapForm });
-  };
+//     let propertyToMapForm = {
+//       cameras,
+//       direction,
+//       id,
+//       img,
+//       mapImg,
+//       name,
+//       reports,
+//     };
+
+//     setEditReportFormVisible(!editReportFormVisible);
+//     setReportForm({ ...Details, property: propertyToMapForm });
+//   };
 
 
-  let newProperty = { ...Details.property, reports: reportes };
+//   let newProperty = { ...Details.property, reports: reportes };
 
-  const {
-    reportForm,
-    setReportForm,
-    editReportFormVisible,
-    setEditReportFormVisible,
-  } = useContext(UserContext);
-  return (
-    <div
-      className="flex justify-center m-0 p-0"
-      onClick={() => {
-        getPropertytoMapForm();
-      }}
-    >
-      <AiFillEdit className="text-lg "></AiFillEdit>
-    </div>
-  );
-};
+//   const {
+//     reportForm,
+//     setReportForm,
+//     editReportFormVisible,
+//     setEditReportFormVisible,
+//   } = useContext(UserContext);
+//   return (
+//     <div
+//       className="flex justify-center m-0 p-0"
+//       onClick={() => {
+//         getPropertytoMapForm();
+//       }}
+//     >
+//       <AiFillEdit className="text-lg "></AiFillEdit>
+//     </div>
+//   );
+// };
+
 export const GridEditCamera = ({ camera }) => {
   const { cameraForm, setCameraForm, cameraSaved, setCameratSaved, cameraFormFlag, setCameraFormFlag } = useContext(UserContext);
   const showCameraToEdit = () => {
@@ -5386,7 +5394,7 @@ const customerGridStatus = (props) => (
       style={{ background: props.StatusBg }}
       className="rounded-full h-3 w-3"
     />
-    <p>{props.Status}</p>
+    <p>{props.level}</p>
   </div>
 );
 export const areaPrimaryXAxis = {
@@ -6290,7 +6298,7 @@ export const reportsGrid = (t) => {
     },
 
     {
-      field: "OrderItems",
+      field: "caseType.incident",
       headerText: "Case",
       width: "200",
       editType: "dropdownedit",
@@ -6298,7 +6306,7 @@ export const reportsGrid = (t) => {
     },
 
     {
-      field: "Status",
+      field: "level",
       headerText: "Level",
       width: "130",
       format: "yMd",
@@ -6307,14 +6315,14 @@ export const reportsGrid = (t) => {
     },
 
     {
-      field: "dateIncident",
+      field: "dateOfReport",
       headerText: "Date Incident",
       width: "130",
       textAlign: "Center",
     },
 
     {
-      field: "Time",
+      field: "timeOfReport",
       headerText: "Time",
       width: "100",
       editType: "dropdownedit",
@@ -6322,7 +6330,7 @@ export const reportsGrid = (t) => {
     },
 
     {
-      field: "OrderID",
+      field: "numerCase",
       headerText: "Report ID",
       width: "110",
       textAlign: "Center",
@@ -6335,15 +6343,6 @@ export const reportsGrid = (t) => {
       textAlign: "Center",
       template: GridPdf,
     },
-
-    {
-      field: "Details",
-      headerText: "Details",
-      width: "105",
-      textAlign: "Center",
-      template: GridDetails,
-    },
-
   ];
 
 };
@@ -6357,14 +6356,14 @@ export const reportsGridAdmin = (t) => {
       width: "120",
     },
     {
-      field: "OrderItems",
+      field: "caseType.incident",
       headerText: t("dashboard.reports.table.admin.Case"),
       width: "200",
       editType: "dropdownedit",
       textAlign: "Center",
     },
     {
-      field: "Status",
+      field: "level",
       headerText: t("dashboard.reports.table.admin.CaseLevel"),
       width: "130",
       format: "yMd",
@@ -6373,20 +6372,20 @@ export const reportsGridAdmin = (t) => {
     },
 
     {
-      field: "dateIncident",
+      field: "dateOfReport",
       headerText: t("dashboard.reports.table.admin.DateCase"),
       width: "130",
       textAlign: "Center",
     },
     {
-      field: "Time",
+      field: "timeOfReport",
       headerText: t("dashboard.reports.table.admin.TimeCase"),
       width: "100",
       editType: "dropdownedit",
       textAlign: "Center",
     },
     {
-      field: "OrderID",
+      field: "numerCase",
       headerText: t("dashboard.reports.table.admin.IdCase"),
       width: "110",
       textAlign: "Center",
@@ -6400,7 +6399,7 @@ export const reportsGridAdmin = (t) => {
       template: GridPdf,
     },
     {
-      field: "isVerified",
+      field: "verified",
       headerText: t("dashboard.reports.table.admin.CaseVerified"),
       width: "95",
       textAlign: "Center",
@@ -6411,14 +6410,69 @@ export const reportsGridAdmin = (t) => {
       headerText: t("dashboard.reports.table.admin.CaseEdit"),
       width: "80",
       textAlign: "Center",
-      template: GridEditReport,
+      template: GridIsVerified,
+    },
+
+  ];
+};
+
+export const reportsGridMonitor = (t) => {
+  return [
+    {
+      headerText: t("dashboard.reports.table.admin.CaseImage"),
+      template: gridOrderImage,
+      textAlign: "Center",
+      width: "120",
     },
     {
-      field: "Details",
-      headerText: t("dashboard.reports.table.admin.CaseDetails"),
-      width: "105",
+      field: "caseType.incident",
+      headerText: t("dashboard.reports.table.admin.Case"),
+      width: "200",
+      editType: "dropdownedit",
       textAlign: "Center",
-      template: GridDetails,
+    },
+    {
+      field: "level",
+      headerText: t("dashboard.reports.table.admin.CaseLevel"),
+      width: "130",
+      format: "yMd",
+      textAlign: "Center",
+      template: customerGridStatus,
+    },
+
+    {
+      field: "dateOfReport",
+      headerText: t("dashboard.reports.table.admin.DateCase"),
+      width: "130",
+      textAlign: "Center",
+    },
+    {
+      field: "timeOfReport",
+      headerText: t("dashboard.reports.table.admin.TimeCase"),
+      width: "100",
+      editType: "dropdownedit",
+      textAlign: "Center",
+    },
+    {
+      field: "numerCase",
+      headerText: t("dashboard.reports.table.admin.IdCase"),
+      width: "110",
+      textAlign: "Center",
+    },
+
+    {
+      field: "PDF",
+      headerText: "Pdf",
+      width: "80",
+      textAlign: "Center",
+      template: GridPdf,
+    },
+    {
+      field: "verified",
+      headerText: t("dashboard.reports.table.admin.CaseVerified"),
+      width: "95",
+      textAlign: "Center",
+      template: GridIsVerified,
     },
   ];
 };

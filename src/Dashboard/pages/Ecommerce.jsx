@@ -14,6 +14,7 @@ import { TbDeviceCctv, TbDeviceCctvOff } from "react-icons/tb";
 import { GiPoliceCar } from "react-icons/gi";
 import { useTranslation } from "react-i18next";
 import { Link } from 'react-router-dom';
+import { getNumberOfReportsByRole } from "../helper/getNumberOfReportsByRole";
 
 let mag = {
   id: 2,
@@ -31,10 +32,12 @@ const Ecommerce = () => {
   const [t] = useTranslation("global");
   const [propertyFetched, setPropertyFetched] = useState({});
   
-  let user = JSON.parse(localStorage.getItem("user") || '{}'); // Se agrega un valor por defecto por si el parse falla
+  let user = JSON.parse(localStorage.getItem("user") || '{}'); 
+  let userId = user.id;
   let userRole = user.role.roleName;
   let propertyStorage = JSON.parse(localStorage.getItem("propertySelected") || '{}') || user.properties?.[0]; // Asegúrate de manejar correctamente cuando user.properties pueda ser undefined
   const { propertyContext } = useContext(UserContext);
+  const [reportsData, setReportsData] = useState(null); // Estado inicial como null
 
   useEffect(() => {
     if (propertyContext && propertyContext.id) {
@@ -52,6 +55,26 @@ const Ecommerce = () => {
 
   const backgroundImageUrl = propertyFetched.name ? `${process.env.PUBLIC_URL}/images/${formatImageName(propertyFetched.name)}` : '';
 
+  const numOfReports = reportsData ? reportsData.length : "...";
+  useEffect(() => {
+    if (propertyContext && propertyContext.id) {
+      // Restablece reportsData a cero cuando se selecciona una nueva propiedad
+      setReportsData([]);
+
+      // Carga los reportes para la propiedad seleccionada
+      getNumberOfReportsByRole(propertyContext.id, userId, userRole)
+        .then(reports => {
+          // Si no hay error y la respuesta es un array (incluso si está vacío)
+          setReportsData(reports || []); // Asignamos el array de reportes o uno vacío
+        })
+        .catch(error => {
+          // Manejamos el error sin cambiar reportsData
+          console.error("Error al obtener los reportes: ", error);
+          setReportsData(null); // O podrías establecer algún estado de error si es necesario
+        });
+    }
+  }, [propertyContext, userRole, userId]);
+
 
   return (
     
@@ -66,8 +89,9 @@ const Ecommerce = () => {
             <div className="flex justify-between items-center py-5">
               <div>
                 <p className="p-0 font-bold text-gray-300">{t("dashboard.dashboard-index.number-reports")}</p>
-                <p className="p-0 text-2xl rounded-md  text-gray-300">
-                  {propertyFetched.numOfReports || 0}
+                {/* Aquí decides cómo mostrar numOfReports basado en el estado de reportsData */}
+                <p className="p-0 text-2xl rounded-md text-gray-300">
+                  {reportsData === null ? 'Cargando...' : reportsData.length}
                 </p>
               </div>
               <NavLink
@@ -83,15 +107,8 @@ const Ecommerce = () => {
             </div>
           </div>
 
-          <div
-            className="flex m-3 flex-wrap  
-          gap-1 items-center"
-          >
-            <div
-              key={1}
-              className="bg-white/75
-                   dar:text-gray-200 dark:bg-secondary-dark-bg
-                   md:w-52 p-4 pt-9">
+          <div className="flex m-3 flex-wrap gap-1 items-">
+            <div key={1} className="bg-white/75 dar:text-gray-200 dark:bg-secondary-dark-bg md:w-52 p-4 pt-9 rounded-2xl">
               
               <button
             
@@ -163,12 +180,7 @@ const Ecommerce = () => {
               <p className="p-0 text-md text-gray-700 mt-1">{t("dashboard.dashboard-index.cameras-off")}</p>
             </div>
 
-            <div
-              key={4}
-              className="bg-white/75
-                   dar:text-gray-200 dark:bg-secondary-dark-bg
-                   md:w-52 p-4 pt-9 rounded-2xl"
-            >
+            <div key={4} className="bg-white/75 dark:text-gray-200 dark:bg-secondary-dark-bg md:w-1/4 p-4 pt-9 rounded-2xl">
               <button
                 type="button"
                 style={{

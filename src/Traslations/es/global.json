@@ -399,7 +399,11 @@
   },
   "dashboard": {
     "dashboard-navbar": {
+      "cart": {
       "property": "Propiedades",
+      "search": "Buscar"  
+      },
+      
       "hi": "Hola,",
       "user-profile": {
         "profile": "Mi perfil",

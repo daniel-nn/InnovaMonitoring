@@ -36,7 +36,7 @@ const Bar = () => {
   let propertyStorage = JSON.parse(localStorage.getItem("propertySelected"));
   let idStorage = propertyStorage.id;
   let user = JSON.parse(localStorage.getItem("user"));
-  let userRole = user.rol?.rolName || "";
+  let userRole = user.role.roleName;
   let id1 = propertyContext.id || idStorage;
   const [reportes, setReportes] = useState([]);
   const { currentMode } = useStateContext();
