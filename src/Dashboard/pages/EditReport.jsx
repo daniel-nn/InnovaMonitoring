@@ -15,16 +15,18 @@ import { InputNumber } from "primereact/inputnumber";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Calendar } from "primereact/calendar";
 import { RadioButton } from 'primereact/radiobutton';
-import  exportPDF from "../helper/exportPdf"
+import exportPDF from "../helper/exportPdf"
 
 
-const NewReport = () => {
+const EditReport = () => {
     const { propertyContext, reportSaved, setreportSaved } = useContext(UserContext);
     const [t, i18n] = useTranslation("global");
     const navigate = useNavigate();
 
     const { reportForm, setReportForm } = useContext(UserContext);
     const { property, agent, dateOfReport, timeOfReport, incidentDate, incidentStartTime, incidentEndTime, caseType, level, company, numerCase, camerasFunctioning, listMalfuncioningCameras, observerdViaCameras, policeFirstResponderNotified, policeFirstResponderScene, securityGuardsNotified, securityGuardsScene, policeNumerCase, reportDetails, formNotificationClient, emailedReport, pdf, images, videos } = reportForm;
+    console.log("EditReport data:", reportForm);
+
     const [properties, setProperties] = useState([]);
     const [agents, setAgents] = useState([]);
     const [incidents, setIncidents] = useState([]);
@@ -45,26 +47,25 @@ const NewReport = () => {
     useEffect(() => {
         const fetchAgents = async () => {
             let agentsData = await getAgents();
-            console.log("creando objetoagents", agentsData); // Después de obtener los datos y antes de procesarlos
 
            
-            if (userRole === "Admin") { 
-                const adminOption = { id: user.id, name: user.name }; 
+            if (userRole === "Admin") {
+                const adminOption = { id: user.id, name: user.name };
                 agentsData = [adminOption, ...agentsData];
             }
 
            
             const formattedAgents = agentsData.map(agent => ({
-                label: agent.name, 
-                value: agent.id 
+                ...agent, // Mantén toda la estructura del agente
+
+                label: agent.name, // Agrega un campo 'label' para mostrar en el Dropdown
             }));
             setAgents(formattedAgents);
-            console.log("Agents Data:", agentsData); // Después de obtener los datos y antes de procesarlos
-            console.log("Formatted Agents:", formattedAgents); // Después de procesarlos y antes de llamar a setAgents
-            
+
+          
             if (userRole === "Monitor") {
-       
-         
+
+                
                 setReportForm(prev => ({
                     ...prev,
                     agent: {
@@ -86,25 +87,25 @@ const NewReport = () => {
         fetchIncidents();
     }, [navigate]);
 
-    
+
 
 
     const malFunctionCameras = useMemo(() => [
-        { label: t("dashboard.reports.new-report.list-Malfuncion-cameras.na"), value: 'N/A' },
-        { label: t("dashboard.reports.new-report.list-Malfuncion-cameras.listedOnReport"), value: 'Listed on Report' }
+        { label: t("dashboard.reports.edit-report.list-Malfuncion-cameras.na"), value: 'N/A' },
+        { label: t("dashboard.reports.edit-report.list-Malfuncion-cameras.listedOnReport"), value: 'Listed on Report' }
     ], [t]);
 
     const [listpoliceFirstResponderScene, setlistpoliceFirstResponderScene] = useState([]);
     useEffect(() => {
         setlistpoliceFirstResponderScene([
-            { label: t("dashboard.reports.new-report.List-policeFirstResponderNotified.yes"), value: 'Yes' },
-            { label: t("dashboard.reports.new-report.List-policeFirstResponderNotified.no"), value: 'No' },
-            { label: t("dashboard.reports.new-report.List-policeFirstResponderNotified.n/a"), value: 'N/A' },
-            { label: t("dashboard.reports.new-report.List-policeFirstResponderNotified.fiat-security"), value: 'Fiat Security' },
-            { label: t("dashboard.reports.new-report.List-policeFirstResponderNotified.security"), value: 'Security' },
-            { label: t("dashboard.reports.new-report.List-policeFirstResponderNotified.police"), value: 'Police' },
-            { label: t("dashboard.reports.new-report.List-policeFirstResponderNotified.firemen"), value: 'Firemen' },
-            { label: t("dashboard.reports.new-report.List-policeFirstResponderNotified.ambulance"), value: 'Ambulance' },
+            { label: t("dashboard.reports.edit-report.List-policeFirstResponderNotified.yes"), value: 'Yes' },
+            { label: t("dashboard.reports.edit-report.List-policeFirstResponderNotified.no"), value: 'No' },
+            { label: t("dashboard.reports.edit-report.List-policeFirstResponderNotified.n/a"), value: 'N/A' },
+            { label: t("dashboard.reports.edit-report.List-policeFirstResponderNotified.fiat-security"), value: 'Fiat Security' },
+            { label: t("dashboard.reports.edit-report.List-policeFirstResponderNotified.security"), value: 'Security' },
+            { label: t("dashboard.reports.edit-report.List-policeFirstResponderNotified.police"), value: 'Police' },
+            { label: t("dashboard.reports.edit-report.List-policeFirstResponderNotified.firemen"), value: 'Firemen' },
+            { label: t("dashboard.reports.edit-report.List-policeFirstResponderNotified.ambulance"), value: 'Ambulance' },
         ]);
     }, [t, i18n.language]);
 
@@ -113,25 +114,25 @@ const NewReport = () => {
     const [listNotificationClient, setlistNotificationClient] = useState([]);
     useEffect(() => {
         setlistNotificationClient([
-            { label: t("dashboard.reports.new-report.NotificationClient-list.email"), value: 'Email' },
-            { label: t("dashboard.reports.new-report.NotificationClient-list.call-mgr"), value: 'Call MGR' },
-            { label: t("dashboard.reports.new-report.NotificationClient-list.call-asst-mgr"), value: 'CALL ASST.MGR' },
-            { label: t("dashboard.reports.new-report.NotificationClient-list.text"), value: 'Text' },
-            { label: t("dashboard.reports.new-report.NotificationClient-list.email-call"), value: 'EMAIL & CALL' },
-            { label: t("dashboard.reports.new-report.NotificationClient-list.text-call"), value: 'TEXT & CALL' },
-            { label: t("dashboard.reports.new-report.NotificationClient-list.other"), value: 'OTHER' }
+            { label: t("dashboard.reports.edit-report.NotificationClient-list.email"), value: 'Email' },
+            { label: t("dashboard.reports.edit-report.NotificationClient-list.call-mgr"), value: 'Call MGR' },
+            { label: t("dashboard.reports.edit-report.NotificationClient-list.call-asst-mgr"), value: 'CALL ASST.MGR' },
+            { label: t("dashboard.reports.edit-report.NotificationClient-list.text"), value: 'Text' },
+            { label: t("dashboard.reports.edit-report.NotificationClient-list.email-call"), value: 'EMAIL & CALL' },
+            { label: t("dashboard.reports.edit-report.NotificationClient-list.text-call"), value: 'TEXT & CALL' },
+            { label: t("dashboard.reports.edit-report.NotificationClient-list.other"), value: 'OTHER' }
         ])
     }, [t, i18n.language]);
 
     const [listemailedReport, setemailedReport] = useState([]);
     useEffect(() => {
         setemailedReport([
-            { label: t("dashboard.reports.new-report.emaildReport-list.property-manager"), value: 'PROPERTY MANAGER' },
-            { label: t("dashboard.reports.new-report.emaildReport-list.assitant-manager"), value: 'ASSISTANT MANAGER' },
-            { label: t("dashboard.reports.new-report.emaildReport-list.ownership"), value: 'OWNERSHIP' },
-            { label: t("dashboard.reports.new-report.emaildReport-list.corporate"), value: 'CORPORATE' },
-            { label: t("dashboard.reports.new-report.emaildReport-list.security-guard"), value: 'SECURITY GUARD' },
-            { label: t("dashboard.reports.new-report.emaildReport-list.staff"), value: 'STAFF' }
+            { label: t("dashboard.reports.edit-report.emaildReport-list.property-manager"), value: 'PROPERTY MANAGER' },
+            { label: t("dashboard.reports.edit-report.emaildReport-list.assitant-manager"), value: 'ASSISTANT MANAGER' },
+            { label: t("dashboard.reports.edit-report.emaildReport-list.ownership"), value: 'OWNERSHIP' },
+            { label: t("dashboard.reports.edit-report.emaildReport-list.corporate"), value: 'CORPORATE' },
+            { label: t("dashboard.reports.edit-report.emaildReport-list.security-guard"), value: 'SECURITY GUARD' },
+            { label: t("dashboard.reports.edit-report.emaildReport-list.staff"), value: 'STAFF' }
         ])
     }, [t, i18n.language])
 
@@ -140,10 +141,10 @@ const NewReport = () => {
     useEffect(() => {
         const updateTitle = () => {
             if (reportForm.property && reportForm.property.name) {
-                const newTitleWithProperty = `${t('dashboard.reports.new-report.new-report-with-property')} ${reportForm.property.name}`;
+                const newTitleWithProperty = `${t('dashboard.reports.edit-report.edit-report-with-property')} ${reportForm.property.name}`;
                 setHeaderTitle(newTitleWithProperty);
             } else {
-                const newTitle = t('dashboard.reports.new-report.new-report');
+                const newTitle = t('dashboard.reports.edit-report.edit-tittle');
                 setHeaderTitle(newTitle);
             }
         };
@@ -153,7 +154,7 @@ const NewReport = () => {
             i18n.off('languageChanged', updateTitle);
         };
     }, [i18n, t, reportForm.property]);
-    
+
     const reportDtoPdf = async (reportForm) => {
         console.log('reportForm recibido:', reportForm);
         const {
@@ -174,8 +175,8 @@ const NewReport = () => {
             formNotificationClient,
             emailedReport,
             reportDetails
-           
-        } = reportForm;      
+
+        } = reportForm;
         let reportDtoPdf = {
             agent: reportForm.agent.name,
             caseType: reportForm.caseType.incident,
@@ -184,7 +185,7 @@ const NewReport = () => {
             numerCase,
             property,
             propertyAddress: property ? property.direction : 'Dirección no proporcionada',
-            propertyrgb: property ? property.rgbcolor : '255, 255 ,255', 
+            propertyrgb: property ? property.rgbcolor : '255, 255 ,255',
             listMalfuncioningCameras,
             observerdViaCameras: observerdViaCameras ? 1 : 0,
             policeFirstResponderNotified: policeFirstResponderNotified ? 1 : 0,
@@ -201,7 +202,7 @@ const NewReport = () => {
             incidentDate: formatDate(reportForm.incidentDate),
             incidentStartTime: formatTime(reportForm.incidentStartTime),
             incidentEndTime: formatTime(reportForm.incidentEndTime),
-         
+
         };
         return reportDtoPdf;
     };
@@ -239,7 +240,7 @@ const NewReport = () => {
             });
         });
 
-        
+
 
         videos.forEach((vid) => {
             evidences.push({
@@ -269,7 +270,7 @@ const NewReport = () => {
             pdf
         } = reportForm;
         let reportDto = {
-            agent: reportForm.agent.id,
+            agent: reportForm.agent,
             caseType,
             company,
             level,
@@ -298,7 +299,6 @@ const NewReport = () => {
         await postReport(reportDto);
         setreportSaved(!reportSaved);
     };
-
     const sendingreport = () => {
         const swalStyles = `
             .swal2-confirm-button-success {
@@ -335,16 +335,16 @@ const NewReport = () => {
         styleSheet.innerText = swalStyles;
         document.head.appendChild(styleSheet);
         const propertyName = reportForm.property?.name ?? ' ';
-        const confirmationTitle = t("dashboard.reports.new-report.swal.confirmation") + propertyName;
+        const confirmationTitle = t("dashboard.reports.edit-report.swal.confirmation") + propertyName;
         Swal.fire({
             title: confirmationTitle,
             icon: "info",
             showDenyButton: true,
             showCancelButton: true,
-            confirmButtonText: '<i class="pi pi-check"></i> ' + t("dashboard.reports.new-report.swal.send"),
-            denyButtonText: `<i class="pi pi-times"></i> ` + t("dashboard.reports.new-report.swal.don't-save"),
+            confirmButtonText: '<i class="pi pi-check"></i> ' + t("dashboard.reports.edit-report.swal.send"),
+            denyButtonText: `<i class="pi pi-times"></i> ` + t("dashboard.reports.edit-report.swal.don't-save"),
 
-            cancelButtonText: t("dashboard.reports.new-report.swal.cancel"),
+            cancelButtonText: t("dashboard.reports.edit-report.swal.cancel"),
             buttonsStyling: false,
             customClass: {
                 confirmButton: 'swal2-confirm-button-success',
@@ -367,10 +367,10 @@ const NewReport = () => {
                     });
                     Toast.fire({
                         icon: "success",
-                        title: t("dashboard.reports.new-report.swal.report-send")
+                        title: t("dashboard.reports.edit-report.swal.report-send")
                     });
                 }).catch((error) => {
-                    
+
                     console.error("Error saving the report:", error);
                 });
             } else if (result.isDenied) {
@@ -415,7 +415,7 @@ const NewReport = () => {
                 });
                 Toast.fire({
                     icon: "error",
-                    title: t("dashboard.reports.new-report.swal.canceled-report")
+                    title: t("dashboard.reports.edit-report.swal.canceled-report")
                 });
 
             }
@@ -434,60 +434,62 @@ const NewReport = () => {
 
                 <div className="w-full md:w-1/3 px-3 mb-6">
                     <label htmlFor="propertyType" className="font-bold block mb-2">
-                        {t("dashboard.reports.new-report.select-property")}
+                        {t("dashboard.reports.edit-report.select-property")}
                     </label>
                     <div className="p-inputgroup">
                         <span className="p-inputgroup-addon">
                             <i className="pi pi-home"></i>
                         </span>
                         <Dropdown
-                            value={property}
+                            value={properties.find(p => p.id === property.id)} // Encuentra el objeto completo basado en el ID
                             onChange={(e) => {
                                 setReportForm(prevForm => ({
                                     ...prevForm,
-                                    property: e.value
+                                    property: e.value // Aquí pasas el objeto completo de la propiedad
                                 }));
                             }}
                             options={properties}
                             optionLabel="name"
-                            placeholder={t("dashboard.reports.new-report.property")}
+                            placeholder={t("dashboard.reports.edit-report.property")}
                             className="w-full"
                         />
                     </div>
+                    <button onClick={() => console.log(agents || "agentes no encontrado")}>agentes</button>
+
                 </div>
 
                 <div className="w-full md:w-1/3 px-3 mb-6">
                     <label htmlFor="agentType" className="font-bold block mb-2">
-                        {t("dashboard.reports.new-report.select-agent")}
+                        {t("dashboard.reports.edit-report.select-agent")}
                     </label>
                     <div className="p-inputgroup">
                         <span className="p-inputgroup-addon">
                             <i className="pi pi-user"></i>
                         </span>
+                        <button onClick={() => console.log(agents.find(a => a.id === reportForm.agent.id)?.id || "id agente no encontrado")}>idagente</button>
                         {userRole === "Admin" ? (
                             <Dropdown
-                                value={reportForm.agent}
-                                onChange={(e) => setReportForm(prev => ({
-                                    ...prev,
-                                    agent: e.value // Aquí asegúrate de que e.value sea el id del agente
-                                }))}
-                                options={agents} // Asegúrate de que esto está pasando el array correcto
-                                optionLabel="label"
-                                placeholder={t("dashboard.reports.new-report.agent")}
+                                value={reportForm.agent.name} // Encuentra el agente actual basado en el ID
+                                onChange={(e) => setReportForm((prev) => ({ ...prev, agent: e.value }))}
+                                options={agents}
+                                optionLabel="label" // Usa 'label' para mostrar nombres en el Dropdown
+                                placeholder={t("dashboard.reports.edit-report.agent")}
                                 className="w-full"
                             />
-
                         ) : (
-                                <div className="w-full p-inputtext p-component p-disabled" style={{ lineHeight: '1.5', padding: '0.5em 1em', border: '1px solid #c8c8c8', borderRadius: '4px', background: '#f8f8f8' }}>
-                                    <span>{reportForm.agent.name}</span>
-                                </div>
+                            <div className="w-full p-inputtext p-component p-disabled" style={{ lineHeight: '1.5', padding: '0.5em 1em', border: '1px solid #c8c8c8', borderRadius: '4px', background: '#f8f8f8' }}>
+                                <span>{reportForm.agent.name}</span>
+                            </div>
                         )}
+                       
+
+                        <button onClick={() => console.log(agents.find(a => a.id === reportForm.agent.id)?.name || "Agente no encontrado")}>agente</button>
                     </div>
                 </div>
-                
+
                 <div className="w-full md:w-1/3 px-3 mb-6">
                     <label htmlFor="level" className="font-bold block mb-2">
-                        {t("dashboard.reports.new-report.select-number-case")}
+                        {t("dashboard.reports.edit-report.select-number-case")}
                     </label>
                     <div className="p-inputgroup">
                         <span className="p-inputgroup-addon">
@@ -495,7 +497,7 @@ const NewReport = () => {
                         </span>
                         <InputNumber value={numerCase} onValueChange={(e) => setReportForm((i) => {
                             return { ...reportForm, numerCase: e.value };
-                        })} placeholder={t("dashboard.reports.new-report.number-case")}
+                        })} placeholder={t("dashboard.reports.edit-report.number-case")}
                             mode="decimal" minFractionDigits={0} />
 
                     </div>
@@ -503,14 +505,14 @@ const NewReport = () => {
 
                 <div className="w-full md:w-1/3 px-3 mb-6">
                     <label htmlFor="dateOfReport" className="font-bold block mb-2">
-                        {t("dashboard.reports.new-report.select-date-of-report")}
+                        {t("dashboard.reports.edit-report.select-date-of-report")}
                     </label>
                     <div className="p-inputgroup">
                         <span className="p-inputgroup-addon">
                             <i className="pi pi-calendar-times"></i>
                         </span>
                         <Calendar
-                            placeholder={t("dashboard.reports.new-report.date-of-report-placeholder")}
+                            placeholder={t("dashboard.reports.edit-report.date-of-report-placeholder")}
                             value={dateOfReport}
                             onChange={(e) => setReportForm((i) => {
 
@@ -522,14 +524,14 @@ const NewReport = () => {
 
                 <div className="w-full md:w-1/3 px-3 mb-6">
                     <label htmlFor="timeOfReport" className="font-bold block mb-2">
-                        {t("dashboard.reports.new-report.select-time-of-report")}
+                        {t("dashboard.reports.edit-report.select-time-of-report")}
                     </label>
                     <div className="p-inputgroup">
                         <span className="p-inputgroup-addon">
                             <i className="pi pi-clock"></i>
                         </span>
                         <Calendar
-                            placeholder={t("dashboard.reports.new-report.time-of-report-placeholder")}
+                            placeholder={t("dashboard.reports.edit-report.time-of-report-placeholder")}
                             value={timeOfReport}
                             onChange={(e) => setReportForm((i) => {
 
@@ -542,14 +544,14 @@ const NewReport = () => {
 
                 <div className="w-full md:w-1/3 px-3 mb-6">
                     <label htmlFor="incidentDate" className="font-bold block mb-2">
-                        {t("dashboard.reports.new-report.select-date-of-incident")}
+                        {t("dashboard.reports.edit-report.select-date-of-incident")}
                     </label>
                     <div className="p-inputgroup">
                         <span className="p-inputgroup-addon">
                             <i className="pi pi-calendar-times"></i>
                         </span>
                         <Calendar
-                            placeholder={t("dashboard.reports.new-report.date-of-incident-placeholder")}
+                            placeholder={t("dashboard.reports.edit-report.date-of-incident-placeholder")}
                             value={incidentDate}
                             onChange={(e) => setReportForm((i) => {
 
@@ -561,14 +563,14 @@ const NewReport = () => {
 
                 <div className="w-full md:w-1/3 px-3 mb-6">
                     <label htmlFor="incidentStartTime" className="font-bold block mb-2">
-                        {t("dashboard.reports.new-report.select-incident-start-time")}
+                        {t("dashboard.reports.edit-report.select-incident-start-time")}
                     </label>
                     <div className="p-inputgroup">
                         <span className="p-inputgroup-addon">
                             <i className="pi pi-clock"></i>
                         </span>
                         <Calendar
-                            placeholder={t("dashboard.reports.new-report.incident-start-time-placeholder")}
+                            placeholder={t("dashboard.reports.edit-report.incident-start-time-placeholder")}
                             value={incidentStartTime}
                             onChange={(e) => setReportForm((i) => {
 
@@ -581,14 +583,14 @@ const NewReport = () => {
 
                 <div className="w-full md:w-1/3 px-3 mb-6">
                     <label htmlFor="incidentEndTime" className="font-bold block mb-2">
-                        {t("dashboard.reports.new-report.select-incident-end-time")}
+                        {t("dashboard.reports.edit-report.select-incident-end-time")}
                     </label>
                     <div className="p-inputgroup">
                         <span className="p-inputgroup-addon">
                             <i className="pi pi-clock"></i>
                         </span>
                         <Calendar
-                            placeholder={t("dashboard.reports.new-report.incident-end-time-placeholder")}
+                            placeholder={t("dashboard.reports.edit-report.incident-end-time-placeholder")}
                             value={incidentEndTime}
                             onChange={(e) => setReportForm((i) => {
 
@@ -601,7 +603,7 @@ const NewReport = () => {
 
                 <div className="w-full md:w-1/3 px-3 mb-6">
                     <label htmlFor="caseType" className="font-bold block mb-2">
-                        {t("dashboard.reports.new-report.select-incident")}
+                        {t("dashboard.reports.edit-report.select-incident")}
                     </label>
                     <div className="p-inputgroup">
                         <span className="p-inputgroup-addon">
@@ -615,7 +617,7 @@ const NewReport = () => {
                             })}
                             options={incidents}
                             optionLabel="incident"
-                            placeholder={t("dashboard.reports.new-report.incident")}
+                            placeholder={t("dashboard.reports.edit-report.incident")}
                             className="w-full md:w-14rem"
                         />
                     </div>
@@ -623,7 +625,7 @@ const NewReport = () => {
 
                 <div className="w-full md:w-1/3 px-3 mb-6">
                     <label htmlFor="level" className="font-bold block mb-2">
-                        {t("dashboard.reports.new-report.select-report-level")}
+                        {t("dashboard.reports.edit-report.select-report-level")}
                     </label>
                     <div className="p-inputgroup">
                         <span className="p-inputgroup-addon">
@@ -635,7 +637,7 @@ const NewReport = () => {
                                 return { ...reportForm, level: e.value };
                             })}
                             options={levels}
-                            placeholder={t("dashboard.reports.new-report.level")}
+                            placeholder={t("dashboard.reports.edit-report.level")}
                             className="w-full md:w-14rem"
                         />
                     </div>
@@ -643,7 +645,7 @@ const NewReport = () => {
 
                 <div className="w-full md:w-1/3 px-3 mb-6">
                     <label htmlFor="company" className="font-bold block mb-2">
-                        {t("dashboard.reports.new-report.select-company")}
+                        {t("dashboard.reports.edit-report.select-company")}
                     </label>
                     <div className="p-inputgroup">
                         <span className="p-inputgroup-addon">
@@ -656,7 +658,7 @@ const NewReport = () => {
                                 return { ...reportForm, company: e.value };
                             })}
                             options={team}
-                            placeholder={t("dashboard.reports.new-report.monitoring-team")}
+                            placeholder={t("dashboard.reports.edit-report.monitoring-team")}
                             className="w-full md:w-14rem"
                         />
                     </div>
@@ -664,7 +666,7 @@ const NewReport = () => {
 
                 <div className="w-full md:w-1/3 px-3 mb-6 text-center">
                     <label htmlFor="camerasfunctioning" className="font-bold block mb-2">
-                        {t("dashboard.reports.new-report.select-is-cameras-funcioning")}
+                        {t("dashboard.reports.edit-report.select-is-cameras-funcioning")}
                     </label>
                     <div className="flex justify-center">
                         <div className="flex align-items-center mr-2">
@@ -681,7 +683,7 @@ const NewReport = () => {
                                 }}
                                 checked={reportForm.camerasFunctioning === true}
                             />
-                            <label htmlFor="camerasYes" className="ml-2">{t("dashboard.reports.new-report.yes")}</label>
+                            <label htmlFor="camerasYes" className="ml-2">{t("dashboard.reports.edit-report.yes")}</label>
                         </div>
                         <div className="flex align-items-center ml-4">
                             <RadioButton
@@ -697,14 +699,14 @@ const NewReport = () => {
                                 }}
                                 checked={reportForm.camerasFunctioning === false}
                             />
-                            <label htmlFor="camerasNo" className="ml-2">{t("dashboard.reports.new-report.no")}</label>
+                            <label htmlFor="camerasNo" className="ml-2">{t("dashboard.reports.edit-report.no")}</label>
                         </div>
                     </div>
                 </div>
 
                 <div className="w-full md:w-1/3 px-3 mb-6">
                     <label htmlFor="MalfuncioningCameras" className="font-bold block mb-2">
-                        {t("dashboard.reports.new-report.listMalfuncioningCameras")}
+                        {t("dashboard.reports.edit-report.listMalfuncioningCameras")}
                     </label>
                     <div className="p-inputgroup">
                         <span className="p-inputgroup-addon">
@@ -718,7 +720,7 @@ const NewReport = () => {
                             }))}
                             options={malFunctionCameras}
                             optionLabel="label"
-                            placeholder={t("dashboard.reports.new-report.selectMalfunctioningCamerasPlaceholder")}
+                            placeholder={t("dashboard.reports.edit-report.selectMalfunctioningCamerasPlaceholder")}
                             className="w-full md:w-14rem"
                         />
                     </div>
@@ -726,7 +728,7 @@ const NewReport = () => {
 
                 <div className="w-full md:w-1/3 px-3 mb-6 text-center">
                     <label htmlFor="observerdViaCameras" className="font-bold block mb-2">
-                        {t("dashboard.reports.new-report.select-observerdViaCameras")}
+                        {t("dashboard.reports.edit-report.select-observerdViaCameras")}
                     </label>
                     <div className="flex justify-center">
                         <div className="flex align-items-center mr-2">
@@ -743,7 +745,7 @@ const NewReport = () => {
                                 }}
                                 checked={reportForm.observerdViaCameras === true}
                             />
-                            <label htmlFor="camerasYes" className="ml-2">{t("dashboard.reports.new-report.yes")}</label>
+                            <label htmlFor="camerasYes" className="ml-2">{t("dashboard.reports.edit-report.yes")}</label>
                         </div>
                         <div className="flex align-items-center ml-4">
                             <RadioButton
@@ -759,14 +761,14 @@ const NewReport = () => {
                                 }}
                                 checked={reportForm.observerdViaCameras === false}
                             />
-                            <label htmlFor="camerasNo" className="ml-2">{t("dashboard.reports.new-report.no")}</label>
+                            <label htmlFor="camerasNo" className="ml-2">{t("dashboard.reports.edit-report.no")}</label>
                         </div>
                     </div>
                 </div>
 
                 <div className="w-full md:w-1/3 px-3 mb-6 text-center">
                     <label htmlFor="policeFirstResponderNotified" className="font-bold block mb-2">
-                        {t("dashboard.reports.new-report.is-policeFirstResponderNotified")}
+                        {t("dashboard.reports.edit-report.is-policeFirstResponderNotified")}
                     </label>
                     <div className="flex justify-center">
                         <div className="flex align-items-center mr-2">
@@ -783,7 +785,7 @@ const NewReport = () => {
                                 }}
                                 checked={reportForm.policeFirstResponderNotified === true}
                             />
-                            <label htmlFor="camerasYes" className="ml-2">{t("dashboard.reports.new-report.yes")}</label>
+                            <label htmlFor="camerasYes" className="ml-2">{t("dashboard.reports.edit-report.yes")}</label>
                         </div>
                         <div className="flex align-items-center ml-4">
                             <RadioButton
@@ -799,14 +801,14 @@ const NewReport = () => {
                                 }}
                                 checked={reportForm.policeFirstResponderNotified === false}
                             />
-                            <label htmlFor="camerasNo" className="ml-2">{t("dashboard.reports.new-report.no")}</label>
+                            <label htmlFor="camerasNo" className="ml-2">{t("dashboard.reports.edit-report.no")}</label>
                         </div>
                     </div>
                 </div>
 
                 <div className="w-full md:w-1/3 px-3 mb-6">
                     <label htmlFor="policeFirstResponderNotified" className="font-bold block mb-2">
-                        {t("dashboard.reports.new-report.police-first-responder-scene")}
+                        {t("dashboard.reports.edit-report.police-first-responder-scene")}
                     </label>
                     <div className="p-inputgroup">
                         <span className="p-inputgroup-addon">
@@ -820,7 +822,7 @@ const NewReport = () => {
                             }))}
                             options={listpoliceFirstResponderScene}
                             optionLabel="label"
-                            placeholder={t("dashboard.reports.new-report.policeFirstResponderSceneeholder")}
+                            placeholder={t("dashboard.reports.edit-report.policeFirstResponderSceneeholder")}
                             className="w-full md:w-14rem"
                         />
                     </div>
@@ -828,7 +830,7 @@ const NewReport = () => {
 
                 <div className="w-full md:w-1/3 px-3 mb-6 text-center">
                     <label htmlFor="GuardsNotified" className="font-bold block mb-2">
-                        {t("dashboard.reports.new-report.securityGuardsNotified")}
+                        {t("dashboard.reports.edit-report.securityGuardsNotified")}
                     </label>
                     <div className="flex justify-center">
                         <div className="flex align-items-center mr-2">
@@ -845,7 +847,7 @@ const NewReport = () => {
                                 }}
                                 checked={reportForm.securityGuardsNotified === true}
                             />
-                            <label htmlFor="securityGuardsNotifiedYes" className="ml-2">{t("dashboard.reports.new-report.yes")}</label>
+                            <label htmlFor="securityGuardsNotifiedYes" className="ml-2">{t("dashboard.reports.edit-report.yes")}</label>
                         </div>
                         <div className="flex align-items-center ml-4">
                             <RadioButton
@@ -861,14 +863,14 @@ const NewReport = () => {
                                 }}
                                 checked={reportForm.securityGuardsNotified === false}
                             />
-                            <label htmlFor="securityGuardsNotifiedNo" className="ml-2">{t("dashboard.reports.new-report.no")}</label>
+                            <label htmlFor="securityGuardsNotifiedNo" className="ml-2">{t("dashboard.reports.edit-report.no")}</label>
                         </div>
                     </div>
                 </div>
 
                 <div className="w-full md:w-1/3 px-3 mb-6 text-center">
                     <label htmlFor="GuardsScene" className="font-bold block mb-2">
-                        {t("dashboard.reports.new-report.securityGuardsScene")}
+                        {t("dashboard.reports.edit-report.securityGuardsScene")}
                     </label>
                     <div className="flex justify-center">
                         <div className="flex align-items-center mr-2">
@@ -885,7 +887,7 @@ const NewReport = () => {
                                 }}
                                 checked={reportForm.securityGuardsScene === true}
                             />
-                            <label htmlFor="securityGuardsSceneYes" className="ml-2">{t("dashboard.reports.new-report.yes")}</label>
+                            <label htmlFor="securityGuardsSceneYes" className="ml-2">{t("dashboard.reports.edit-report.yes")}</label>
                         </div>
                         <div className="flex align-items-center ml-4">
                             <RadioButton
@@ -901,14 +903,14 @@ const NewReport = () => {
                                 }}
                                 checked={reportForm.securityGuardsScene === false}
                             />
-                            <label htmlFor="securityGuardsSceneNo" className="ml-2">{t("dashboard.reports.new-report.no")}</label>
+                            <label htmlFor="securityGuardsSceneNo" className="ml-2">{t("dashboard.reports.edit-report.no")}</label>
                         </div>
                     </div>
                 </div>
 
                 <div className="w-full md:w-1/3 px-3 mb-6">
                     <label htmlFor="policeNumerCase" className="font-bold block mb-2">
-                        {t("dashboard.reports.new-report.policeNumerCase")}
+                        {t("dashboard.reports.edit-report.policeNumerCase")}
                     </label>
                     <div className="p-inputgroup">
                         <span className="p-inputgroup-addon">
@@ -916,14 +918,14 @@ const NewReport = () => {
                         </span>
                         <InputNumber value={policeNumerCase} onValueChange={(e) => setReportForm((i) => {
                             return { ...reportForm, policeNumerCase: e.value };
-                        })} placeholder={t("dashboard.reports.new-report.policeNumerCase-placeholder")}
+                        })} placeholder={t("dashboard.reports.edit-report.policeNumerCase-placeholder")}
                             mode="decimal" minFractionDigits={0} />
                     </div>
                 </div>
 
                 <div className="w-full md:w-1/3 px-3 mb-6">
                     <label htmlFor="NotificationClient" className="font-bold block mb-2">
-                        {t("dashboard.reports.new-report.NotificationClient")}
+                        {t("dashboard.reports.edit-report.NotificationClient")}
                     </label>
                     <div className="p-inputgroup">
                         <span className="p-inputgroup-addon">
@@ -937,7 +939,7 @@ const NewReport = () => {
                             }))}
                             options={listNotificationClient}
                             optionLabel="label"
-                            placeholder={t("dashboard.reports.new-report.NotificationClient-placeholder")}
+                            placeholder={t("dashboard.reports.edit-report.NotificationClient-placeholder")}
                             className="w-full md:w-14rem"
                         />
                     </div>
@@ -945,7 +947,7 @@ const NewReport = () => {
 
                 <div className="w-full md:w-1/3 px-3 mb-6">
                     <label htmlFor="emaildReport" className="font-bold block mb-2">
-                        {t("dashboard.reports.new-report.emaildReport")}
+                        {t("dashboard.reports.edit-report.emaildReport")}
                     </label>
                     <div className="p-inputgroup">
                         <span className="p-inputgroup-addon">
@@ -959,7 +961,7 @@ const NewReport = () => {
                             }))}
                             options={listemailedReport}
                             optionLabel="label"
-                            placeholder={t("dashboard.reports.new-report.emaildReport-placeholder")}
+                            placeholder={t("dashboard.reports.edit-report.emaildReport-placeholder")}
                             className="w-full md:w-14rem"
                         />
                     </div>
@@ -1006,7 +1008,7 @@ const NewReport = () => {
 
                 <div className="w-full px-3 mb-6">
                     <label htmlFor="reportDetails" className="font-bold block mb-2">
-                        {t("dashboard.reports.new-report.report-details")}
+                        {t("dashboard.reports.edit-report.report-details")}
                     </label>
                     <div className="p-inputgroup">
                         <InputTextarea
@@ -1018,7 +1020,7 @@ const NewReport = () => {
                             rows={5}
                             cols={30}
                             autoResize
-                            placeholder={t("dashboard.reports.new-report.report-details-placeholder")}
+                            placeholder={t("dashboard.reports.edit-report.report-details-placeholder")}
                         />
                     </div>
                 </div>
@@ -1028,7 +1030,7 @@ const NewReport = () => {
 
 
             <div className="flex justify-end mt-4 pr-20">
-                <Button label={t("dashboard.reports.new-report.swal.send")} severity="success" onClick={sendingreport} />
+                <Button label={t("dashboard.reports.edit-report.swal.send")} severity="success" onClick={sendingreport} />
                 <Button
                     label="pdf"
                     severity="success"
@@ -1042,13 +1044,10 @@ const NewReport = () => {
                         }
                     }}
                 />
-                <Button label={t("reportform.agent")} severity="success" onClick={() => console.log(reportForm.agent)} />
-     
-
             </div>
         </div>
 
     );
 };
 
-export default NewReport;
+export default EditReport;

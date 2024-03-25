@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import {GridComponent, ColumnsDirective, ColumnDirective, Resize, Sort, ContextMenu, Filter, Page,Search,PdfExport, Inject, Toolbar,} from "@syncfusion/ej2-react-grids";
+import { GridComponent, ColumnsDirective, ColumnDirective, Resize, Sort, ContextMenu, Filter, Page, Search, PdfExport, Inject, Toolbar, } from "@syncfusion/ej2-react-grids";
 import { contextMenuItems, reportsGrid, reportsGridAdmin, reportsGridMonitor } from "../data/dummy";
 import { Header } from "../components";
 import { UserContext } from "../../context/UserContext";
@@ -27,13 +27,13 @@ const Reports = () => {
   const toolbarOptions = ["Search"];
 
   let propertiesUser = JSON.parse(localStorage.getItem("user"));
- 
+
   let listOfPropertiesByUser = propertiesUser.properties;
 
   const [information, setInformation] = useState(true);
 
-  const { propertyContext, setPropertyContext, reportSaved, setreportSaved, reportFormVisible, 
-  setReportFormVisible, editReportFormVisible, setEditReportFormVisible, setReportForm,} = useContext(UserContext);
+  const { propertyContext, setPropertyContext, reportSaved, setreportSaved, reportFormVisible,
+    setReportFormVisible, editReportFormVisible, setEditReportFormVisible, setReportForm, } = useContext(UserContext);
 
   const [reportes, setReportes] = useState([]);
 
@@ -43,16 +43,16 @@ const Reports = () => {
   let idStorage = propertyStorage.id;
   let id = propertyContext.id || idStorage;
   const [t, i18n] = useTranslation("global");
-  
+
   const [clientGridColumns, setClientGridColumns] = useState([]);
-  const [adminGridColumns, setAdminGridColumns] = useState([]); 
+  const [adminGridColumns, setAdminGridColumns] = useState([]);
   const [monitorGridColumns, setMonitorGridColumns] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
- 
+
   const closeForm = () => {
     setReportFormVisible(false);
-    setReportForm({}); 
-    setActiveIndex(0); 
+    setReportForm({});
+    setActiveIndex(0);
   };
 
 
@@ -63,7 +63,7 @@ const Reports = () => {
         reports = await getNumberOfReportsByRole(propertyContext.id || id, user.id, userRole);
       } catch (error) {
         console.error("Error al obtener los reportes:", error);
-        reports = []; 
+        reports = [];
       }
       setReportes(reports);
       if (userRole === "Admin") {
@@ -82,12 +82,16 @@ const Reports = () => {
   const navigateToNewReport = () => {
     navigate("/dashboard/NewReport");
   };
-  
+
+  const navigateEditReport = () => {
+    navigate("/dashboard/EditReport");
+  };
+
   return (
 
     <>
       <Dialog
-        header={t("dashboard.reports.new-report.add-report")}
+        header={t("dashboard.reports.new-reporst.add-report")}
         visible={reportFormVisible}
         style={{ width: "50vw" }}
         onHide={closeForm}
@@ -97,7 +101,7 @@ const Reports = () => {
           setActiveIndex={setActiveIndex}
         />}
       >
-        
+
         {information ? (
           <ReportForm
             incidents={cases}
@@ -112,6 +116,7 @@ const Reports = () => {
           />
         )}
       </Dialog>
+      
       <Dialog
         header={t("dashboard.reports.edit-report.edit-tittle")}
         visible={editReportFormVisible}
@@ -140,7 +145,18 @@ const Reports = () => {
           />
         )}
       </Dialog>
-
+      <button
+        onClick={() => console.log("Reportes:", reportes)}
+        className="mt-4 mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      >
+        Mostrar Reportes en Consola
+      </button>
+      <button
+        onClick={() => console.log(localStorage)}
+        className="mt-4 mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      >
+        Localstorage
+      </button>
       <div className="m-20 md:m-10 mt-14 p-2 md:p-0 bg-white rounded-3xl">
         <Header category={t("dashboard.reports.reports-tittle")} title={t("dashboard.reports.reports-of") + propertyContext.name} />
         <div className="card flex justify-end py-2 mb-7">
@@ -159,6 +175,14 @@ const Reports = () => {
                 severity="info"
                 label={t("dashboard.reports.new-report.add-report")} 
                 className="p-button-text ml-2" 
+              >
+                <AiOutlinePlusCircle className="ml-2"></AiOutlinePlusCircle>
+              </Button>
+              <Button
+                onClick={navigateEditReport}
+                severity="info"
+                label={t("Reporte editar sin traduccion")}
+                className="p-button-text ml-2"
               >
                 <AiOutlinePlusCircle className="ml-2"></AiOutlinePlusCircle>
               </Button>

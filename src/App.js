@@ -28,6 +28,7 @@ import { Agents } from "./Dashboard/pages/Agents";
 import { Cases } from "./Dashboard/pages/Cases";
 import { UserContext } from "./context/UserContext";
 import  NewReport from "./Dashboard/pages/NewReport";
+import EditReport from "./Dashboard/pages/EditReport";
 import { useContext } from "react";
 import PieLevels from "./Dashboard/pages/Charts/PieLevels";
 import { Properties } from "./Dashboard/pages/Properties";
@@ -66,9 +67,13 @@ function App() {
               {/* Dashboard */}
                <Route path="/dashboard" element={<Ecommerce />} />
               <Route path="/dashboard/ecommerce" element={<Ecommerce />} />
-              {/* Pages */}
+              {/* Pages Dashboard*/}
+              {/* Reportes*/}
               <Route path="/dashboard/reports" element={<Reports />} />
               <Route path="/dashboard/NewReport" element={<NewReport />} />
+              <Route path="/dashboard/EditReport" element={<EditReport />} />
+
+              {/* */}
               <Route path="/dashboard/cameras" element={<Cameras />} />
               <Route path="/dashboard/Notifications" element={<Customers />} />
               <Route path="/dashboard/mapa" element={<Mapa />} />

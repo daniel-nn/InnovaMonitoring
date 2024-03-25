@@ -19,7 +19,6 @@ const Dashboard = () => {
 
 
   useEffect(() => {
-    // Asegúrate de que 'property' no sea null ni undefined antes de intentar usar 'Object.keys'
     if (property && Object.keys(propertyContext).length === 0 && Object.keys(property).length > 0) {
       setPropertyContext(property);
     }
@@ -31,15 +30,12 @@ const Dashboard = () => {
   useEffect(() => {
     const handleStorageChange = (event) => {
       if (event.key === 'user' && !event.newValue) {
-        // Si la clave 'user' en localStorage se elimina o se limpia, redirigir a login
         navigate('/login');
       }
     };
-
-    // Agrega el event listener al objeto window
     window.addEventListener('storage', handleStorageChange);
 
-    // Retorna una función de limpieza que remueve el event listener
+    // función de limpieza que remueve el event listener
     return () => {
       window.removeEventListener('storage', handleStorageChange);
     };
@@ -47,16 +43,6 @@ const Dashboard = () => {
 
   return (
     <div className="flex relative dark:bg-main-dark-bg">
-       {/* <div className="fixed right-4 bottom-4" style={{ zIndex: "1000" }}>
-        <TooltipComponent content="Settings" position="Top">
-          <button
-            type="button"
-            className="text-3xl  p-3 hover:drop-shadow-xl hover:bg-light-gray"
-          >
-            <FiSettings />
-          </button>
-        </TooltipComponent>
-      </div> */}
       {activeMenu ? (
         <div className="w-72 fixed sidebar dark:bg-secondary-dark-bg bg-white ">
           <Sidebar />

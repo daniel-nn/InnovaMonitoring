@@ -2,6 +2,7 @@ import React, { useContext, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { AiFillFilePdf, AiFillEdit, AiFillCheckCircle } from "react-icons/ai";
 import { FiCreditCard, FiStar, FiShoppingCart, } from "react-icons/fi";
+import { FaSpinner } from 'react-icons/fa'; 
 import { BsCurrencyDollar, BsShield, BsChatLeft, } from "react-icons/bs";
 import { HiOutlineEye, HiStatusOffline, HiStatusOnline, } from "react-icons/hi";
 import { TiDeleteOutline, TiTick } from "react-icons/ti";
@@ -112,8 +113,15 @@ export const GridPdf = (props) => {
 };
 
 export const GridDetails = ({ Details }) => {
+  // Verifica si 'Details' está definido y tiene una propiedad 'id'
+  if (!Details || typeof Details.id === 'undefined') {
+    return <div>No hay detalles disponibles</div>; // O cualquier otro retorno que consideres apropiado
+  }
+
   let id = Details.id;
 
+  // Temporalmente comentado para evitar el error mientras solucionamos el problema principal
+  /*
   return (
     <Link
       target="_top"
@@ -123,7 +131,16 @@ export const GridDetails = ({ Details }) => {
       <HiOutlineEye className="text-lg "></HiOutlineEye>
     </Link>
   );
+  */
+
+  // Retorna solo el ícono como placeholder mientras solucionas el problema del enlace
+  return (
+    <div className="flex justify-center m-0 p-0">
+      <HiOutlineEye className="text-lg "></HiOutlineEye>
+    </div>
+  );
 };
+
 export const GridIsVerified = ({ verified }) => {
   if (verified) {
     return (
@@ -5024,52 +5041,31 @@ let reportes = [
   },
 ];
 
-// export const GridEditReport = ({ Details }) => {
-//   const getPropertytoMapForm = async () => {
-//     // Verificar si Details o Details.property son undefined
-//     if (!Details || !Details.property) {
-//       console.error("Details o Details.property no está definido.");
-//       return; // Salir de la función si no están definidos
-//     }
-//     // Si están definidos, continúa con la lógica de la función
-//     console.log(Details);
-//     let data = await GetPropertyInfo(Details.property.id);
-//     const { cameras, direction, id, img, mapImg, name, reports } = data;
+export const GridEditReportTemplate = (props) => {
+  console.log("GridEditReportTemplate props:", props);
+  const { setReportForm } = useContext(UserContext);
 
-//     let propertyToMapForm = {
-//       cameras,
-//       direction,
-//       id,
-//       img,
-//       mapImg,
-//       name,
-//       reports,
-//     };
+  const navigate = useNavigate();
 
-//     setEditReportFormVisible(!editReportFormVisible);
-//     setReportForm({ ...Details, property: propertyToMapForm });
-//   };
+  if (!props || !props.id) {
+    return <div className="flex justify-center"><p>No hay datos</p></div>;
+  }
+
+  // Función para manejar el click y navegar al editor del reporte.
+  const handleEditClick = () => {
+    setReportForm(props); 
+    navigate('/dashboard/EditReport');
+  };
+
+  // Renderiza el icono de editar con el evento click ligado a él.
+  return (
+    <div className="flex justify-center m-0 p-0 cursor-pointer" onClick={handleEditClick}>
+      <AiFillEdit className="text-lg" />
+    </div>
+  );
+};
 
 
-//   let newProperty = { ...Details.property, reports: reportes };
-
-//   const {
-//     reportForm,
-//     setReportForm,
-//     editReportFormVisible,
-//     setEditReportFormVisible,
-//   } = useContext(UserContext);
-//   return (
-//     <div
-//       className="flex justify-center m-0 p-0"
-//       onClick={() => {
-//         getPropertytoMapForm();
-//       }}
-//     >
-//       <AiFillEdit className="text-lg "></AiFillEdit>
-//     </div>
-//   );
-// };
 
 export const GridEditCamera = ({ camera }) => {
   const { cameraForm, setCameraForm, cameraSaved, setCameratSaved, cameraFormFlag, setCameraFormFlag } = useContext(UserContext);
@@ -6410,9 +6406,8 @@ export const reportsGridAdmin = (t) => {
       headerText: t("dashboard.reports.table.admin.CaseEdit"),
       width: "80",
       textAlign: "Center",
-      template: GridIsVerified,
+      template: GridEditReportTemplate, // Componente de React, sin llaves adicionales
     },
-
   ];
 };
 

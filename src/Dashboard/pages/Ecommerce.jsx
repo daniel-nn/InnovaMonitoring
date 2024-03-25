@@ -28,16 +28,16 @@ const Ecommerce = () => {
     return name.toLowerCase().split(' ').join('-') + '.jpg';
   };
 
-  const { currentColor } = useStateContext(); // Se eliminó currentMode ya que no se usa
+  const { currentColor } = useStateContext(); 
   const [t] = useTranslation("global");
   const [propertyFetched, setPropertyFetched] = useState({});
   
   let user = JSON.parse(localStorage.getItem("user") || '{}'); 
   let userId = user.id;
   let userRole = user.role.roleName;
-  let propertyStorage = JSON.parse(localStorage.getItem("propertySelected") || '{}') || user.properties?.[0]; // Asegúrate de manejar correctamente cuando user.properties pueda ser undefined
+  let propertyStorage = JSON.parse(localStorage.getItem("propertySelected") || '{}') || user.properties?.[0]; 
   const { propertyContext } = useContext(UserContext);
-  const [reportsData, setReportsData] = useState(null); // Estado inicial como null
+  const [reportsData, setReportsData] = useState(null); 
 
   useEffect(() => {
     if (propertyContext && propertyContext.id) {
