@@ -34,7 +34,7 @@ export const Agents = () => {
   const [agentSaved, setAgentSaved] = useState(false);
   const [visible, setVisible] = useState(false);
   let user = JSON.parse(localStorage.getItem("user"));
-  let userRole = user.role.roleName;
+  let userRole = user.role.rolName;
   const {agentProvider, setagentProvider, agentDialog, setAgentDialog, flag} = useContext(UserContext);
   useEffect(() => {
     getAgents(navigate).then((data) => setAgents(data));

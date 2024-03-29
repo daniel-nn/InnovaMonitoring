@@ -20,7 +20,7 @@ export const UserProvider = ({ children }) => {
   const [reportForm, setReportForm] = useState({
     id:"",
     property: {},
-    agent: {},
+    createdBy: {}, 
     dateOfReport: new Date(),
     timeOfReport: new Date(),
     incidentDate: new Date(),

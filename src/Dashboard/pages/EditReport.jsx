@@ -16,6 +16,7 @@ import { InputTextarea } from "primereact/inputtextarea";
 import { Calendar } from "primereact/calendar";
 import { RadioButton } from 'primereact/radiobutton';
 import exportPDF from "../helper/exportPdf"
+import { getAdminsAndMonitors } from "../helper/getUserAdminsaAndMonitors";
 
 
 const EditReport = () => {
@@ -24,16 +25,17 @@ const EditReport = () => {
     const navigate = useNavigate();
 
     const { reportForm, setReportForm } = useContext(UserContext);
-    const { property, agent, dateOfReport, timeOfReport, incidentDate, incidentStartTime, incidentEndTime, caseType, level, company, numerCase, camerasFunctioning, listMalfuncioningCameras, observerdViaCameras, policeFirstResponderNotified, policeFirstResponderScene, securityGuardsNotified, securityGuardsScene, policeNumerCase, reportDetails, formNotificationClient, emailedReport, pdf, images, videos } = reportForm;
+    const { property, agent, createdBy, dateOfReport, timeOfReport, incidentDate, incidentStartTime, incidentEndTime, caseType, level, company, numerCase, camerasFunctioning, listMalfuncioningCameras, observerdViaCameras, policeFirstResponderNotified, policeFirstResponderScene, securityGuardsNotified, securityGuardsScene, policeNumerCase, reportDetails, formNotificationClient, emailedReport, pdf, images, videos } = reportForm;
     console.log("EditReport data:", reportForm);
 
     const [properties, setProperties] = useState([]);
+    const [ Users, setUsers ] = useState ([]);
     const [agents, setAgents] = useState([]);
     const [incidents, setIncidents] = useState([]);
     const levels = ["1", "2", "3", "4"];
     const team = ["Innova Monitoring", "Impro",];
     let user = JSON.parse(localStorage.getItem("user"));
-    let userRole = user.role.roleName;
+    let userRole = user.role.rolName;
     useEffect(() => {
         const fetchProperties = async () => {
             const propertiesData = await getPropertiesInfo(navigate);
@@ -45,32 +47,50 @@ const EditReport = () => {
 
 
     useEffect(() => {
+        const fetchUsers = async () => {
+            let usersData = await getAdminsAndMonitors();
+            console.log("Users Data:", usersData); // Para depuración
+
+
+            const formattedUsers = usersData.map(user => ({
+                label: user.name,
+                value: user.id
+            }));
+
+            setUsers(formattedUsers);
+        };
+
+        fetchUsers();
+    }, [userRole, user.id, setReportForm]);
+
+    useEffect(() => {
         const fetchAgents = async () => {
             let agentsData = await getAgents();
+            console.log("creando objetoagents", agentsData); // Después de obtener los datos y antes de procesarlos
 
-           
+
             if (userRole === "Admin") {
                 const adminOption = { id: user.id, name: user.name };
                 agentsData = [adminOption, ...agentsData];
             }
 
-           
-            const formattedAgents = agentsData.map(agent => ({
-                ...agent, // Mantén toda la estructura del agente
 
-                label: agent.name, // Agrega un campo 'label' para mostrar en el Dropdown
+            const formattedAgents = agentsData.map(agent => ({
+                label: agent.name,
+                value: agent.id
             }));
             setAgents(formattedAgents);
+            console.log("Agents Data:", agentsData); // Después de obtener los datos y antes de procesarlos
+            console.log("Formatted Agents:", formattedAgents); // Después de procesarlos y antes de llamar a setAgents
 
-          
             if (userRole === "Monitor") {
 
-                
+
                 setReportForm(prev => ({
                     ...prev,
                     agent: {
                         ...prev.agent,
-                        name: user.name 
+                        name: user.name
                     }
                 }));
             }
@@ -441,11 +461,11 @@ const EditReport = () => {
                             <i className="pi pi-home"></i>
                         </span>
                         <Dropdown
-                            value={properties.find(p => p.id === property.id)} // Encuentra el objeto completo basado en el ID
+                            value={properties.find(p => p.id === property.id)} 
                             onChange={(e) => {
                                 setReportForm(prevForm => ({
                                     ...prevForm,
-                                    property: e.value // Aquí pasas el objeto completo de la propiedad
+                                    property: e.value 
                                 }));
                             }}
                             options={properties}
@@ -455,35 +475,33 @@ const EditReport = () => {
                         />
                     </div>
                     <button onClick={() => console.log(agents || "agentes no encontrado")}>agentes</button>
-
                 </div>
 
                 <div className="w-full md:w-1/3 px-3 mb-6">
-                    <label htmlFor="agentType" className="font-bold block mb-2">
-                        {t("dashboard.reports.edit-report.select-agent")}
+                    <label htmlFor="userType" className="font-bold block mb-2">
+                        {t("dashboard.reports.new-report.select-user")}
                     </label>
                     <div className="p-inputgroup">
                         <span className="p-inputgroup-addon">
                             <i className="pi pi-user"></i>
                         </span>
-                        <button onClick={() => console.log(agents.find(a => a.id === reportForm.agent.id)?.id || "id agente no encontrado")}>idagente</button>
                         {userRole === "Admin" ? (
                             <Dropdown
-                                value={reportForm.agent.name} // Encuentra el agente actual basado en el ID
-                                onChange={(e) => setReportForm((prev) => ({ ...prev, agent: e.value }))}
-                                options={agents}
-                                optionLabel="label" // Usa 'label' para mostrar nombres en el Dropdown
-                                placeholder={t("dashboard.reports.edit-report.agent")}
+                                value={reportForm.createdBy.id}
+                                onChange={(e) => setReportForm(prev => ({
+                                    ...prev,
+                                    createdBy: { id: e.value }
+                                }))}
+                                options={Users}
+                                optionLabel="label"
+                                placeholder={t("dashboard.reports.new-report.user")}
                                 className="w-full"
                             />
                         ) : (
-                            <div className="w-full p-inputtext p-component p-disabled" style={{ lineHeight: '1.5', padding: '0.5em 1em', border: '1px solid #c8c8c8', borderRadius: '4px', background: '#f8f8f8' }}>
-                                <span>{reportForm.agent.name}</span>
+                            <div className="w-full p-inputtext p-component p-disabled">
+                                <span>{user.name}</span>
                             </div>
                         )}
-                       
-
-                        <button onClick={() => console.log(agents.find(a => a.id === reportForm.agent.id)?.name || "Agente no encontrado")}>agente</button>
                     </div>
                 </div>
 

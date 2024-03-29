@@ -14,7 +14,7 @@ const Sidebar = () => {
   const { currentColor, activeMenu, setActiveMenu, screenSize } =
     useStateContext();
   let user = JSON.parse(localStorage.getItem("user") || '{}'); 
-  let userRole = user.role.roleName;
+  let userRole = user.role.rolName;
   const navigate = useNavigate();
 
   const handleCloseSideBar = () => {

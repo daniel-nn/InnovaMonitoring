@@ -17,7 +17,7 @@ const PieLevels = () => {
   let idStorage = propertyStorage.id;
   let id1 = propertyContext.id || idStorage;
   let user = JSON.parse(localStorage.getItem("user"));
-  let userRole = user.role.roleName;
+  let userRole = user.role.rolName;
   const [reportes, setReportes] = useState([]);
 
   let chart = [

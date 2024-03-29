@@ -39,7 +39,7 @@ const Reports = () => {
 
   let propertyStorage = JSON.parse(localStorage.getItem("propertySelected"));
   let user = JSON.parse(localStorage.getItem("user"));
-  let userRole = user.role.roleName;
+  let userRole = user.role.rolName;
   let idStorage = propertyStorage.id;
   let id = propertyContext.id || idStorage;
   const [t, i18n] = useTranslation("global");

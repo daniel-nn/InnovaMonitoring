@@ -34,7 +34,7 @@ const Ecommerce = () => {
   
   let user = JSON.parse(localStorage.getItem("user") || '{}'); 
   let userId = user.id;
-  let userRole = user.role.roleName;
+  let userRole = user.role.rolName;
   let propertyStorage = JSON.parse(localStorage.getItem("propertySelected") || '{}') || user.properties?.[0]; 
   const { propertyContext } = useContext(UserContext);
   const [reportsData, setReportsData] = useState(null); 

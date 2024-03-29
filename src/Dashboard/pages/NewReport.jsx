@@ -15,8 +15,8 @@ import { InputNumber } from "primereact/inputnumber";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Calendar } from "primereact/calendar";
 import { RadioButton } from 'primereact/radiobutton';
-import  exportPDF from "../helper/exportPdf"
-
+import exportPDF from "../helper/exportPdf"
+import { getAdminsAndMonitors } from "../helper/getUserAdminsaAndMonitors";
 
 const NewReport = () => {
     const { propertyContext, reportSaved, setreportSaved } = useContext(UserContext);
@@ -24,14 +24,50 @@ const NewReport = () => {
     const navigate = useNavigate();
 
     const { reportForm, setReportForm } = useContext(UserContext);
-    const { property, agent, dateOfReport, timeOfReport, incidentDate, incidentStartTime, incidentEndTime, caseType, level, company, numerCase, camerasFunctioning, listMalfuncioningCameras, observerdViaCameras, policeFirstResponderNotified, policeFirstResponderScene, securityGuardsNotified, securityGuardsScene, policeNumerCase, reportDetails, formNotificationClient, emailedReport, pdf, images, videos } = reportForm;
+    const resetReportForm = () => {
+        setReportForm({
+            id: "",
+            property: {},
+            createdBy: {},
+            dateOfReport: new Date(),
+            timeOfReport: new Date(),
+            incidentDate: new Date(),
+            incidentStartTime: new Date(),
+            incidentEndTime: new Date(),
+            caseType: {},
+            level: "",
+            company: "",
+            numerCase: "",
+            camerasFunctioning: true,
+            listMalfuncioningCameras: "",
+            observerdViaCameras: true,
+            policeFirstResponderNotified: false,
+            policeFirstResponderScene: "",
+            securityGuardsNotified: false,
+            securityGuardsScene: false,
+            policeNumerCase: "",
+            formNotificationClient: "",
+            emailedReport: "",
+            reportDetails: "",
+            pdf: "",
+            images: [],
+            videos: []
+        });
+    };
+
+    useEffect(() => {
+        resetReportForm();
+    }, []);
+
+    const { property, createdBy, dateOfReport, timeOfReport, incidentDate, incidentStartTime, incidentEndTime, caseType, level, company, numerCase, camerasFunctioning, listMalfuncioningCameras, observerdViaCameras, policeFirstResponderNotified, policeFirstResponderScene, securityGuardsNotified, securityGuardsScene, policeNumerCase, reportDetails, formNotificationClient, emailedReport, pdf, images, videos } = reportForm;
     const [properties, setProperties] = useState([]);
-    const [agents, setAgents] = useState([]);
+    const [Users, setUsers] = useState([])
     const [incidents, setIncidents] = useState([]);
     const levels = ["1", "2", "3", "4"];
     const team = ["Innova Monitoring", "Impro",];
     let user = JSON.parse(localStorage.getItem("user"));
-    let userRole = user.role.roleName;
+    let userRole = user.role.rolName;
+   
     useEffect(() => {
         const fetchProperties = async () => {
             const propertiesData = await getPropertiesInfo(navigate);
@@ -41,42 +77,35 @@ const NewReport = () => {
         fetchProperties();
     }, [navigate]);
 
-
     useEffect(() => {
-        const fetchAgents = async () => {
-            let agentsData = await getAgents();
-            console.log("creando objetoagents", agentsData); // Después de obtener los datos y antes de procesarlos
+        const fetchUsers = async () => {
+            let usersData = await getAdminsAndMonitors();
+            console.log("Users Data:", usersData); // Para depuración
 
-           
-            if (userRole === "Admin") { 
-                const adminOption = { id: user.id, name: user.name }; 
-                agentsData = [adminOption, ...agentsData];
-            }
 
-           
-            const formattedAgents = agentsData.map(agent => ({
-                label: agent.name, 
-                value: agent.id 
+            const formattedUsers = usersData.map(user => ({
+                label: user.name,
+                value: user
             }));
-            setAgents(formattedAgents);
-            console.log("Agents Data:", agentsData); // Después de obtener los datos y antes de procesarlos
-            console.log("Formatted Agents:", formattedAgents); // Después de procesarlos y antes de llamar a setAgents
-            
+
+            setUsers(formattedUsers);
+
+            // Si el rol es Monitor, busca el objeto de usuario correspondiente y lo asigna a createdBy
             if (userRole === "Monitor") {
-       
-         
-                setReportForm(prev => ({
-                    ...prev,
-                    agent: {
-                        ...prev.agent,
-                        name: user.name 
-                    }
-                }));
+                const monitorUser = formattedUsers.find(u => u.value.id === user.id)?.value;
+                if (monitorUser) {
+                    setReportForm(prev => ({
+                        ...prev,
+                        createdBy: monitorUser // Asigna el objeto de usuario completo encontrado
+                    }));
+                }
             }
         };
 
-        fetchAgents();
-    }, [setReportForm, userRole, user.id, user.name]);
+        fetchUsers();
+    }, [ userRole, user.id, setReportForm]);
+
+  
 
     useEffect(() => {
         const fetchIncidents = async () => {
@@ -86,7 +115,7 @@ const NewReport = () => {
         fetchIncidents();
     }, [navigate]);
 
-    
+
 
 
     const malFunctionCameras = useMemo(() => [
@@ -153,11 +182,11 @@ const NewReport = () => {
             i18n.off('languageChanged', updateTitle);
         };
     }, [i18n, t, reportForm.property]);
-    
+
     const reportDtoPdf = async (reportForm) => {
         console.log('reportForm recibido:', reportForm);
         const {
-            agent,
+            createdBy,
             caseType,
             company,
             level,
@@ -174,17 +203,17 @@ const NewReport = () => {
             formNotificationClient,
             emailedReport,
             reportDetails
-           
-        } = reportForm;      
+
+        } = reportForm;
         let reportDtoPdf = {
-            agent: reportForm.agent.name,
+            createdBy: reportForm.user,
             caseType: reportForm.caseType.incident,
             company,
             level,
             numerCase,
             property,
             propertyAddress: property ? property.direction : 'Dirección no proporcionada',
-            propertyrgb: property ? property.rgbcolor : '255, 255 ,255', 
+            propertyrgb: property ? property.rgbcolor : '255, 255 ,255',
             listMalfuncioningCameras,
             observerdViaCameras: observerdViaCameras ? 1 : 0,
             policeFirstResponderNotified: policeFirstResponderNotified ? 1 : 0,
@@ -201,7 +230,7 @@ const NewReport = () => {
             incidentDate: formatDate(reportForm.incidentDate),
             incidentStartTime: formatTime(reportForm.incidentStartTime),
             incidentEndTime: formatTime(reportForm.incidentEndTime),
-         
+
         };
         return reportDtoPdf;
     };
@@ -239,7 +268,7 @@ const NewReport = () => {
             });
         });
 
-        
+
 
         videos.forEach((vid) => {
             evidences.push({
@@ -249,7 +278,7 @@ const NewReport = () => {
         });
 
         const {
-            agent,
+            user,
             caseType,
             company,
             level,
@@ -269,7 +298,7 @@ const NewReport = () => {
             pdf
         } = reportForm;
         let reportDto = {
-            agent: reportForm.agent.id,
+            createdBy: reportForm.createdBy, 
             caseType,
             company,
             level,
@@ -294,6 +323,7 @@ const NewReport = () => {
             incidentStartTime: formatTime(reportForm.incidentStartTime) + ' ' + formatTime(reportForm.incidentStartTime),
             incidentEndTime: formatTime(reportForm.incidentEndTime) + ' ' + formatTime(reportForm.incidentEndTime),
         };
+        console.log('Objeto a enviar:', reportDto);
 
         await postReport(reportDto);
         setreportSaved(!reportSaved);
@@ -370,14 +400,14 @@ const NewReport = () => {
                         title: t("dashboard.reports.new-report.swal.report-send")
                     });
                 }).catch((error) => {
-                    
+
                     console.error("Error saving the report:", error);
                 });
             } else if (result.isDenied) {
                 setReportForm({
                     id: "",
                     property: {},
-                    agent: {},
+                    user: {},
                     dateOfReport: new Date(),
                     timeOfReport: new Date(),
                     incidentDate: new Date(),
@@ -457,8 +487,8 @@ const NewReport = () => {
                 </div>
 
                 <div className="w-full md:w-1/3 px-3 mb-6">
-                    <label htmlFor="agentType" className="font-bold block mb-2">
-                        {t("dashboard.reports.new-report.select-agent")}
+                    <label htmlFor="userType" className="font-bold block mb-2">
+                        {t("dashboard.reports.new-report.select-user")}
                     </label>
                     <div className="p-inputgroup">
                         <span className="p-inputgroup-addon">
@@ -466,25 +496,24 @@ const NewReport = () => {
                         </span>
                         {userRole === "Admin" ? (
                             <Dropdown
-                                value={reportForm.agent}
+                                value={reportForm.createdBy}
                                 onChange={(e) => setReportForm(prev => ({
                                     ...prev,
-                                    agent: e.value // Aquí asegúrate de que e.value sea el id del agente
+                                    createdBy: e.value // e.value ahora será el objeto de usuario completo
                                 }))}
-                                options={agents} // Asegúrate de que esto está pasando el array correcto
+                                options={Users}
                                 optionLabel="label"
-                                placeholder={t("dashboard.reports.new-report.agent")}
+                                placeholder={t("dashboard.reports.new-report.user")}
                                 className="w-full"
                             />
-
                         ) : (
-                                <div className="w-full p-inputtext p-component p-disabled" style={{ lineHeight: '1.5', padding: '0.5em 1em', border: '1px solid #c8c8c8', borderRadius: '4px', background: '#f8f8f8' }}>
-                                    <span>{reportForm.agent.name}</span>
-                                </div>
+                            <div className="w-full p-inputtext p-component p-disabled">
+                                <span>{user.name}</span>
+                            </div>
                         )}
                     </div>
                 </div>
-                
+
                 <div className="w-full md:w-1/3 px-3 mb-6">
                     <label htmlFor="level" className="font-bold block mb-2">
                         {t("dashboard.reports.new-report.select-number-case")}
@@ -1042,8 +1071,8 @@ const NewReport = () => {
                         }
                     }}
                 />
-                <Button label={t("reportform.agent")} severity="success" onClick={() => console.log(reportForm.agent)} />
-     
+                <Button label={t("User")} severity="success" onClick={() => console.log(reportForm)} />
+
 
             </div>
         </div>

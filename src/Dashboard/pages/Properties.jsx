@@ -52,7 +52,7 @@ export const Properties = () => {
     setFlag,
   } = useContext(UserContext);
   let user = JSON.parse(localStorage.getItem("user"));
-  let userRole = user.role.roleName;
+  let userRole = user.role.rolName;
   
 
   useEffect(() => {

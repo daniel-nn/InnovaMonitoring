@@ -36,7 +36,7 @@ const Cameras = () => {
   let idStorage = propertyStorage.id;
   let id = propertyContext.id || idStorage;
   let user = JSON.parse(localStorage.getItem("user"));
-  let userRole = user.role.roleName;
+  let userRole = user.role.rolName;
   useEffect(() => {
  
     getCameras(propertyContext.id || id, navigate).then((data) =>

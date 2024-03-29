@@ -38,7 +38,7 @@ const Navbar = () => {
   /* const { userContext, setUserContext } = useContext(UserContext); */
   const navigate = useNavigate(); // Asegúrate de importar useNavigate de 'react-router-dom'
   const userProfile = JSON.parse(localStorage.getItem("user"))
-  const userRole = userProfile.role.roleName; // Asumiendo que userProfile.role contiene el objeto rol con una propiedad roleName.
+  const userRole = userProfile.role.rolName; // Asumiendo que userProfile.role contiene el objeto rol con una propiedad roleName.
   const [properties, setProperties] = useState(userProfile.properties); // Inicializamos el estado con las propiedades del perfil del usuario.
 
   let userImage = "";

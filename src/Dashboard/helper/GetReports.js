@@ -44,7 +44,6 @@ export const GetReports = async (id, userRol) => {
         Details: report || { id: 1 },
         Edit: report || {  },
         isVerified:report.verified,
-
       };
     });
   } catch (error) {

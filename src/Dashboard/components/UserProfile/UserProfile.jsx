@@ -55,7 +55,7 @@ const UserProfile = ({ userProfile }) => {
             {userProfile.name}
           </p>
           <p className="text-gray-500 text-sm dark:text-gray-400">
-            {userProfile.role ? userProfile.role.roleName : ""}
+            {userProfile.role ? userProfile.role.rolName : ""}
           </p>
           <p className="text-gray-500 text-sm font-semibold dark:text-gray-400">
             {userProfile.email}
