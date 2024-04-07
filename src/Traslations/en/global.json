@@ -480,8 +480,8 @@
         "new-report-with-property": "New Report of - ",
         "select-property": "Property To Report",
         "property": "Property",
-        "select-agent": "Select The Monitor",
-        "agent": "Agent",
+        "select-user": "Select The Monitor",
+        "user": "Agent",
         "select-number-case": "Enter the case number",
         "number-case": "Number case",
         "select-date-of-report": "Select The Date Of The Report",
@@ -561,7 +561,9 @@
           "report-send": "Report Send",
           "canceled-report": "Changes Are Not Saved",
           "empty": "Enter the case number",
-          "edit": "Report has been successfully saved"
+          "edit": "Report has been successfully saved",
+          "fill-missing-field-title": "Missing Field",
+          "fill-missing-field": "complete the field - "
         },
         "error": {
           "property": "Fill the property field.",
@@ -583,8 +585,8 @@
         "edit-report-with-property": "Edit Report Of - ",
         "select-property": "Property To Report",
         "property": "Property",
-        "select-agent": "Select The Monitor",
-        "agent": "Agent",
+        "select-user": "Select The Monitor",
+        "user": "Agent",
         "select-number-case": "Enter the case number",
         "number-case": "Number case",
         "select-date-of-report": "Select The Date Of The Report",
@@ -682,6 +684,40 @@
         }
       }
     },
+    "users": {
+      "users-tittle": "Users",
+      "add-user": "Add User",
+      "dialog-add-user": {
+        "add-user": "Add User",
+        "name": "Name",
+        "email": "Email",
+        "password": "Password",
+        "suggestion": {
+          "pick-password": "Pick a password",
+          "suggestions": "Suggestions",
+          "at-least-one-lowercase": "At least one lowercase",
+          "at-least-one-uppercase": "At least one uppercase",
+          "at-least-one-numeric": "At least one numeric",
+          "minimum-characters": "Minimum 8 characters"
+        },
+        "image-url": "Image Url",
+        "roles": {
+          "select-rol": "Select The Rol",
+          "Admin": "Admin",
+          "Client": "User",
+          "Monitor": "Monitor"
+        }
+      },
+      "table": {
+        "image": "Image",
+        "name": "Name",
+        "email": "Email",
+        "rol": "Role",
+        "properties": "Properties",
+        "delete": "Delete"
+      }
+    },
+
     "footer": "All rights reserved Innova Monitoring"
   },
   "space": " "

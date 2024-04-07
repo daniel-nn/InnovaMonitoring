@@ -478,8 +478,8 @@
         "new-report-with-property": "Nuevo reporte de - ",
         "select-property": "Seleccione la propiedad a reportar",
         "property": "Propiedad",
-        "select-agent": "Selecciona el agente",
-        "agent": "Monitor",
+        "select-user": "Selecciona el agente",
+        "user": "Monitor",
         "select-number-case": "Ingresa el numero de caso",
         "number-case": "Numero de caso",
         "select-date-of-report": "Selecciona la fecha del reporte",
@@ -559,7 +559,9 @@
           "report-send": "Reporte enviado.",
           "canceled-report": "No se guardaron los cambios.",
           "empty": "",
-          "edit": "El informe se ha guardado correctamente."
+          "edit": "El informe se ha guardado correctamente.",
+          "fill-missing-field-title": "Campo faltante",
+          "fill-missing-field": "Complete el campo - "
         },
         "error": {
           "property": "Complete el campo de propiedad.",
@@ -582,8 +584,8 @@
         "new-report-with-property": "Nuevo reporte de - ",
         "select-property": "Seleccione la propiedad a reportar",
         "property": "Propiedad",
-        "select-agent": "Selecciona el agente",
-        "agent": "Monitor",
+        "select-user": "Selecciona el agente",
+        "user": "Monitor",
         "select-number-case": "Ingresa el numero de caso",
         "number-case": "Numero de caso",
         "select-date-of-report": "Selecciona la fecha del reporte",
@@ -680,6 +682,40 @@
           "evidences": "Evidencias"
         }
       }  
+    },
+    
+    "users": {
+      "users-tittle": "Usuarios",
+      "add-user": "Agregar usuario",
+      "dialog-add-user": {
+        "add-user": "Agregar usuario",
+        "name": "Nombre",
+        "email": "Correo",
+        "password": "Contraseña",
+        "suggestion": {
+          "pick-password": "Elige una contraseña",
+          "suggestions": "Sugerencias",
+          "at-least-one-lowercase": "Al menos una minúscula",
+          "at-least-one-uppercase": "Al menos una mayúscula",
+          "at-least-one-numeric": "Al menos un número",
+          "minimum-characters": "Mínimo 8 caracteres"
+        },
+        "image-url": "Url de la imagen",
+        "roles": {
+          "select-rol": "Seleccione el rol",
+          "Admin": "Administrador",
+          "Client": "Usuario",
+          "Monitor": "Monitor"
+        },
+        "table": {
+          "image": "Imagen",
+          "name": "Nombre",
+          "email": "Correo Electrónico",
+          "rol": "Rol",
+          "properties": "Propiedades",
+          "delete": "Eliminar"
+        }
+      }
     },
     "footer": "Todos los derechos reservados Innova Monitioring"
   },

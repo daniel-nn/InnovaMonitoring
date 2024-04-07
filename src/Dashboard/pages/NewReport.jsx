@@ -59,6 +59,77 @@ const NewReport = () => {
         resetReportForm();
     }, []);
 
+    const validateForm = () => {
+  
+        const fieldsToValidate = {
+            'property.name': t("dashboard.reports.new-report.select-property"),
+            'createdBy.name': t("dashboard.reports.new-report.select-user"),
+            'numerCase': t("dashboard.reports.new-report.select-number-case"),
+            'dateOfReport': t("dashboard.reports.new-report.select-date-of-report"),
+            'timeOfReport': t("dashboard.reports.new-report.select-time-of-report"),
+            'incidentDate': t("dashboard.reports.new-report.select-date-of-incident"),
+            'incidentStartTime': t("dashboard.reports.new-report.select-incident-start-time"),
+            'incidentEndTime': t("dashboard.reports.new-report.select-incident-end-time"),
+            'caseType.incident': t("dashboard.reports.new-report.select-incident"),
+            'level': t("dashboard.reports.new-report.select-report-level"),
+            'company': t("dashboard.reports.new-report.select-company"),
+            'listMalfuncioningCameras': t("dashboard.reports.new-report.listMalfuncioningCameras"),
+            'policeFirstResponderNotified': t("dashboard.reports.new-report.is-policeFirstResponderNotified"),
+            'policeFirstResponderScene': t("dashboard.reports.new-report.police-first-responder-scene"),
+            'securityGuardsNotified': t("dashboard.reports.new-report.securityGuardsNotified"),
+            'securityGuardsScene': t("dashboard.reports.new-report.securityGuardsScene"),
+            'policeNumerCase': t("dashboard.reports.new-report.policeNumerCase"),
+            'formNotificationClient': t("dashboard.reports.new-report.NotificationClient"),
+            'emailedReport': t("dashboard.reports.new-report.emaildReport"),
+            'reportDetails': t("dashboard.reports.new-report.report-details")
+        };
+        const missingFieldKey = Object.keys(fieldsToValidate).find(field => {
+            const fieldParts = field.split('.');
+            let value = reportForm;
+            for (const part of fieldParts) {
+                value = value[part];
+                if (value === undefined) return true;
+            }
+            return value === "" || value === null || (Array.isArray(value) && value.length === 0); // Ajusta para listas vacías
+        });
+
+        if (missingFieldKey) {
+            const missingFieldName = fieldsToValidate[missingFieldKey];
+            Swal.fire({
+                title: t("dashboard.reports.new-report.swal.fill-missing-field-title"),
+                text: `${t("dashboard.reports.new-report.swal.fill-missing-field")} ${missingFieldName}`,
+                icon: 'warning',
+                confirmButtonText: "Ok",
+                customClass: {
+                    confirmButton: 'custom-swal2-confirm'
+                },
+                buttonsStyling: false,
+                didOpen: () => {
+                    // Estilos personalizados para el botón
+                    const confirmButton = Swal.getConfirmButton();
+                    if (confirmButton) {
+                        confirmButton.style.backgroundColor = "#007bff"; // Color de fondo
+                        confirmButton.style.color = "#ffffff"; // Color del texto
+                        confirmButton.style.border = "none"; // Quitar borde
+                        confirmButton.style.boxShadow = "0 4px 8px rgba(0,123,255,.5)"; // Sombra para darle un aspecto más "elevado"
+                        confirmButton.style.borderRadius = "0.375rem"; // Bordes redondeados
+                        confirmButton.style.padding = "0.75rem 1.5rem"; // Ajustar el padding para hacerlo más grande
+                        confirmButton.onmouseenter = () => {
+                            confirmButton.style.backgroundColor = "#0056b3"; // Cambiar color de fondo al pasar el mouse
+                        };
+                        confirmButton.onmouseleave = () => {
+                            confirmButton.style.backgroundColor = "#007bff"; // Restaurar color de fondo original al quitar el mouse
+                        };
+                    }
+                }
+            });
+            return false;
+        }
+
+        return true;
+    };
+
+
     const { property, createdBy, dateOfReport, timeOfReport, incidentDate, incidentStartTime, incidentEndTime, caseType, level, company, numerCase, camerasFunctioning, listMalfuncioningCameras, observerdViaCameras, policeFirstResponderNotified, policeFirstResponderScene, securityGuardsNotified, securityGuardsScene, policeNumerCase, reportDetails, formNotificationClient, emailedReport, pdf, images, videos } = reportForm;
     const [properties, setProperties] = useState([]);
     const [Users, setUsers] = useState([])
@@ -90,7 +161,7 @@ const NewReport = () => {
 
             setUsers(formattedUsers);
 
-            // Si el rol es Monitor, busca el objeto de usuario correspondiente y lo asigna a createdBy
+       
             if (userRole === "Monitor") {
                 const monitorUser = formattedUsers.find(u => u.value.id === user.id)?.value;
                 if (monitorUser) {
@@ -105,7 +176,7 @@ const NewReport = () => {
         fetchUsers();
     }, [ userRole, user.id, setReportForm]);
 
-  
+    console.log("EditReport data:", reportForm);
 
     useEffect(() => {
         const fetchIncidents = async () => {
@@ -330,6 +401,7 @@ const NewReport = () => {
     };
 
     const sendingreport = () => {
+        if (!validateForm()) return; 
         const swalStyles = `
             .swal2-confirm-button-success {
                 background-color: rgb(50,135,64);

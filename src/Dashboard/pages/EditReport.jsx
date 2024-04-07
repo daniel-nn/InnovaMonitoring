@@ -10,13 +10,13 @@ import { useTranslation } from "react-i18next";
 import { Button } from "primereact/button";
 import Swal from 'sweetalert2'
 import { Dropdown } from "primereact/dropdown";
-import { postReport } from "../helper/postReport";
 import { InputNumber } from "primereact/inputnumber";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Calendar } from "primereact/calendar";
 import { RadioButton } from 'primereact/radiobutton';
 import exportPDF from "../helper/exportPdf"
 import { getAdminsAndMonitors } from "../helper/getUserAdminsaAndMonitors";
+import { verifyReport } from "../helper/verifyReport";
 
 
 const EditReport = () => {
@@ -30,7 +30,7 @@ const EditReport = () => {
 
     const [properties, setProperties] = useState([]);
     const [ Users, setUsers ] = useState ([]);
-    const [agents, setAgents] = useState([]);
+    // const [agents, setAgents] = useState([]);
     const [incidents, setIncidents] = useState([]);
     const levels = ["1", "2", "3", "4"];
     const team = ["Innova Monitoring", "Impro",];
@@ -54,7 +54,7 @@ const EditReport = () => {
 
             const formattedUsers = usersData.map(user => ({
                 label: user.name,
-                value: user.id
+                value: user
             }));
 
             setUsers(formattedUsers);
@@ -63,41 +63,6 @@ const EditReport = () => {
         fetchUsers();
     }, [userRole, user.id, setReportForm]);
 
-    useEffect(() => {
-        const fetchAgents = async () => {
-            let agentsData = await getAgents();
-            console.log("creando objetoagents", agentsData); // Después de obtener los datos y antes de procesarlos
-
-
-            if (userRole === "Admin") {
-                const adminOption = { id: user.id, name: user.name };
-                agentsData = [adminOption, ...agentsData];
-            }
-
-
-            const formattedAgents = agentsData.map(agent => ({
-                label: agent.name,
-                value: agent.id
-            }));
-            setAgents(formattedAgents);
-            console.log("Agents Data:", agentsData); // Después de obtener los datos y antes de procesarlos
-            console.log("Formatted Agents:", formattedAgents); // Después de procesarlos y antes de llamar a setAgents
-
-            if (userRole === "Monitor") {
-
-
-                setReportForm(prev => ({
-                    ...prev,
-                    agent: {
-                        ...prev.agent,
-                        name: user.name
-                    }
-                }));
-            }
-        };
-
-        fetchAgents();
-    }, [setReportForm, userRole, user.id, user.name]);
 
     useEffect(() => {
         const fetchIncidents = async () => {
@@ -106,6 +71,110 @@ const EditReport = () => {
         };
         fetchIncidents();
     }, [navigate]);
+
+    useEffect(() => {
+        // Verifica si las fechas y horas son strings y no están vacías
+        if (typeof reportForm.dateOfReport === 'string' && reportForm.dateOfReport &&
+            typeof reportForm.timeOfReport === 'string' && reportForm.timeOfReport &&
+            typeof reportForm.incidentDate === 'string' && reportForm.incidentDate &&
+            typeof reportForm.incidentStartTime === 'string' && reportForm.incidentStartTime &&
+            typeof reportForm.incidentEndTime === 'string' && reportForm.incidentEndTime) {
+
+            // Función auxiliar para parsear fecha desde string "MM-DD-YYYY" a objeto Date
+            const parseDate = (dateStr) => {
+                const [month, day, year] = dateStr.split('-').map(num => parseInt(num, 10));
+                return new Date(year, month - 1, day);
+            };
+
+            // Función auxiliar para combinar fecha y hora en un solo objeto Date
+            const combineDateAndTime = (dateStr, timeStr) => {
+                const [hours, minutes] = timeStr.split(':').map(num => parseInt(num, 10));
+                const date = parseDate(dateStr);
+                date.setHours(hours, minutes, 0); // Ajusta la hora y minuto, segundos a 0
+                return date;
+            };
+
+            // Actualiza el estado con las nuevas fechas y horas combinadas
+            setReportForm(prevReportForm => ({
+                ...prevReportForm,
+                dateOfReport: parseDate(reportForm.dateOfReport),
+                timeOfReport: combineDateAndTime(reportForm.dateOfReport, reportForm.timeOfReport),
+                incidentDate: parseDate(reportForm.incidentDate),
+                incidentStartTime: combineDateAndTime(reportForm.incidentDate, reportForm.incidentStartTime),
+                incidentEndTime: combineDateAndTime(reportForm.incidentDate, reportForm.incidentEndTime),
+            }));
+        }
+    }, []);
+
+    const validateForm = () => {
+
+        const fieldsToValidate = {
+            'property.name': t("dashboard.reports.new-report.select-property"),
+            'createdBy.name': t("dashboard.reports.new-report.select-user"),
+            'numerCase': t("dashboard.reports.new-report.select-number-case"),
+            'dateOfReport': t("dashboard.reports.new-report.select-date-of-report"),
+            'timeOfReport': t("dashboard.reports.new-report.select-time-of-report"),
+            'incidentDate': t("dashboard.reports.new-report.select-date-of-incident"),
+            'incidentStartTime': t("dashboard.reports.new-report.select-incident-start-time"),
+            'incidentEndTime': t("dashboard.reports.new-report.select-incident-end-time"),
+            'caseType.incident': t("dashboard.reports.new-report.select-incident"),
+            'level': t("dashboard.reports.new-report.select-report-level"),
+            'company': t("dashboard.reports.new-report.select-company"),
+            'listMalfuncioningCameras': t("dashboard.reports.new-report.listMalfuncioningCameras"),
+            'policeFirstResponderNotified': t("dashboard.reports.new-report.is-policeFirstResponderNotified"),
+            'policeFirstResponderScene': t("dashboard.reports.new-report.police-first-responder-scene"),
+            'securityGuardsNotified': t("dashboard.reports.new-report.securityGuardsNotified"),
+            'securityGuardsScene': t("dashboard.reports.new-report.securityGuardsScene"),
+            'policeNumerCase': t("dashboard.reports.new-report.policeNumerCase"),
+            'formNotificationClient': t("dashboard.reports.new-report.NotificationClient"),
+            'emailedReport': t("dashboard.reports.new-report.emaildReport"),
+            'reportDetails': t("dashboard.reports.new-report.report-details")
+        };
+        const missingFieldKey = Object.keys(fieldsToValidate).find(field => {
+            const fieldParts = field.split('.');
+            let value = reportForm;
+            for (const part of fieldParts) {
+                value = value[part];
+                if (value === undefined) return true;
+            }
+            return value === "" || value === null || (Array.isArray(value) && value.length === 0); // Ajusta para listas vacías
+        });
+
+        if (missingFieldKey) {
+            const missingFieldName = fieldsToValidate[missingFieldKey];
+            Swal.fire({
+                title: t("dashboard.reports.new-report.swal.fill-missing-field-title"),
+                text: `${t("dashboard.reports.new-report.swal.fill-missing-field")} ${missingFieldName}`,
+                icon: 'warning',
+                confirmButtonText: "Ok",
+                customClass: {
+                    confirmButton: 'custom-swal2-confirm'
+                },
+                buttonsStyling: false,
+                didOpen: () => {
+                    // Estilos personalizados para el botón
+                    const confirmButton = Swal.getConfirmButton();
+                    if (confirmButton) {
+                        confirmButton.style.backgroundColor = "#007bff"; // Color de fondo
+                        confirmButton.style.color = "#ffffff"; // Color del texto
+                        confirmButton.style.border = "none"; // Quitar borde
+                        confirmButton.style.boxShadow = "0 4px 8px rgba(0,123,255,.5)"; // Sombra para darle un aspecto más "elevado"
+                        confirmButton.style.borderRadius = "0.375rem"; // Bordes redondeados
+                        confirmButton.style.padding = "0.75rem 1.5rem"; // Ajustar el padding para hacerlo más grande
+                        confirmButton.onmouseenter = () => {
+                            confirmButton.style.backgroundColor = "#0056b3"; // Cambiar color de fondo al pasar el mouse
+                        };
+                        confirmButton.onmouseleave = () => {
+                            confirmButton.style.backgroundColor = "#007bff"; // Restaurar color de fondo original al quitar el mouse
+                        };
+                    }
+                }
+            });
+            return false;
+        }
+
+        return true;
+    };
 
 
 
@@ -159,6 +228,18 @@ const EditReport = () => {
     const [headerTitle, setHeaderTitle] = useState('');
 
     useEffect(() => {
+        if (incidents.length > 0 && reportForm.caseType && reportForm.caseType.id) {
+            // Encuentra el caso que coincide con el `id` en `reportForm.caseType`
+            const matchingCaseType = incidents.find(c => c.id === reportForm.caseType.id);
+            if (matchingCaseType) {
+                setReportForm(prevReportForm => ({
+                    ...prevReportForm,
+                    caseType: matchingCaseType,
+                }));
+            }
+        }
+    }, [incidents, reportForm.caseType]);
+    useEffect(() => {
         const updateTitle = () => {
             if (reportForm.property && reportForm.property.name) {
                 const newTitleWithProperty = `${t('dashboard.reports.edit-report.edit-report-with-property')} ${reportForm.property.name}`;
@@ -175,10 +256,11 @@ const EditReport = () => {
         };
     }, [i18n, t, reportForm.property]);
 
+  
     const reportDtoPdf = async (reportForm) => {
         console.log('reportForm recibido:', reportForm);
         const {
-            agent,
+            createdBy,
             caseType,
             company,
             level,
@@ -198,7 +280,7 @@ const EditReport = () => {
 
         } = reportForm;
         let reportDtoPdf = {
-            agent: reportForm.agent.name,
+            createdBy: reportForm.createdBy, 
             caseType: reportForm.caseType.incident,
             company,
             level,
@@ -270,7 +352,7 @@ const EditReport = () => {
         });
 
         const {
-            agent,
+            user,
             caseType,
             company,
             level,
@@ -290,7 +372,8 @@ const EditReport = () => {
             pdf
         } = reportForm;
         let reportDto = {
-            agent: reportForm.agent,
+            id: reportForm.id,
+            createdBy: reportForm.createdBy,
             caseType,
             company,
             level,
@@ -315,11 +398,14 @@ const EditReport = () => {
             incidentStartTime: formatTime(reportForm.incidentStartTime) + ' ' + formatTime(reportForm.incidentStartTime),
             incidentEndTime: formatTime(reportForm.incidentEndTime) + ' ' + formatTime(reportForm.incidentEndTime),
         };
-
-        await postReport(reportDto);
+        
+        console.log('Objeto a enviar:', reportDto);
+        await verifyReport(reportDto);
         setreportSaved(!reportSaved);
     };
+
     const sendingreport = () => {
+        if (!validateForm()) return; 
         const swalStyles = `
             .swal2-confirm-button-success {
                 background-color: rgb(50,135,64);
@@ -355,16 +441,16 @@ const EditReport = () => {
         styleSheet.innerText = swalStyles;
         document.head.appendChild(styleSheet);
         const propertyName = reportForm.property?.name ?? ' ';
-        const confirmationTitle = t("dashboard.reports.edit-report.swal.confirmation") + propertyName;
+        const confirmationTitle = t("dashboard.reports.new-report.swal.confirmation") + propertyName;
         Swal.fire({
             title: confirmationTitle,
             icon: "info",
             showDenyButton: true,
             showCancelButton: true,
-            confirmButtonText: '<i class="pi pi-check"></i> ' + t("dashboard.reports.edit-report.swal.send"),
-            denyButtonText: `<i class="pi pi-times"></i> ` + t("dashboard.reports.edit-report.swal.don't-save"),
+            confirmButtonText: '<i class="pi pi-check"></i> ' + t("dashboard.reports.new-report.swal.send"),
+            denyButtonText: `<i class="pi pi-times"></i> ` + t("dashboard.reports.new-report.swal.don't-save"),
 
-            cancelButtonText: t("dashboard.reports.edit-report.swal.cancel"),
+            cancelButtonText: t("dashboard.reports.new-report.swal.cancel"),
             buttonsStyling: false,
             customClass: {
                 confirmButton: 'swal2-confirm-button-success',
@@ -387,7 +473,7 @@ const EditReport = () => {
                     });
                     Toast.fire({
                         icon: "success",
-                        title: t("dashboard.reports.edit-report.swal.report-send")
+                        title: t("dashboard.reports.new-report.swal.report-send")
                     });
                 }).catch((error) => {
 
@@ -397,7 +483,7 @@ const EditReport = () => {
                 setReportForm({
                     id: "",
                     property: {},
-                    agent: {},
+                    user: {},
                     dateOfReport: new Date(),
                     timeOfReport: new Date(),
                     incidentDate: new Date(),
@@ -435,7 +521,7 @@ const EditReport = () => {
                 });
                 Toast.fire({
                     icon: "error",
-                    title: t("dashboard.reports.edit-report.swal.canceled-report")
+                    title: t("dashboard.reports.new-report.swal.canceled-report")
                 });
 
             }
@@ -474,7 +560,7 @@ const EditReport = () => {
                             className="w-full"
                         />
                     </div>
-                    <button onClick={() => console.log(agents || "agentes no encontrado")}>agentes</button>
+                
                 </div>
 
                 <div className="w-full md:w-1/3 px-3 mb-6">
@@ -485,25 +571,21 @@ const EditReport = () => {
                         <span className="p-inputgroup-addon">
                             <i className="pi pi-user"></i>
                         </span>
-                        {userRole === "Admin" ? (
-                            <Dropdown
-                                value={reportForm.createdBy.id}
-                                onChange={(e) => setReportForm(prev => ({
-                                    ...prev,
-                                    createdBy: { id: e.value }
-                                }))}
-                                options={Users}
-                                optionLabel="label"
-                                placeholder={t("dashboard.reports.new-report.user")}
-                                className="w-full"
-                            />
-                        ) : (
-                            <div className="w-full p-inputtext p-component p-disabled">
-                                <span>{user.name}</span>
-                            </div>
-                        )}
+                        <Dropdown
+                            value={reportForm.createdBy}
+                            options={Users}
+                            onChange={(e) => setReportForm(prev => ({
+                                ...prev,
+                                createdBy: e.value 
+                            }))}
+                            optionLabel="label"
+                            placeholder={t("dashboard.reports.new-report.user")}
+                            className="w-full"
+                        />
                     </div>
                 </div>
+
+
 
                 <div className="w-full md:w-1/3 px-3 mb-6">
                     <label htmlFor="level" className="font-bold block mb-2">

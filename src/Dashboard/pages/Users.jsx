@@ -25,6 +25,7 @@ import { getUsers } from "../helper/getUsers";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { UserContext } from "../../context/UserContext";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useFetchRoles } from "../Hooks/useFetchRoles";
 import { getRoles } from "../helper/getRoles";
@@ -36,10 +37,11 @@ export const Users = () => {
   const {
     userProvider,
     setUserProvider,
-    userDialog,
-    setUserDialog,
     flag
   } = useContext(UserContext);
+
+  const [userDialog, setUserDialog] = useState(false);
+  const [t, i18n] = useTranslation("global");
 
   const { navigate } = useNavigate();
 
@@ -87,6 +89,8 @@ export const Users = () => {
     setUserProvider({});
   };
   return (
+    
+   
     <>
       <Dialog
         header="Add User"
@@ -193,17 +197,18 @@ export const Users = () => {
           </div>
         </div>
       </Dialog>
+
       <div className="m-20 md:m-10 mt-14 p-2 md:p-0 bg-white rounded-3xl">
-        <Header category="Page" title={"Users"} />
+        <Header title={t("dashboard.users.users-tittle")} />
         <div className="card flex justify-end py-2">
           {userRole == "Admin" ? (
             <Button
+              onClick={() => setUserDialog(true)}
               severity="info"
-              label="Add User"
-              onClick={() => setUserDialog(!userDialog)}
+              label={t("dashboard.users.add-user")}
+              className="p-button-rounded p-button-info ml-2"
             >
-              {" "}
-              <AiOutlinePlusCircle className="ml-2"></AiOutlinePlusCircle>
+              <AiOutlinePlusCircle className="ml-2" />
             </Button>
           ) : (
             <></>

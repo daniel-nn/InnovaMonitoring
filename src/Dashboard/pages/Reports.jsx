@@ -23,7 +23,7 @@ import { Column } from "@syncfusion/ej2-react-charts";
 const Reports = () => {
   const navigate = useNavigate();
   const { cases } = useFetchIncidents(navigate);
-  const { agents } = useFetchAgents(navigate);
+  // const { agents } = useFetchAgents(navigate);
   const toolbarOptions = ["Search"];
 
   let propertiesUser = JSON.parse(localStorage.getItem("user"));
@@ -32,7 +32,7 @@ const Reports = () => {
 
   const [information, setInformation] = useState(true);
 
-  const { propertyContext, setPropertyContext, reportSaved, setreportSaved, reportFormVisible,
+  const { propertyContext, setPropertyContext, reportSaved, setreportSaved,
     setReportFormVisible, editReportFormVisible, setEditReportFormVisible, setReportForm, } = useContext(UserContext);
 
   const [reportes, setReportes] = useState([]);
@@ -83,106 +83,19 @@ const Reports = () => {
     navigate("/dashboard/NewReport");
   };
 
-  const navigateEditReport = () => {
-    navigate("/dashboard/EditReport");
-  };
-
   return (
 
     <>
-      <Dialog
-        header={t("dashboard.reports.new-reporst.add-report")}
-        visible={reportFormVisible}
-        style={{ width: "50vw" }}
-        onHide={closeForm}
-        footer={<FooterReportForm
-          setInformation={setInformation}
-          activeIndex={activeIndex}
-          setActiveIndex={setActiveIndex}
-        />}
-      >
-
-        {information ? (
-          <ReportForm
-            incidents={cases}
-            properties={listOfPropertiesByUser}
-            agents={agents}
-          />
-        ) : (
-          <ReportFormEvidences
-            setReportFormVisible={setReportFormVisible}
-            reportSaved={reportSaved}
-            setreportSaved={setreportSaved}
-          />
-        )}
-      </Dialog>
-      
-      <Dialog
-        header={t("dashboard.reports.edit-report.edit-tittle")}
-        visible={editReportFormVisible}
-        style={{ width: "50vw" }}
-        onHide={() => {
-          setEditReportFormVisible(false);
-          setReportForm({});
-        }}
-        footer={<FooterReportForm
-          setInformation={setInformation}
-          activeIndex={activeIndex}
-          setActiveIndex={setActiveIndex} // Esto es crítico para evitar el error
-        />}
-      >
-        {information ? (
-          <ReportFormEdit
-            incidents={cases}
-            properties={listOfPropertiesByUser}
-            agents={agents}
-          />
-        ) : (
-          <ReportFormEvidencesEdit
-            setReportFormVisible={setReportFormVisible}
-            reportSaved={reportSaved}
-            setreportSaved={setreportSaved}
-          />
-        )}
-      </Dialog>
-      <button
-        onClick={() => console.log("Reportes:", reportes)}
-        className="mt-4 mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-      >
-        Mostrar Reportes en Consola
-      </button>
-      <button
-        onClick={() => console.log(localStorage)}
-        className="mt-4 mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-      >
-        Localstorage
-      </button>
       <div className="m-20 md:m-10 mt-14 p-2 md:p-0 bg-white rounded-3xl">
         <Header category={t("dashboard.reports.reports-tittle")} title={t("dashboard.reports.reports-of") + propertyContext.name} />
         <div className="card flex justify-end py-2 mb-7">
           {(userRole === "Admin" || userRole === "Monitor") && (
             <>
               <Button
-                onClick={() => setReportFormVisible(!reportFormVisible)}
-                severity="info"
-                label={t("dashboard.reports.add-report")}
-                className="p-button-text"
-              >
-                <AiOutlinePlusCircle className="ml-2"></AiOutlinePlusCircle>
-              </Button>
-              <Button
                 onClick={navigateToNewReport}
                 severity="info"
                 label={t("dashboard.reports.new-report.add-report")} 
                 className="p-button-text ml-2" 
-              >
-                <AiOutlinePlusCircle className="ml-2"></AiOutlinePlusCircle>
-              </Button>
-              <Button
-                onClick={navigateEditReport}
-                severity="info"
-                label={t("Reporte editar sin traduccion")}
-                className="p-button-text ml-2"
               >
                 <AiOutlinePlusCircle className="ml-2"></AiOutlinePlusCircle>
               </Button>
