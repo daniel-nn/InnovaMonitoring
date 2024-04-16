@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext, useRef, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { AiFillFilePdf, AiFillEdit, AiFillCheckCircle } from "react-icons/ai";
 import { FiCreditCard, FiStar, FiShoppingCart, } from "react-icons/fi";
@@ -29,6 +29,8 @@ import Swal from "sweetalert2";
 import { SiDialogflow } from "react-icons/si";
 import { postNewAgent } from "../helper/postNewAgent";
 import { postIncident } from "../helper/postIncident";
+import { toggleReportVerification } from "../helper/toggleReportVerification";
+import exportPDF from "../helper/exportPdf";
 import { getUser } from "../helper/getUser";
 
 export const useGlobalTranslation = () => {
@@ -88,28 +90,27 @@ export const gridOrderProperties = (props) => {
 };
 
 export const GridPdf = (props) => {
-  const { t } = useGlobalTranslation(); 
-  let url = props.PDF;
-  const toast = useRef(null);
+  const { t } = useGlobalTranslation();
 
-  if (url === "/dashboard/reports") {
-    return (
-      <Link
-        onClick={() => {
-          Swal.fire(t("dashboard.reports.table.admin.no-pdf")); 
-        }}
-        className="flex justify-center m-0 p-0 "
-      >
-        <AiFillFilePdf className="text-lg text-red-600"></AiFillFilePdf>
-      </Link>
-    );
-  } else {
-    return (
-      <Link to={url} className="flex justify-center m-0 p-0" target="_blank">
-        <AiFillFilePdf className="text-lg text-red-600"></AiFillFilePdf>
-      </Link>
-    );
-  }
+  const handlePDFClick = async () => {
+    if (!props.id) {
+      Swal.fire(t("dashboard.reports.table.admin.no-pdf"));
+    } else {
+      console.log("Esto es la data del PDF:", props);  // Visualización de los datos para depuración
+      try {
+        await exportPDF(props);  // Usar directamente los props para generar el PDF
+      } catch (error) {
+        console.error('Error al generar el PDF:', error);
+        Swal.fire(t("Error"), t("dashboard.reports.table.admin.pdf-error"), "error");
+      }
+    }
+  };
+
+  return (
+    <button onClick={handlePDFClick} className="flex justify-center m-0 p-0">
+      <AiFillFilePdf className="text-lg text-red-600"></AiFillFilePdf>
+    </button>
+  );
 };
 
 export const GridDetails = ({ Details }) => {
@@ -155,6 +156,31 @@ export const GridIsVerified = ({ verified }) => {
       </div>
     );
   }
+};
+
+// Plantilla para mostrar el estado del reporte y actualizar su estado
+export const GridisVerifiedAndVerification = ({ id, verified: initialVerified }) => {
+  const [t, i18n] = useTranslation("global");
+  const [verified, setVerified] = useState(initialVerified);
+
+  useEffect(() => {
+    setVerified(initialVerified);
+  }, [initialVerified]);  
+  const handleToggleVerification = async () => {
+    const newVerifiedStatus = await toggleReportVerification(id, verified, t);
+    setVerified(newVerifiedStatus);
+  };
+
+
+  return (
+    <div key={Math.random()} className="flex justify-center m-0 p-0 text-lg cursor-pointer" onClick={handleToggleVerification}>
+      {verified ? (
+        <AiFillCheckCircle className="text-green-600" />
+      ) : (
+        <TiDeleteOutline className="text-red-600" />
+      )}
+    </div>
+  );
 };
 
 let reportes = [
@@ -5984,51 +6010,61 @@ const useUserProfileData = () => {
 export default useUserProfileData;
 
 
+// plantilla para los roles de la tabla de usuarios
 
-export const userGrid = [
-  {
-    headerText: "Image",
-    template: gridOrderImage,
-    textAlign: "Center",
-    width: "120",
-  },
-  {
-    field: "Name",
-    headerText: "Name",
-    width: "170",
-    editType: "dropdownedit",
-    textAlign: "Center",
-  },
-  {
-    field: "Email",
-    headerText: "Email",
-    width: "180",
-    editType: "dropdownedit",
-    textAlign: "Center",
-  },
-  {
-    field: "Rol",
-    headerText: "Rol",
-    width: "100",
-    editType: "dropdownedit",
-    textAlign: "Center",
-  },
-  {
-    field: "Properties",
-    headerText: "Properties",
-    width: "200",
-    textAlign: "Center",
-    template: gridOrderProperties,
-  },
+const roleTemplate = (rowData, t) => {
+  return (
+    <span>{t(`dashboard.users.table.roles.${rowData.Rol}`)}</span>
+  );
+};
 
-  {
-    headerText: "Delete",
-    template: GridDelete,
-    textAlign: "Center",
-    width: "80",
-    field: "id",
-  },
-];
+export const userGrid = (t) => {
+  return [
+    {
+      headerText: t("dashboard.users.table.image"),
+      template: gridOrderImage,
+      textAlign: "Center",
+      width: "120",
+    },
+    {
+      field: "Name",
+      headerText: t("dashboard.users.table.name"),
+      width: "170",
+      editType: "dropdownedit",
+      textAlign: "Center",
+    },
+    {
+      field: "Email",
+      headerText: t("dashboard.users.table.email"),
+      width: "180",
+      editType: "dropdownedit",
+      textAlign: "Center",
+    },
+    {
+      field: "Rol",
+      headerText: t("dashboard.users.table.rol"),
+      width: "100",
+      textAlign: "Center",
+      template: rowData => roleTemplate(rowData, t),  
+      editType: "dropdownedit"
+    },
+    {
+      field: "Properties",
+      headerText: t("dashboard.users.table.properties"),
+      width: "200",
+      textAlign: "Center",
+      template: gridOrderProperties,
+    },
+    {
+      headerText: t("dashboard.users.table.delete"),
+      template: GridDelete,
+      textAlign: "Center",
+      width: "80",
+      field: "id",
+    },
+  ];
+};
+
 export const userGridAdmin = [
   {
     headerText: "Image",
@@ -6037,28 +6073,24 @@ export const userGridAdmin = [
     width: "120",
   },
   {
-    field: "Name",
     headerText: "Name",
     width: "170",
     editType: "dropdownedit",
     textAlign: "Center",
   },
   {
-    field: "Email",
     headerText: "Email",
     width: "180",
     editType: "dropdownedit",
     textAlign: "Center",
   },
   {
-    field: "Rol",
     headerText: "Rol",
     width: "100",
     editType: "dropdownedit",
     textAlign: "Center",
   },
   {
-    field: "Properties",
     headerText: "Properties",
     width: "200",
     textAlign: "Center",
@@ -6144,40 +6176,50 @@ export const orderAgents = [
     width: "120",
   },
 ];
-export const orderAgentsAdmin = [
-  {
-    headerText: "Image",
-    template: gridOrderImage,
-    textAlign: "Center",
-    width: "120",
-  },
-  {
-    headerText: "Name",
-    field: "name",
-    textAlign: "Center",
-    width: "120",
-  },
-  {
-    headerText: "Email",
-    field: "email",
-    textAlign: "Center",
-    width: "120",
-  },
-  {
-    headerText: "Edit",
-    template: GridAgentEdit,
-    textAlign: "Center",
-    width: "80",
-    field: "agent",
-  },
-  {
-    headerText: "Delete",
-    template: GridDeleteAgents,
-    textAlign: "Center",
-    width: "80",
-    field: "id",
-  },
-];
+
+export const orderAgentsAdmin = (t) => {
+  return [
+    {
+      headerText: t("dashboard.agents.table.image"),
+      template: gridOrderImage,
+      textAlign: "Center",
+      width: "120",
+    },
+    {
+      headerText: t("dashboard.agents.table.name"),
+      field: "Name",
+      textAlign: "Center",
+      width: "120",
+    },
+    {
+      headerText: t("dashboard.agents.table.email"),
+      field: "Email",
+      textAlign: "Center",
+      width: "120",
+    },
+    {
+      headerText: t("dashboard.agents.table.password"),
+      field: "user.pasword",  
+      textAlign: "Center",
+      width: "120",
+    },
+    {
+      headerText: t("dashboard.agents.table.edit"),
+      template: GridAgentEdit,
+      textAlign: "Center",
+      width: "80",
+      field: "agent",
+    },
+    {
+      headerText: t("dashboard.agents.table.delete"),
+      template: GridDeleteAgents,
+      textAlign: "Center",
+      width: "80",
+      field: "id",
+    },
+  ];
+};
+
 
 export const propertyGrid = [
   {
@@ -6359,6 +6401,13 @@ export const reportsGridAdmin = (t) => {
       textAlign: "Center",
     },
     {
+      field: "createdBy.name",
+      headerText: t("dashboard.reports.table.admin.Agent"),
+      width: "200",
+      editType: "dropdownedit",
+      textAlign: "Center",
+    },
+    {
       field: "level",
       headerText: t("dashboard.reports.table.admin.CaseLevel"),
       width: "130",
@@ -6373,13 +6422,7 @@ export const reportsGridAdmin = (t) => {
       width: "130",
       textAlign: "Center",
     },
-    {
-      field: "timeOfReport",
-      headerText: t("dashboard.reports.table.admin.TimeCase"),
-      width: "100",
-      editType: "dropdownedit",
-      textAlign: "Center",
-    },
+  
     {
       field: "numerCase",
       headerText: t("dashboard.reports.table.admin.IdCase"),
@@ -6394,20 +6437,23 @@ export const reportsGridAdmin = (t) => {
       textAlign: "Center",
       template: GridPdf,
     },
+
     {
       field: "verified",
       headerText: t("dashboard.reports.table.admin.CaseVerified"),
       width: "95",
       textAlign: "Center",
-      template: GridIsVerified,
+      template: GridisVerifiedAndVerification,
     },
+
     {
       field: "Edit",
       headerText: t("dashboard.reports.table.admin.CaseEdit"),
       width: "80",
       textAlign: "Center",
-      template: GridEditReportTemplate, // Componente de React, sin llaves adicionales
+      template: GridEditReportTemplate, 
     },
+
   ];
 };
 
@@ -6842,6 +6888,7 @@ export const lineChartData = [
     { x: new Date(2011, 0, 1), y: 100 },
   ],
 ];
+
 export const dropdownData = [
   {
     Id: "1",

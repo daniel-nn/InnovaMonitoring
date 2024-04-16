@@ -59,6 +59,8 @@ const NewReport = () => {
         resetReportForm();
     }, []);
 
+
+    // Funcion para validar el formulario
     const validateForm = () => {
   
         const fieldsToValidate = {
@@ -90,7 +92,7 @@ const NewReport = () => {
                 value = value[part];
                 if (value === undefined) return true;
             }
-            return value === "" || value === null || (Array.isArray(value) && value.length === 0); // Ajusta para listas vacías
+            return value === "" || value === null || (Array.isArray(value) && value.length === 0); 
         });
 
         if (missingFieldKey) {
@@ -105,20 +107,19 @@ const NewReport = () => {
                 },
                 buttonsStyling: false,
                 didOpen: () => {
-                    // Estilos personalizados para el botón
                     const confirmButton = Swal.getConfirmButton();
                     if (confirmButton) {
                         confirmButton.style.backgroundColor = "#007bff"; // Color de fondo
-                        confirmButton.style.color = "#ffffff"; // Color del texto
-                        confirmButton.style.border = "none"; // Quitar borde
-                        confirmButton.style.boxShadow = "0 4px 8px rgba(0,123,255,.5)"; // Sombra para darle un aspecto más "elevado"
-                        confirmButton.style.borderRadius = "0.375rem"; // Bordes redondeados
-                        confirmButton.style.padding = "0.75rem 1.5rem"; // Ajustar el padding para hacerlo más grande
+                        confirmButton.style.color = "#ffffff"; 
+                        confirmButton.style.border = "none"; 
+                        confirmButton.style.boxShadow = "0 4px 8px rgba(0,123,255,.5)"; 
+                        confirmButton.style.borderRadius = "0.375rem"; 
+                        confirmButton.style.padding = "0.75rem 1.5rem";
                         confirmButton.onmouseenter = () => {
-                            confirmButton.style.backgroundColor = "#0056b3"; // Cambiar color de fondo al pasar el mouse
+                            confirmButton.style.backgroundColor = "#0056b3"; 
                         };
                         confirmButton.onmouseleave = () => {
-                            confirmButton.style.backgroundColor = "#007bff"; // Restaurar color de fondo original al quitar el mouse
+                            confirmButton.style.backgroundColor = "#007bff";
                         };
                     }
                 }
@@ -151,24 +152,18 @@ const NewReport = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             let usersData = await getAdminsAndMonitors();
-            console.log("Users Data:", usersData); // Para depuración
-
-
+            console.log("Users Data:", usersData); 
             const formattedUsers = usersData.map(user => ({
                 label: user.name,
                 value: user
             }));
-
             setUsers(formattedUsers);
-
-       
             if (userRole === "Monitor") {
                 const monitorUser = formattedUsers.find(u => u.value.id === user.id)?.value;
                 if (monitorUser) {
                     setReportForm(prev => ({
                         ...prev,
-                        createdBy: monitorUser // Asigna el objeto de usuario completo encontrado
-                    }));
+                        createdBy: monitorUser                     }));
                 }
             }
         };
@@ -193,6 +188,7 @@ const NewReport = () => {
         { label: t("dashboard.reports.new-report.list-Malfuncion-cameras.na"), value: 'N/A' },
         { label: t("dashboard.reports.new-report.list-Malfuncion-cameras.listedOnReport"), value: 'Listed on Report' }
     ], [t]);
+
 
     const [listpoliceFirstResponderScene, setlistpoliceFirstResponderScene] = useState([]);
     useEffect(() => {
@@ -254,58 +250,6 @@ const NewReport = () => {
         };
     }, [i18n, t, reportForm.property]);
 
-    const reportDtoPdf = async (reportForm) => {
-        console.log('reportForm recibido:', reportForm);
-        const {
-            createdBy,
-            caseType,
-            company,
-            level,
-            numerCase,
-            property,
-            camerasFunctioning,
-            listMalfuncioningCameras,
-            observerdViaCameras,
-            policeFirstResponderNotified,
-            policeFirstResponderScene,
-            securityGuardsNotified,
-            securityGuardsScene,
-            policeNumerCase,
-            formNotificationClient,
-            emailedReport,
-            reportDetails
-
-        } = reportForm;
-        let reportDtoPdf = {
-            createdBy: reportForm.user,
-            caseType: reportForm.caseType.incident,
-            company,
-            level,
-            numerCase,
-            property,
-            propertyAddress: property ? property.direction : 'Dirección no proporcionada',
-            propertyrgb: property ? property.rgbcolor : '255, 255 ,255',
-            listMalfuncioningCameras,
-            observerdViaCameras: observerdViaCameras ? 1 : 0,
-            policeFirstResponderNotified: policeFirstResponderNotified ? 1 : 0,
-            policeFirstResponderScene,
-            camerasFunctioning: camerasFunctioning ? 1 : 0,
-            securityGuardsNotified: securityGuardsNotified ? 1 : 0,
-            securityGuardsScene: securityGuardsScene ? 1 : 0,
-            policeNumerCase,
-            formNotificationClient,
-            emailedReport,
-            reportDetails,
-            dateOfReport: formatDate(reportForm.dateOfReport),
-            timeOfReport: formatTime(reportForm.timeOfReport),
-            incidentDate: formatDate(reportForm.incidentDate),
-            incidentStartTime: formatTime(reportForm.incidentStartTime),
-            incidentEndTime: formatTime(reportForm.incidentEndTime),
-
-        };
-        return reportDtoPdf;
-    };
-
     const formatDate = (date) => {
         if (!date) date = new Date();
         const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -338,8 +282,6 @@ const NewReport = () => {
                 name: "Img",
             });
         });
-
-
 
         videos.forEach((vid) => {
             evidences.push({
@@ -1130,21 +1072,7 @@ const NewReport = () => {
 
             <div className="flex justify-end mt-4 pr-20">
                 <Button label={t("dashboard.reports.new-report.swal.send")} severity="success" onClick={sendingreport} />
-                <Button
-                    label="pdf"
-                    severity="success"
-                    onClick={async () => {
-                        try {
-                            const dataForPdf = await reportDtoPdf(reportForm);
-                            console.log(dataForPdf);
-                            await exportPDF(dataForPdf);
-                        } catch (error) {
-                            console.error('Error al generar el PDF:', error);
-                        }
-                    }}
-                />
                 <Button label={t("User")} severity="success" onClick={() => console.log(reportForm)} />
-
 
             </div>
         </div>

@@ -22,13 +22,13 @@ const createHTMLString = (data) => {
           <div style="grid-column: span 4; padding-left: 12px;">
             <h1 style="font-size: 30px; color: rgb(48, 84, 150); border-bottom: 2px solid rgb(48, 84, 150); padding-bottom: 3px;  font-weight: bold;">INCIDENT REPORT
             </h1>
-            <p style="color: rgb(48, 84, 150); font-weight: bold;">${data.property.name}.</p>
-            <p style="color: rgb(48, 84, 150); font-weight: bold;">${data.propertyAddress}</p>
+            <p style="color: rgb(48, 84, 150); font-weight: bold;">${data.property.name || 'Null'}  </p>
+            <p style="color: rgb(48, 84, 150); font-weight: bold;">${data.property.direction || 'Null'}</p>
             <p style="color: rgb(47, 117, 181); margin-top: 50px; font-weight: bold;"> CREATED BY: 
-                <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.agent}</span>
+                <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.createdBy.name || 'Null'}</span>
             </p>
             <p style="color: rgb(47, 117, 181); font-weight: bold;"> REPORT NUMBER: 
-                <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.numerCase}</span> 
+                <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.numerCase || 'Null'}</span> 
             </p>
         </div>
           <div style="grid-column: span 4; padding-left: 12px;">
@@ -40,24 +40,24 @@ const createHTMLString = (data) => {
             <br>
             <br>
             <br>
-            <p style="color: rgb(47, 117, 181); margin-top: 50px; font-weight: bold;"> DATE OF REPORT: <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.dateOfReport}</span> </p> 
-            <p style="color: rgb(47, 117, 181); font-weight: bold;"> REPORT TIME: <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.timeOfReport}</span> </p> 
+            <p style="color: rgb(47, 117, 181); margin-top: 50px; font-weight: bold;"> DATE OF REPORT: <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.dateOfReport || 'Null'}</span> </p> 
+            <p style="color: rgb(47, 117, 181); font-weight: bold;"> REPORT TIME: <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.timeOfReport || 'Null'}</span> </p> 
         </div>
         <div style="grid-column: 1 / -1; background-color: rgb(47, 117, 181);">
             <p style="color: white; text-align: center; font-size: 20px; font-weight: bold; padding-bottom: 12px">INCIDENT INFORMATION</p>
         </div>
         <div style="grid-column: span 6; padding-left: 12px;">
             <p style="color: rgb(47, 117, 181); font-weight: bold;"> INCIDENT TYPE:
-    <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.caseType}</span>
+    <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.caseType.incident || 'Null'}</span>
             </p>
             <p style="color: rgb(47, 117, 181); font-weight: bold;">START TIME OF INCIDENT:
-                <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.incidentStartTime}</span>
+                <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.incidentStartTime || 'Null'}</span>
             </p>
             <p style="color: rgb(47, 117, 181); font-weight: bold;"> INCIDENT URGENCY:
-                <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.level}</span>
+                <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.level || 'Null'}</span>
             </p>
             <p style="color: rgb(47, 117, 181); font-weight: bold;"> LIST OF MALFUNCTIONING CAMERAS:
-               <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.listMalfuncioningCameras}</span>
+               <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.listMalfuncioningCameras || 'Null'}</span>
             </p>
             <p style="color: rgb(47, 117, 181); font-weight: bold; margin-top: 20px;"> POLICE/FIRST RESPONDER NOTIFIED:
                <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.policeFirstResponderNotified ? 'Yes': 'No'}</span>
@@ -66,15 +66,15 @@ const createHTMLString = (data) => {
                <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.securityGuardsNotified ? 'Yes': 'No'}</span>
             </p>
             <p style="color: rgb(47, 117, 181); font-weight: bold;"> POLICE CASE NUMBER:
-                <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.policeNumerCase}</span>
+                <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.policeNumerCase || 'Null'}</span>
             </p>
         </div>
         <div style="grid-column: span 6; padding-left: 12px;">
                <p style="color: rgb(47, 117, 181); font-weight: bold;"> DATE OF INCIDENT:
-                <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.incidentDate}</span>
+                <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.incidentDate || 'Null'}</span>
             </p>
             <p style="color: rgb(47, 117, 181); font-weight: bold;"> END TIME OF INCIDENT:
-                <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.incidentEndTime}</span>
+                <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.incidentEndTime || 'Null'}</span>
             </p>
             <p style="color: rgb(47, 117, 181); font-weight: bold;"> CAMERAS FUNCTIONING:
                 <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.camerasFunctioning ? 'Yes' : 'No'}</span>
@@ -83,7 +83,7 @@ const createHTMLString = (data) => {
                 <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.observerdViaCameras ? 'Yes' : 'No'}</span>
             </p>
             <p style="color: rgb(47, 117, 181); font-weight: bold; margin-top: 20px;"> POLICE/FIRST RESPONDER ON SCENE:
-               <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.policeFirstResponderScene}</span>
+               <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.policeFirstResponderScene || 'Null'}</span>
             </p>
             <p style="color: rgb(47, 117, 181); font-weight: bold;"> SECURITY GUARDS ON SCENE:
                 <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.securityGuardsScene ? 'Yes' : 'No'}</span>
@@ -98,18 +98,18 @@ const createHTMLString = (data) => {
                 <img src="/pdf/LIBRO.SVG" alt="Logo" style="width: 100%; height: auto;">
             </div>
             <div style="background-color: rgb(235, 222, 246); padding: 10px; margin-top: -1px; padding-bottom: 15px;"> 
-                <p style="color: rgb(0, 0, 0);">${data.reportDetails}</p>
+                <p style="color: rgb(0, 0, 0);">${data.reportDetails || 'Null'}</p>
             </div>
         </div>
             <div style="grid-column: span 7; padding: 12px;">
             <p style="color: rgb(47, 117, 181); font-weight: bold;"> CREATED BY:
-                <span style="color: rgb(0, 0, 0);">${data.agent}</span>
+                <span style="color: rgb(0, 0, 0);">${data.createdBy.name || 'Null'}</span>
             </p>
             <p style="color: rgb(47, 117, 181); font-weight: bold;"> FORM OF NOTIFICATION TO CLIENT:
-                <span style="color: rgb(0, 0, 0);">${data.formNotificationClient}</span>
+                <span style="color: rgb(0, 0, 0);">${data.formNotificationClient || 'Null'}</span>
             </p>
             <p style="color: rgb(47, 117, 181); font-weight: bold;"> EMAILED REPORT TO:
-                <span style="color: rgb(0, 0, 0);">${data.emailedReport}</span>
+                <span style="color: rgb(0, 0, 0);">${data.emailedReport || 'Null'}</span>
             </p>
           </div>
           <div style="grid-column: span 5;">

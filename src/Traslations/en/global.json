@@ -446,19 +446,21 @@
       "vandalized-cameras": "Vandalized Cameras"
     },
     "reports": {
-      "reports-of": "reports of - ",
+      "reports-of": "Reports of - ",
       "reports-tittle": "Reports",
       "add-report": "Add report",
       "table": {
         "admin": {
           "CaseImage": "Image",
-          "Case": "incident",
+          "Case": "Incident",
+          "Agent": "Monitor",
           "CaseLevel": "Case Level",
           "CaseStatus": "Status",
           "DateCase": "Date Incident",
           "TimeCase": "Time",
           "IdCase": "Report ID",
           "CaseVerified": "Verified",
+          "verifiedchanged": "Verified Status Changed",
           "CaseEdit": "Edit",
           "CaseDetails": "Details",
           "no-pdf": "This report does not have a pdf"
@@ -694,6 +696,12 @@
         "password": "Password",
         "suggestion": {
           "pick-password": "Pick a password",
+          "enter-password": "Enter a password",
+          "password-strength": {
+            "weak": "Weak",
+            "medium": "Medium",
+            "strong": "Strong"
+          },
           "suggestions": "Suggestions",
           "at-least-one-lowercase": "At least one lowercase",
           "at-least-one-uppercase": "At least one uppercase",
@@ -703,17 +711,38 @@
         "image-url": "Image Url",
         "roles": {
           "select-rol": "Select The Rol",
-          "Admin": "Admin",
-          "Client": "User",
-          "Monitor": "Monitor"
-        }
+          "roles-dropdown": {
+            "Admin": "Admin",
+            "Client": "Client",
+            "Monitor": "Monitor"
+          }
+        },
+        "cancel": "Cancel",
+        "send": "Send"
       },
       "table": {
         "image": "Image",
         "name": "Name",
         "email": "Email",
         "rol": "Role",
+        "roles": {
+          "Admin": "Admin",
+          "Client": "Client",
+          "Monitor": "Monitor"
+        }, 
         "properties": "Properties",
+        "delete": "Delete"
+      }
+    },
+    "agents": {
+      "agents-tittle": "Monitoring Agents",
+      "add-agent": "Add Agent",
+      "table":{
+        "image": "Imagen",
+        "name": "Name",
+        "email": "Email",
+        "password": "Password",
+        "edit": "Edit",
         "delete": "Delete"
       }
     },

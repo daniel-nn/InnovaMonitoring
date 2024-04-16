@@ -451,12 +451,14 @@
         "admin": {
           "CaseImage": "Imagen",
           "Case": "Incidente",
+          "Agent": "Monitor",
           "CaseLevel": "Nivel",
           "CaseStatus": "Estatus caso",
           "DateCase": "Fecha",
           "TimeCase": "Hora",
           "IdCase": "ID caso",
           "CaseVerified": "Verificado",
+          "verifiedchanged": "Estado verificado cambiado",
           "CaseEdit": "Editar",
           "CaseDetails": "Detalles",
           "no-pdf": "Este informe no tiene pdf"
@@ -694,6 +696,12 @@
         "password": "Contraseña",
         "suggestion": {
           "pick-password": "Elige una contraseña",
+          "enter-password": "Ingrese una contraseña",
+          "password-strength": {
+            "weak": "Débil",
+            "medium": "Medio",
+            "strong": "Fuerte"
+          },
           "suggestions": "Sugerencias",
           "at-least-one-lowercase": "Al menos una minúscula",
           "at-least-one-uppercase": "Al menos una mayúscula",
@@ -703,20 +711,42 @@
         "image-url": "Url de la imagen",
         "roles": {
           "select-rol": "Seleccione el rol",
+          "roles-dropdown":{
           "Admin": "Administrador",
           "Client": "Usuario",
           "Monitor": "Monitor"
+          }
         },
-        "table": {
-          "image": "Imagen",
-          "name": "Nombre",
-          "email": "Correo Electrónico",
-          "rol": "Rol",
-          "properties": "Propiedades",
-          "delete": "Eliminar"
-        }
+        "cancel": "Cancelar",
+        "send": "Enviar"
+      },
+      "table": {
+        "image": "Imagen",
+        "name": "Nombre",
+        "email": "Correo Electrónico",
+        "rol": "Rol",
+        "roles": {
+          "Admin": "Administrador",
+          "Client": "Cliente",
+          "Monitor": "Monitor"
+        },
+        "properties": "Propiedades",
+        "delete": "Eliminar"
       }
     },
+    "agents": {
+      "agents-tittle": "Agentes de monitoreo",
+      "add-agent": "Añadir agente",
+      "table": {
+        "image": "Imagen",
+        "name": "Nombre",
+        "email": "Correo",
+        "password": "Contraseña",
+        "edit": "Editar",
+        "delete": "Eliminar"
+      }
+    },
+
     "footer": "Todos los derechos reservados Innova Monitioring"
   },
   "space": " "

@@ -50,6 +50,9 @@ export const Users = () => {
   const [userSaved, setUserSaved] = useState(false);
   const [roles, setRoles] = useState([]);
   const [properties, setProperties] = useState();
+  const [userGridColumns, setUserGridColumns] = useState([]);
+
+
   let propertiesSelectedVar = [];
 
   const [propertiesList, setPropertiesList] = useState([]);
@@ -58,26 +61,47 @@ export const Users = () => {
   let userRole = user.role.rolName;
 
   useEffect(() => {
-    getUsers().then((data) => setUsers(data));
-    getPropertiesInfo(navigate).then((data) => {
-      propertiesSelectedVar = data.map((i) => {
-        return { id: i.id, name: i.name, direction: i.direction, img: i.img };
-      });
-      setProperties(propertiesSelectedVar);
-    });
-    getRoles().then((data) => setRoles(data));
-  }, [userSaved, flag]);
+    const fetchData = async () => {
+      const userData = await getUsers();
+      const propertiesData = await getPropertiesInfo(navigate);
+      setUsers(userData);
+      setProperties(propertiesData.map(prop => ({
+        id: prop.id,
+        name: prop.name,
+        direction: prop.direction,
+        img: prop.img
+      })));
+    };
+    fetchData();
+  }, [navigate, flag]); 
 
-  const header = <div className="font-bold mb-3">Pick a password</div>;
+  useEffect(() => {
+    const fetchRoles = async () => {
+      const rolesData = await getRoles();
+      if (rolesData && rolesData.length > 0) {
+        const rolesArray = rolesData.map(({ id, rolName }) => ({
+          rolKey: id,
+          rolName: t(`dashboard.users.dialog-add-user.roles.roles-dropdown.${rolName}`)  // Traducir el nombre del rol 
+        }));
+        setRoles(rolesArray);
+      } else {
+        console.log('No roles data found');
+      }
+    };
+    fetchRoles();
+  }, [t]);  
+
+
+  const header = <div className="font-bold mb-3">{t("dashboard.users.dialog-add-user.suggestion.pick-password")}</div>;
   const footer = (
     <>
       <Divider />
-      <p className="mt-2">Suggestions</p>
+      <p className="mt-2">{t("dashboard.users.dialog-add-user.suggestion.suggestions")}</p>
       <ul className="pl-2 ml-2 mt-0 line-height-3">
-        <li>At least one lowercase</li>
-        <li>At least one uppercase</li>
-        <li>At least one numeric</li>
-        <li>Minimum 8 characters</li>
+        <li>{t("dashboard.users.dialog-add-user.suggestion.at-least-one-lowercase")}</li>
+        <li>{t("dashboard.users.dialog-add-user.suggestion.at-least-one-uppercase")}</li>
+        <li>{t("dashboard.users.dialog-add-user.suggestion.at-least-one-numeric")}</li>
+        <li>{t("dashboard.users.dialog-add-user.suggestion.minimum-characters")}</li>
       </ul>
     </>
   );
@@ -88,25 +112,38 @@ export const Users = () => {
     setUserDialog(!userDialog);
     setUserProvider({});
   };
+
+  const handleClose = () => {
+    setUserDialog(false);  // Cierra el diálogo
+    setUserProvider({});   // Restablece el estado del formulario
+  };
+
+  const handleLogLanguage = () => {
+    console.log("Current language:", i18n.language);
+  };
+
+
   return (
     
    
     <>
       <Dialog
-        header="Add User"
+        header={t("dashboard.users.dialog-add-user.add-user")}
         visible={userDialog}
         style={{ width: "40vw", display: "flex", justifyContent: "center" }}
-        onHide={() => {
-          setUserDialog(false);
-          setUserProvider({});
-        }}
+        onHide={handleClose}
         footer={
           <div className="w-full flex justify-center">
-            <Button icon="pi pi-times" severity="danger" label="Cancel" />
+            <Button
+              icon="pi pi-times"
+              severity="danger"
+              label={t("dashboard.users.dialog-add-user.cancel")}
+              onClick={handleClose}  // Y también usa la función de cierre aquí
+            />            
             <div className="w-3"></div>
             <Button
               icon="pi pi-check"
-              label="Send"
+              label={t("dashboard.users.dialog-add-user.send")}
               className="w-full"
               onClick={() => {
                 saveNewUser();
@@ -128,7 +165,7 @@ export const Users = () => {
                   })
                 }
               />
-              <label htmlFor="username">Name</label>
+              <label htmlFor="username">{t("dashboard.users.dialog-add-user.name")}</label>
             </span>
           </div>
 
@@ -144,7 +181,7 @@ export const Users = () => {
                   })
                 }
               />
-              <label htmlFor="username">Email</label>
+              <label htmlFor="username">{t("dashboard.users.dialog-add-user.email")}</label>
             </span>
           </div>
 
@@ -152,16 +189,19 @@ export const Users = () => {
             <span className="p-float-label w-full">
               <Password
                 toggleMask
-                value={userProvider.pasword}
-                onChange={(e) =>
-                  setUserProvider({ ...userProvider, pasword: e.target.value })
-                }
+                value={userProvider.password}
+                onChange={(e) => setUserProvider({ ...userProvider, password: e.target.value })}
                 className="w-full"
                 header={header}
                 footer={footer}
+                promptLabel={t("dashboard.users.dialog-add-user.suggestion.enter-password")}
+                weakLabel={t("dashboard.users.dialog-add-user.suggestion.password-strength.weak")}
+                mediumLabel={t("dashboard.users.dialog-add-user.suggestion.password-strength.medium")}
+                strongLabel={t("dashboard.users.dialog-add-user.suggestion.password-strength.strong")}
               />
 
-              <label htmlFor="Password">Password</label>
+
+              <label htmlFor="Password">{t("dashboard.users.dialog-add-user.password")}</label>
             </span>
           </div>
 
@@ -177,23 +217,20 @@ export const Users = () => {
                   })
                 }
               />
-              <label htmlFor="image">Image URL</label>
+              <label htmlFor="image">{t("dashboard.users.dialog-add-user.image-url")}</label>
             </span>
           </div>
 
           <div className="mx-auto w-7/12 ">
             <Dropdown
               value={userProvider.rol}
-              onChange={(e) =>
-                setUserProvider((i) => {
-                  return { ...userProvider, rol: e.value };
-                })
-              }
+              onChange={(e) => setUserProvider(prev => ({ ...prev, rol: e.value.rolKey }))}
               optionLabel="rolName"
-              options={roles || []}
-              placeholder="Role"
+              options={roles}
+              placeholder={t("dashboard.users.dialog-add-user.roles.select-rol")}
               className="w-full"
             />
+
           </div>
         </div>
       </Dialog>
@@ -210,26 +247,25 @@ export const Users = () => {
             >
               <AiOutlinePlusCircle className="ml-2" />
             </Button>
+            
           ) : (
             <></>
           )}
         </div>
-
+    
         <GridComponent
-          id="gridcomp"
+          id="userGrid"
+          key={i18n.language}
           dataSource={users}
           allowPaging
           allowSorting
           allowExcelExport
           allowPdfExport
-          contextMenuItems={contextMenuItems}
-          toolbar={toolbarOptions}
-          style={{ position: "absolute", zIndex: 0 }}
+          toolbar={["Search"]}
         >
           <ColumnsDirective>
-            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-            {userGrid.map((item, index) => (
-              <ColumnDirective key={index} {...item} />
+            {userGrid(t).map((column, index) => (
+              <ColumnDirective key={index} {...column} />
             ))}
           </ColumnsDirective>
           <Inject
