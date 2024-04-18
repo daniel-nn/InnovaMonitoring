@@ -25,6 +25,7 @@ import { Stacked } from "./Dashboard/components";
 import { FormPage } from "./components/FormPage/FormPage";
 import { Users } from "./Dashboard/pages/Users";
 import { Agents } from "./Dashboard/pages/Agents";
+import { UserDatails } from "./Dashboard/pages/UserDatails";
 import { Cases } from "./Dashboard/pages/Cases";
 import { UserContext } from "./context/UserContext";
 import  NewReport from "./Dashboard/pages/NewReport";
@@ -78,10 +79,11 @@ function App() {
               <Route path="/dashboard/Notifications" element={<Customers />} />
               <Route path="/dashboard/mapa" element={<Mapa />} />
               <Route path="/dashboard/Users" element={<Users />} />
+              <Route path="/dashboard/UserDetails" element={<UserDatails />} />
               <Route path="/dashboard/Agents" element={<Agents />} />
               <Route path="/dashboard/Cases" element={<Cases />} />
               <Route path="/dashboard/properties" element={<Properties />} />
-
+S
               {/* Charts */}
               <Route path="/dashboard/line" element={<Line />} />
            
