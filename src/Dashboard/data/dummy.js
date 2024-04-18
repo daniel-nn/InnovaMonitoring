@@ -51,6 +51,13 @@ export const gridOrderImage = (props) => (
 );
 
 export const gridOrderProperties = (props) => {
+    return (
+      <a className="flex justify-center m-0 p-0 cursor-pointer">
+        Detalles
+      </a>
+    );
+};
+/*export const gridOrderProperties = (props) => {
 
   if (props.lenght > 3) {
     return (
@@ -88,7 +95,7 @@ export const gridOrderProperties = (props) => {
   }
 
 };
-
+*/
 export const GridPdf = (props) => {
   const { t } = useGlobalTranslation();
 
@@ -6018,6 +6025,54 @@ const roleTemplate = (rowData, t) => {
   );
 };
 
+/*
+export const GridUserEdit = ({ user }) => {
+  const { userProvider, setUserProvider, userDialog, setUserDialog } =
+    useContext(UserContext);
+
+  return (
+    <div
+      onClick={() => {
+        setUserProvider(user);
+
+        setUserDialog(!userDialog);
+      }}
+      className="flex justify-center m-0 p-0 cursor-pointer"
+    >
+      <AiFillEdit className="text-lg"></AiFillEdit>
+    </div>
+  );
+};
+*/
+const PropertiesTemplate = ({user}, t) => {
+  //Ojo cambiar el nombre de este atributo
+   const { userProvider, setUserProvider } = useContext(UserContext);
+  const handlerClick=()=>{
+    console.log(user)
+    setUserProvider({
+      ...userProvider,
+      id:user.id,
+      name:user.name,
+      email:user.email,
+      pasword: user.pasword,
+      image: user.image,
+      enamble: user.enable,
+      rol: user.rol,
+      properties: user.properties
+    })
+    navigate("/dashboard/UserDetails");
+    
+  }
+
+  
+  const navigate = useNavigate();
+  return (
+    <a onClick={() => handlerClick()} className="flex justify-center m-0 p-0 cursor-pointer">
+        Detalles
+      </a>
+  );
+};
+
 export const userGrid = (t) => {
   return [
     {
@@ -6053,7 +6108,8 @@ export const userGrid = (t) => {
       headerText: t("dashboard.users.table.properties"),
       width: "200",
       textAlign: "Center",
-      template: gridOrderProperties,
+      template: PropertiesTemplate,
+      //template: gridOrderProperties,
     },
     {
       headerText: t("dashboard.users.table.delete"),
@@ -6061,6 +6117,40 @@ export const userGrid = (t) => {
       textAlign: "Center",
       width: "80",
       field: "id",
+    },
+  ];
+};
+
+export const removePropertyToUse = () => {
+  return (
+    <div
+      className="flex justify-center m-0 p-0 text-red-700"
+    >
+      <MdDelete className="text-lg "></MdDelete>
+    </div>
+  );
+};
+
+export const propertiesGrid = (t) => {
+  return [
+    {
+      headerText: "Name",
+      field: "name",
+      textAlign: "Center",
+      width: "120",
+    },
+    {
+      field: "direction",
+      headerText: "Address",
+      width: "160",
+      editType: "dropdownedit",
+      textAlign: "Center",
+    },
+    {
+      template: removePropertyToUse,
+      headerText: "Remove",
+      width: "100",
+      textAlign: "Center",
     },
   ];
 };
