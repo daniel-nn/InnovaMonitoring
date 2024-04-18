@@ -5181,22 +5181,26 @@ export const GridPropertyEdit = ({ property }) => {
     </div>
   );
 };
+
+
 export const GridDelete = ({ id }) => {
   let url = `${process.env.REACT_APP_SERVER_IP}/users`;
   const { navigate } = useNavigate();
   const { flag, setFlag } = useContext(UserContext);
+  const [t, i18n] = useTranslation("global");
+
 
 
   const deleteItemFunction = () => {
 
     Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
+      title: t("dashboard.users.delete.confirmTitle"), 
+      text: t("dashboard.users.delete.confirmText"),
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#e6c200",
       cancelButtonColor: "gray",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonText: t("dashboard.users.delete.confirmButton"), 
     }).then((result) => {
       if (result.isConfirmed) {
         deleteItem(url, id, flag, setFlag).then(
@@ -5218,6 +5222,8 @@ export const GridDelete = ({ id }) => {
     </div>
   );
 };
+
+
 export const GridDeleteAgents = ({ agent }) => {
   let url = `${process.env.REACT_APP_SERVER_IP}/agents`;
   const { navigate } = useNavigate();
@@ -5255,6 +5261,8 @@ export const GridDeleteAgents = ({ agent }) => {
     </div>
   );
 };
+
+
 export const GridDeleteCase = ({ caseType }) => {
   const {
     setreportSaved, reportSaved
@@ -5338,7 +5346,6 @@ export const GridDeleteCamera = ({ id }) => {
 export const GridLiveView = ({ LiveView }) => {
   console.log(LiveView);
   const { cameraContext, setCameraContext } = useContext(UserContext);
-  /*   setCameraContext(LiveView); */
 
   return (
     <Link
@@ -6212,7 +6219,7 @@ export const orderAgentsAdmin = (t) => {
     },
     {
       headerText: t("dashboard.agents.table.delete"),
-      template: GridDeleteAgents,
+      template: GridDelete,
       textAlign: "Center",
       width: "80",
       field: "id",

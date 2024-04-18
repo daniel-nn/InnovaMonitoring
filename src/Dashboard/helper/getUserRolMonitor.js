@@ -40,9 +40,10 @@ export const getUserRolMonitor = async (navigate) => {
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: "Error al buscar la información de la propiedad en la base de datos",
+                text: "Error al buscar la información de el monitor en la base de datos",
             });
             return [];
         }
     }
+    
 };

@@ -718,7 +718,8 @@
           }
         },
         "cancel": "Cancelar",
-        "send": "Enviar"
+        "send": "Enviar",
+        "successful-response": "Usuario agregado"
       },
       "table": {
         "image": "Imagen",
@@ -732,11 +733,48 @@
         },
         "properties": "Propiedades",
         "delete": "Eliminar"
+      },
+      "delete": {
+        "confirmTitle": "¿Estas seguro?",
+        "confirmText": "No podras revertir estos cambios",
+        "confirmButton": "Si!"
       }
     },
     "agents": {
       "agents-tittle": "Agentes de monitoreo",
-      "add-agent": "Añadir agente",
+      "add-agent": "Agregar agente",
+      "dialog-add-agent": {
+        "add-agent": "Agregar agente",
+        "name": "Nombre",
+        "email": "Correo",
+        "password": "Contraseña",
+        "suggestion": {
+          "pick-password": "Elige una contraseña",
+          "enter-password": "Ingrese una contraseña",
+          "password-strength": {
+            "weak": "Débil",
+            "medium": "Medio",
+            "strong": "Fuerte"
+          },
+          "suggestions": "Sugerencias",
+          "at-least-one-lowercase": "Al menos una minúscula",
+          "at-least-one-uppercase": "Al menos una mayúscula",
+          "at-least-one-numeric": "Al menos un número",
+          "minimum-characters": "Mínimo 8 caracteres"
+        },
+        "image-url": "Url de la imagen",
+        "roles": {
+          "select-rol": "Seleccione el rol",
+          "roles-dropdown": {
+            "Admin": "Administrador",
+            "Client": "Usuario",
+            "Monitor": "Monitor"
+          }
+        },
+        "cancel": "Cancelar",
+        "send": "Enviar",
+        "successful-response": "Monitor agregado"
+      },
       "table": {
         "image": "Imagen",
         "name": "Nombre",

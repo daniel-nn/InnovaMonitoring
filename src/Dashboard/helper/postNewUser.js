@@ -2,56 +2,46 @@ import { CameraAltTwoTone } from '@mui/icons-material';
 import React from 'react'
 import Swal from 'sweetalert2';
 
-export const postNewUser = async(user) => {
-    
-  let resp = {}
+export const postNewUser = async (user) => {
+  const url = `${process.env.REACT_APP_SERVER_IP}/users`;
+  const { name, email, image, pasword, rol } = user;  
 
-    const url = `${process.env.REACT_APP_SERVER_IP}/users`;
-   let data = {}
-   try {
-    const {name,email, image, pasword, rol} = user;
-    
-      resp = await fetch(url, {
-       method: "POST",
-       body: JSON.stringify({
+  try {
+    const resp = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
         name,
         email,
         image,
-        pasword,
+        pasword, 
         rol
-       }),
-        headers: {
-     "Content-Type": "application/json",
-     
-   },
-     })
-    data = await resp.json();
-    Swal.fire({
-        icon: 'success',
-        title: 'Success',
-        text:"The user has been created correctly",
-  
       })
-   } catch (error) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Error',
-      text: error,
+    });
 
-    })
-   }
+    const data = await resp.json();
 
-    if(resp.status == 500){
-     
+    if (resp.ok) {
+      
+    } else {
       Swal.fire({
         icon: 'error',
         title: 'Error',
-        text: 'Error saving the user, check that all fields are filled in and try again.',
-  
-      })
-      return 
+        text: data.message || 'Error saving the user, check that all fields are filled in and try again.',
+      });
+      console.error("Error en la respuesta:", data);
     }
-  
-    console.log(data)
-  return data
-}
+
+    return data;
+  } catch (error) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: error.toString(),
+    });
+    console.error("Error al enviar datos:", error);
+    return null;
+  }
+};

@@ -31,7 +31,6 @@ export const getUser = async (user) => {
     });
     return; 
   } else if (resp.status === 200) {
-    // Si el inicio de sesión es exitoso, `data` debería ser tu UserLoginDTO
     console.log("UserLoginDTO received:", data);
 
   }

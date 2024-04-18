@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { GoPrimitiveDot } from "react-icons/go";
-import { Stacked, Pie, Button, SparkLine, Header } from "../components";
+import { Stacked, Pie, SparkLine, Header } from "../components";
 import imagen from "../../assets/arrest.jpg";
 import { earningData,SparklineAreaData,ecomPieChartData,} from "../data/dummy";
 import { useStateContext } from "../../context/ContextProvider";
@@ -15,6 +15,8 @@ import { GiPoliceCar } from "react-icons/gi";
 import { useTranslation } from "react-i18next";
 import { Link } from 'react-router-dom';
 import { getNumberOfReportsByRole } from "../helper/getNumberOfReportsByRole";
+import { Button } from "primereact/button";
+
 
 let mag = {
   id: 2,
@@ -75,7 +77,6 @@ const Ecommerce = () => {
     }
   }, [propertyContext, userRole, userId]);
 
-
   return (
     
     <div className="m-10 md:m-8 mt-5 p-2 md:p-0 bg-white rounded-3xl">
@@ -89,7 +90,6 @@ const Ecommerce = () => {
             <div className="flex justify-between items-center py-5">
               <div>
                 <p className="p-0 font-bold text-gray-300">{t("dashboard.dashboard-index.number-reports")}</p>
-                {/* Aquí decides cómo mostrar numOfReports basado en el estado de reportsData */}
                 <p className="p-0 text-2xl rounded-md text-gray-300">
                   {reportsData === null ? 'Cargando...' : reportsData.length}
                 </p>

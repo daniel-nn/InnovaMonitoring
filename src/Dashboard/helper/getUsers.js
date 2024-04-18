@@ -28,7 +28,7 @@ export const getUsers = async (navigate) => {
           StatusBg: "#8BE78B",
             Email: user.email,
             Name: user.name,
-            Rol: user.rol.rolName,
+            Rol: user?.rol?.rolName,  
             user,
             id:user.id
         };
@@ -38,6 +38,7 @@ export const getUsers = async (navigate) => {
       
       
     } catch (error) {
+      console.log(error)
       Swal.fire({
         icon: "error",
         title: "Error",

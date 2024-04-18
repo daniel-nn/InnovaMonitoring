@@ -32,6 +32,7 @@ import { getRoles } from "../helper/getRoles";
 import { GetPropertyInfo } from "../helper/getPropertyInfo";
 import { getPropertiesInfo } from "../helper/getProperties";
 import { postNewUser } from "../helper/postNewUser";
+import Swal from 'sweetalert2';
 
 export const Users = () => {
   const {
@@ -50,8 +51,18 @@ export const Users = () => {
   const [userSaved, setUserSaved] = useState(false);
   const [roles, setRoles] = useState([]);
   const [properties, setProperties] = useState();
-  const [userGridColumns, setUserGridColumns] = useState([]);
 
+
+
+  useEffect(() => {
+    getUsers().then((data) => setUsers(data));
+    getPropertiesInfo(navigate).then((data) => {
+      propertiesSelectedVar = data.map((i) => {
+        return { id: i.id, name: i.name, direction: i.direction, img: i.img };
+      });
+      setProperties(propertiesSelectedVar);
+    });
+  }, [userSaved, flag]);
 
   let propertiesSelectedVar = [];
 
@@ -81,7 +92,8 @@ export const Users = () => {
       if (rolesData && rolesData.length > 0) {
         const rolesArray = rolesData.map(({ id, rolName }) => ({
           rolKey: id,
-          rolName: t(`dashboard.users.dialog-add-user.roles.roles-dropdown.${rolName}`)  // Traducir el nombre del rol 
+          rolName: t(`dashboard.users.dialog-add-user.roles.roles-dropdown.${rolName}`),
+          originalName: rolName
         }));
         setRoles(rolesArray);
       } else {
@@ -89,13 +101,13 @@ export const Users = () => {
       }
     };
     fetchRoles();
-  }, [t]);  
-
+  }, [t]);
 
   const header = <div className="font-bold mb-3">{t("dashboard.users.dialog-add-user.suggestion.pick-password")}</div>;
+
   const footer = (
     <>
-      <Divider />
+      <Divider/>
       <p className="mt-2">{t("dashboard.users.dialog-add-user.suggestion.suggestions")}</p>
       <ul className="pl-2 ml-2 mt-0 line-height-3">
         <li>{t("dashboard.users.dialog-add-user.suggestion.at-least-one-lowercase")}</li>
@@ -107,38 +119,68 @@ export const Users = () => {
   );
 
   const saveNewUser = async () => {
-    await postNewUser(userProvider);
-    setUserSaved(!userSaved);
-    setUserDialog(!userDialog);
-    setUserProvider({});
+    const userToSend = {
+      name: userProvider.name,
+      email: userProvider.email,
+      pasword: userProvider.pasword,
+      image: userProvider.image,
+      rol: {
+        id: userProvider.rol.rolKey,
+        rolName: userProvider.rol.originalName  
+      },
+      properties: userProvider.properties || []
+    };
+
+    console.log("Datos que se enviarán:", userToSend);
+
+    try {
+      const data = await postNewUser(userToSend);
+      console.log("Respuesta del servidor:", data);
+      if (data) {
+        Swal.fire({
+          toast: true,
+          position: 'top-end',
+          icon: 'success',
+          title: t('dashboard.users.dialog-add-user.successful-response'),
+          showConfirmButton: false,
+          timer: 3000 
+        });
+        setUserSaved(!userSaved);
+        setUserDialog(false);
+        setUserProvider({});
+      }
+    } catch (error) {
+      console.error("Error al enviar datos:", error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: error.toString(),
+      });
+    }
   };
 
   const handleClose = () => {
-    setUserDialog(false);  // Cierra el diálogo
-    setUserProvider({});   // Restablece el estado del formulario
+    setUserDialog(false);  
+    setUserProvider({});   
   };
-
-  const handleLogLanguage = () => {
-    console.log("Current language:", i18n.language);
-  };
-
 
   return (
-    
-   
+
     <>
       <Dialog
         header={t("dashboard.users.dialog-add-user.add-user")}
         visible={userDialog}
-        style={{ width: "40vw", display: "flex", justifyContent: "center" }}
         onHide={handleClose}
+        modal
+        dismissableMask 
+        style={{ width: "40vw", display: "flex", justifyContent: "center" }}
         footer={
           <div className="w-full flex justify-center">
             <Button
               icon="pi pi-times"
               severity="danger"
               label={t("dashboard.users.dialog-add-user.cancel")}
-              onClick={handleClose}  // Y también usa la función de cierre aquí
+              onClick={handleClose}  
             />            
             <div className="w-3"></div>
             <Button
@@ -189,8 +231,8 @@ export const Users = () => {
             <span className="p-float-label w-full">
               <Password
                 toggleMask
-                value={userProvider.password}
-                onChange={(e) => setUserProvider({ ...userProvider, password: e.target.value })}
+                value={userProvider.pasword}
+                onChange={(e) => setUserProvider({ ...userProvider, pasword: e.target.value })}
                 className="w-full"
                 header={header}
                 footer={footer}
@@ -199,8 +241,6 @@ export const Users = () => {
                 mediumLabel={t("dashboard.users.dialog-add-user.suggestion.password-strength.medium")}
                 strongLabel={t("dashboard.users.dialog-add-user.suggestion.password-strength.strong")}
               />
-
-
               <label htmlFor="Password">{t("dashboard.users.dialog-add-user.password")}</label>
             </span>
           </div>
@@ -224,13 +264,22 @@ export const Users = () => {
           <div className="mx-auto w-7/12 ">
             <Dropdown
               value={userProvider.rol}
-              onChange={(e) => setUserProvider(prev => ({ ...prev, rol: e.value.rolKey }))}
+              onChange={(e) => {
+                console.log("Nuevo valor de rol seleccionado:", e.value);
+                setUserProvider(prev => ({
+                  ...prev,
+                  rol: {
+                    rolKey: e.value.rolKey,
+                    rolName: e.value.rolName,
+                    originalName: e.value.originalName 
+                  }
+                }));
+              }}
               optionLabel="rolName"
               options={roles}
               placeholder={t("dashboard.users.dialog-add-user.roles.select-rol")}
               className="w-full"
             />
-
           </div>
         </div>
       </Dialog>

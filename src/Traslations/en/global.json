@@ -718,7 +718,8 @@
           }
         },
         "cancel": "Cancel",
-        "send": "Send"
+        "send": "Send",
+        "successful-response": "Added user"
       },
       "table": {
         "image": "Image",
@@ -732,11 +733,48 @@
         }, 
         "properties": "Properties",
         "delete": "Delete"
-      }
+      },
+      "delete": {
+        "confirmTitle": "Are you sure?",
+        "confirmText": "You won't be able to revert this!",
+        "confirmButton": "Yes, delete it!"
+      }  
     },
     "agents": {
       "agents-tittle": "Monitoring Agents",
       "add-agent": "Add Agent",
+      "dialog-add-agent": {
+        "add-agent": "Add Agent",
+        "name": "Name",
+        "email": "Email",
+        "password": "Password",
+        "suggestion": {
+          "pick-password": "Pick a password",
+          "enter-password": "Enter a password",
+          "password-strength": {
+            "weak": "Weak",
+            "medium": "Medium",
+            "strong": "Strong"
+          },
+          "suggestions": "Suggestions",
+          "at-least-one-lowercase": "At least one lowercase",
+          "at-least-one-uppercase": "At least one uppercase",
+          "at-least-one-numeric": "At least one numeric",
+          "minimum-characters": "Minimum 8 characters"
+        },
+        "image-url": "Image Url",
+        "roles": {
+          "select-rol": "Select The Rol",
+          "roles-dropdown": {
+            "Admin": "Admin",
+            "Client": "Client",
+            "Monitor": "Monitor"
+          }
+        },
+        "cancel": "Cancel",
+        "send": "Send",
+        "successful-response": "Added Agent"
+      },
       "table":{
         "image": "Imagen",
         "name": "Name",
