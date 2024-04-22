@@ -6,34 +6,19 @@ import { UserContext } from "../../context/UserContext";
 import { Button } from "primereact/button";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import "primeicons/primeicons.css";
-import { Dialog } from "primereact/dialog";
 import { useNavigate } from "react-router-dom";
-import { FooterReportForm } from "../components/Forms/FooterReportForm/FooterReportForm";
-import { ReportFormEvidences } from "../components/Forms/ReportFormEvidences";
 import { useFetchIncidents } from "../Hooks/useFetchIncidents";
-import { useFetchAgents } from "../Hooks/useFetchAgents";
-import { GetReports } from "../helper/GetReports";
-import { ReportFormEdit } from "../components/Forms/ReportFormEdit";
-import { ReportFormEvidencesEdit } from "../components/Forms/ReportFormEvidencesEdit";
-import { ReportForm } from "../components/Forms/ReportForm";
 import { useTranslation } from "react-i18next";
 import { getNumberOfReportsByRole } from "../helper/getNumberOfReportsByRole";
-import { Column } from "@syncfusion/ej2-react-charts";
 
 const Reports = () => {
   const navigate = useNavigate();
-  const { cases } = useFetchIncidents(navigate);
-  // const { agents } = useFetchAgents(navigate);
   const toolbarOptions = ["Search"];
 
   let propertiesUser = JSON.parse(localStorage.getItem("user"));
 
-  let listOfPropertiesByUser = propertiesUser.properties;
 
-  const [information, setInformation] = useState(true);
-
-  const { propertyContext, setPropertyContext, reportSaved, setreportSaved,
-    setReportFormVisible, editReportFormVisible, setEditReportFormVisible, setReportForm, } = useContext(UserContext);
+  const { propertyContext, reportSaved } = useContext(UserContext);
 
   const [reportes, setReportes] = useState([]);
 
@@ -47,14 +32,6 @@ const Reports = () => {
   const [clientGridColumns, setClientGridColumns] = useState([]);
   const [adminGridColumns, setAdminGridColumns] = useState([]);
   const [monitorGridColumns, setMonitorGridColumns] = useState([]);
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  const closeForm = () => {
-    setReportFormVisible(false);
-    setReportForm({});
-    setActiveIndex(0);
-  };
-
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -71,8 +48,8 @@ const Reports = () => {
       } else if (userRole === "Monitor") {
         setMonitorGridColumns(reportsGridMonitor(t));
       } else if (userRole === "Client") {
-        let verifiedReports = reports.filter(report => report.isVerified);
-        setReportes(verifiedReports);
+        let verifiedReports = reports.filter(report => report.verified);
+        setReportes(verifiedReports);  
         setClientGridColumns(reportsGrid(t));
       }
     };
@@ -84,13 +61,11 @@ const Reports = () => {
   };
 
   return (
-
-    <>
-      <div className="m-20 md:m-10 mt-14 p-2 md:p-0 bg-white rounded-3xl">
+    <div className="m-20 md:m-10 mt-14 p-2 md:p-0 bg-white rounded-3xl">
         <Header category={t("dashboard.reports.reports-tittle")} title={t("dashboard.reports.reports-of") + propertyContext.name} />
         <div className="card flex justify-end py-2 mb-7">
           {(userRole === "Admin" || userRole === "Monitor") && (
-            <>
+          
               <Button
                 onClick={navigateToNewReport}
                 severity="info"
@@ -99,9 +74,10 @@ const Reports = () => {
               >
                 <AiOutlinePlusCircle className="ml-2"></AiOutlinePlusCircle>
               </Button>
-            </>
+            
           )}
         </div>
+        
         {/* Esta es la tabla */}
         <GridComponent
           id="gridcomp"
@@ -139,7 +115,6 @@ const Reports = () => {
           />
         </GridComponent>
       </div>
-    </>
   );
 };
 export default Reports;

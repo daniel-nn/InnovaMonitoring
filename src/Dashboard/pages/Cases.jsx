@@ -3,19 +3,9 @@ import React, { useContext, useEffect, useState } from "react";
 
 import { Button } from "primereact/button";
 import { AiOutlinePlusCircle } from "react-icons/ai";
-import {
-  GridComponent,
-  ColumnsDirective,
-  ColumnDirective,
-  Resize,
-  Sort,
-  ContextMenu,
-  Filter,
-  Page,
-  Search,
-  PdfExport,
-  Inject,
-} from "@syncfusion/ej2-react-grids";
+import { GridComponent, ColumnsDirective, ColumnDirective, Resize, Sort, ContextMenu, Filter, Page, Search, PdfExport, Inject,} from "@syncfusion/ej2-react-grids";
+import { useTranslation } from "react-i18next";
+
 
 import { contextMenuItems, ordersCases, ordersCasesAdmin, ordersGrid } from "../data/dummy";
 import { Header } from "../components";
@@ -25,10 +15,13 @@ import { UserContext } from "../../context/UserContext";
 import { InputText } from "primereact/inputtext";
 import { PostIncident, postIncident } from "../helper/postIncident";
 import { putIncident } from "../helper/putIncident";
+
 export const Cases = () => {
   const toolbarOptions = ["Search"];
   const { navigate } = useNavigate();
   const [cases, setCases] = useState([]);
+  const [t, i18n] = useTranslation("global");
+
 
   const {
     caseProvider,
@@ -60,10 +53,17 @@ export const Cases = () => {
     setCaseDialog(!caseDialog);
   };
 
+  const handleClose = () => {
+    setCaseDialog(false);     // Cierra el diálogo
+    setCaseProvider({});      // Limpia el estado del proveedor de casos
+    setEditCase(false);       // Restablece cualquier estado de edición
+  };
+
+
   return (
     <>
       <Dialog
-        header="Add Case"
+        header={t("dashboard.cases.add-dialog.add-title")}
         visible={caseDialog}
         style={{ width: "30vw", display: "flex", justifyContent: "center" }}
         onHide={() => {
@@ -71,10 +71,16 @@ export const Cases = () => {
           setCaseProvider({});
           setEditCase(false);
         }}
-        
+        modal={true}              
+        dismissableMask={true} 
         footer={
           <div className="w-full flex justify-end">
-            <Button icon="pi pi-times" severity="danger" label="Cancel" />
+            <Button
+              icon="pi pi-times"
+              severity="danger"
+              label={t("Cancel")}
+              onClick={handleClose}     
+            />
             <div className="w-3"></div>
             {editCase ? (
               <Button icon="pi pi-check" label="Save" onClick={editIncident} />
@@ -90,20 +96,22 @@ export const Cases = () => {
               <InputText onChange={(e) => setCaseProvider((i) => {
               return { ...caseProvider, incident:e.target.value };
             })} value={caseProvider.incident} id="caseType" />
-              <label htmlFor="caseType">CaseType</label>
+              <label htmlFor="caseType">{t("dashboard.cases.add-case")}</label>
             </span>
           </div>
         </div>
       </Dialog>
       <div className="m-20 md:m-10 mt-14 p-2 md:p-0 bg-white rounded-3xl">
-        <Header category="Page" title={"Cases"} />
+        <Header title={t("dashboard.cases.add-case")} />
         <div className="card flex justify-end py-2">
 
         {userRole == "Admin" ? (
                  
-                 <Button
-                 severity="info"
-                 label="Add Case"
+                <Button
+                severity="info"
+                label={t("dashboard.cases.add-case")}
+                className="p-button-text ml-2"
+
                  onClick={() => {
                    setCaseDialog(!caseDialog);
                  }}
@@ -120,6 +128,7 @@ export const Cases = () => {
         <GridComponent
           id="gridcomp"
           dataSource={cases}
+          key={i18n.language}
           allowPaging
           allowSorting
           allowExcelExport
@@ -129,8 +138,7 @@ export const Cases = () => {
           style={{ position: "absolute", zIndex: 0 }}
         >
           <ColumnsDirective>
-            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-            {ordersCasesAdmin.map((item, index) => (
+            {ordersCasesAdmin(t).map((item, index) => (
               <ColumnDirective key={index} {...item} />
             ))}
           </ColumnsDirective>
@@ -146,6 +154,7 @@ export const Cases = () => {
             ]}
           />
         </GridComponent>
+
       </div>
     </>
   );

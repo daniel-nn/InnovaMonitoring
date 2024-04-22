@@ -292,7 +292,7 @@ export const Users = () => {
               onClick={() => setUserDialog(true)}
               severity="info"
               label={t("dashboard.users.add-user")}
-              className="p-button-rounded p-button-info ml-2"
+              className="p-button-text ml-2"
             >
               <AiOutlinePlusCircle className="ml-2" />
             </Button>

@@ -5214,6 +5214,7 @@ export const GridDelete = ({ id }) => {
 };
 
 
+
 export const GridDeleteAgents = ({ agent }) => {
   let url = `${process.env.REACT_APP_SERVER_IP}/agents`;
   const { navigate } = useNavigate();
@@ -5277,29 +5278,55 @@ export const GridDeleteCase = ({ caseType }) => {
   );
 };
 
-export const GridDeleteProperty = ({ id }) => {
-  let url = `${process.env.REACT_APP_SERVER_IP}/properties`;
+export const GridDeleteProperty = ({ id, t }) => {
+  const url = `${process.env.REACT_APP_SERVER_IP}/properties`;
+  const { setFlag } = useContext(UserContext);
 
-  const {
-    propertySaved,
-    setPropertySaved,
-    agentDialog,
-    setAgentDialog,
-    flag,
-    setFlag,
-  } = useContext(UserContext);
+  const confirmDeletion = () => {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: t("dashboard.properties.table.reports"),
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, borrar!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteProperty();
+      }
+    });
+  };
+
+  const deleteProperty = async () => {
+    try {
+      const response = await fetch(`${url}/${id}`, { method: 'DELETE' });
+      if (response.ok) {
+        Swal.fire(
+          'Eliminado!',
+          'La propiedad ha sido eliminada.',
+          'success'
+        );
+        setFlag(flag => !flag);
+      } else {
+        throw new Error('Failed to delete the property');
+      }
+    } catch (error) {
+      Swal.fire(
+        'Error!',
+        'Hubo un problema al eliminar la propiedad.',
+        'error'
+      );
+    }
+  };
+
   return (
-    <div
-      onClick={() => {
-        deleteProperty(url, id, propertySaved, setPropertySaved);
-        setFlag(!flag);
-      }}
-      className="flex justify-center m-0 p-0 text-red-700"
-    >
-      <MdDelete className="text-lg "></MdDelete>
+    <div onClick={confirmDeletion} className="flex justify-center m-0 p-0 text-red-700">
+      <MdDelete className="text-lg" />
     </div>
   );
 };
+
 export const GridDeleteCamera = ({ id }) => {
   let url = `${process.env.REACT_APP_SERVER_IP}/cameras`;
   const { cameraSaved, setCameratSaved } = useContext(UserContext);
@@ -6035,9 +6062,10 @@ export const GridUserEdit = ({ user }) => {
 };
 */
 
-const PropertiesTemplate = ({user}, t) => {
-  //Ojo cambiar el nombre de este atributo
-   const { userProvider, setUserProvider } = useContext(UserContext);
+const PropertiesTemplate = ({user}) => {
+
+  const [t, i18n] = useTranslation("global");
+  const { userProvider, setUserProvider } = useContext(UserContext);
   const handlerClick=()=>{
     console.log(user)
     setUserProvider({ 
@@ -6057,8 +6085,7 @@ const PropertiesTemplate = ({user}, t) => {
   const navigate = useNavigate();
   return (
     <a onClick={() => handlerClick()} className="flex justify-center m-0 p-0 cursor-pointer">
-      Detalles
-      {/* {t("dashboard.users.table.details")} */}
+      {t("dashboard.users.table.details")}
       </a>
   );
 };
@@ -6093,14 +6120,14 @@ export const userGrid = (t) => {
       template: rowData => roleTemplate(rowData, t),  
       editType: "dropdownedit"
     },
-      {
-        field: "Properties",
-        headerText: t("dashboard.users.table.properties"),
-        width: "200",
-        textAlign: "Center",
-        template: PropertiesTemplate,
-        //template: gridOrderProperties,
-      },
+    {
+      field: "Properties",
+      headerText: t("dashboard.users.table.properties"),
+      width: "200",
+      textAlign: "Center",
+      template: PropertiesTemplate,
+      //template: gridOrderProperties,
+    },
     {
       headerText: t("dashboard.users.table.delete"),
       template: GridDelete,
@@ -6206,34 +6233,31 @@ export const ordersCases = [
     width: "150",
   },
 ];
-export const ordersCasesAdmin = [
-  {
-    headerText: "Case ID",
-    field: "id",
-    textAlign: "Center",
-    width: "20",
-  },
-  {
-    headerText: "Case Type",
-    field: "incident",
-    textAlign: "Center",
-    width: "150",
-  },
-  {
-    headerText: "Edit",
-    template: GridEdit,
-    textAlign: "Center",
-    width: "30",
-    field: "caseType",
-  },
-  {
-    headerText: "Delete",
-    template: GridDeleteCase,
-    textAlign: "Center",
-    width: "30",
-    field: "caseType",
-  },
-];
+
+export const ordersCasesAdmin = (t) => {
+  return [
+    {
+      headerText: t("dashboard.cases.table.case-type"),
+      field: "incident",
+      textAlign: "Center",
+      width: "150",
+    },
+    {
+      headerText: t("dashboard.cases.table.edit"),
+      template: GridEdit,
+      textAlign: "Center",
+      width: "30",
+      field: "caseType",
+    },
+    {
+      headerText: t("dashboard.cases.table.delete"),
+      template: GridDeleteCase,
+      textAlign: "Center",
+      width: "30",
+      field: "caseType",
+    },
+  ];
+};
 
 export const orderAgents = [
   {
@@ -6301,45 +6325,49 @@ export const orderAgentsAdmin = (t) => {
 };
 
 
-export const propertyGrid = [
+export const propertyGrid = (t) => {
+  return [
   {
-    headerText: "Image",
-    template: gridOrderImage,
-    textAlign: "Center",
-    field: "img",
-    width: "120",
-  },
-  {
-    headerText: "ID",
-    field: "id",
-    textAlign: "Center",
-    width: "80",
-  },
-  {
-    headerText: "Name",
-    field: "Name",
-    textAlign: "Center",
-    width: "140",
-  },
-  {
-    headerText: "Address",
-    field: "Direction",
-    textAlign: "Center",
-    width: "120",
-  },
-  {
-    headerText: "Cameras",
-    field: "Cameras",
-    textAlign: "Center",
-    width: "120",
-  },
-  {
-    headerText: "Reports",
-    field: "Reports",
-    textAlign: "Center",
-    width: "120",
-  },
-];
+      headerText: t("dashboard.properties.table.image"),
+      template: gridOrderImage,
+      textAlign: "Center",
+      field: "img",
+      width: "120",
+    },
+    {
+      headerText: t("dashboard.properties.table.name"),
+      field: "Name",
+      textAlign: "Center",
+      width: "140",
+    },
+    {
+      headerText: t("dashboard.properties.table.address"),
+      field: "Direction",
+      textAlign: "Center",
+      width: "120",
+    },
+    {
+      headerText: t("dashboard.properties.table.cameras"),
+      field: "Cameras",
+      textAlign: "Center",
+      width: "120",
+    },
+    {
+      headerText: t("dashboard.properties.table.reports"),
+      field: "Reports",
+      textAlign: "Center",
+      width: "120",
+    },
+
+    {
+      headerText: t("dashboard.users.table.delete"),
+      template: ({ id }) => <GridDeleteProperty id={id} t={t} />,
+      textAlign: "Center",
+      width: "80",
+      field: "id",
+    },
+  ];
+};
 
 export const propertyGridAdmin = [
   {
@@ -6406,8 +6434,8 @@ export const propertyGridAdmin = [
 
 
 export const reportsGrid = (t) => {
+  
   return [
-
     {
       headerText: t("dashboard.reports.table.client.CaseImage"),
       template: gridOrderImage,
@@ -6539,9 +6567,6 @@ export const reportsGridAdmin = (t) => {
       textAlign: "Center",
       template: GridEditReportTemplate, 
     },
-
-  
-
   ];
 };
 

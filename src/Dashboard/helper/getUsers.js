@@ -10,9 +10,7 @@ export const getUsers = async (navigate) => {
     let data = {};
     try {
       resp = await fetch(url);
-  
       data = await resp.json();
-
       usersMapped = data.map((user) => {
         let userImg = "";
         let link = user.image?.split("/");
@@ -29,7 +27,6 @@ export const getUsers = async (navigate) => {
             Email: user.email,
             Name: user.name,
             Rol: user?.rol?.rolName,
-            user,
             id:user.id
         };
       });
@@ -53,7 +50,6 @@ export const getUsers = async (navigate) => {
         text: "Error al buscar la informacion de la propiedad en la base de datos",
       });
   
-
       return;
     }
   

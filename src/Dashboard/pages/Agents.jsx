@@ -258,9 +258,10 @@ export const Agents = () => {
           <Button
           severity="info"
           label={t("dashboard.agents.add-agent")}
+          className="p-button-text ml-2"
+
               onClick={() => setUserDialog(prev => !prev)}
         >
-          {" "}
           <AiOutlinePlusCircle className="ml-2"></AiOutlinePlusCircle>
         </Button>
           ) : (

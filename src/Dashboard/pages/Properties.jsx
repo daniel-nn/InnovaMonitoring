@@ -3,25 +3,13 @@ import React, { useContext, useEffect, useState } from "react";
 
 import { Button } from "primereact/button";
 import { AiOutlinePlusCircle } from "react-icons/ai";
-import {
-  GridComponent,
-  ColumnsDirective,
-  ColumnDirective,
-  Resize,
-  Sort,
-  ContextMenu,
-  Filter,
-  Page,
-  Search,
-  PdfExport,
-  Inject,
-  Toolbar,
-} from "@syncfusion/ej2-react-grids";
+import { GridComponent, ColumnsDirective, ColumnDirective, Resize, Sort, ContextMenu, Filter, Page, Search, PdfExport, Inject, Toolbar,} from "@syncfusion/ej2-react-grids";
+import { useTranslation } from "react-i18next";
 
 import {
   contextMenuItems,
   orderAgents,
-  ordersGrid,
+  ordersGrid, 
   propertyGrid,
 } from "../data/dummy";
 import { Header } from "../components";
@@ -37,6 +25,8 @@ import { postNewProperty } from "../helper/postNewProperty";
 export const Properties = () => {
   const toolbarOptions = ["Search"];
   const { navigate } = useNavigate();
+  const [t, i18n] = useTranslation("global");
+
 
   const [properties, setProperties] = useState([]);
   const [propertySaved, setPropertySaved] = useState(false);
@@ -44,9 +34,7 @@ export const Properties = () => {
   let propertiesUser = JSON.parse(localStorage.getItem("user"));
   let listOfPropertiesByUser = propertiesUser.properties;
   const {
-    propertyProvider,
-    setPropertyProvider,
-    agentDialog,
+    propertyProvider, setPropertyProvider, agentDialog,
     setAgentDialog,
     flag,
     setFlag,
@@ -60,26 +48,38 @@ export const Properties = () => {
   }, [agentDialog, flag]);
 
   const saveNewProperty = async () => {
-    await postNewProperty(propertyProvider);
+    await postNewProperty(propertyProvider, t);
     setAgentDialog(!agentDialog);
     setPropertySaved(!propertySaved);
     setPropertyProvider({});
   };
 
+  const handleClose = () => {
+    setAgentDialog(false);  
+    setPropertyProvider({}); 
+  };
+
   return (
     <>
       <Dialog
-        header="Add Property"
+        header={t("dashboard.properties.dialog.dialog-title")}
+        onHide={handleClose} 
         visible={agentDialog}
+        modal={true}          
+        dismissableMask={true}
         style={{ width: "30vw", display: "flex", justifyContent: "center" }}
-        onHide={() => setAgentDialog(false)}
         footer={
           <div className="w-full flex justify-end">
-            <Button icon="pi pi-times" severity="danger" label="Cancel" />
+            <Button
+              icon="pi pi-times"
+              severity="danger"
+              label={t("dashboard.properties.dialog.cancel")}
+              onClick={handleClose}  
+            />            
             <div className="w-3"></div>
             <Button
               icon="pi pi-check"
-              label="Send"
+              label={t("dashboard.properties.dialog.send")}
               onClick={() => {
                 saveNewProperty();
               }}
@@ -99,7 +99,7 @@ export const Properties = () => {
                   })
                 }
               />
-              <label htmlFor="username">Property Name</label>
+              <label htmlFor="username">{t("dashboard.properties.dialog.property-name")}</label>
             </span>
           </div>
 
@@ -114,7 +114,7 @@ export const Properties = () => {
                   })
                 }
               />
-              <label htmlFor="username">Address</label>
+              <label htmlFor="username">{t("dashboard.properties.dialog.address")}</label>
             </span>
           </div>
 
@@ -129,7 +129,7 @@ export const Properties = () => {
                   })
                 }
               />
-              <label htmlFor="username">Image URL</label>
+              <label htmlFor="username">{t("dashboard.properties.dialog.img-url")}</label>
             </span>
           </div>
           <div className="mx-auto">
@@ -143,24 +143,24 @@ export const Properties = () => {
                   })
                 }
               />
-              <label htmlFor="username">Property Map</label>
+              <label htmlFor="username">{t("dashboard.properties.dialog.property-map")}</label>
             </span>
           </div>
         </div>
       </Dialog>
       <div className="m-20 md:m-10 mt-14 p-2 md:p-0 bg-white rounded-3xl">
-        <Header category="Page" title={"Properties"} />
+        <Header title={t("dashboard.properties.properties-title")} />
 
         <div className="card flex justify-end py-2">
           {userRole == "Admin" ? (
             <Button
               severity="info"
-              label="Add Property"
+              label={t("dashboard.properties.add-property")}
+              className="p-button-text ml-2"
               onClick={() => {
                 setAgentDialog(!agentDialog);
               }}
             >
-              {" "}
               <AiOutlinePlusCircle className="ml-2"></AiOutlinePlusCircle>
             </Button>
           ) : (
@@ -170,6 +170,7 @@ export const Properties = () => {
 
         <GridComponent
           id="gridcomp"
+          key={i18n.language}
           dataSource={properties}
           allowPaging
           allowSorting
@@ -181,7 +182,7 @@ export const Properties = () => {
         >
           <ColumnsDirective>
             {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-            {propertyGrid.map((item, index) => (
+            {propertyGrid(t).map((item, index) => (
               <ColumnDirective key={index} {...item} />
             ))}
           </ColumnsDirective>

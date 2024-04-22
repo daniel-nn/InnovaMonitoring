@@ -820,7 +820,51 @@
         }
       }
     },
-
+    "cases": {
+      "cases-tittle": "Casos",
+      "add-case": "Añadir Caso",
+      "add-dialog":{
+        "add-title": "Caso nuevo",
+        "name-case-label": "Añadir Caso",
+        "send": "Enviar",
+        "cancel": "Cancelar"
+      },
+      "edit-dialog": {
+        "edit-tittle": "Editar Caso",
+        "name-case-label": "Nuevo nombre del caso",
+        "send": "Enviar",
+        "cancel": "Cancelar"
+      },
+      "table": {
+        "case-type": "Tipo de caso",
+        "edit": "Editar",
+        "delete": "Delete"
+      }
+    },
+   "properties": {
+    "properties-title": "Propiedades",
+    "add-property": "Agregar propiedad",
+    "dialog": {
+      "dialog-title": "Agregar propiedad",
+      "property-name": "Nombre de la propiedad",
+      "address": "Dirección",
+      "img-url": "URL de la imagen",
+      "property-map": "Mapa de la propiedad",
+      "send": "Enviar",
+      "cancel": "Cancelar",
+      "swal": {
+        "added-property": "Propiedad agregada"
+      }
+    },
+    "table": {
+      "image": "Imagen",
+      "name": "Nombre",
+      "address": "Dirección",
+      "cameras": "Cámaras",
+      "reports": "Reportes",
+      "delete": "Eliminar"
+    }
+  },
     "footer": "Todos los derechos reservados Innova Monitioring"
   },
   "space": " "

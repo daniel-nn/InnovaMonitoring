@@ -821,6 +821,52 @@
       }
     },
 
+    "cases": {
+      "cases-tittle": "Cases",
+      "add-case": "Add Case",
+        "add-dialog": {
+          "add-title": "Add Case",
+          "name-case-label": "New Case",
+          "send": "Send",
+          "cancel": "Cancel"
+        },
+        "edit-dialog": {
+          "edit-tittle": "Edit Case",
+          "name-case-label": "Edit Case Name",
+          "send": "Send",
+          "cancel": "Cancel"
+        },
+    "table": {
+      "case-type": "Case Type",
+      "edit": "Edit",
+      "delete": "Delete"
+    }
+    },
+
+    "properties": {
+      "properties-title": "Properties",
+      "add-property": "Add Property",
+      "dialog": {
+        "dialog-title": "Add Property",
+        "property-name": "Property Name",
+        "address": "Address",
+        "img-url": "Image URL",
+        "property-map": "Property Map",
+        "send": "Send",
+        "cancel": "Cancel",
+        "swal": {
+          "added-property": "Added Property"
+        }
+      },
+      "table": {
+        "image": "Image",
+        "name": "Name",
+        "address": "Address",
+        "cameras": "Cameras",
+        "reports": "Reports",
+        "delete": "Delete"
+      }
+    },
     "footer": "All rights reserved Innova Monitoring"
   },
   "space": " "

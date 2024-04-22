@@ -2,7 +2,7 @@ import { CameraAltTwoTone } from "@mui/icons-material";
 import React from "react";
 import Swal from "sweetalert2";
 
-export const postNewProperty= async (agent) => {
+export const postNewProperty= async (agent, t) => {
   let resp = {};
 
   const url = `${process.env.REACT_APP_SERVER_IP}/properties`;
@@ -17,9 +17,12 @@ export const postNewProperty= async (agent) => {
     });
     data = await resp.json();
     Swal.fire({
-      icon: "success",
-      title: "Success",
-      text: "The property has been created correctly",
+      toast: true,
+      position: 'top-end',
+      icon: 'success',
+      title: t('dashboard.properties.dialog.swal.added-property'),
+      showConfirmButton: false,
+      timer: 3000
     });
   } catch (error) {
     Swal.fire({

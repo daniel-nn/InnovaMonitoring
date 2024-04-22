@@ -12,13 +12,13 @@ const useHandleProfileClick = () => {
         const { id, name, email, password, image, enable, rol, properties } = userProvider || {};
 
         let missingFields = [];
-        if (!id) missingFields.push('id');
-        if (!name) missingFields.push('name');
-        if (!email) missingFields.push('email');
-        if (!password) missingFields.push('password');
-        if (!image) missingFields.push('image');
-        if (enable === undefined) missingFields.push('enable');
-        if (!rol || !rol.rolName) missingFields.push('rol or rol.rolName');
+        // if (!id) missingFields.push('id');
+        // if (!name) missingFields.push('name');
+        // if (!email) missingFields.push('email');
+        // if (!password) missingFields.push('password');
+        // if (!image) missingFields.push('image');
+        // if (enable === undefined) missingFields.push('enable');
+        // if (!rol || !rol.rolName) missingFields.pussh('rol or rol.rolName');
 
         if (missingFields.length > 0) {
             console.error("Perfil incompleto o incorrecto, faltan los siguientes campos:", missingFields.join(', '));
