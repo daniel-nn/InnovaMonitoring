@@ -120,30 +120,15 @@ export const GridPdf = (props) => {
   );
 };
 
-export const GridDetails = ({ Details }) => {
-  // Verifica si 'Details' está definido y tiene una propiedad 'id'
-  if (!Details || typeof Details.id === 'undefined') {
-    return <div>No hay detalles disponibles</div>; // O cualquier otro retorno que consideres apropiado
-  }
-
-  let id = Details.id;
-
-  /*
+export const GridDetails = (props) => {
+  let id = props?.id;
   return (
     <Link
-      target="_top"
       className="flex justify-center m-0 p-0"
       to={`/dashboard/report-details/${id}`}
     >
       <HiOutlineEye className="text-lg "></HiOutlineEye>
     </Link>
-  );
-  */
-  // Retorna solo el ícono como placeholder mientras solucionas el problema del enlace
-  return (
-    <div className="flex justify-center m-0 p-0">
-      <HiOutlineEye className="text-lg "></HiOutlineEye>
-    </div>
   );
 };
 
@@ -6532,7 +6517,13 @@ export const reportsGridAdmin = (t) => {
       textAlign: "Center",
       template: GridPdf,
     },
-
+    {
+      field: "Details",
+      headerText: t("dashboard.reports.table.admin.CaseDetails"),
+      width: "105",
+      textAlign: "Center",
+      template: GridDetails,
+    },
     {
       field: "verified",
       headerText: t("dashboard.reports.table.admin.CaseVerified"),
@@ -6548,6 +6539,8 @@ export const reportsGridAdmin = (t) => {
       textAlign: "Center",
       template: GridEditReportTemplate, 
     },
+
+  
 
   ];
 };
