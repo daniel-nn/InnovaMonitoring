@@ -721,7 +721,7 @@
         "send": "Send",
         "successful-response": "Added user"
       },
-      "table": {
+      "table": {  
         "image": "Image",
         "name": "Name",
         "email": "Email",
@@ -732,6 +732,7 @@
           "Monitor": "Monitor"
         }, 
         "properties": "Properties",
+        "details": "Details",
         "delete": "Delete"
       },
       "delete": {
@@ -782,6 +783,41 @@
         "password": "Password",
         "edit": "Edit",
         "delete": "Delete"
+      }
+    },
+
+    "user-details": {
+      "panel": {
+        "panel": "Panel",
+        "personal-profile": "Personal Profile",
+        "properties": "Properties"
+      },
+      "personal-profile": {
+        "personal-profile": "Personal Profile",
+        "change-picture": "Change Picture",
+        "name": "Name",
+        "name-placeholder": "Your Name",
+        "email": "Email",
+        "email-placeholder": "Your Email",
+        "password": "Password",
+        "password-placeholder": "Your Password",
+        "show-password": "Show password",
+        "hide-password": "Hide Password",
+        "role": "Role",
+        "roles": {
+          "Admin": "Admin",
+          "Client": "Client",
+          "Monitor": "Monitor"
+        },
+        "save": "Save"
+      },
+      "properties": {
+        "assigned-properties": "Assigned Properties",
+        "table": {
+          "name": "Name",
+          "address": "Address",
+          "remove": "Remove"
+        }
       }
     },
 

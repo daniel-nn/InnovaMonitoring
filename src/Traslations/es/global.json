@@ -732,7 +732,8 @@
           "Monitor": "Monitor"
         },
         "properties": "Propiedades",
-        "delete": "Eliminar"
+        "details": "Detalles",
+        "remove": "Remover"
       },
       "delete": {
         "confirmTitle": "¿Estas seguro?",
@@ -782,6 +783,41 @@
         "password": "Contraseña",
         "edit": "Editar",
         "delete": "Eliminar"
+      }
+    },
+
+    "user-details": {
+      "panel": {
+        "panel": "Panel",
+        "personal-profile": "Perfil",
+        "properties": "Propiedades"
+      },
+      "personal-profile": {
+        "personal-profile": "Perfil personal",
+        "change-picture": "Cambiar imagen",
+        "name": "Nombre",
+        "name-placeholder": "Tu nombre",
+        "email": "Correo electrónico",
+        "email-placeholder": "Tu correo",
+        "password": "Contraseña",
+        "password-placeholder": "Tu contraseña  ",
+        "show-password": "Mostrar contraseña",
+        "hide-password": "Ocultar contraseña",
+        "role": "Rol",
+        "roles": {
+          "Admin": "Administrador",
+          "Client": "Usuario",
+          "Monitor": "Monitor"
+        },
+        "save": "Guardar"
+      },
+      "properties": {
+        "assigned-properties": "Propiedades asignadas",
+        "table": {
+          "name": "Nombre",
+          "address": "Dirección",
+          "remove": "Eliminar"
+        }
       }
     },
 

@@ -12,9 +12,8 @@ const GridPropertiesProfile = ({properties}) => {
           
         <div className="flex justify-between align-middle p-6 mt-10">
         <h2 className="text-3xl text-primary font-bold sm:text-xl">
-            Assigned Properties
+          {t("dashboard.user-details.properties.assigned-properties")}
           </h2>
-
           <Button severity="info" label="Assign property" />
         </div>
           <GridComponent

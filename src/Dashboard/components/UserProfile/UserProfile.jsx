@@ -1,16 +1,17 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import { MdOutlineCancel } from "react-icons/md";
+import { useNavigate } from "react-router-dom"; 
 import { Button } from "..";
 import { useStateContext } from "../../../context/ContextProvider";
+import { UserContext } from "../../../context/UserContext"; 
 import avatar from "../../data/avatar.jpg";
 import useUserProfileData from "../UserProfileData";
-import { SiShopware } from "react-icons/si";
 import Shortlogo from "../../../assets/images/Logos/Logo short.png"
 import LogoutButton from "../LogoutButton";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next"; 
 import './UserProfile.css'
 import useOutsideClick from "../../Hooks/useOutsideClick";
-
+import useHandleProfileClick from "../../Hooks/useHandleProfileClick";
 
 const UserProfile = ({ userProfile }) => {
   const { currentColor } = useStateContext();
@@ -18,7 +19,6 @@ const UserProfile = ({ userProfile }) => {
   const [t] = useTranslation("global");
   let userImg = userProfile.image ? userProfile.image : avatar;
   let roleName = userProfile.role;
-
   if (link) {
     let idImg = link[5];
     userImg = "https://drive.google.com/uc?export=view&id=" + idImg;
@@ -30,6 +30,9 @@ const UserProfile = ({ userProfile }) => {
   const userRef = useRef();
   const { setIsClicked } = useStateContext();
   useOutsideClick(userRef, () => setIsClicked(prev => ({ ...prev, userProfile: false })));
+ 
+  const handleProfileClick = useHandleProfileClick();
+
 
   return (
     <div ref={userRef} className="nav-item absolute right-1 top-16 bg-white dark:bg-[#42464D] p-8 rounded-lg w-96">
@@ -67,7 +70,9 @@ const UserProfile = ({ userProfile }) => {
         {translatedUserProfileData.map((item, index) => (
           <div
             key={index}
-            className="flex gap-5 border-b-1 border-color p-4 hover:bg-light-gray cursor-pointer  dark:hover:bg-[#42464D]"
+            // Agrega una clase adicional para aplicar estilos cuando el mouse está encima.
+            className={`flex gap-5 border-b-1 border-color p-4 cursor-pointer dark:hover:bg-[#42464D] ${item.hoverClass}`}
+            onClick={() => handleProfileClick(userProfile)}
           >
             <button
               type="button"
@@ -101,3 +106,4 @@ const UserProfile = ({ userProfile }) => {
 };
 
 export default UserProfile;
+

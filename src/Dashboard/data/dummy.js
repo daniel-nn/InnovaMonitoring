@@ -128,7 +128,6 @@ export const GridDetails = ({ Details }) => {
 
   let id = Details.id;
 
-  // Temporalmente comentado para evitar el error mientras solucionamos el problema principal
   /*
   return (
     <Link
@@ -140,7 +139,6 @@ export const GridDetails = ({ Details }) => {
     </Link>
   );
   */
-
   // Retorna solo el ícono como placeholder mientras solucionas el problema del enlace
   return (
     <div className="flex justify-center m-0 p-0">
@@ -5137,23 +5135,23 @@ export const GridEdit = ({ caseType }) => {
     </div>
   );
 };
-export const GridUserEdit = ({ user }) => {
-  const { userProvider, setUserProvider, userDialog, setUserDialog } =
-    useContext(UserContext);
+// export const GridUserEdit = ({ user }) => {
+//   const { userProvider, setUserProvider, userDialog, setUserDialog } =
+//     useContext(UserContext);
 
-  return (
-    <div
-      onClick={() => {
-        setUserProvider(user);
+//   return (
+//     <div
+//       onClick={() => {
+//         setUserProvider(user);
 
-        setUserDialog(!userDialog);
-      }}
-      className="flex justify-center m-0 p-0 cursor-pointer"
-    >
-      <AiFillEdit className="text-lg"></AiFillEdit>
-    </div>
-  );
-};
+//         setUserDialog(!userDialog);
+//       }}
+//       className="flex justify-center m-0 p-0 cursor-pointer"
+//     >
+//       <AiFillEdit className="text-lg"></AiFillEdit>
+//     </div>
+//   );
+// };
 export const GridAgentEdit = ({ agent }) => {
   const { agentProvider, setagentProvider, agentDialog, setAgentDialog } =
     useContext(UserContext);
@@ -6051,12 +6049,13 @@ export const GridUserEdit = ({ user }) => {
   );
 };
 */
+
 const PropertiesTemplate = ({user}, t) => {
   //Ojo cambiar el nombre de este atributo
    const { userProvider, setUserProvider } = useContext(UserContext);
   const handlerClick=()=>{
     console.log(user)
-    setUserProvider({
+    setUserProvider({ 
       ...userProvider,
       id:user.id,
       name:user.name,
@@ -6070,12 +6069,11 @@ const PropertiesTemplate = ({user}, t) => {
     navigate("/dashboard/UserDetails");
     
   }
-
-  
   const navigate = useNavigate();
   return (
     <a onClick={() => handlerClick()} className="flex justify-center m-0 p-0 cursor-pointer">
-        Detalles
+      Detalles
+      {/* {t("dashboard.users.table.details")} */}
       </a>
   );
 };
@@ -6110,14 +6108,14 @@ export const userGrid = (t) => {
       template: rowData => roleTemplate(rowData, t),  
       editType: "dropdownedit"
     },
-    {
-      field: "Properties",
-      headerText: t("dashboard.users.table.properties"),
-      width: "200",
-      textAlign: "Center",
-      template: PropertiesTemplate,
-      //template: gridOrderProperties,
-    },
+      {
+        field: "Properties",
+        headerText: t("dashboard.users.table.properties"),
+        width: "200",
+        textAlign: "Center",
+        template: PropertiesTemplate,
+        //template: gridOrderProperties,
+      },
     {
       headerText: t("dashboard.users.table.delete"),
       template: GridDelete,
@@ -6141,21 +6139,21 @@ export const removePropertyToUse = () => {
 export const propertiesGrid = (t) => {
   return [
     {
-      headerText: "Name",
+      headerText: t("dashboard.user-details.properties.table.name"),
       field: "name",
       textAlign: "Center",
       width: "120",
     },
     {
+      headerText: t("dashboard.user-details.properties.table.address"),
       field: "direction",
-      headerText: "Address",
       width: "160",
       editType: "dropdownedit",
       textAlign: "Center",
     },
     {
+      headerText: t("dashboard.user-details.properties.table.remove"),
       template: removePropertyToUse,
-      headerText: "Remove",
       width: "100",
       textAlign: "Center",
     },

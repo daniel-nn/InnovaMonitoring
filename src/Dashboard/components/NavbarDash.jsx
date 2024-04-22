@@ -35,11 +35,10 @@ const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
 
 const Navbar = () => {
   const { currentColor, activeMenu, setActiveMenu, handleClick, isClicked, setScreenSize, screenSize } = useStateContext();
-  /* const { userContext, setUserContext } = useContext(UserContext); */
-  const navigate = useNavigate(); // Asegúrate de importar useNavigate de 'react-router-dom'
+  const navigate = useNavigate(); 
   const userProfile = JSON.parse(localStorage.getItem("user"))
-  const userRole = userProfile.role.rolName; // Asumiendo que userProfile.role contiene el objeto rol con una propiedad roleName.
-  const [properties, setProperties] = useState(userProfile.properties); // Inicializamos el estado con las propiedades del perfil del usuario.
+  const userRole = userProfile.role.rolName; 
+  const [properties, setProperties] = useState(userProfile.properties); 
 
   let userImage = "";
   

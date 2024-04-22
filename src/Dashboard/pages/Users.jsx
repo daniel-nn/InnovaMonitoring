@@ -141,7 +141,7 @@ export const Users = () => {
           toast: true,
           position: 'top-end',
           icon: 'success',
-          title: t('dashboard.users.dialog-add-user.successful-response'),       
+          title: t('dashboard.users.dialog-add-user.successful-response'),
           showConfirmButton: false,
           timer: 3000 
         });
