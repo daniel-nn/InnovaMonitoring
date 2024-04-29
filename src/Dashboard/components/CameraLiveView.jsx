@@ -22,14 +22,14 @@ export const CameraLiveView = () => {
             <img
               alt="ecommerce"
               className="lg:w-8/12 w-full lg:h-auto h-64 object-cover object-center rounded"
-              src={cameraContext.cameraImg}
+              src={cameraContext?.cameraImg}
             />
             <div className="lg:w-4/12 w-full lg:pl-10 lg:py-6 mb-6 lg:mb-0 ">
               <h2 className="text-sm title-font text-gray-500 tracking-widest">
                 Innova Monitoring
               </h2>
               <h1 className="text-gray-900 text-3xl title-font font-medium mb-4">
-               {cameraContext.name}
+               {cameraContext?.name}
               </h1>
               <div className="flex mb-4">
                 <a className="flex-grow text-yellow-600 border-b-2 border-yellow-600 py-2 text-lg px-1">
@@ -41,30 +41,40 @@ export const CameraLiveView = () => {
                 <span className="text-gray-500">Status</span>
                 <span
                   className="ml-auto text-gray-100 px-4 font-semibold py-1 rounded-full"
-                  style={setStatusColor(cameraContext.status)}
+                  style={setStatusColor(cameraContext?.status)}
                 >
-                 {cameraContext.status}
+                 {cameraContext?.status}
                 </span>
               </div>
               <div className="flex border-t border-gray-200 py-2">
                 <span className="text-gray-500">Brand</span>
-                <span className="ml-auto text-gray-900"> {cameraContext.brand}</span>
+                <span className="ml-auto text-gray-900"> 
+                {cameraContext?.brand}
+                </span>
               </div>
               <div className="flex border-t border-b  border-gray-200 py-2">
                 <span className="text-gray-500">Type</span>
-                <span className="ml-auto text-gray-900"> {cameraContext.type}</span>
+                <span className="ml-auto text-gray-900">
+                   {cameraContext?.type}
+                   </span>
               </div>
               <div className="flex border-t border-b border-gray-200 py-2">
                 <span className="text-gray-500">Installed by us</span>
-                <span className="ml-auto text-gray-900"> {cameraContext.installedByUs}</span>
+                <span className="ml-auto text-gray-900">
+                   {cameraContext?.installedByUs}
+                   </span>
               </div>
               <div className="flex border-t border-b  border-gray-200 py-2">
                 <span className="text-gray-500">Date Installed</span>
-                <span className="ml-auto text-gray-900"> {cameraContext.dateInstalled}</span>
+                <span className="ml-auto text-gray-900"> 
+                {cameraContext?.dateInstalled}
+                </span>
               </div>
               <div className="flex border-t border-b border-gray-200 py-2">
                 <span className="text-gray-500">Property</span>
-                <span className="ml-auto text-gray-900"> {cameraContext.property.name}</span>
+                <span className="ml-auto text-gray-900"> 
+                  {cameraContext?.property?.name}
+                </span>
               </div>
             </div>
           </div>

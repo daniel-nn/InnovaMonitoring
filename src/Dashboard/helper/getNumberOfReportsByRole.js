@@ -9,9 +9,8 @@ export const getNumberOfReportsByRole = async (propertyId, userId, userRole) => 
         if (response.status === 204) {
             return []; // un array vacío para indicar "sin reportes".
         }
-        if (!response.ok) {
+        if (!response.ok) { 
             if (response.status === 404) {
-                // Un estado 404 significa que simplemente no hay reportes para esta combinación de propiedad y usuario.
                 console.log("No se encontraron reportes para esta propiedad y usuario.");
                 return [];
             }

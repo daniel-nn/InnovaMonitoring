@@ -3,30 +3,20 @@ import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../context/UserContext';
 
 const useHandleProfileClick = () => {
-    const { userProvider, setUserProvider } = useContext(UserContext);
+    const { setUserProvider } = useContext(UserContext);
     const navigate = useNavigate();
 
     return useCallback(() => {
-        console.log("Datos recibidos en handleProfileClick:", userProvider);
-
-        const { id, name, email, password, image, enable, rol, properties } = userProvider || {};
-
-        let missingFields = [];
-        // if (!id) missingFields.push('id');
-        // if (!name) missingFields.push('name');
-        // if (!email) missingFields.push('email');
-        // if (!password) missingFields.push('password');
-        // if (!image) missingFields.push('image');
-        // if (enable === undefined) missingFields.push('enable');
-        // if (!rol || !rol.rolName) missingFields.pussh('rol or rol.rolName');
-
-        if (missingFields.length > 0) {
-            console.error("Perfil incompleto o incorrecto, faltan los siguientes campos:", missingFields.join(', '));
+        const userData = JSON.parse(localStorage.getItem("user"));
+        if (!userData) {
+            console.error("No user data available");
             return;
         }
 
+        console.log("Datos recibidos en handleProfileClick:", userData);
+        setUserProvider(userData); 
         navigate("/dashboard/UserDetails");
-    }, [userProvider, navigate]); 
+    }, [navigate, setUserProvider]);
 };
 
 export default useHandleProfileClick;

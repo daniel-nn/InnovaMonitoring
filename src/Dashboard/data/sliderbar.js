@@ -33,12 +33,12 @@ const SidebarLinks = () => {
                     permit: "Yes",
                 },
 
-                {
-                    name: t("dashboard.dashboard-sliderbar.integral-management-section.map"),
-                    icon: <BsMap />,
-                    url: "Mapa",
-                    permit: "Yes",
-                },
+                // {
+                //     name: t("dashboard.dashboard-sliderbar.integral-management-section.map"),
+                //     icon: <BsMap />,
+                //     url: "Mapa",
+                //     permit: "Yes",
+                // },
                 {
                     name: "cameras",
                     icon: <HiUserCircle />,

@@ -31,7 +31,7 @@ import { postNewAgent } from "../helper/postNewAgent";
 import { postIncident } from "../helper/postIncident";
 import { toggleReportVerification } from "../helper/toggleReportVerification";
 import exportPDF from "../helper/exportPdf";
-import { getUser } from "../helper/getUser";
+import { t } from "i18next";
 
 export const useGlobalTranslation = () => {
   return useTranslation("global");
@@ -103,9 +103,9 @@ export const GridPdf = (props) => {
     if (!props.id) {
       Swal.fire(t("dashboard.reports.table.admin.no-pdf"));
     } else {
-      console.log("Esto es la data del PDF:", props);  // Visualización de los datos para depuración
+      console.log("Esto es la data del PDF:", props);  
       try {
-        await exportPDF(props);  // Usar directamente los props para generar el PDF
+        await exportPDF(props);  
       } catch (error) {
         console.error('Error al generar el PDF:', error);
         Swal.fire(t("Error"), t("dashboard.reports.table.admin.pdf-error"), "error");
@@ -121,7 +121,7 @@ export const GridPdf = (props) => {
 };
 
 export const GridDetails = (props) => {
-  let id = props?.id;
+  let id = props?.id;  
   return (
     <Link
       className="flex justify-center m-0 p-0"
@@ -5174,32 +5174,46 @@ export const GridPropertyEdit = ({ property }) => {
 
 
 export const GridDelete = ({ id }) => {
-  let url = `${process.env.REACT_APP_SERVER_IP}/users`;
-  const { navigate } = useNavigate();
+  const url = `${process.env.REACT_APP_SERVER_IP}/users`;
+  const navigate = useNavigate();
   const { flag, setFlag } = useContext(UserContext);
-  const [t, i18n] = useTranslation("global");
-
-
+  const { t } = useTranslation("global");
 
   const deleteItemFunction = () => {
-
     Swal.fire({
-      title: t("dashboard.users.delete.confirmTitle"), 
+      title: t("dashboard.users.delete.confirmTitle"),
       text: t("dashboard.users.delete.confirmText"),
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#e6c200",
-      cancelButtonColor: "gray",
-      confirmButtonText: t("dashboard.users.delete.confirmButton"), 
+      confirmButtonColor: '#3085d6',
+      confirmButtonText: t("dashboard.users.delete.confirmButton"),
+      cancelButtonColor: '#d33',
+      cancelButtonText: t('dashboard.users.delete.cancel-button')
     }).then((result) => {
       if (result.isConfirmed) {
-        deleteItem(url, id, flag, setFlag).then(
-        );
+        deleteItem(url, id, flag, setFlag)
+          .then(() => {
+            Swal.fire({
+              toast: true,
+              position: 'top-end',
+              icon: 'success',
+              title: t('dashboard.users.delete.user-removed'),
+              showConfirmButton: false,
+              timer: 3000
+            });
+            setFlag(!flag);  
+          })
+          .catch(error => {
+            Swal.fire(
+              t('Error!'),
+              t('dashboard.users.delete.error-deleting-user'), 
+              'error'
+            );
+          });
       }
     });
+  };
 
-
-  }
 
   return (
     <div
@@ -5255,42 +5269,74 @@ export const GridDeleteAgents = ({ agent }) => {
 
 
 export const GridDeleteCase = ({ caseType }) => {
-  const {
-    setreportSaved, reportSaved
-  } = useContext(UserContext);
+  const { setreportSaved, reportSaved } = useContext(UserContext);
+  const [t] = useTranslation("global");
   let url = `${process.env.REACT_APP_SERVER_IP}/cases`;
 
+  const confirmDeletion = () => {
+    Swal.fire({
+      title: t('dashboard.cases.table.delete.swal.confirmation'),
+      text: t("dashboard.cases.table.delete.swal.delete-case"),
+      icon: 'warning',
+      confirmButtonColor: '#3085d6',
+      confirmButtonText: t('dashboard.cases.table.delete.swal.yes'),
+      showCancelButton: true,
+      cancelButtonColor: '#d33',
+      cancelButtonText: t('dashboard.cases.table.delete.swal.no')
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteIncident();
+      }
+    });
+  };
+
   const deleteIncident = async () => {
-
     caseType.deleted = true;
-    await postIncident(caseType, setreportSaved, reportSaved);
-
+    try {
+      await postIncident(caseType, setreportSaved, reportSaved);
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'success',
+        title: t('dashboard.cases.table.delete.swal.case-removed'),
+        showConfirmButton: false,
+        timer: 3000
+      });
+    } catch (error) {
+      Swal.fire(
+        'Error!',
+        t('dashboard.cases.table.delete.swal.error-deleting-case'),
+        'error'
+      );
+    }
   }
+
   return (
     <div
-      onClick={() => {
-        deleteIncident()
-      }}
-      className="flex justify-center m-0 p-0 text-red-700"
+      onClick={confirmDeletion}
+      className="flex justify-center m-0 p-0 text-red-700 cursor-pointer"
     >
-      <MdDelete className="text-lg "></MdDelete>
+      <MdDelete className="text-lg" />
     </div>
   );
 };
 
-export const GridDeleteProperty = ({ id, t }) => {
+export const GridDeleteProperty = ({ id }) => {
   const url = `${process.env.REACT_APP_SERVER_IP}/properties`;
   const { setFlag } = useContext(UserContext);
+  const [t, i18n] = useTranslation("global");
+
 
   const confirmDeletion = () => {
     Swal.fire({
-      title: '¿Estás seguro?',
-      text: t("dashboard.properties.table.reports"),
+      title: t('dashboard.properties.table.delete.swal.confirmation'),
+      text: t("dashboard.properties.table.delete.swal.delete-property"),
       icon: 'warning',
-      showCancelButton: true,
       confirmButtonColor: '#3085d6',
+      confirmButtonText: t('dashboard.properties.table.delete.swal.yes'),
+      showCancelButton: true,
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Sí, borrar!'
+      cancelButtonText: t('dashboard.properties.table.delete.swal.no')
     }).then((result) => {
       if (result.isConfirmed) {
         deleteProperty();
@@ -5302,11 +5348,14 @@ export const GridDeleteProperty = ({ id, t }) => {
     try {
       const response = await fetch(`${url}/${id}`, { method: 'DELETE' });
       if (response.ok) {
-        Swal.fire(
-          'Eliminado!',
-          'La propiedad ha sido eliminada.',
-          'success'
-        );
+        Swal.fire({
+          toast: true,
+          position: 'top-end',
+          icon: 'success',
+          title: t('dashboard.properties.table.delete.swal.property-removed'),
+          showConfirmButton: false,
+          timer: 3000
+        });
         setFlag(flag => !flag);
       } else {
         throw new Error('Failed to delete the property');
@@ -5330,16 +5379,19 @@ export const GridDeleteProperty = ({ id, t }) => {
 export const GridDeleteCamera = ({ id }) => {
   let url = `${process.env.REACT_APP_SERVER_IP}/cameras`;
   const { cameraSaved, setCameratSaved } = useContext(UserContext);
+  const [t, i18n] = useTranslation("global");
+
   const deleteCameraFunction = () => {
 
     Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
+      title: t("dashboard.cameras.table.delete.confirm-title"),
+      text: t("dashboard.cameras.table.delete.confirm-text"),
       icon: "warning",
-      showCancelButton: true,
       confirmButtonColor: "#e6c200",
+      confirmButtonText: t("dashboard.cameras.table.delete.yes"),
+      showCancelButton: true,
       cancelButtonColor: "gray",
-      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: t("dashboard.cameras.table.delete.no"),
     }).then((result) => {
       if (result.isConfirmed) {
         deleteCamera(url, id, cameraSaved, setCameratSaved).then(
@@ -5370,7 +5422,6 @@ export const GridLiveView = ({ LiveView }) => {
       onClick={() => {
         setCameraContext(LiveView);
       }}
-      target="_top"
       to={`/dashboard/camera/live-view`}
     >
       <HiOutlineEye className="text-lg"></HiOutlineEye>
@@ -5730,102 +5781,107 @@ export const customersGrid = [
   },
 ];
 
-export const cameraGrid = [
-  {
-    headerText: "Img",
-    width: "115",
-    template: gridEmployeeProfile,
-    textAlign: "Center",
-  },
+export const cameraGrid = (t) => {
+  return [
+    {
+      headerText: t("dashboard.table.img"),
+      width: "115",
+      template: gridEmployeeProfile,
+      textAlign: "Center",
+    },
 
-  { width: "190", field: "Name", headerText: "Name", textAlign: "Center" },
-  {
-    headerText: "Status",
-    width: "110",
-    textAlign: "Center",
-    template: gridOrderStatus,
-  },
-  { field: "Title", headerText: "Brand", width: "100", textAlign: "Center" },
-  { field: "Type", headerText: "Type", width: "90", textAlign: "Center" },
+    { width: "190", field: "Name", headerText: "Name", textAlign: "Center" },
+    {
+      headerText: "Status",
+      width: "110",
+      textAlign: "Center",
+      template: gridOrderStatus,
+    },
+    { field: "Title", headerText: "Brand", width: "100", textAlign: "Center" },
+    { field: "Type", headerText: "Type", width: "90", textAlign: "Center" },
 
-  {
-    field: "Installed",
-    headerText: "Installed",
-    width: "100",
-    textAlign: "Center",
-  },
+    {
+      field: "Installed",
+      headerText: "Installed",
+      width: "100",
+      textAlign: "Center",
+    },
 
-  {
-    field: "DateInstalled",
-    headerText: "Date",
-    width: "110",
-    format: "yMd",
-    textAlign: "Center",
-  },
-  {
-    field: "LiveView",
-    headerText: "Details",
-    width: "100",
-    textAlign: "Center",
-    template: GridLiveView,
-  },
+    {
+      field: "DateInstalled",
+      headerText: "Date",
+      width: "110",
+      format: "yMd",
+      textAlign: "Center",
+    },
+    {
+      field: "LiveView",
+      headerText: "Details",
+      width: "100",
+      textAlign: "Center",
+      template: GridLiveView,
+    },
+  ]
+}
+ 
+export const cameraGridAdmin = (t) => {
+  return [
+    {
+      headerText: t("dashboard.cameras.table.img"),
+      width: "115",
+      template: gridEmployeeProfile,
+      textAlign: "Center",
+    },
 
-];
-export const cameraGridAdmin = [
-  {
-    headerText: "Img",
-    width: "115",
-    template: gridEmployeeProfile,
-    textAlign: "Center",
-  },
+    { 
+      headerText: t("dashboard.cameras.table.name"),
+      width: "190", 
+      field: "Name", 
+      textAlign: "Center" },
+    {
+      headerText: t("dashboard.cameras.table.status"),
+      width: "110",
+      textAlign: "Center",
+      template: gridOrderStatus,
+    },
+    { 
+      headerText: t("dashboard.cameras.table.brand"),
+      field: "Title",
+      width: "100", 
+      textAlign: "Center" 
+    },
+    { 
+      field: "Type",
+      headerText: t("dashboard.cameras.table.type"),
+      width: "90", 
+      textAlign: "Center"
+    },
 
-  { width: "190", field: "Name", headerText: "Name", textAlign: "Center" },
-  {
-    headerText: "Status",
-    width: "110",
-    textAlign: "Center",
-    template: gridOrderStatus,
-  },
-  { field: "Title", headerText: "Brand", width: "100", textAlign: "Center" },
-  { field: "Type", headerText: "Type", width: "90", textAlign: "Center" },
+    {
+      field: "LiveView",
+      headerText: t("dashboard.cameras.table.details"),
+      width: "100",
+      textAlign: "Center",
+      template: GridLiveView,
+    },
+    {
+      field: "camera",
+      headerText: t("dashboard.cameras.table.edit"),
+      width: "100",
+      textAlign: "Center",
+      template: GridEditCamera,
+    },
+    {
+      field: "id",
+      headerText: t("dashboard.cameras.table.delete.delete  "),
+      width: "90",
+      textAlign: "Center",
+      template: GridDeleteCamera,
+    },
+  ]
+} 
+  
 
-  {
-    field: "Installed",
-    headerText: "Installed",
-    width: "100",
-    textAlign: "Center",
-  },
-
-  {
-    field: "DateInstalled",
-    headerText: "Date",
-    width: "110",
-    format: "yMd",
-    textAlign: "Center",
-  },
-  {
-    field: "LiveView",
-    headerText: "Details",
-    width: "100",
-    textAlign: "Center",
-    template: GridLiveView,
-  },
-  {
-    field: "camera",
-    headerText: "Edit",
-    width: "100",
-    textAlign: "Center",
-    template: GridEditCamera,
-  },
-  {
-    field: "id",
-    headerText: "Delete",
-    width: "90",
-    textAlign: "Center",
-    template: GridDeleteCamera,
-  },
-
-];
 let Permission = true;
 
 
@@ -6062,33 +6118,22 @@ export const GridUserEdit = ({ user }) => {
 };
 */
 
-const PropertiesTemplate = ({user}) => {
+  const PropertiesTemplate = ({user}) => {
 
-  const [t, i18n] = useTranslation("global");
-  const { userProvider, setUserProvider } = useContext(UserContext);
-  const handlerClick=()=>{
-    console.log(user)
-    setUserProvider({ 
-      ...userProvider,
-      id:user.id,
-      name:user.name,
-      email:user.email,
-      pasword: user.pasword,
-      image: user.image,
-      enamble: user.enable,
-      rol: user.rol,
-      properties: user.properties
-    })
-    navigate("/dashboard/UserDetails");
-    
-  }
-  const navigate = useNavigate();
-  return (
-    <a onClick={() => handlerClick()} className="flex justify-center m-0 p-0 cursor-pointer">
-      {t("dashboard.users.table.details")}
-      </a>
-  );
-};
+    const [t, i18n] = useTranslation("global");
+    const { userProvider, setUserProvider } = useContext(UserContext);
+    const handlerClick = () => {
+      console.log(user);
+      setUserProvider(user);  // Actualiza el contexto con los datos del usuario
+      navigate("/dashboard/UserDetails");
+    };
+    const navigate = useNavigate();
+    return (  
+      <a onClick={() => handlerClick()} className="flex justify-center m-0 p-0 cursor-pointer">
+        {t("dashboard.users.table.details")}
+        </a>
+    );
+  };
 
 export const userGrid = (t) => {
   return [
@@ -6138,17 +6183,63 @@ export const userGrid = (t) => {
   ];
 };
 
-export const removePropertyToUse = () => {
+export const RemovePropertyToUser = ({ propertyId, userId, setUserData }) => {
+  const { t } = useTranslation("global");
+  const url = `${process.env.REACT_APP_SERVER_IP}/users/${userId}/remover-propiedad`;
+
+  const deletePropertyFunction = () => {
+    Swal.fire({
+      title: t("dashboard.user-details.properties.table.delete-assigned-property.confirm-title"),
+      text: t("dashboard.user-details.properties.table.delete-assigned-property.confirm-text"), 
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      confirmButtonText: t("dashboard.user-details.properties.table.delete-assigned-property.yes"),
+      cancelButtonColor: '#d33',
+      cancelButtonText: t('dashboard.user-details.properties.table.delete-assigned-property.no')
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(url, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: propertyId })
+        })
+          .then(response => response.json())
+          .then(data => {
+            setUserData(prevData => ({
+              ...prevData,
+              user: {
+                ...prevData.user,
+                properties: prevData.user.properties.filter(p => p.id !== propertyId)
+              }
+            }));
+            Swal.fire({
+              toast: true,
+              position: 'top-end',
+              icon: 'success',
+              title: t('dashboard.user-details.properties.table.delete-assigned-property.swal.property-user-removed'),
+              showConfirmButton: false,
+              timer: 3000
+            });
+          })
+          .catch(error => {
+            Swal.fire(t('Error!'), error.message, 'error');
+          });
+      }
+    });
+  };
+
+
   return (
-    <div
-      className="flex justify-center m-0 p-0 text-red-700"
-    >
-      <MdDelete className="text-lg "></MdDelete>
+    <div onClick={deletePropertyFunction} className="flex justify-center m-0 p-0 text-red-700 cursor-pointer">
+      <MdDelete className="text-lg" />
     </div>
   );
 };
 
-export const propertiesGrid = (t) => {
+
+
+export const propertiesUserGrid = (t, userId, setUserData) => {
   return [
     {
       headerText: t("dashboard.user-details.properties.table.name"),
@@ -6165,7 +6256,7 @@ export const propertiesGrid = (t) => {
     },
     {
       headerText: t("dashboard.user-details.properties.table.remove"),
-      template: removePropertyToUse,
+      template: (props) => <RemovePropertyToUser propertyId={props.id} userId={userId} setUserData={setUserData} />,
       width: "100",
       textAlign: "Center",
     },
@@ -6203,13 +6294,7 @@ export const userGridAdmin = [
     textAlign: "Center",
     template: gridOrderProperties,
   },
-  /* {
-    headerText: "Edit",
-    template: GridUserEdit,
-    textAlign: "Center",
-    width: "80",
-    field: "user",
-  }, */
+
   {
     headerText: "Delete",
     template: GridDelete,
@@ -6250,7 +6335,7 @@ export const ordersCasesAdmin = (t) => {
       field: "caseType",
     },
     {
-      headerText: t("dashboard.cases.table.delete"),
+      headerText: t("dashboard.cases.table.delete.delete"),
       template: GridDeleteCase,
       textAlign: "Center",
       width: "30",
@@ -6259,27 +6344,7 @@ export const ordersCasesAdmin = (t) => {
   ];
 };
 
-export const orderAgents = [
-  {
-    headerText: "Image",
-    template: gridOrderImage,
-    textAlign: "Center",
-    width: "120",
-  },
-  {
-    headerText: "Name",
-    field: "name",
-    textAlign: "Center",
-    width: "120",
-  },
-  
-  {
-    headerText: "Email",
-    field: "email",
-    textAlign: "Center",
-    width: "120",
-  },
-];
+
 
 export const orderAgentsAdmin = (t) => {
   return [
@@ -6360,8 +6425,8 @@ export const propertyGrid = (t) => {
     },
 
     {
-      headerText: t("dashboard.users.table.delete"),
-      template: ({ id }) => <GridDeleteProperty id={id} t={t} />,
+      headerText: t("dashboard.properties.table.delete.delete"),
+      template: GridDeleteProperty,
       textAlign: "Center",
       width: "80",
       field: "id",
@@ -6482,13 +6547,22 @@ export const reportsGrid = (t) => {
       textAlign: "Center",
     },
 
-    {
-      field: "PDF",
-      headerText: "PDF",
-      width: "80",
-      textAlign: "Center",
-      template: GridPdf,
-    },
+      {
+        field: "PDF",
+        headerText: "PDF",
+        width: "80",
+        textAlign: "Center",
+        template: GridPdf,
+      },
+    
+      {
+        field: "Details",
+        headerText: t("dashboard.reports.table.admin.CaseDetails"),
+        width: "105",  
+        textAlign: "Center",
+        template: GridDetails,
+      },
+
   ];
 
 };
@@ -6569,6 +6643,7 @@ export const reportsGridAdmin = (t) => {
     },
   ];
 };
+
 
 export const reportsGridMonitor = (t) => {
   return [

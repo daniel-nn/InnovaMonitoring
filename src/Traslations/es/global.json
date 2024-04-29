@@ -397,7 +397,9 @@
     "paragraph2": "Al empoderar a las fuerzas del orden, nuestros esfuerzos de colaboración con las entidades policiales han sido fundamentales para mejorar las medidas de seguridad. Juntos, hemos logrado hitos en la creación de comunidades más seguras a través de soluciones de vanguardia y asociaciones estratégicas.",
     "tittle_carrousel": "Entidades policiales con las cuales hemos trabajado:"
   },
+  
   "dashboard": {
+
     "dashboard-navbar": {
       "cart": {
       "property": "Propiedades",
@@ -411,6 +413,7 @@
         "logout-button": "Cerrar sesión"
       }
     },
+
     "dashboard-sliderbar": {
       "dashboard-section": {
         "dashboard-tittle": "Panel de control",
@@ -434,6 +437,7 @@
         "logout": "Cerrar sesión"
       }
     },
+    
     "dashboard-index": {
       "home": "Inicio",
       "number-reports": "Numero de reportes",
@@ -442,11 +446,10 @@
       "cameras-off": "Cámaras fuera de línea",
       "vandalized-cameras": "Cámaras vandalizadas"
     },
+
     "reports": {
       "reports-of": "Reportes de - ",
-      "reports-tittle": "Informes",
-      "add-report": "Agregar reporteeee",
-      
+      "reports-tittle": "Informes",      
       "table": {
         "admin": {
           "CaseImage": "Imagen",
@@ -474,6 +477,7 @@
           "no-pdf": "Este informe no tiene pdf"
         }
       },
+
       "new-report": {
         "add-report": "Agregar reporte",
         "new-report": "Nuevo Reporte",
@@ -503,8 +507,8 @@
         "select-is-cameras-funcioning": "¿Estaban la camaras funcionando?",
         "yes": "Si",
         "no": "No",
-        "listMalfuncioningCameras": "Lista de camaras que funcionan mal",
-        "selectMalfunctioningCamerasPlaceholder": "Lista de cámaras que funcionan mal",
+        "listMalfuncioningCameras": "Lista de camaras averiadas",
+        "selectMalfunctioningCamerasPlaceholder": "Lista de cámaras averiadas",
         "list-Malfuncion-cameras":{
           "na": "N/A",
           "listedOnReport": "Listado en el reporte"
@@ -683,9 +687,104 @@
           "information": "Información",
           "evidences": "Evidencias"
         }
-      }  
+      },
+      "case-details": {
+        "incident-report": "Reporte de incidente",
+        "property": "Propiedad:",
+        "name": "Agente de monitoreo:",
+        "company": "Equipo:",
+        "incident": "Caso del incidente:",
+          "types-of-incident": {
+            "narcotics": "Narcóticos",
+            "shooting": "Disparos",
+            "garbage": "Basura",
+            "illegal-parking": "Estacionamiento Ilegal",
+            "carrying-weapon": "Portación de Arma",
+            "damage-to-property": "Daño a la Propiedad",
+            "debris": "Escombros",
+            "drinking-alcohol-outdoor": "Consumo de Alcohol al Aire Libre",
+            "flooding": "Inundación",
+            "gambling": "Juego de Azar",
+            "hazardous": "Peligroso",
+            "medical-emergency": "Emergencia Médica",
+            "police-arrest": "Policía (Arresto)",
+            "police-interrogation": "Policía (Interrogatorio)",
+            "trespassing": "Intrusión",
+            "vandalism": "Vandalismo",
+            "other-see-report": "Otros (Ver Informe)",
+            "illegal-sales": "Ventas Ilegales"
+        },
+        "level": "Nivel del reporte:",
+        "security-guards-scene": "Guardia de seguridad en el lugar:",
+        "security-guards-notified": "Guardia de seguridad notificado:",
+        "form-notification-client": "Notificación al cliente:",
+        "observed-via-cameras": "Observado a través de cámaras:",
+        "list-malfuncioning-cameras": "Lista de cámaras averiadas:",
+        "cameras-functioning": "Cámaras funcionando:",
+        "date-of-report": "Fecha:",
+        "incident-start-time": "Hora de inicio del incidente:",
+        "incident-end-time": "Hora de fin del incidente:",
+        "time-of-report": "Hora del reporte:",
+        "report-pdf": "Pdf del reporte:",
+        "numer-case": "Número del caso:",
+        "verified": "Verificado:",
+        "emailed-report": "Informe enviado a:",
+        "police-notified": "Policía notificado:",
+        "police-first-responder-notified": "Policía en el lugar:",
+        "police-numer-case": "Número de caso policial:",
+        "yes": "Si",
+        "no": "No",
+        "video-gallery": "Galería de videos:",
+        "image-gallery": "Galería de imágenes:"
+      }
     },
     
+    "cameras": {
+      "title": "Camaras de - ",
+      "dialog": {
+        "add-camera": "Añadir Camara",
+        "camera-name": "Nombre de la camara",
+        "camera-name-placeholder": "Añade el nombre de la camara",
+        "brand": "Marca",
+        "brand-placeholder": "Ingresa la marca de la camara",
+        "type": "Tipo de camara",
+        "type-placeholder": "Seleciona el tipo de camara",
+        "model": "Modelo",
+        "model-placeholder": "Ingresa el modelo de la camara",
+        "camera-status": "Estatus de la camara",
+        "camera-status-placeholder": "Estatus de la camara",
+        "installed-by": "¿Instalada por nosotros?",
+        "installed-by-placeholder": "¿Fue instalada por nosotros?",
+        "date-installed": "Fecha de instalación",
+        "date-installed-placeholder": "¿Cuando fue instalada la camara?",
+        "property": "Selecciona la propiedad de la camara",
+        "property-placeholder": "Seleccióna la propiedad de la camara",
+        "image-url": "Imagen de la camara",
+        "image-url-placeholder": "Ingresa la imagen"
+      },
+      "table": {
+        "img": "Imagen",
+        "name": "Nombre",
+        "status": "Estatus",
+        "brand": "Marca",
+        "type": "Tipo",
+        "installed": "Instalada",
+        "date": "Fecha",
+        "details": "Detalles",
+        "edit": "Editar",
+        "delete": {
+          "delete": "Eliminar",
+          "confirm-title": "¿Estas seguro?",
+          "confirm-text": "No podras revertir este proceso",
+          "yes": "yes",
+          "no": "no",
+          "swal": {
+            "deleted-camera": "Camara eliminada"
+          }
+        }   
+      }
+    },     
+
     "users": {
       "users-tittle": "Usuarios",
       "add-user": "Agregar usuario",
@@ -717,9 +816,19 @@
           "Monitor": "Monitor"
           }
         },
+        "validation": {
+
+        },
         "cancel": "Cancelar",
         "send": "Enviar",
-        "successful-response": "Usuario agregado"
+        "successful-response": "Usuario agregado",
+        "validation": {
+          "name-required": "El nombre es obligatorio.",
+          "email-required": "El correo electrónico es obligatorio.",
+          "password-required": "La contraseña es obligatoria.",
+          "role-required": "La selección de rol es obligatoria.",
+          "image-required": "La URL de la imagen es obligatoria."
+        }
       },
       "table": {
         "image": "Imagen",
@@ -733,14 +842,17 @@
         },
         "properties": "Propiedades",
         "details": "Detalles",
-        "remove": "Remover"
+        "delete": "Eliminar"
       },
       "delete": {
         "confirmTitle": "¿Estas seguro?",
         "confirmText": "No podras revertir estos cambios",
-        "confirmButton": "Si!"
+        "confirmButton": "Si",
+        "cancel-button": "Cancelar",
+        "user-removed": "Usuario eliminado"
       }
     },
+
     "agents": {
       "agents-tittle": "Agentes de monitoreo",
       "add-agent": "Agregar agente",
@@ -774,6 +886,9 @@
         },
         "cancel": "Cancelar",
         "send": "Enviar",
+        "validation": {
+          "": ""
+        },
         "successful-response": "Monitor agregado"
       },
       "table": {
@@ -811,16 +926,27 @@
         },
         "save": "Guardar"
       },
-      "properties": {
+      "properties": { 
         "assigned-properties": "Propiedades asignadas",
         "table": {
           "name": "Nombre",
           "address": "Dirección",
-          "remove": "Eliminar"
+          "remove": "Eliminar",
+          "delete-assigned-property": {
+            "confirm-title": "¿Estas seguro?",
+            "confirm-text": "No podras revertir este proceso",
+            "yes": "Si",
+            "no": "No",
+            "swal": {
+              "property-user-removed": "Propiedad removida"
+            }
+          }
         }
       }
     },
+
     "cases": {
+
       "cases-tittle": "Casos",
       "add-case": "Añadir Caso",
       "add-dialog":{
@@ -829,18 +955,34 @@
         "send": "Enviar",
         "cancel": "Cancelar"
       },
+
+      "swal": {
+        "added-case": "Caso agregado"
+      },
+
       "edit-dialog": {
         "edit-tittle": "Editar Caso",
         "name-case-label": "Nuevo nombre del caso",
         "send": "Enviar",
         "cancel": "Cancelar"
       },
+
       "table": {
         "case-type": "Tipo de caso",
         "edit": "Editar",
-        "delete": "Delete"
+        "delete": {
+          "delete": "Eliminar",
+          "swal": {
+            "confirmation": "¿Estas seguro?",
+            "delete-case": "Esta acción no se puede revertir",
+            "yes": "Si",
+            "no": "Cancelar",
+            "case-removed": "Caso Eliminado"
+          }
+        }
       }
     },
+
    "properties": {
     "properties-title": "Propiedades",
     "add-property": "Agregar propiedad",
@@ -853,7 +995,13 @@
       "send": "Enviar",
       "cancel": "Cancelar",
       "swal": {
-        "added-property": "Propiedad agregada"
+        "added-property": "Propiedad agregada",
+        "validate-property-details": {
+          "name": "Campo de nombre requerido.",
+          "direction": "Dirección requerida.",
+          "img-url": "El url de la imagen es requerido.",
+          "map-url": "Ingrese el url de el mapa."
+        }
       }
     },
     "table": {
@@ -862,9 +1010,19 @@
       "address": "Dirección",
       "cameras": "Cámaras",
       "reports": "Reportes",
-      "delete": "Eliminar"
+      "delete": {
+        "delete": "Eliminar",
+        "swal": {
+          "confirmation": "¿Estas seguro?",
+          "delete-property": "Esta acción no se puede revertir",
+          "yes": "Si",
+          "no": "Cancelar",
+          "property-removed": "Propiedad Eliminada"
+        }
+      }
     }
   },
+
     "footer": "Todos los derechos reservados Innova Monitioring"
   },
   "space": " "

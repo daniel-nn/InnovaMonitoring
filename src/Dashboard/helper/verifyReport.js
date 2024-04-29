@@ -23,7 +23,7 @@ export const verifyReport = async(report) => {
     Swal.fire({
         icon: 'success',
         title: 'Success',
-        text:"Report has been successfully verified",
+        text:"Report has been successfully uptated",
   
       })
    } catch (error) {

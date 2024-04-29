@@ -21,11 +21,14 @@ import useFetchProperties from "../Hooks/useFetchProperties";
 import { getCameras } from "../helper/getCameras";
 import { UserContext } from "../../context/UserContext";
 import { cameraGrid, cameraGridAdmin } from "../data/dummy";
+import { useTranslation } from "react-i18next";
 
 const Cameras = () => {
   const toolbarOptions = ["Search"];
   const navigate = useNavigate();
   const editing = { allowDeleting: true, allowEditing: true };
+  const { t, i18n } = useTranslation("global");
+
 
   const [camerasList, setCamerasList] = useState([]);
   let propertiesUser = JSON.parse(localStorage.getItem("user"));
@@ -37,8 +40,9 @@ const Cameras = () => {
   let id = propertyContext.id || idStorage;
   let user = JSON.parse(localStorage.getItem("user"));
   let userRole = user.role.rolName;
+
+
   useEffect(() => {
- 
     getCameras(propertyContext.id || id, navigate).then((data) =>
       setCamerasList(data)
     );
@@ -47,7 +51,7 @@ const Cameras = () => {
   return (
     <>
       <Dialog
-        header="Add Camera"
+        header={t("dashboard.cameras.dialog.add-camera")}
         visible={cameraFormFlag}
         style={{ width: "50vw" }}
         onHide={() => {setCameraFormFlag(false);  setCameraForm({})}}
@@ -56,14 +60,14 @@ const Cameras = () => {
         <CameraForm properties={listOfPropertiesByUser} />
       </Dialog>
       <div className="m-0 md:m-8 mt-14 p-2 md:p-0 bg-white rounded-3xl">
-        <Header category="Page" title={"Cameras - "+propertyContext.name} />
+        <Header title={t("dashboard.cameras.title") +propertyContext.name} />
 
         <div className="card flex justify-end py-2 mb-7">
           {userRole == "Admin" ? (
             <Button
             onClick={() => setCameraFormFlag(true)}
             severity="info"
-            label="Add Camera"
+            label={t("dashboard.cameras.dialog.add-camera")}
           >
             {" "}
             <AiOutlinePlusCircle className="ml-2"></AiOutlinePlusCircle>
@@ -78,6 +82,7 @@ const Cameras = () => {
           dataSource={camerasList}
           width="auto"
           allowPaging
+          key={i18n.language}
           allowSorting
           pageSettings={{ pageCount: 5 }}
           editSettings={editing}
@@ -88,12 +93,14 @@ const Cameras = () => {
 
           <ColumnsDirective>
             {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-            {userRole === "Admin" ? cameraGridAdmin.map((item, index) => (
-              <ColumnDirective key={index} {...item} />
-            )) : cameraGrid.map((item, index) => (
-              <ColumnDirective key={index} {...item} />
-            )) }
+            {userRole === "Admin" ?
+              cameraGridAdmin(t).map((item, index) => (
+                <ColumnDirective key={index} {...item} />
+              )) : cameraGrid(t).map((item, index) => (
+                <ColumnDirective key={index} {...item} />
+              ))}
           </ColumnsDirective>
+
           <Inject services={[Search, Page, Toolbar]} />
         </GridComponent>
       </div>

@@ -448,8 +448,7 @@
     "reports": {
       "reports-of": "Reports of - ",
       "reports-tittle": "Reports",
-      "add-report": "Add report",
-      "table": {
+        "table": {
         "admin": {
           "CaseImage": "Image",
           "Case": "Incident",
@@ -684,8 +683,107 @@
           "information": "Information",
           "evidences": "Evidences"
         }
+      },
+
+      "case-details": {
+        "incident-report": "Incident Report:",
+        "property": "Property:",
+        "name": "Monitoring Agent:",
+        "company": "Team:",
+        "incident": "Incident Case:",
+        "types-of-incident": {
+          "narcotics": "Narcotics",
+          "shooting": "Shooting",
+          "garbage": "Garbage",
+          "illegal-parking": "Illegal Parking",
+          "carrying-weapon": "Carrying Weapon",
+          "damage-to-property": "Damage To Property",
+          "debris": "Debris",
+          "drinking-alcohol_outdoor": "Drinking Alcohol (Outdoor)",
+          "flooding": "Flooding",
+          "gambling": "Gambling",
+          "hazardous": "Hazardous",
+          "medical-emergency": "Medical Emergency",
+          "police-arrest": "Police (Arrest)",
+          "police-interrogation": "Police (Interrogation)",
+          "trespassing": "Trespassing",
+          "vandalism": "Vandalism",
+          "other-see-report": "Other See Report",
+          "illegal-sales": "Illegal Sales"
+        },
+        "level": "Level Of Report:",
+        "security-guards-scene": "Security Guard On Scene:",
+        "security-guards-notified": "Security Guard Notified:",
+        "form-notification-client": "Form Notification To Client:",
+        "observed-via-cameras": "Observed Via Cameras:",
+        "list-malfuncioning-cameras": "List Mal Functioning Cameras:",
+        "cameras-functioning": "Cameras Functioning:",
+        "date-of-report": "Date:",
+        "incident-start-time": "Incident Start Time:",
+        "incident-end-time": "Incident End Time:",
+        "time-of-report": "Time Of Report:",
+        "report-pdf": "Report Pdf:",
+        "numer-case": "Numer Case:",
+        "verified": "Verified:",
+        "emailed-report": "Emailed Report To:",
+        "police-notified": "Police Notified:",
+        "police-first-responder-notified": "Police On The Scene:",
+        "police-numer-case": "Police Number Case:",
+        "yes": "Yes",
+        "no": "No",
+        "video-gallery": "Video Gallery:",
+        "image-gallery": "Image Gallery:"
+      }
+      
+
+    },
+
+    "cameras": {
+      "title": "Cameras Of - ",
+      "dialog": {
+        "add-camera": "Add Camera",
+        "camera-name": "Camera Name",
+        "camera-name-placeholder": "Add The Camera Name",
+        "brand": "Brand",
+        "brand-placeholder": "Enter The Camera Brand",
+        "type": "Camera Type",
+        "type-placeholder": "Select The Camera Type",
+        "model": "Model",
+        "model-placeholder": "Enter The Camera Model",
+        "camera-status": "Camera Status",
+        "camera-status-placeholder": "Select The Camera Status",
+        "installed-by": "Installed By Us?",
+        "installed-by-placeholder": "Was It Installed By Us?",
+        "date-installed": "Installation Date",
+        "date-installed-placeholder": "When Was The Camera Installed?",
+        "property": "Select The Camera Property",
+        "property-placeholder": "Select The Camera Property",
+        "image-url": "Camera Image",
+        "image-url-placeholder": "Enter The Image"
+      },
+      "table": {
+        "img": "Image",
+        "name": "Name",
+        "status": "Status",
+        "brand": "Brand",
+        "type": "Type",
+        "installed": "Installed",
+        "date": "Date",
+        "details": "Details",
+        "edit": "Edit",
+        "delete": {
+          "delete": "delete",
+          "confirm-title": "Are You Sure?",
+          "confirm-text": "You Will Not Be Able To Reverse This Process",
+          "yes": "Yes",
+          "no": "No",
+          "swal": {
+            "deleted-camera": "Camera Deleted"
+          }
+        }
       }
     },
+
     "users": {
       "users-tittle": "Users",
       "add-user": "Add User",
@@ -719,6 +817,13 @@
         },
         "cancel": "Cancel",
         "send": "Send",
+        "validation": {
+          "name-required": "Name is required.",
+          "email-required": "Email is required.",
+          "password-required": "Password is required.",
+          "role-required": "Role selection is required.",
+          "image-required": "Image URL is required."
+        },
         "successful-response": "Added user"
       },
       "table": {  
@@ -738,9 +843,12 @@
       "delete": {
         "confirmTitle": "Are you sure?",
         "confirmText": "You won't be able to revert this!",
-        "confirmButton": "Yes, delete it!"
+        "confirmButton": "Yes",
+        "cancel-button": "Cancel",
+        "user-removed": "User Removed"
       }  
     },
+    
     "agents": {
       "agents-tittle": "Monitoring Agents",
       "add-agent": "Add Agent",
@@ -816,7 +924,16 @@
         "table": {
           "name": "Name",
           "address": "Address",
-          "remove": "Remove"
+          "remove": "Remove",
+          "delete-assigned-property": {
+            "confirm-title": "Are You Sure?",
+            "confirm-text": "You Will Not Be Able To Reverse This Process",
+            "yes": "Yes",
+            "no": "No",
+            "swal": {
+              "property-user-removed": "Property Removed"
+            }
+          }
         }
       }
     },
@@ -824,22 +941,38 @@
     "cases": {
       "cases-tittle": "Cases",
       "add-case": "Add Case",
+      
         "add-dialog": {
           "add-title": "Add Case",
           "name-case-label": "New Case",
           "send": "Send",
           "cancel": "Cancel"
         },
+
+        "swal": {
+          "added-case": "Added Case"
+        },
+
         "edit-dialog": {
           "edit-tittle": "Edit Case",
           "name-case-label": "Edit Case Name",
           "send": "Send",
           "cancel": "Cancel"
         },
+
     "table": {
       "case-type": "Case Type",
       "edit": "Edit",
-      "delete": "Delete"
+      "delete": {
+        "delete": "Delete",
+        "swal": {
+          "confirmation": "Are you sure?",
+          "delete-case": "You won't be able to revert this!",
+          "yes": "Yes",
+          "no": "Cancel",
+          "case-removed": "Case Removed"
+        }
+      }
     }
     },
 
@@ -855,7 +988,13 @@
         "send": "Send",
         "cancel": "Cancel",
         "swal": {
-          "added-property": "Added Property"
+          "added-property": "Added property",
+          "validate-property-details": {
+            "name": "Name field is required.",
+            "direction": "Address is required.",
+            "img-url": "Image URL is required.",
+            "map-url": "Enter the map URL."
+          }
         }
       },
       "table": {
@@ -864,7 +1003,16 @@
         "address": "Address",
         "cameras": "Cameras",
         "reports": "Reports",
-        "delete": "Delete"
+        "delete": {
+          "delete": "Delete",
+          "swal": {
+            "confirmation": "Are you sure?",
+            "delete-property": "You won't be able to revert this!",
+            "yes": "Yes",
+            "no": "Cancel",
+            "property-removed": "Property Removed"
+          }
+        }
       }
     },
     "footer": "All rights reserved Innova Monitoring"

@@ -43,23 +43,25 @@ const Login = () => {
           email: newUser.email,
           name: newUser.name,
           image: newUser.image,
-          role: newUser.role, 
+          role: newUser.rol, 
           properties: newUser.properties 
         }));
+
         // Actualiza el contexto de usuario con la nueva información
+        
         setUserContext({
           ...userContext, 
           id: newUser.id,
           email: newUser.email,
           name: newUser.name,
           image: newUser.image,
-          role: newUser.role,
+          role: newUser.rol,
           properties: newUser.properties
         });
 
         if (newUser.properties && newUser.properties.length > 0) {
           localStorage.setItem("propertySelected", JSON.stringify(newUser.properties[0])); // Almacena la primera propiedad
-          setUserLogged(true); // Indica que el usuario está autenticado
+          setUserLogged(true); 
           navigate("/dashboard");
         } else {
           Swal.fire("Info", t("login.swal-fire.properties-don't-assigned"), "info");

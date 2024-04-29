@@ -51,6 +51,7 @@ export const Users = () => {
   const [userSaved, setUserSaved] = useState(false);
   const [roles, setRoles] = useState([]);
   const [properties, setProperties] = useState();
+  const [validationErrors, setValidationErrors] = useState({});
 
 
 
@@ -118,24 +119,85 @@ export const Users = () => {
     </>
   );
 
-  const saveNewUser = async () => {
-    const userToSend = {
-      name: userProvider.name,
-      email: userProvider.email,
-      pasword: userProvider.pasword,
-      image: userProvider.image,
-      rol: {
-        id: userProvider.rol.rolKey,
-        rolName: userProvider.rol.originalName  
-      },
-      properties: userProvider.properties || []
-    };
+  const handleInputChange = (field, value) => {
+    setUserProvider((prevState) => ({
+      ...prevState,
+      [field]: value
+    }));
 
-    console.log("Datos que se enviarán:", userToSend);
+    if (validationErrors[field] && value.trim()) {
+      setValidationErrors((prevState) => ({
+        ...prevState,
+        [field]: null
+      }));
+    }
+  };
+
+  const validateUserDetails = () => {
+    const errors = {};
+    if (!userProvider.name || userProvider.name.trim() === "") {
+      errors.name = t("dashboard.users.dialog-add-user.validation.name-required");
+    }
+    if (!userProvider.email || userProvider.email.trim() === "") {
+      errors.email = t("dashboard.users.dialog-add-user.validation.email-required");
+    }
+    if (!userProvider.pasword || userProvider.pasword.trim() === "") {
+      errors.pasword = t("dashboard.users.dialog-add-user.validation.password-required");
+    }
+    if (!userProvider.rol) {
+      errors.rol = t("dashboard.users.dialog-add-user.validation.role-required");
+    }
+
+    if (!userProvider.image || userProvider.image.size === 0) {
+      errors.image = t("dashboard.users.dialog-add-user.validation.image-required");
+    }
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleClose = () => {
+    setUserDialog(false);  
+    setUserProvider({}); 
+    setValidationErrors({});  
+  };
+
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setUserProvider(prevState => ({
+        ...prevState,
+        image: file
+      }));
+
+      if (validationErrors.image) {
+        setValidationErrors(prevState => ({
+          ...prevState,
+          image: null
+        }));
+      }
+    }
+  };
+
+  const saveNewUser = async () => {
+    if (!validateUserDetails()) {
+      return; 
+    }
+
+    const formData = new FormData();
+    formData.append('name', userProvider.name);
+    formData.append('email', userProvider.email);
+    formData.append('password', userProvider.password);
+    formData.append('rol', JSON.stringify({ id: userProvider.rol.rolKey, rolName: userProvider.rol.originalName }));
+    formData.append('image', userProvider.image);
+
+    if (userProvider.properties) {
+      userProvider.properties.forEach(property => {
+        formData.append('properties[]', JSON.stringify(property));
+      });
+    }
 
     try {
-      const data = await postNewUser(userToSend);
-      console.log("Respuesta del servidor:", data);
+      const data = await postNewUser(formData); 
       if (data) {
         Swal.fire({
           toast: true,
@@ -143,14 +205,13 @@ export const Users = () => {
           icon: 'success',
           title: t('dashboard.users.dialog-add-user.successful-response'),
           showConfirmButton: false,
-          timer: 3000 
+          timer: 3000
         });
-        setUserSaved(!userSaved);
-        setUserDialog(false);
-        setUserProvider({});
+        setUserSaved(!userSaved); 
+        setUserDialog(false); 
+        setUserProvider({}); 
       }
     } catch (error) {
-      console.error("Error al enviar datos:", error);
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -159,10 +220,8 @@ export const Users = () => {
     }
   };
 
-  const handleClose = () => {
-    setUserDialog(false);  
-    setUserProvider({});   
-  };
+
+
 
   return (
 
@@ -201,65 +260,58 @@ export const Users = () => {
                 id="username"
                 value={userProvider.name}
                 className="w-full"
-                onChange={(e) =>
-                  setUserProvider((i) => {
-                    return { ...userProvider, name: e.target.value };
-                  })
-                }
+                onChange={(e) => handleInputChange('name', e.target.value)}
               />
               <label htmlFor="username">{t("dashboard.users.dialog-add-user.name")}</label>
+              {validationErrors.name && <small className="p-error">{validationErrors.name}</small>}
+
             </span>
           </div>
 
-          <div className=" mb-6 mx-auto w-7/12">
-            <span className="p-float-label">
+          <div className="mb-6 mx-auto w-7/12">
+            <span className="p-float-label w-full">
               <InputText
-                id="username"
+                id="email"
                 value={userProvider.email}
                 className="w-full"
-                onChange={(e) =>
-                  setUserProvider((i) => {
-                    return { ...userProvider, email: e.target.value };
-                  })
-                }
+                onChange={(e) => handleInputChange('email', e.target.value)}
               />
-              <label htmlFor="username">{t("dashboard.users.dialog-add-user.email")}</label>
+              <label htmlFor="email">{t("dashboard.users.dialog-add-user.email")}</label>
+              {validationErrors.email && <small className="p-error">{validationErrors.email}</small>}
             </span>
           </div>
 
-          <div className=" mb-6 mx-auto w-7/12 flex justify-center">
+          <div className="mb-6 mx-auto w-7/12">
             <span className="p-float-label w-full">
               <Password
+                id="password"
                 toggleMask
                 value={userProvider.pasword}
-                onChange={(e) => setUserProvider({ ...userProvider, pasword: e.target.value })}
+                onChange={(e) => handleInputChange('pasword', e.target.value)}
                 className="w-full"
                 header={header}
                 footer={footer}
-                promptLabel={t("dashboard.users.dialog-add-user.suggestion.enter-password")}
-                weakLabel={t("dashboard.users.dialog-add-user.suggestion.password-strength.weak")}
-                mediumLabel={t("dashboard.users.dialog-add-user.suggestion.password-strength.medium")}
-                strongLabel={t("dashboard.users.dialog-add-user.suggestion.password-strength.strong")}
               />
-              <label htmlFor="Password">{t("dashboard.users.dialog-add-user.password")}</label>
+              <label htmlFor="password">{t("dashboard.users.dialog-add-user.password")}</label>
+              {validationErrors.pasword && <small className="p-error">{validationErrors.pasword}</small>}
             </span>
           </div>
 
-          <div className="mb-6 mx-auto w-7/12 flex justify-center">
+          <div className="mb-6 mx-auto w-7/12">
+            <label htmlFor="username">{t("dashboard.cameras.dialog.camera-name")}</label>
+
             <span className="p-float-label w-full">
-              <InputText
+              <input
+                type="file"
                 id="image"
-                value={userProvider.image}
+                accept="image/*"
+                onChange={(e) => handleImageChange(e)}
                 className="w-full"
-                onChange={(e) =>
-                  setUserProvider((i) => {
-                    return { ...userProvider, image: e.target.value };
-                  })
-                }
               />
-              <label htmlFor="image">{t("dashboard.users.dialog-add-user.image-url")}</label>
+              {validationErrors.image && <small className="p-error">{validationErrors.image}</small>}
             </span>
           </div>
+
 
           <div className="mx-auto w-7/12 ">
             <Dropdown
@@ -274,13 +326,22 @@ export const Users = () => {
                     originalName: e.value.originalName 
                   }
                 }));
+                if (validationErrors.rol) {
+                  setValidationErrors((prev) => {
+                    const updatedErrors = { ...prev };
+                    delete updatedErrors.rol;
+                    return updatedErrors;
+                  });
+                }
               }}
               optionLabel="rolName"
               options={roles}
               placeholder={t("dashboard.users.dialog-add-user.roles.select-rol")}
               className="w-full"
             />
+            {validationErrors.rol && <small className="p-error">{validationErrors.rol}</small>}
           </div>
+          
         </div>
       </Dialog>
 

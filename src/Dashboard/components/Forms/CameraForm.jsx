@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 import { postCamera } from "../../helper/postCamera";
 import { MdScreenRotationAlt } from "react-icons/md";
 import { BsArrowRightShort, BsArrowUpShort } from "react-icons/bs";
+import { useTranslation } from "react-i18next";
+
 export const CameraForm = ({ properties, setVisible }) => {
   const navigate = useNavigate();
   const { cameraForm, setCameraForm } = useContext(UserContext);
@@ -21,16 +23,19 @@ export const CameraForm = ({ properties, setVisible }) => {
     type,
     property,
     model,
-    lon,
-    lat,
-    rotation,
+    // lon,
+    // lat,
+    // rotation,
   } = cameraForm;
   const statusList = ["Working", "Offline", "Vandalized"];
+  const { t, i18n } = useTranslation("global");
+
+
   return (
     <div>
       <div className="flex">
         <div className="p-inputgroup my-3 ml-3 flex flex-col">
-          <label htmlFor="username">Camera Name</label>
+          <label htmlFor="username">{t("dashboard.cameras.dialog.camera-name")}</label>
           <div className="p-inputgroup">
             <span className="p-inputgroup-addon">
               <i className="pi pi-user"></i>
@@ -42,12 +47,12 @@ export const CameraForm = ({ properties, setVisible }) => {
                   return { ...cameraForm, name: e.target.value };
                 })
               }
-              placeholder="Name"
+              placeholder={t("dashboard.cameras.dialog.camera-name-placeholder")}
             />
           </div>
         </div>
         <div className="p-inputgroup my-3 ml-3 flex flex-col">
-          <label htmlFor="username">Brand</label>
+          <label htmlFor="username">{t("dashboard.cameras.dialog.brand")}</label>
           <div className="p-inputgroup">
             <span className="p-inputgroup-addon">
               <i className="pi pi-user"></i>
@@ -59,14 +64,14 @@ export const CameraForm = ({ properties, setVisible }) => {
                   return { ...cameraForm, brand: e.target.value };
                 })
               }
-              placeholder="Brand"
+              placeholder={t("dashboard.cameras.dialog.brand-placeholder")}
             />
           </div>
         </div>
       </div>
       <div className="flex">
         <div className="p-inputgroup my-3 ml-3 flex flex-col">
-          <label htmlFor="username">Type</label>
+          <label htmlFor="username">{t("dashboard.cameras.dialog.type")}</label>
           <div className="p-inputgroup">
             <span className="p-inputgroup-addon">
               <i className="pi pi-user"></i>
@@ -79,14 +84,14 @@ export const CameraForm = ({ properties, setVisible }) => {
                 })
               }
               options={["Dome", "PTZ", "Bullet", "LPR"]}
-              placeholder="Type"
+              placeholder={t("dashboard.cameras.dialog.type-placeholder")}
               className="w-full md:w-14rem"
             />
           </div>
         </div>
 
         <div className="p-inputgroup my-3 ml-3 flex flex-col">
-          <label htmlFor="username">Model</label>
+          <label htmlFor="username">{t("dashboard.cameras.dialog.model")}</label>
           <div className="p-inputgroup">
             <span className="p-inputgroup-addon">
               <i className="pi pi-user"></i>
@@ -98,7 +103,7 @@ export const CameraForm = ({ properties, setVisible }) => {
                   return { ...cameraForm, model: e.target.value };
                 })
               }
-              placeholder="Model"
+              placeholder={t("dashboard.cameras.dialog.model-placeholder")}
             />
           </div>
         </div>
@@ -106,7 +111,7 @@ export const CameraForm = ({ properties, setVisible }) => {
 
       <div className="flex">
         <div className="p-inputgroup my-3 ml-3 flex flex-col">
-          <label htmlFor="username">Camera Status</label>
+          <label htmlFor="username">{t("dashboard.cameras.dialog.camera-status")}</label>
           <div className="p-inputgroup">
             <span className="p-inputgroup-addon">
               <i className="pi pi-user"></i>
@@ -120,13 +125,13 @@ export const CameraForm = ({ properties, setVisible }) => {
                 })
               }
               options={statusList}
-              placeholder="Status"
+              placeholder={t("dashboard.cameras.dialog.camera-status-placeholder")}
               className="w-full md:w-14rem"
             />
           </div>
         </div>
         <div className="p-inputgroup my-3 ml-3 flex flex-col">
-          <label htmlFor="username">Installed By Us</label>
+          <label htmlFor="username">{t("dashboard.cameras.dialog.installed-by")}</label>
           <div className="p-inputgroup">
             <span className="p-inputgroup-addon">
               <i className="pi pi-user"></i>
@@ -140,19 +145,22 @@ export const CameraForm = ({ properties, setVisible }) => {
                 })
               }
               options={["Yes", "No"]}
-              placeholder="Installed by us"
+              placeholder={t("dashboard.cameras.dialog.installed-by-placeholder")}
               className="w-full md:w-14rem"
             />
           </div>
         </div>
+              
+      </div>
+      <div className="flex">
         <div className="p-inputgroup my-3 ml-3 flex flex-col">
-          <label htmlFor="username">Date Installed</label>
+          <label htmlFor="username">{t("dashboard.cameras.dialog.date-installed")}</label>
           <div className="p-inputgroup">
             <span className="p-inputgroup-addon">
               <i className="pi pi-clock"></i>
             </span>
             <Calendar
-              placeholder="Date"
+              placeholder={t("dashboard.cameras.dialog.date-installed-placeholder")}
               value={dateInstalled}
               onChange={(e) =>
                 setCameraForm((i) => {
@@ -165,7 +173,7 @@ export const CameraForm = ({ properties, setVisible }) => {
       </div>
       <div className="flex">
         <div className="p-inputgroup my-3 ml-3 flex flex-col">
-          <label htmlFor="username">Property</label>
+          <label htmlFor="username">{t("dashboard.cameras.dialog.property")}</label>
           <div className="p-inputgroup">
             <span className="p-inputgroup-addon">
               <i className="pi pi-user"></i>
@@ -179,13 +187,13 @@ export const CameraForm = ({ properties, setVisible }) => {
               }
               options={properties}
               optionLabel="name"
-              placeholder="Property"
+              placeholder={t("dashboard.cameras.dialog.property-placeholder")}
               className="w-full md:w-14rem"
             />
           </div>
         </div>
         <div className="p-inputgroup my-3 ml-3 flex flex-col">
-          <label htmlFor="username">Image URL</label>
+          <label htmlFor="username">{t("dashboard.cameras.dialog.image-url")}</label>
           <div className="p-inputgroup">
             <span className="p-inputgroup-addon">
               <i className="pi pi-user"></i>
@@ -197,12 +205,12 @@ export const CameraForm = ({ properties, setVisible }) => {
                   return { ...cameraForm, image: e.target.value };
                 })
               }
-              placeholder="Image url"
+              placeholder={t("dashboard.cameras.dialog.image-url-placeholder")}
             />
           </div>
         </div>
       </div>
-      <div className="flex">
+      {/* <div className="flex">
         <div className="p-inputgroup my-3 ml-3 flex flex-col">
           <label htmlFor="username">Latitud</label>
           <div className="p-inputgroup">
@@ -256,7 +264,7 @@ export const CameraForm = ({ properties, setVisible }) => {
             />
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

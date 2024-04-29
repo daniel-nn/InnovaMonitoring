@@ -4,6 +4,8 @@ import { useTranslation } from "react-i18next";
 import { InputTextarea } from "primereact/inputtextarea";
 import { UserContext } from "../../context/UserContext";
 import { getRoles } from "../helper/getRoles";
+import TextField from '@material-ui/core/TextField';
+import { makeStyles } from '@material-ui/core/styles';
 
 
 
@@ -17,6 +19,7 @@ import { getRoles } from "../helper/getRoles";
       let user = JSON.parse(localStorage.getItem("user"));
       let userRole = user.role.rolName;
     const [selectedRoleId, setSelectedRoleId] = useState(userProvider.rol?.rolKey);
+    const [tempRole, setTempRole] = useState(null); // Este estado almacenará temporalmente el nuevo rol seleccionado
 
 
 
@@ -59,34 +62,36 @@ import { getRoles } from "../helper/getRoles";
           const rolesArray = rolesData.map(({ id, rolName }) => ({
             rolKey: id,
             rolName: t(`dashboard.users.dialog-add-user.roles.roles-dropdown.${rolName}`),
-            originalName: rolName
+            originalName: rolName  // Guarda el nombre original para uso en la base de datos
           }));
           setRoles(rolesArray);
+
+          // Establece el selectedRoleId basado en el id del rol de userProvider
+          if (userProvider && userProvider.rol && userProvider.rol.id) {
+            setSelectedRoleId(userProvider.rol.id);
+          }
         } catch (error) {
           console.error('Failed to fetch roles:', error);
         }
       };
 
       fetchRoles();
-    }, [t]);
+    }, [t, userProvider]);
 
-    useEffect(() => {
-      if (userProvider.rol?.rolKey !== selectedRoleId) {
-        setSelectedRoleId(userProvider.rol?.rolKey);
-      }
-    }, [userProvider.rol]);
 
     const onRoleChange = (e) => {
       setSelectedRoleId(e.value);
       const selectedRole = roles.find(role => role.rolKey === e.value);
-      setUserProvider(prev => ({
-        ...prev,
-        rol: selectedRole
-      }));
+      if (selectedRole) {
+        setTempRole(selectedRole.originalName); // Guarda el originalName del rol seleccionado
+      }
     };
+
+
 
     const handleSaveClick = () => {
       console.log('Current form values:', input);
+    
     };
 
 
@@ -171,12 +176,14 @@ import { getRoles } from "../helper/getRoles";
                         placeholder={t("dashboard.users.dialog-add-user.roles.select-rol")}
                         className="w-full"
                       />
+
                     )}
                 </div>
 
                   <div className="flex justify-end">
                     <button type="submit"
-                      className="text-white bg-indigo-700  hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800" onClick={handleSaveClick}>
+                      className="text-white bg-indigo-700  hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800" 
+                      onClick={handleSaveClick}>
                         
                     {t("dashboard.user-details.personal-profile.save")}
                     </button>

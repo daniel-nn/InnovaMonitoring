@@ -20,7 +20,6 @@ import { GoUnverified } from "react-icons/go";
 import { FaLevelUpAlt, FaUser } from "react-icons/fa";
 import { HiOutlineDocumentReport } from "react-icons/hi";
 import { MdEmail, MdOutlineMail } from "react-icons/md";
-
 import { BiTimeFive } from "react-icons/bi";
 import { FiUser } from "react-icons/fi";
 import useFetchReportId from "../Hooks/useFetchReportId";
@@ -28,7 +27,11 @@ import { verifyReport } from "../helper/verifyReport";
 import { getReportId } from "../helper/getReportId";
 import { deleteItem } from "../helper/delete";
 import Swal from "sweetalert2";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next"; 
+import { data } from "autoprefixer";
+import { GridPdf } from "../data/dummy" 
+import { getUserById } from "../helper/getUsersById";
+
 
 let url = `${process.env.REACT_APP_SERVER_IP}/reports`;
 let noImages = [
@@ -42,22 +45,27 @@ let noImages = [
 
 let images = [];
 let videos = [];
+
 export const ReportDatails = () => {
-  const [t] = useTranslation("global");
+
+  const [t, i18n] = useTranslation("global");
   let dataImages = [];
   let dataVideos = [];
   const navigate = useNavigate();
   let { id } = useParams();
   const [flag, setFlag] = useState(false);
   const [reportDetails, setReportDetails] = useState({});
-  //const {report, isLoading} = useFetchReportId(id, navigate);
+  //const {report, isLoading} = useFetchReportId(id, navigate); 
   let user = JSON.parse(localStorage.getItem("user"));
   let userRole = user.rol?.rolName || "";
   const { reportSaved, setreportSaved, reportFormVisible, setReportFormVisible } = useContext(UserContext);
+  
   useEffect(() => {
     getReportId(id, navigate)
-      .then((data) => setReportDetails(data))
-
+      .then((data) => {
+        setReportDetails(data);
+        console.log("Report data:", data); 
+      });
   }, [reportSaved]);
 
 
@@ -110,6 +118,15 @@ export const ReportDatails = () => {
     return "https://drive.google.com/file/d/" + idVid + "/preview";
   });
   console.log(dataImages)
+
+  const [incidentType, setIncidentType] = useState('');
+
+  useEffect(() => {
+    const incidentKey = reportDetails?.caseType?.incident.toLowerCase().replace(/\s/g, '_');
+    const translationPath = `dashboard.reports.case-details.types-of-incident.${incidentKey}`;
+    setIncidentType(t(translationPath));
+  }, [reportDetails, t]);
+
   return (
 
     <div className="mx-20 md:m-10  md:p-0 bg-white rounded-3xl">
@@ -159,9 +176,9 @@ export const ReportDatails = () => {
         <div className="px-4 py-3 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-3">
           <div className="max-w-xl mb-10 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12">
             <div>
-              <p className="inline-block px-3 py-px mb-4 text-xs font-semibold tracking-wider text-gray-700 uppercase rounded-full bg-teal-accent-400">
+              <h6 className="inline-block px-3 py-px mb-4 text-xs font-semibold tracking-wider text-gray-700 uppercase rounded-full bg-teal-accent-400">
                 INNOVA MONITORING
-              </p>
+              </h6>
             </div>
             <h2 className="max-w-lg mb-6 font-sans text-3xl font-bold leading-none tracking-tight text-yellow-600 sm:text-4xl md:mx-auto">
               <span className="relative inline-block">
@@ -187,9 +204,8 @@ export const ReportDatails = () => {
                     height="24"
                   />
                 </svg>
-                <span className="relative">Incidente </span>
-              </span>{" "}
-              Report
+                <span className="relative">{t("dashboard.reports.case-details.incident-report")}</span>
+              </span>
             </h2>
             <p className="text-base text-gray-700 md:text-lg">
 
@@ -204,7 +220,7 @@ export const ReportDatails = () => {
                   </div>
                 </div>
                 <div className="flex items-center max-w-full ">
-                  <h6 className=" text-xl font-bold leading-5">Property:</h6>
+                  <h6 className=" text-xl font-bold leading-5">{t("dashboard.reports.case-details.property")}</h6>
                   <p className="text-lg text-gray-900 ml-3">
                     {reportDetails?.property?.name}
                   </p>
@@ -217,7 +233,7 @@ export const ReportDatails = () => {
                   </div>
                 </div>
                 <div className="flex items-center w-full border-b-1">
-                  <p className=" text-lg font-bold ">Monitoring Agent:</p>
+                  <p className=" text-lg font-bold ">{t("dashboard.reports.case-details.name")}</p>
                   <p className="text-lg text-gray-900 ml-3">
                     {reportDetails?.createdBy?.name}
                   </p>
@@ -229,9 +245,9 @@ export const ReportDatails = () => {
                   <div className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-50">
                     <AiOutlineTeam className="text-yellow-600 w-5 h-6"></AiOutlineTeam>
                   </div>
-                </div>
+                </div>    
                 <div className="flex items-center w-full border-b-1">
-                  <p className=" text-lg font-bold ">Team:</p>
+                  <p className=" text-lg font-bold ">{t("dashboard.reports.case-details.company")}</p>
                   <p className="text-lg text-gray-900 ml-3">
                     {reportDetails?.company}
                   </p>
@@ -244,9 +260,9 @@ export const ReportDatails = () => {
                   </div>
                 </div>
                 <div className="flex items-center w-full border-b-1">
-                  <p className=" text-lg font-bold ">Incidente Case:</p>
+                  <p className=" text-lg font-bold ">{t("dashboard.reports.case-details.incident")}</p>
                   <p className="text-lg text-gray-900 ml-3">
-                    {reportDetails?.caseType?.incident}
+                    {incidentType}
                   </p>
                 </div>
               </div>
@@ -257,7 +273,7 @@ export const ReportDatails = () => {
                   </div>
                 </div>
                 <div className="flex items-center w-full border-b-1">
-                  <p className=" text-lg font-bold ">Level:</p>
+                  <p className=" text-lg font-bold ">{t("dashboard.reports.case-details.level")}</p>
                   <p className="text-lg text-gray-900 ml-3">
                     {reportDetails?.level}
                   </p>
@@ -270,12 +286,12 @@ export const ReportDatails = () => {
                   </div>
                 </div>
                 <div className="flex items-center w-full border-b-1">
-                  <p className=" text-lg font-bold ">Security Guard ON Scene</p>
+                  <p className=" text-lg font-bold ">{t("dashboard.reports.case-details.security-guards-scene")}</p>
                   <p className="text-lg text-gray-900 ml-3">
                     {reportDetails?.securityGuardsScene ? (
-                      <p className="text-teal-600">Yes</p>
+                      <p className="text-teal-600">{t("dashboard.reports.case-details.yes")}</p>
                     ) : (
-                      <p className="text-red-700">No</p>
+                      <p className="text-red-700">{t("dashboard.reports.case-details.no")}</p>
                     )}
                   </p>
                 </div>
@@ -286,12 +302,12 @@ export const ReportDatails = () => {
                   </div>
                 </div>
                 <div className="flex items-center w-full border-b-1">
-                  <p className=" text-lg font-bold ">Security Guard Notified</p>
+                  <p className=" text-lg font-bold ">{t("dashboard.reports.case-details.security-guards-notified")}</p>
                   <p className="text-lg text-gray-900 ml-3">
                     {reportDetails?.securityGuardsNotified ? (
-                      <p className="text-teal-600">Yes</p>
+                      <p className="text-teal-600">{t("dashboard.reports.case-details.yes")}</p>
                     ) : (
-                      <p className="text-red-700">No</p>
+                      <p className="text-red-700">{t("dashboard.reports.case-details.no")}</p>
                     )}
                   </p>
                 </div>
@@ -303,7 +319,7 @@ export const ReportDatails = () => {
                   </div>
                 </div>
                 <div className="flex items-center w-full border-b-1">
-                  <p className=" text-lg font-bold ">Form Notification Client</p>
+                  <p className=" text-lg font-bold ">{t("dashboard.reports.case-details.form-notification-client")}</p>
                   <p className="text-lg text-gray-900 ml-3">
                     {reportDetails?.formNotificationClient}
                   </p>
@@ -316,12 +332,12 @@ export const ReportDatails = () => {
                   </div>
                 </div>
                 <div className="flex items-center w-full border-b-1">
-                  <p className=" text-lg font-bold ">Observerd Via Cameras</p>
+                  <p className=" text-lg font-bold ">{t("dashboard.reports.case-details.observed-via-cameras")}</p>
                   <p className="text-lg text-gray-900 ml-3">
                     {reportDetails?.observerdViaCameras ? (
-                      <p className="text-teal-600">Yes</p>
+                      <p className="text-teal-600">{t("dashboard.reports.case-details.yes")}</p>
                     ) : (
-                      <p className="text-red-700">No</p>
+                      <p className="text-red-700">{t("dashboard.reports.case-details.no")}</p>
                     )}
                   </p>
                 </div>
@@ -333,7 +349,7 @@ export const ReportDatails = () => {
                   </div>
                 </div>
                 <div className="flex items-center w-full border-b-1">
-                  <p className=" text-lg font-bold ">List Mal Funcioning Cameras</p>
+                  <p className=" text-lg font-bold ">{t("dashboard.reports.case-details.list-malfuncioning-cameras")}</p>
                   <p className="text-lg text-gray-900 ml-3">
                     {reportDetails?.listMalfuncioningCameras}
                   </p>
@@ -346,12 +362,12 @@ export const ReportDatails = () => {
                   </div>
                 </div>
                 <div className="flex items-center w-full border-b-1">
-                  <p className=" text-lg font-bold ">Cameras Functioning</p>
+                  <p className=" text-lg font-bold ">{t("dashboard.reports.case-details.cameras-functioning")}</p>
                   <p className="text-lg text-gray-900 ml-3">
                     {reportDetails?.camerasFunctioning ? (
-                      <p className="text-teal-600">Yes</p>
+                      <p className="text-teal-600">{t("dashboard.reports.case-details.yes")}</p>
                     ) : (
-                      <p className="text-red-700">No</p>
+                      <p className="text-red-700">{t("dashboard.reports.case-details.no")}</p>
                     )}
                   </p>
                 </div>
@@ -365,7 +381,7 @@ export const ReportDatails = () => {
                   </div>
                 </div>
                 <div className="flex items-center w-full border-b-1">
-                  <p className=" text-lg font-bold ">Date</p>
+                  <p className=" text-lg font-bold ">{t("dashboard.reports.case-details.date-of-report")}</p>
                   <p className="text-lg text-gray-900 ml-3">
                     {reportDetails?.dateOfReport}
                   </p>
@@ -378,7 +394,7 @@ export const ReportDatails = () => {
                   </div>
                 </div>
                 <div className="flex items-center w-full border-b-1">
-                  <p className=" text-lg font-bold ">Incident Start Time:</p>
+                  <p className=" text-lg font-bold ">{t("dashboard.reports.case-details.incident-start-time")}</p>
                   <p className="text-lg text-gray-900 ml-3">
                     {reportDetails?.incidentStartTime}
                   </p>
@@ -391,7 +407,7 @@ export const ReportDatails = () => {
                   </div>
                 </div>
                 <div className="flex items-center w-full border-b-1">
-                  <p className=" text-lg font-bold ">Incident End Time</p>
+                  <p className=" text-lg font-bold ">{t("dashboard.reports.case-details.incident-end-time")}</p>
                   <p className="text-lg text-gray-900 ml-3">
                     {reportDetails?.incidentEndTime}
                   </p>
@@ -404,8 +420,12 @@ export const ReportDatails = () => {
                   </div>
                 </div>
                 <div className="flex items-center w-full border-b-1">
-                  <p className=" text-lg font-bold ">Time of Report</p>
-                  <a className="text-lg text-teal-600 ml-3">{reportDetails?.timeOfReport}</a>
+                  <p className=" text-lg font-bold ">
+                    {t("dashboard.reports.case-details.time-of-report")}
+                  </p>
+                  <a className="text-lg text-teal-600 ml-3">
+                    {reportDetails?.timeOfReport}
+                  </a>
                 </div>
               </div>
               <div className="flex max-w-full ">
@@ -415,9 +435,13 @@ export const ReportDatails = () => {
                   </div>
                 </div>
                 <div className="flex items-center w-full border-b-1">
-                  <p className=" text-lg font-bold ">Report PDF</p>
-                  <a className="text-lg ml-3 text-blue-600">Link</a>
-                </div>
+                  <p className=" text-lg font-bold mr-5">
+                    {t("dashboard.reports.case-details.report-pdf")}
+                  </p>
+                  <GridPdf {...reportDetails} className="ml-20">   
+                    <AiFillFilePdf />
+                  </GridPdf>                
+                  </div>
               </div>
               <div className="flex max-w-full ">
                 <div className=" mr-3">
@@ -426,7 +450,7 @@ export const ReportDatails = () => {
                   </div>
                 </div>
                 <div className="flex items-center w-full border-b-1">
-                  <p className=" text-lg font-bold ">Number Case</p>
+                  <p className=" text-lg font-bold ">{t("dashboard.reports.case-details.numer-case")}</p>
                   <p className="text-lg text-gray-900 ml-3">
                     {reportDetails?.numerCase}
                   </p>
@@ -439,12 +463,12 @@ export const ReportDatails = () => {
                   </div>
                 </div>
                 <div className="flex items-center w-full border-b-1">
-                  <p className=" text-lg font-bold ">Verified</p>
+                  <p className=" text-lg font-bold ">{t("dashboard.reports.case-details.verified")}</p>
                   <p className="text-lg text-gray-900 ml-3">
                     {reportDetails?.verified ? (
-                      <p className="text-teal-600">Yes</p>
+                      <p className="text-teal-600">{t("dashboard.reports.case-details.yes")}</p>
                     ) : (
-                      <p className="text-red-700">No</p>
+                      <p className="text-red-700">{t("dashboard.reports.case-details.no")}</p>
                     )}
                   </p>
                 </div>
@@ -456,7 +480,7 @@ export const ReportDatails = () => {
                   </div>
                 </div>
                 <div className="flex items-center w-full border-b-1">
-                  <p className=" text-lg font-bold ">Emailed Report</p>
+                  <p className=" text-lg font-bold ">{t("dashboard.reports.case-details.emailed-report")}</p>
                   <p className="text-lg text-gray-900 ml-3">
                     {reportDetails?.emailedReport}
                   </p>
@@ -469,12 +493,12 @@ export const ReportDatails = () => {
                   </div>
                 </div>
                 <div className="flex items-center w-full border-b-1">
-                  <p className=" text-lg font-bold ">Police Notified</p>
+                  <p className=" text-lg font-bold ">{t("dashboard.reports.case-details.police-notified")}</p>
                   <p className="text-lg text-gray-900 ml-3">
                     {reportDetails?.policeFirstResponderNotified ? (
-                      <p className="text-teal-600">Yes</p>
+                      <p className="text-teal-600">{t("dashboard.reports.case-details.yes")}</p>
                     ) : (
-                      <p className="text-red-700">No</p>
+                      <p className="text-red-700">{t("dashboard.reports.case-details.no")}</p>
                     )}
                   </p>
                 </div>
@@ -486,12 +510,12 @@ export const ReportDatails = () => {
                   </div>
                 </div>
                 <div className="flex items-center w-full border-b-1">
-                  <p className=" text-lg font-bold ">Police On The Scene</p>
+                  <p className=" text-lg font-bold ">{t("dashboard.reports.case-details.police-first-responder-notified")}</p>
                   <p className="text-lg text-gray-900 ml-3">
                     {reportDetails?.policeFirstResponderScene ? (
-                      <p className="text-teal-600">Yes</p>
+                      <p className="text-teal-600">{t("dashboard.reports.case-details.yes")}</p>
                     ) : (
-                      <p className="text-red-700">No</p>
+                      <p className="text-red-700">{t("dashboard.reports.case-details.no")}</p>
                     )}
                   </p>
                 </div>
@@ -503,12 +527,12 @@ export const ReportDatails = () => {
                   </div>
                 </div>
                 <div className="flex items-center w-full border-b-1">
-                  <p className=" text-lg font-bold ">Police Number Case</p>
+                  <p className=" text-lg font-bold ">{t("dashboard.reports.case-details.police-numer-case")}</p>
                   <p className="text-lg text-gray-900 ml-3">
                     {reportDetails?.policeNumerCase ? (
                       <p className="text-gray-800">{reportDetails.policeNumerCase}</p>
                     ) : (
-                      <p className="text-red-700">"-"</p>
+                      <p className="text-red-700">"   "</p>
                     )}
                   </p>
                 </div>
@@ -547,12 +571,11 @@ export const ReportDatails = () => {
                 height="24"
               />
             </svg>
-            <span className="relative">Video </span>
-          </span>{" "}
-          Gallery
+            <span className="relative"><p className="text-red-700">{t("dashboard.reports.case-details.video-gallery")}</p> </span>
+          </span>
         </h2>
       </div>
-      <hr />
+      
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
 
         {
@@ -603,9 +626,8 @@ export const ReportDatails = () => {
                 height="24"
               />
             </svg>
-            <span className="relative">Image </span>
-          </span>{" "}
-          Gallery
+            <span className="relative">{t("dashboard.reports.case-details.image-gallery")}</span>
+          </span>
         </h2>
       </div>
       <ReactImageGallery

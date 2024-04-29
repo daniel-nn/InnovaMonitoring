@@ -83,6 +83,7 @@ export const deleteProperty = async (
   }
   return {};
 };
+
 export const deleteCamera = async (url, id, cameraSaved, setCameratSaved) => {
   let resp = {};
 

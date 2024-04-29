@@ -70,7 +70,6 @@ const UserProfile = ({ userProfile }) => {
         {translatedUserProfileData.map((item, index) => (
           <div
             key={index}
-            // Agrega una clase adicional para aplicar estilos cuando el mouse está encima.
             className={`flex gap-5 border-b-1 border-color p-4 cursor-pointer dark:hover:bg-[#42464D] ${item.hoverClass}`}
             onClick={() => handleProfileClick(userProfile)}
           >

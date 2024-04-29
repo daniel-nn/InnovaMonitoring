@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import Swal from "sweetalert2";
 import { UserContext } from "../../context/UserContext";
 
-export const putIncident = async (caseProvider, setreportSaved, reportSaved) => {
+export const putIncident = async (caseProvider, setreportSaved, reportSaved, t) => {
 
 
   let resp = {};

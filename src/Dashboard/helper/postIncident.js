@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import Swal from "sweetalert2";
 import { UserContext } from "../../context/UserContext";
 
-export const postIncident = async (caseProvider, setreportSaved, reportSaved) => {
+export const postIncident = async (caseProvider, setreportSaved, reportSaved, t) => {
 
 
   let resp = {};
@@ -20,11 +20,13 @@ export const postIncident = async (caseProvider, setreportSaved, reportSaved) =>
     });
     data = await resp.json();
     Swal.fire({
-      icon: "success",
-      title: "Success",
-      text: "The incident has been created correctly",
+      toast: true,
+      position: 'top-end',
+      icon: 'success',
+      title: t('dashboard.cases.swal.added-case'),
+      showConfirmButton: false,
+      timer: 3000
     });
-
     setreportSaved(!reportSaved)
   } catch (error) {
     Swal.fire({

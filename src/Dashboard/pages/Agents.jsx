@@ -31,9 +31,10 @@ export const Agents = () => {
   const [visible, setVisible] = useState(false);
   let user = JSON.parse(localStorage.getItem("user"));
   let userRole = user.role.rolName;
-  const { userProvider, setUserProvider, agentDialog, setAgentDialog, flag} = useContext(UserContext);
+  const { userProvider, setUserProvider, agentDialog, setAgentDialog, flag, setFlag } = useContext(UserContext);
   const [userSaved, setUserSaved] = useState(false);
   const [roles, setRoles] = useState([]);
+  const [validationErrors, setValidationErrors] = useState({});
 
 
   const fetchMonitors = async () => {
@@ -43,7 +44,7 @@ export const Agents = () => {
 
   useEffect(() => {
     fetchMonitors();
-  }, [navigate]); 
+  }, [navigate, flag]);
 
   useEffect(() => {
     const fetchRoles = async () => {
@@ -57,13 +58,14 @@ export const Agents = () => {
 
         setRoles(rolesArray);
         const monitorRole = rolesArray.find(role => role.originalName === "Monitor");
+        console.log("monitor Role data:", monitorRole)
         if (monitorRole) {
           setUserProvider(prev => ({
             ...prev,
             rol: {
               rolKey: monitorRole.rolKey,
               rolName: monitorRole.rolName,
-              originalName: monitorRole.originalName  // Asegúrate de incluir originalName aquí
+              originalName: monitorRole.originalName  
             }
           }));
         }
@@ -73,6 +75,7 @@ export const Agents = () => {
     };
     fetchRoles();
   }, [t, setUserProvider]);
+
 
 
   const header = <div className="font-bold mb-3">{t("dashboard.agents.dialog-add-agent.suggestion.pick-password")}</div>;
@@ -89,10 +92,45 @@ export const Agents = () => {
     </>
   );
 
+  const handleInputChange = (field, value) => {
+    setUserProvider(prev => ({
+      ...prev,
+      [field]: value
+    }));
+    if (validationErrors[field]) {
+      setValidationErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
+    }
+  };
 
+  const validateAgentDetails = () => {
+    const errors = {};
+    if (!userProvider.name || userProvider.name.trim() === "") {
+      errors.name = t("dashboard.users.dialog-add-user.validation.name-required");
+    }
+    if (!userProvider.email || userProvider.email.trim() === "") {
+      errors.email = t("dashboard.users.dialog-add-user.validation.email-required");
+    }
+    if (!userProvider.pasword || userProvider.pasword.trim() === "") {
+      errors.pasword = t("dashboard.users.dialog-add-user.validation.password-required");
+    }
+
+    if (!userProvider.image || userProvider.image.trim() === "") {
+      errors.image = t("dashboard.users.dialog-add-user.validation.image-required")
+    }
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
 
   const saveNewUser = async () => {
+
+    if (!validateAgentDetails()) return;
+
     const userToSend = {
       name: userProvider.name,
       email: userProvider.email,
@@ -109,12 +147,14 @@ export const Agents = () => {
       const data = await postNewUser(userToSend);
       if (data && !data.error) {  
         Swal.fire({
+          toast: true,
+          position: 'top-end',
           icon: 'success',
-          title: 'Success',
-          text: "The agent has been created correctly",
+          title: t('dashboard.users.dialog-add-user.successful-response'),
+          showConfirmButton: false,
           timer: 3000
         });
-        setUserSaved(userSaved => !userSaved);  // Cambio de estado para disparar recarga
+        setUserSaved(userSaved => !userSaved);  
         setUserDialog(false);
         setUserProvider({});
         fetchMonitors(); 
@@ -135,6 +175,7 @@ export const Agents = () => {
   const handleClose = () => {
     setUserDialog(false);
     setUserProvider({});
+    setValidationErrors({});
   };
 
   return (
@@ -175,13 +216,21 @@ export const Agents = () => {
                 id="username"
                 value={userProvider.name}
                 className="w-full"
-                onChange={(e) =>
-                  setUserProvider((i) => {
-                    return { ...userProvider, name: e.target.value };
-                  })
-                }
+                onChange={(e) => {
+                  setUserProvider((prev) => ({
+                    ...prev,
+                    name: e.target.value
+                  }));
+                  if (validationErrors.name) {
+                    setValidationErrors((prev) => ({
+                      ...prev,
+                      name: null
+                    }));
+                  }
+                }}
               />
               <label htmlFor="username">{t("dashboard.agents.dialog-add-agent.name")}</label>
+              {validationErrors.name && <small className="p-error">{validationErrors.name}</small>}
             </span>
           </div>
 
@@ -191,13 +240,21 @@ export const Agents = () => {
                 id="username"
                 value={userProvider.email}
                 className="w-full"
-                onChange={(e) =>
-                  setUserProvider((i) => {
-                    return { ...userProvider, email: e.target.value };
-                  })
-                }
+                onChange={(e) => {
+                  setUserProvider((prev) => ({
+                    ...prev,
+                    email: e.target.value
+                  }));
+                  if (validationErrors.email) {
+                    setValidationErrors((prev) => ({
+                      ...prev,
+                      email: null
+                    }));
+                  }
+                }}
               />
               <label htmlFor="username">{t("dashboard.agents.dialog-add-agent.email")}</label>
+              {validationErrors.email && <small className="p-error">{validationErrors.email}</small>}
             </span>
           </div>
 
@@ -206,7 +263,18 @@ export const Agents = () => {
               <Password
                 toggleMask
                 value={userProvider.pasword}
-                onChange={(e) => setUserProvider({ ...userProvider, pasword: e.target.value })}
+                onChange={(e) => {
+                  setUserProvider((prev) => ({
+                    ...prev,
+                    pasword: e.target.value
+                  }));
+                  if (validationErrors.pasword) {
+                    setValidationErrors((prev) => ({
+                      ...prev,
+                      pasword: null
+                    }));
+                  }
+                }}       
                 className="w-full"
                 header={header}
                 footer={footer}
@@ -215,9 +283,8 @@ export const Agents = () => {
                 mediumLabel={t("dashboard.agents.dialog-add-agent.suggestion.password-strength.medium")}
                 strongLabel={t("dashboard.agents.dialog-add-agent.suggestion.password-strength.strong")}
               />
-
-
               <label htmlFor="Password">{t("dashboard.agents.dialog-add-agent.password")}</label>
+              {validationErrors.email && <small className="p-error">{validationErrors.email}</small>}
             </span>
           </div>
 
@@ -227,13 +294,21 @@ export const Agents = () => {
                 id="image"
                 value={userProvider.image}
                 className="w-full"
-                onChange={(e) =>
-                  setUserProvider((i) => {
-                    return { ...userProvider, image: e.target.value };
-                  })
-                }
+                onChange={(e) => {
+                  setUserProvider((prev) => ({
+                    ...prev,
+                    image: e.target.value
+                  }));
+                  if (validationErrors.image) {
+                    setValidationErrors((prev) => ({
+                      ...prev,
+                      image: null
+                    }));
+                  }
+                }}
               />
               <label htmlFor="image">{t("dashboard.agents.dialog-add-agent.image-url")}</label>
+              {validationErrors.image && <small className="p-error">{validationErrors.image}</small>}
             </span>
           </div>
 

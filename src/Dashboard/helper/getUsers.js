@@ -27,27 +27,27 @@ export const getUsers = async (navigate) => {
             Email: user.email,
             Name: user.name,
             Rol: user?.rol?.rolName,
+            user,
             id:user.id
         };
       });
 
 
-      
-      
     } catch (error) {
-      console.log(error)
+      console.error("Error fetching users:", error);
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: error,
+        text: error.toString(),
       });
+      return []; // Retorna un arreglo vacío en caso de error
     }
   
     if (resp.status == 404) {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "Error al buscar la informacion de la propiedad en la base de datos",
+        text: "Error al buscar la informacion  de los usuarios en la base de datos",
       });
   
       return;
