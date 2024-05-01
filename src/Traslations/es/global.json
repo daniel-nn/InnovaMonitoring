@@ -466,6 +466,21 @@
           "CaseDetails": "Detalles",
           "no-pdf": "Este informe no tiene pdf"
         },
+        "admin-no-verfied":{
+          "property": "Propiedad",
+          "Case": "Incidente",
+          "Agent": "Monitor",
+          "CaseLevel": "Nivel",
+          "CaseStatus": "Estatus caso",
+          "DateCase": "Fecha",
+          "TimeCase": "Hora",
+          "IdCase": "ID caso",
+          "CaseVerified": "Verificado",
+          "verifiedchanged": "Estado verificado cambiado",
+          "CaseEdit": "Editar",
+          "CaseDetails": "Detalles",
+          "no-pdf": "Este informe no tiene pdf"
+        },
         "client": {
           "CaseImage": "Imagen",
           "Case": "Caso  de",
@@ -807,7 +822,8 @@
           "at-least-one-numeric": "Al menos un número",
           "minimum-characters": "Mínimo 8 caracteres"
         },
-        "image-url": "Url de la imagen",
+        "inser-img": "Ingrese la imagen del usuario",
+        "search-img": "Buscar imagen",
         "roles": {
           "select-rol": "Seleccione el rol",
           "roles-dropdown":{

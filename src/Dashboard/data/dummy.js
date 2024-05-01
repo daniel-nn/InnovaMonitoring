@@ -6644,6 +6644,83 @@ export const reportsGridAdmin = (t) => {
   ];
 };
 
+export const reportsGridNoVerified = (t) => {
+  return [
+    {
+      headerText: t("dashboard.reports.table.admin-no-verfied.property"),
+      field: "property.name",
+      textAlign: "Center",
+      width: "190",
+    },
+    {
+      field: "caseType.incident",
+      headerText: t("dashboard.reports.table.admin-no-verfied.Case"),
+      width: "120",
+      editType: "dropdownedit",
+      textAlign: "Center",
+    },
+    {
+      field: "createdBy.name",
+      headerText: t("dashboard.reports.table.admin-no-verfied.Agent"),
+      width: "200",
+      editType: "dropdownedit",
+      textAlign: "Center",
+    },
+    {
+      field: "level",
+      headerText: t("dashboard.reports.table.admin-no-verfied.CaseLevel"),
+      width: "90",
+      format: "yMd",
+      textAlign: "Center",
+      template: customerGridStatus,
+    },
+
+    {
+      field: "dateOfReport",
+      headerText: t("dashboard.reports.table.admin-no-verfied.DateCase"),
+      width: "130",
+      textAlign: "Center",
+    },
+
+    {
+      field: "numerCase",
+      headerText: t("dashboard.reports.table.admin-no-verfied.IdCase"),
+      width: "110",
+      textAlign: "Center",
+    },
+    {
+      field: "PDF",
+      headerText: "Pdf",
+      width: "40",
+      textAlign: "Center",
+      template: GridPdf,
+    },
+    {
+      field: "Details",
+      headerText: t("dashboard.reports.table.admin-no-verfied.CaseDetails"),
+      width: "105",
+      textAlign: "Center",
+      template: GridDetails,
+    },
+    {
+      field: "verified",
+      headerText: t("dashboard.reports.table.admin-no-verfied.CaseVerified"),
+      width: "120",
+      textAlign: "Center",
+      template: GridisVerifiedAndVerification,
+    },
+
+    {
+      field: "Edit",
+      headerText: t("dashboard.reports.table.admin-no-verfied.CaseEdit"),
+      width: "80",
+      textAlign: "Center",
+      template: GridEditReportTemplate,
+    },
+  ];
+};
+
+
 
 export const reportsGridMonitor = (t) => {
   return [

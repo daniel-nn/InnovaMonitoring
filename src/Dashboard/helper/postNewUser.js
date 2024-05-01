@@ -1,23 +1,25 @@
-import { CameraAltTwoTone } from '@mui/icons-material';
-import React from 'react'
+import React from 'react';
 import Swal from 'sweetalert2';
 
-export const postNewUser = async (formData) => {
+export const postNewUser = async (formData, t) => {
   const url = `${process.env.REACT_APP_SERVER_IP}/users`;
 
   try {
-    const resp = await fetch(url, {
+    const response = await fetch(url, {
       method: "POST",
-      body: formData  
+      body: formData 
     });
 
-    const data = await resp.json();
+    const data = await response.json();
 
-    if (resp.ok) {  
+    if (response.ok) {
       Swal.fire({
         icon: 'success',
-        title: 'Success',
-        text: 'User successfully saved.',
+        text: t('dashboard.users.dialog-add-user.successful-response'),
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000
       });
     } else {
       Swal.fire({

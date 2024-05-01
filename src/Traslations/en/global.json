@@ -464,6 +464,21 @@
           "CaseDetails": "Details",
           "no-pdf": "This report does not have a pdf"
         },
+        "admin-no-verfied":{
+          "property": "Property",
+          "Case": "Incident",
+          "Agent": "Monitor",
+          "CaseLevel": "Case Level",
+          "CaseStatus": "Status",
+          "DateCase": "Date Incident",
+          "TimeCase": "Time",
+          "IdCase": "Report ID",
+          "CaseVerified": "Verified",
+          "verifiedchanged": "Verified Status Changed",
+          "CaseEdit": "Edit",
+          "CaseDetails": "Details",
+          "no-pdf": "This report does not have a pdf"
+        },
         "client": {
           "CaseImage": "Image",
           "Case": "Case off",
@@ -806,7 +821,8 @@
           "at-least-one-numeric": "At least one numeric",
           "minimum-characters": "Minimum 8 characters"
         },
-        "image-url": "Image Url",
+        "inser-img": "Enter The User's Image",
+        "search-img": "Search Image",
         "roles": {
           "select-rol": "Select The Rol",
           "roles-dropdown": {

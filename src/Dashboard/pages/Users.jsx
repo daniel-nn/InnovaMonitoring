@@ -33,6 +33,7 @@ import { GetPropertyInfo } from "../helper/getPropertyInfo";
 import { getPropertiesInfo } from "../helper/getProperties";
 import { postNewUser } from "../helper/postNewUser";
 import Swal from 'sweetalert2';
+import './css/users/Users.css';
 
 export const Users = () => {
   const {
@@ -177,46 +178,36 @@ export const Users = () => {
       }
     }
   };
-
   const saveNewUser = async () => {
+    
     if (!validateUserDetails()) {
       return; 
     }
 
     const formData = new FormData();
-    formData.append('name', userProvider.name);
-    formData.append('email', userProvider.email);
-    formData.append('password', userProvider.password);
-    formData.append('rol', JSON.stringify({ id: userProvider.rol.rolKey, rolName: userProvider.rol.originalName }));
-    formData.append('image', userProvider.image);
+    const userBlob = new Blob([JSON.stringify({
+      name: userProvider.name,
+      email: userProvider.email,
+      pasword: userProvider.pasword,
+      rol: {
+        id: userProvider.rol.rolKey,
+        rolName: userProvider.rol.originalName
+      },
+      properties: userProvider.properties || []
+    })], { type: 'application/json' });
+    formData.append('user', userBlob);  
 
-    if (userProvider.properties) {
-      userProvider.properties.forEach(property => {
-        formData.append('properties[]', JSON.stringify(property));
-      });
+    if (userProvider.image) {
+      formData.append('img', userProvider.image); 
     }
-
     try {
-      const data = await postNewUser(formData); 
+      const data = await postNewUser(formData, t);
       if (data) {
-        Swal.fire({
-          toast: true,
-          position: 'top-end',
-          icon: 'success',
-          title: t('dashboard.users.dialog-add-user.successful-response'),
-          showConfirmButton: false,
-          timer: 3000
-        });
-        setUserSaved(!userSaved); 
-        setUserDialog(false); 
+        setUserSaved(!userSaved);   
+        setUserDialog(false);
         setUserProvider({}); 
       }
     } catch (error) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: error.toString(),
-      });
     }
   };
 
@@ -298,19 +289,23 @@ export const Users = () => {
           </div>
 
           <div className="mb-6 mx-auto w-7/12">
-            <label htmlFor="username">{t("dashboard.cameras.dialog.camera-name")}</label>
-
-            <span className="p-float-label w-full">
+            <label htmlFor="image">{t("dashboard.users.dialog-add-user.search-img")}</label>
+            <div className="file-upload-container">
               <input
                 type="file"
                 id="image"
                 accept="image/*"
-                onChange={(e) => handleImageChange(e)}
-                className="w-full"
+                onChange={handleImageChange}
+                className="file-input"
+                style={{ display: 'none' }} 
               />
+              <label htmlFor="image" className="file-input-label">{t("dashboard.users.dialog-add-user.search-img")}</label>
+              <span id="file-name" className="file-name">{userProvider.image ? userProvider.image.name : ''}</span>
               {validationErrors.image && <small className="p-error">{validationErrors.image}</small>}
-            </span>
+            </div>
           </div>
+
+
 
 
           <div className="mx-auto w-7/12 ">
