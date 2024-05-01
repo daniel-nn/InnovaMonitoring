@@ -41,10 +41,7 @@ export const gridOrderImage = (props) => (
   <div>
     <img
       className="rounded-xl w-20 h-20  md:ml-3"
-      src={
-        props.ProductImage ||
-        "https://drive.google.com/file/d/1qhOEbNfDGe5ALXoXtaZZisI2qDkLxwAL/view?usp=sharing"
-      }
+      src={props?.UserImage}
       alt="order-item"
     />
   </div>

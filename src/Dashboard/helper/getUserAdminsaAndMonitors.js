@@ -15,15 +15,13 @@ export const getAdminsAndMonitors = async (navigate) => {
 
         usersMapped = data.map((user) => {
             if (user.name && !user.deleted) {
-                let userImg = "";
-                let link = user.image?.split("/");
-                let idImg = link?.[5] ? link[5] : "";
-                userImg = idImg ? `https://drive.google.com/uc?export=view&id=${idImg}` : user.image;
+                let userImg = "https://innovamonitoring-bucket.s3.us-east-2.amazonaws.com/"+
+                user?.image;
 
                 return {
                     id: user.id,
                     name: user.name,
-                    ProductImage: userImg,
+                    UserImage: userImg,
                     rol: user.rol,
                 };
             }

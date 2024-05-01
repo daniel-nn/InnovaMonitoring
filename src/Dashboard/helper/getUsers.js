@@ -12,17 +12,10 @@ export const getUsers = async (navigate) => {
       resp = await fetch(url);
       data = await resp.json();
       usersMapped = data.map((user) => {
-        let userImg = "";
-        let link = user.image?.split("/");
-        if(link){
-
-          let idImg = link[5] ? link[5] : "";
-          userImg = "https://drive.google.com/uc?export=view&id=" + idImg;
-        }
-   
+        let userImg = "https://innovamonitoring-bucket.s3.us-east-2.amazonaws.com/"+user?.image;
+      
         return {
-    
-          ProductImage: userImg,
+          UserImage: userImg,
           StatusBg: "#8BE78B",
             Email: user.email,
             Name: user.name,

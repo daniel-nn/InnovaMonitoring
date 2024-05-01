@@ -15,7 +15,7 @@ import { makeStyles } from '@material-ui/core/styles';
       const [roles, setRoles] = useState([]);
       
       const [showPasword, setShowPasword] = useState(false);
-      const {name, rol} = userProvider;
+      const {name, rol, image} = userProvider;
       let user = JSON.parse(localStorage.getItem("user"));
       let userRole = user.role.rolName;
     const [selectedRoleId, setSelectedRoleId] = useState(userProvider.rol?.rolKey);
@@ -94,6 +94,8 @@ import { makeStyles } from '@material-ui/core/styles';
     
     };
 
+    //Es la concatenacion de la url del bucket con su imagen o clave unica
+    const imageURL = `${process.env.REACT_APP_S3_BUCKET_URL}/${image}`
 
       return (
       <main className="w-full min-h-screen py-1 md:w-2/3 lg:w-3/4">
@@ -104,9 +106,8 @@ import { makeStyles } from '@material-ui/core/styles';
             <h2 className="pl-6 text-2xl sm:text-xl">{initialRolName}</h2>
               <div className="grid max-w-2xl mx-auto mt-4">
                 <div className="flex flex-col items-center space-y-5 sm:flex-row sm:space-y-0">
-  
                   <img className="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-[#f5b73293] dark:ring-indigo-500"
-                    src="https://i.imgur.com/StuIrQx.png"
+                    src={imageURL}
                     alt="Bordered avatar" />
   
                   <div className="flex flex-col space-y-5 sm:ml-8">
