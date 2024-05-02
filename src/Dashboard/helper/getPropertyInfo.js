@@ -19,10 +19,7 @@ export const GetPropertyInfo = async (id, userRole) => {
       : data.reports;
 
     // Procesamiento de imágenes y cámaras
-    const propertyImage = data.img?.split("/")[5]
-      ? `https://drive.google.com/uc?export=view&id=${data.img.split("/")[5]}`
-      : '';
-
+    const propertyImage = `${process.env.REACT_APP_S3_BUCKET_URL}/${data?.img}`
     const camerasWorking = data.cameras?.filter(camera => camera.status === "Working");
     const camerasOffline = data.cameras?.filter(camera => camera.status === "Offline");
     const camerasVandalized = data.cameras?.filter(camera => camera.status === "Vandalized");

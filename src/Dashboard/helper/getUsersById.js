@@ -20,13 +20,7 @@ export const getUserById = async (id) => {
         const data = await resp.json();
 
         if (resp.ok) {
-            let userImg = "";
-            let link = data.image?.split("/");
-            if (link) {
-                let idImg = link[5] ? link[5] : "";
-                userImg = "https://drive.google.com/uc?export=view&id=" + idImg;
-            }
-
+           
             userData = {
                 user: data,
             };

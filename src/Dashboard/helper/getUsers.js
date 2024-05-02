@@ -12,7 +12,12 @@ export const getUsers = async (navigate) => {
       resp = await fetch(url);
       data = await resp.json();
       usersMapped = data.map((user) => {
-        let userImg = "https://innovamonitoring-bucket.s3.us-east-2.amazonaws.com/"+user?.image;
+
+        let userImg = `${process.env.REACT_APP_S3_BUCKET_URL}/${user.image}`
+        if(user.image == null || user.image === ""){
+        userImg ="https://static-00.iconduck.com/assets.00/user-avatar-1-icon-511x512-ynet6qk9.png"
+       }
+        
       
         return {
           UserImage: userImg,

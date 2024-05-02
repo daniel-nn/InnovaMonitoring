@@ -94,8 +94,12 @@ import { makeStyles } from '@material-ui/core/styles';
     
     };
 
-    //Es la concatenacion de la url del bucket con su imagen o clave unica
-    const imageURL = `${process.env.REACT_APP_S3_BUCKET_URL}/${image}`
+    
+    let userImg = `${process.env.REACT_APP_S3_BUCKET_URL}/${image}`
+    if(image == null || user.image === ""){
+    userImg ="https://static-00.iconduck.com/assets.00/user-avatar-1-icon-511x512-ynet6qk9.png"
+   }
+    
 
       return (
       <main className="w-full min-h-screen py-1 md:w-2/3 lg:w-3/4">
@@ -107,7 +111,7 @@ import { makeStyles } from '@material-ui/core/styles';
               <div className="grid max-w-2xl mx-auto mt-4">
                 <div className="flex flex-col items-center space-y-5 sm:flex-row sm:space-y-0">
                   <img className="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-[#f5b73293] dark:ring-indigo-500"
-                    src={imageURL}
+                    src={userImg}
                     alt="Bordered avatar" />
   
                   <div className="flex flex-col space-y-5 sm:ml-8">

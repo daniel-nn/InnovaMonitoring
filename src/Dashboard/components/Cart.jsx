@@ -57,13 +57,13 @@ const handleClickProperty = (propertyArg) => {
           className="w-full p-2 rounded-lg"
         />
       </div>
-      <div className="mt-5 ">
+      <div className="mt-5">
         {properties
           ?.filter((property) =>
             searchTerm === "" ? true : property.name.toLowerCase().includes(searchTerm.toLowerCase())
           )
           .map((property, index) => {
-            const propertyImg = property.name ? `/images/${formatImageName(property.name)}` : '';
+            const propertyImg = `${process.env.REACT_APP_S3_BUCKET_URL}/${property?.img || "Resources/NoImage.png" }`
             return (
               <div
                 key={index}

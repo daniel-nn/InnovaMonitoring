@@ -12,15 +12,12 @@ export const getPropertiesMapped = async (navigate) => {
 
     data = await resp.json();
     propertyMapped = data.map((property) => {
-        let propertyImg = "";
-        let link = property.img?.split("/");
-        let idImg = link[5] ? link[5] : "";
-        propertyImg = "https://drive.google.com/uc?export=view&id=" + idImg;
-   
+       
+    let image = `${process.env.REACT_APP_S3_BUCKET_URL}/${property?.img || "Resources/NoImage.png"}`
 
       return {
        id: property.id,
-        ProductImage: propertyImg,
+        PropertyImage: image,
         Name: property.name,
         Direction: property.direction,
         Edit: property || {},

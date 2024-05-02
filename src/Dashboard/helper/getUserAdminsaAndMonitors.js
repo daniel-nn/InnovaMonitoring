@@ -16,7 +16,7 @@ export const getAdminsAndMonitors = async (navigate) => {
         usersMapped = data.map((user) => {
             if (user.name && !user.deleted) {
                 let userImg = "https://innovamonitoring-bucket.s3.us-east-2.amazonaws.com/"+
-                user?.image;
+                user?.image || "Resources/NoImage.png";
 
                 return {
                     id: user.id,
