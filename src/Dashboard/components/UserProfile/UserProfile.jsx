@@ -15,7 +15,7 @@ import useHandleProfileClick from "../../Hooks/useHandleProfileClick";
 
 const UserProfile = ({ userProfile }) => {
   const { currentColor } = useStateContext();
-  let link = userProfile.image?.split("/");
+  
   const [t] = useTranslation("global");
   let roleName = userProfile.role;  
  
@@ -29,11 +29,10 @@ const UserProfile = ({ userProfile }) => {
  
   const handleProfileClick = useHandleProfileClick();
 
-  let profileImg = "https://static-00.iconduck.com/assets.00/user-avatar-1-icon-511x512-ynet6qk9.png"
-  if(userProfile.image){
-    profileImg = `${process.env.REACT_APP_S3_BUCKET_URL}/${userProfile.image}`
-  }
-
+  let userImg = `${process.env.REACT_APP_S3_BUCKET_URL}/${userProfile.image}`
+  if(userProfile.image == null || userProfile.image === ""){
+  userImg ="https://static-00.iconduck.com/assets.00/user-avatar-1-icon-511x512-ynet6qk9.png"
+ }
   return (
     <div ref={userRef} className="nav-item absolute right-1 top-16 bg-white dark:bg-[#42464D] p-8 rounded-lg w-96">
       <div className="flex justify-between items-center">
@@ -49,7 +48,7 @@ const UserProfile = ({ userProfile }) => {
       <div className="flex gap-5 items-center mt-6 border-color border-b-1 pb-6">
         <img
           className="rounded-full h-24 w-24 userimg"
-          src={profileImg}
+          src={userImg}
 
           alt="user-profile"
         />
