@@ -16,7 +16,8 @@ import { useNavigate } from "react-router-dom";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { AiOutlinePlusCircle } from "react-icons/ai";
-import { CameraForm, CameraFormFooter } from "../components/Forms/CameraForm";
+import { CameraForm, CameraFormFooter, } from "../components/Forms/Cameras/CameraForm";
+import { CameraEditForm } from "../components/Forms/Cameras/CameraEditForm";
 import useFetchProperties from "../Hooks/useFetchProperties";
 import { getCameras } from "../helper/getCameras";
 import { UserContext } from "../../context/UserContext";
@@ -41,6 +42,7 @@ const Cameras = () => {
   let user = JSON.parse(localStorage.getItem("user"));
   let userRole = user.role.rolName;
 
+  const [selectedCamera, setSelectedCamera] = useState(null);
 
   useEffect(() => {
     getCameras(propertyContext.id || id, navigate).then((data) =>
@@ -48,17 +50,41 @@ const Cameras = () => {
     );
   }, [propertyContext, cameraSaved]);
 
+  const handleClose = () => {
+    setCameraFormFlag(false);  // Cierra el diálogo
+    setCameraForm({});         // Resetea el formulario
+  };
+
+
   return (
     <>
       <Dialog
         header={t("dashboard.cameras.dialog.add-camera")}
         visible={cameraFormFlag}
         style={{ width: "50vw" }}
-        onHide={() => {setCameraFormFlag(false);  setCameraForm({})}}
-        footer={<CameraFormFooter cameraSaved={cameraSaved} setCameraFormFlag={setCameraFormFlag} setCameratSaved={setCameratSaved} />}
+        modal
+        dismissableMask 
+        onHide={handleClose}
+        footer={<CameraFormFooter
+          cameraSaved={cameraSaved}
+          setCameraFormFlag={setCameraFormFlag}
+          setCameratSaved={setCameratSaved}
+          onClose={handleClose}
+        />}
       >
         <CameraForm properties={listOfPropertiesByUser} />
       </Dialog>
+
+      <Dialog
+        header="Editar cámara"
+        visible={selectedCamera !== null}
+        style={{ width: "50vw" }}
+        modal
+        onHide={() => setSelectedCamera(null)}
+      >
+        <CameraEditForm camera={selectedCamera} properties={listOfPropertiesByUser} />
+      </Dialog>
+
       <div className="m-0 md:m-8 mt-14 p-2 md:p-0 bg-white rounded-3xl">
         <Header title={t("dashboard.cameras.title") +propertyContext.name} />
 
@@ -94,7 +120,7 @@ const Cameras = () => {
           <ColumnsDirective>
             {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             {userRole === "Admin" ?
-              cameraGridAdmin(t).map((item, index) => (
+              cameraGridAdmin(t, setSelectedCamera).map((item, index) => (
                 <ColumnDirective key={index} {...item} />
               )) : cameraGrid(t).map((item, index) => (
                 <ColumnDirective key={index} {...item} />

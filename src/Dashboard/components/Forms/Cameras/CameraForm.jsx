@@ -1,16 +1,16 @@
 import { InputText } from "primereact/inputtext";
 import React, { useContext } from "react";
-import { UserContext } from "../../../context/UserContext";
+import { UserContext } from "../../../../context/UserContext";
 import { Dropdown } from "primereact/dropdown";
 import { Calendar } from "primereact/calendar";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
-import { postCamera } from "../../helper/postCamera";
+import { postCamera } from "../../../helper/postCamera";
 import { MdScreenRotationAlt } from "react-icons/md";
 import { BsArrowRightShort, BsArrowUpShort } from "react-icons/bs";
 import { useTranslation } from "react-i18next";
 
-export const CameraForm = ({ properties, setVisible }) => {
+export const CameraForm = ({ properties }) => {
   const navigate = useNavigate();
   const { cameraForm, setCameraForm } = useContext(UserContext);
   const {
@@ -18,7 +18,7 @@ export const CameraForm = ({ properties, setVisible }) => {
     brand,
     installedByUs,
     dateInstalled,
-    image,
+    imageFile,
     status,
     type,
     property,
@@ -30,6 +30,16 @@ export const CameraForm = ({ properties, setVisible }) => {
   const statusList = ["Working", "Offline", "Vandalized"];
   const { t, i18n } = useTranslation("global");
 
+
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setCameraForm(prevState => ({
+        ...prevState,
+        imageFile: file
+      }));
+    }
+  };
 
   return (
     <div>
@@ -192,24 +202,25 @@ export const CameraForm = ({ properties, setVisible }) => {
             />
           </div>
         </div>
-        <div className="p-inputgroup my-3 ml-3 flex flex-col">
-          <label htmlFor="username">{t("dashboard.cameras.dialog.image-url")}</label>
-          <div className="p-inputgroup">
-            <span className="p-inputgroup-addon">
-              <i className="pi pi-user"></i>
-            </span>
-            <InputText
-              value={image}
-              onChange={(e) =>
-                setCameraForm((i) => {
-                  return { ...cameraForm, image: e.target.value };
-                })
-              }
-              placeholder={t("dashboard.cameras.dialog.image-url-placeholder")}
+
+        <div className="mb-6 mx-auto w-7/12">
+          <label htmlFor="image">{t("dashboard.cameras.dialog.image")}</label>
+          <div className="file-upload-container">
+            <input
+              type="file"
+              id="image"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="file-input"
+              style={{ display: 'none' }}
             />
+            <label htmlFor="image" className="file-input-label">{t("dashboard.cameras.dialog.search-img")}</label>
+            <span id="file-name" className="file-name">{cameraForm.imageFile ? cameraForm.imageFile.name : ''}</span>
           </div>
         </div>
+      
       </div>
+
       {/* <div className="flex">
         <div className="p-inputgroup my-3 ml-3 flex flex-col">
           <label htmlFor="username">Latitud</label>
@@ -272,7 +283,8 @@ export const CameraForm = ({ properties, setVisible }) => {
 export const CameraFormFooter = ({
   cameraSaved,
   setCameratSaved,
-  setCameraFormFlag
+  setCameraFormFlag,
+  onClose
 }) => {
   const { cameraForm, setCameraForm } = useContext(UserContext);
   const navigate = useNavigate();
@@ -286,7 +298,7 @@ export const CameraFormFooter = ({
 
   return (
     <div className="w-full flex justify-end">
-      <Button icon="pi pi-times" severity="danger" label="Cancel" onClick={()=> setCameraForm({})}/>
+      <Button icon="pi pi-times" severity="danger" label="Cancel" onClick={onClose} />
       <div className="w-3"></div>
       <Button icon="pi pi-check" label="Send" onClick={handleSaveCamera} />
     </div>

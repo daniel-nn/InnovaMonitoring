@@ -447,7 +447,13 @@
     },
     "reports": {
       "reports-of": "Reports of - ",
-      "reports-tittle": "Reports",
+      "non-verified-tittle": "Unverified Reports",
+      "reports-tittle"  : "Reports",
+        "buttons": {  
+          "add-report": "Add Report",
+          "reports-per-property": "Property Reports",
+          "non-verified-reports": "Unverified Reports"
+        },
         "table": {
         "admin": {
           "CaseImage": "Image",
@@ -488,10 +494,17 @@
           "IdCase": "Report ID",
           "CaseDetails": "Details",
           "no-pdf": "This report does not have a pdf"
+        },
+        "delete-report": {
+          "delete": "Delete",
+          "delete-header": "Are You Sure You Want To Delete The Report?",
+          "delete-text": "You Won't Be Able To Revert These Changes",
+          "yes": "Yes",
+          "error-deleting": "Error Deleting Report",
+          "report-removed": "Report Removed"
         }
       },
       "new-report": {
-        "add-report": "add Report",
         "new-report": "New Report",
         "new-report-with-property": "New Report of - ",
         "select-property": "Property To Report",
@@ -519,7 +532,7 @@
         "select-is-cameras-funcioning": "Was The Cameras Working?",
         "yes": "Yes",
         "no": "No",
-        "listMalfuncioningCameras": "List Of Malfunctioning  Cameras",
+        "listMalfunctioningCameras": "List Of Malfunctioning  Cameras",
         "selectMalfunctioningCamerasPlaceholder": "List Of Malfunctioning  Cameras",
         "list-Malfuncion-cameras":{
           "na": "N/A",
@@ -568,7 +581,8 @@
         },
         "report-details": "Report Details",
         "report-details-placeholder": "Report Description",
-        "images": "Images",
+        "upload-evidences": "Agregar evidencias.",
+        "drop-evidences": "Suelta las evidencias",
         "swal": {
           "confirmation": "Are you sure to submit the report for the property - ",
           "cancel": "Cancel",
@@ -579,7 +593,9 @@
           "empty": "Enter the case number",
           "edit": "Report has been successfully saved",
           "fill-missing-field-title": "Missing Field",
-          "fill-missing-field": "complete the field - "
+          "fill-missing-field": "complete the field - ",
+          "missing-evidence-title": "The evidences are required",
+          "missing-evidence": "upload the evidences"
         },
         "error": {
           "property": "Fill the property field.",
@@ -624,7 +640,7 @@
         "select-is-cameras-funcioning": "Was The Cameras Working?",
         "yes": "Yes",
         "no": "No",
-        "listMalfuncioningCameras": "List Of Malfunctioning  Cameras",
+        "listMalfunctioningCameras": "List Of Malfunctioning  Cameras",
         "selectMalfunctioningCamerasPlaceholder": "List Of Malfunctioning  Cameras",
         "list-Malfuncion-cameras": {
           "na": "N/A",
@@ -937,7 +953,12 @@
       },
       "properties": {
         "assigned-properties": "Assigned Properties",
+        "assign-properties": "Assign Properties",
+        "properties-user": "User Properties",
+        "added-to-user": "Added to user",
+        "property-remove": "Property Removed From User",
         "table": {
+          "img": "Image",
           "name": "Name",
           "address": "Address",
           "remove": "Remove",

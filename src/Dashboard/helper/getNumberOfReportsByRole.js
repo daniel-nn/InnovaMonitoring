@@ -7,7 +7,7 @@ export const getNumberOfReportsByRole = async (propertyId, userId, userRole) => 
         const response = await fetch(url, { headers });
        
         if (response.status === 204) {
-            return []; // un array vacío para indicar "sin reportes".
+            return []; 
         }
         if (!response.ok) { 
             if (response.status === 404) {
@@ -17,7 +17,8 @@ export const getNumberOfReportsByRole = async (propertyId, userId, userRole) => 
             throw new Error(`HTTP error! status: ${response.status}`);
         } 
         const reports = await response.json();
-        return reports; // Devuelve los reportes completos.
+        console.log(reports)
+        return reports; 
     } catch (error) {
         console.error("Fetch error: ", error.message);
         return null;

@@ -449,7 +449,13 @@
 
     "reports": {
       "reports-of": "Reportes de - ",
-      "reports-tittle": "Informes",      
+      "reports-tittle": "Informes",
+      "non-verified-tittle": "Reportes no verificados",
+      "buttons": {
+        "add-report": "Agregar reporte",
+        "reports-per-property": "Reportes por propiedad",
+        "non-verified-reports": "Reportes no verificados"
+      },      
       "table": {
         "admin": {
           "CaseImage": "Imagen",
@@ -490,11 +496,17 @@
           "IdCase": "Id caso",
           "CaseDetails": "Detalles",
           "no-pdf": "Este informe no tiene pdf"
+        },
+        "delete-report": {  
+          "delete": "Eliminar",
+          "delete-header": "¿Estas seguro de eliminar el reporte?",
+          "delete-text": "No podras revertir estos cambios",
+          "yes": "Si",
+          "error-deleting": "Error eliminando reporte",
+          "report-removed": "Reporte Eliminado"
         }
       },
-
       "new-report": {
-        "add-report": "Agregar reporte",
         "new-report": "Nuevo Reporte",
         "new-report-with-property": "Nuevo reporte de - ",
         "select-property": "Seleccione la propiedad a reportar",
@@ -522,7 +534,7 @@
         "select-is-cameras-funcioning": "¿Estaban la camaras funcionando?",
         "yes": "Si",
         "no": "No",
-        "listMalfuncioningCameras": "Lista de camaras averiadas",
+        "listMalfunctioningCameras": "Lista de camaras averiadas",
         "selectMalfunctioningCamerasPlaceholder": "Lista de cámaras averiadas",
         "list-Malfuncion-cameras":{
           "na": "N/A",
@@ -571,7 +583,8 @@
         },
         "report-details": "Detalles del reporte",
         "report-details-placeholder": "Descripción del reporte",
-        "images": "Imagenes",
+        "upload-evidences": "Agregar evidencias.",
+        "drop-evidences": "Suelta las evidencias",
         "swal": {
           "confirmation": "Estas seguro de enviar el reporte para la propiedad - ",
           "send": "Enviar",
@@ -582,7 +595,9 @@
           "empty": "",
           "edit": "El informe se ha guardado correctamente.",
           "fill-missing-field-title": "Campo faltante",
-          "fill-missing-field": "Complete el campo - "
+          "fill-missing-field": "Complete el campo - ",
+          "missing-evidence-title": "Evidencias requeridas",
+          "missing-evidence": "Ingrese las evidencias "
         },
         "error": {
           "property": "Complete el campo de propiedad.",
@@ -628,7 +643,7 @@
         "select-is-cameras-funcioning": "¿Estaban la camaras funcionando?",
         "yes": "Si",
         "no": "No",
-        "listMalfuncioningCameras": "Lista de camaras que funcionan mal",
+        "listMalfunctioningCameras": "Lista de camaras que funcionan mal",
         "selectMalfunctioningCamerasPlaceholder": "Lista de cámaras que funcionan mal",
         "list-Malfuncion-cameras": {
           "na": "N/A",
@@ -944,7 +959,12 @@
       },
       "properties": { 
         "assigned-properties": "Propiedades asignadas",
+        "assign-properties": "Asignar propiedades",
+        "properties-user": "Propiedades del usuario",
+        "added-to-user": "Agregada al usuario",
+        "property-remove": "Propiedad eliminada al usuario",
         "table": {
+          "image": "Imagen",
           "name": "Nombre",
           "address": "Dirección",
           "remove": "Eliminar",
@@ -1042,5 +1062,4 @@
     "footer": "Todos los derechos reservados Innova Monitioring"
   },
   "space": " "
-
 }

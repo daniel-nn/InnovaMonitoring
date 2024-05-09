@@ -22,7 +22,7 @@ import product7 from "./product7.jpg";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
 import { TbDeviceCctv } from "react-icons/tb";
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdOutlineAddCircleOutline } from "react-icons/md";
 import { deleteCamera, deleteItem, deleteProperty, } from "../helper/delete";
 import Swal from "sweetalert2";
 import { SiDialogflow } from "react-icons/si";
@@ -30,7 +30,10 @@ import { postNewAgent } from "../helper/postNewAgent";
 import { postIncident } from "../helper/postIncident";
 import { toggleReportVerification } from "../helper/toggleReportVerification";
 import exportPDF from "../helper/exportPdf";
+import deleteReport from "../helper/Reports/delete/deleteReport";
 import { t } from "i18next";
+import { putAddPropertyUser } from "../helper/userProfile/properties/putAddPropertyUser";
+import putDeletePropertyToUser from "../helper/userProfile/properties/putDeletePropertyToUser";
 
 export const useGlobalTranslation = () => {
   return useTranslation("global");
@@ -49,15 +52,31 @@ export const gridUserImage = ({UserImage}) => {
 )};
 
 //TODO: refactorizar este funcion para que valide si hay evidencias y no bote error
-export const gridOrderImage = ({evidences}) => (
-  <div>
-    <img
-      className="rounded-xl w-20 h-20  md:ml-3"
-      src={`${process.env.REACT_APP_S3_BUCKET_URL}/${evidences[0].path || "Resources/NoImage.png"}`}
-      alt="order-item"
-    />
-  </div>
-);
+export const gridOrderImage = ({ evidences }) => {
+  if (!evidences || evidences.length === 0 || !evidences[0]) {
+    return (
+      <div>
+        <img
+          className="rounded-xl w-20 h-20 md:ml-3"
+          src={`${process.env.REACT_APP_S3_BUCKET_URL}/Resources/NoImage.png`}
+          alt="No evidence"
+        />
+      </div>
+    );
+  }
+
+  // Procede si las validaciones son exitosas
+  return (
+    <div>
+      <img
+        className="rounded-xl w-20 h-20 md:ml-3"
+        src={`${process.env.REACT_APP_S3_BUCKET_URL}/${evidences[0].path}`}
+        alt="order-item"
+      />
+    </div>
+  );
+};
+
 
 export const gridPropertyImage = ({PropertyImage}) => (
   <div>
@@ -195,22 +214,42 @@ export const GridisVerifiedAndVerification = ({ id, verified: initialVerified })
 
 
 export const GridEditReportTemplate = (props) => {
-  console.log("GridEditReportTemplate props:", props);
-  const { setReportForm } = useContext(UserContext);
 
+  const { setReportForm } = useContext(UserContext);
   const navigate = useNavigate();
+
+  const handleEditClick = () => {
+    const parseDate = (dateStr) => {
+      if (!dateStr) return null;
+      const [month, day, year] = dateStr.split('-');
+      return new Date(year, month - 1, day);
+    };
+
+    const parseTime = (timeStr, dateStr) => {
+      if (!timeStr || !dateStr) return null;
+      const [hours, minutes] = timeStr.split(':');
+      const [month, day, year] = dateStr.split('-');
+      return new Date(year, month - 1, day, hours, minutes);
+    };
+
+    const formattedProps = {
+      ...props,
+      dateOfReport: parseDate(props.dateOfReport),
+      timeOfReport: parseTime(props.timeOfReport, props.dateOfReport),
+      incidentDate: parseDate(props.incidentDate),
+      incidentStartTime: parseTime(props.incidentStartTime, props.incidentDate),
+      incidentEndTime: parseTime(props.incidentEndTime, props.incidentDate)
+    };
+    console.log("GridEditReportTemplate props xd  :", props);
+
+    setReportForm(formattedProps);
+    navigate('/dashboard/EditReport');
+  };
 
   if (!props || !props.id) {
     return <div className="flex justify-center"><p>No hay datos</p></div>;
   }
 
-  // Función para manejar el click y navegar al editor del reporte.
-  const handleEditClick = () => {
-    setReportForm(props); 
-    navigate('/dashboard/EditReport');
-  };
-
-  // Renderiza el icono de editar con el evento click ligado a él.
   return (
     <div className="flex justify-center m-0 p-0 cursor-pointer" onClick={handleEditClick}>
       <AiFillEdit className="text-lg" />
@@ -220,19 +259,22 @@ export const GridEditReportTemplate = (props) => {
 
 
 
-export const GridEditCamera = ({ camera }) => {
-  const { cameraForm, setCameraForm, cameraSaved, setCameratSaved, cameraFormFlag, setCameraFormFlag } = useContext(UserContext);
-  const showCameraToEdit = () => {
+const GridEditCamera = ({ camera, setSelectedCamera }) => {
 
-    setCameraForm(camera)
-    setCameraFormFlag(!cameraFormFlag)
-  }
+  const showCameraToEdit = () => {
+    // Abre el diálogo para editar la cámara
+    setSelectedCamera(camera);
+  };
+
   return (
-    <div className="cursor-pointe flex justify-center m-0 p-0" onClick={() => { showCameraToEdit() }}>
-      <AiFillEdit className="text-lg"></AiFillEdit>
+    <div className="cursor-pointer flex justify-center m-0 p-0" onClick={showCameraToEdit}>
+      <AiFillEdit className="text-lg" />
     </div>
   );
 };
+
+
+
 export const GridEdit = ({ caseType }) => {
   const {
     caseProvider,
@@ -257,6 +299,8 @@ export const GridEdit = ({ caseType }) => {
     </div>
   );
 };
+
+
 // export const GridUserEdit = ({ user }) => {
 //   const { userProvider, setUserProvider, userDialog, setUserDialog } =
 //     useContext(UserContext);
@@ -360,6 +404,26 @@ export const GridDelete = ({ id }) => {
       className="flex justify-center m-0 p-0 text-red-700"
     >
       <MdDelete className="text-lg "></MdDelete>
+    </div>
+  );
+};
+
+
+export const GridDeleteReport = ({ id, refreshReports }) => {
+  const { t } = useTranslation("global");
+
+  const handleDelete = async () => {
+    const success = await deleteReport(id, t);
+    if (success) {
+      console.log("se borro reporte", id)
+      refreshReports(); 
+
+    }
+  };
+
+  return (
+    <div onClick={handleDelete} className="flex justify-center m-0 p-0 text-red-700">
+      <MdDelete className="text-lg" />
     </div>
   );
 };
@@ -961,7 +1025,7 @@ export const cameraGrid = (t) => {
   ]
 }
  
-export const cameraGridAdmin = (t) => {
+export const cameraGridAdmin = (t, setSelectedCamera) => {
   return [
     {
       headerText: t("dashboard.cameras.table.img"),
@@ -1006,11 +1070,11 @@ export const cameraGridAdmin = (t) => {
       headerText: t("dashboard.cameras.table.edit"),
       width: "100",
       textAlign: "Center",
-      template: GridEditCamera,
+      template: props => <GridEditCamera {...props} setSelectedCamera={setSelectedCamera} />,
     },
     {
       field: "id",
-      headerText: t("dashboard.cameras.table.delete.delete  "),
+      headerText: t("dashboard.cameras.table.delete.delete"),
       width: "90",
       textAlign: "Center",
       template: GridDeleteCamera,
@@ -1322,62 +1386,57 @@ export const userGrid = (t) => {
 
 export const RemovePropertyToUser = ({ propertyId, userId, setUserData }) => {
   const { t } = useTranslation("global");
-  const url = `${process.env.REACT_APP_SERVER_IP}/users/${userId}/remover-propiedad`;
 
-  const deletePropertyFunction = () => {
-    Swal.fire({
-      title: t("dashboard.user-details.properties.table.delete-assigned-property.confirm-title"),
-      text: t("dashboard.user-details.properties.table.delete-assigned-property.confirm-text"), 
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      confirmButtonText: t("dashboard.user-details.properties.table.delete-assigned-property.yes"),
-      cancelButtonColor: '#d33',
-      cancelButtonText: t('dashboard.user-details.properties.table.delete-assigned-property.no')
-    }).then((result) => {
-      if (result.isConfirmed) {
-        fetch(url, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ id: propertyId })
-        })
-          .then(response => response.json())
-          .then(data => {
-            setUserData(prevData => ({
-              ...prevData,
-              user: {
-                ...prevData.user,
-                properties: prevData.user.properties.filter(p => p.id !== propertyId)
-              }
-            }));
-            Swal.fire({
-              toast: true,
-              position: 'top-end',
-              icon: 'success',
-              title: t('dashboard.user-details.properties.table.delete-assigned-property.swal.property-user-removed'),
-              showConfirmButton: false,
-              timer: 3000
-            });
-          })
-          .catch(error => {
-            Swal.fire(t('Error!'), error.message, 'error');
-          });
-      }
-    });
+  const handleClick = () => {
+    putDeletePropertyToUser(userId, propertyId, t, setUserData);
   };
 
 
   return (
-    <div onClick={deletePropertyFunction} className="flex justify-center m-0 p-0 text-red-700 cursor-pointer">
+    <div onClick={handleClick} className="flex justify-center m-0 p-0 text-red-700 cursor-pointer">
       <MdDelete className="text-lg" />
     </div>
   );
 };
 
-
+export const ImgPropertyUsersProfile = (rowData) => {
+  const imageURL = `${process.env.REACT_APP_S3_BUCKET_URL}/${rowData.img}`;
+  return <img src={imageURL} alt="Property" style={{ width: "100px", height: "auto" }} />;
+};
 
 export const propertiesUserGrid = (t, userId, setUserData) => {
   return [
+    
+    {
+      headerText: t("dashboard.user-details.properties.table.image"),
+      template: ImgPropertyUsersProfile,
+      textAlign: "Center",
+      width: "120",
+    },
+    {
+      headerText: t("dashboard.user-details.properties.table.name"),
+      field: "name",
+      textAlign: "Center",
+      width: "120",
+    },
+    {
+      headerText: t("dashboard.user-details.properties.table.address"),
+      field: "direction",
+      width: "160",
+      editType: "dropdownedit",
+      textAlign: "Center",
+    },
+  ];
+};
+
+export const propertiesUserGridAdmin = (t, userId, setUserData) => {
+  return [
+    {
+      headerText: t("dashboard.user-details.properties.table.image"),
+      template: ImgPropertyUsersProfile,
+      textAlign: "Center",
+      width: "120",
+    },
     {
       headerText: t("dashboard.user-details.properties.table.name"),
       field: "name",
@@ -1394,6 +1453,58 @@ export const propertiesUserGrid = (t, userId, setUserData) => {
     {
       headerText: t("dashboard.user-details.properties.table.remove"),
       template: (props) => <RemovePropertyToUser propertyId={props.id} userId={userId} setUserData={setUserData} />,
+      width: "100",
+      textAlign: "Center",
+    },
+  ];
+};
+
+export const AddPropertyIconTemplate = ({ data, userId, t, setUserData, fetchUpdatedProperties }) => {
+  const handleClick = async () => {
+    const propertyInfo = {
+      id: data.id,
+      name: data.name,
+      direction: data.direction,
+      img: data.img,
+      mapImg: data.mapImg
+    };
+
+    await putAddPropertyUser(userId, [propertyInfo], t, setUserData, fetchUpdatedProperties);
+  };
+
+  return (
+    <div onClick={handleClick} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '1.5em', color: '#007ad9' }}>
+      <MdOutlineAddCircleOutline />
+    </div>
+  );
+};
+
+export const assignproperties = (t, userId, setUserData, fetchUpdatedProperties) => {
+ 
+
+  return [
+    {
+      headerText: t("dashboard.user-details.properties.table.image"),
+      template: ImgPropertyUsersProfile,
+      textAlign: "Center",
+      width: "120",
+    },
+    {
+      headerText: t("dashboard.user-details.properties.table.name"),
+      field: "name",
+      textAlign: "Center",
+      width: "120",
+    },
+    {
+      headerText: t("dashboard.user-details.properties.table.address"),
+      field: "direction",
+      width: "160",
+      editType: "dropdownedit",
+      textAlign: "Center",
+    },
+    {
+      headerText: t("dashboard.user-details.properties.table.add-property"),
+      template: (rowData) => <AddPropertyIconTemplate data={rowData} userId={userId} t={t} setUserData={setUserData} fetchUpdatedProperties={fetchUpdatedProperties} />,
       width: "100",
       textAlign: "Center",
     },
@@ -1704,7 +1815,7 @@ export const reportsGrid = (t) => {
 
 };
 
-export const reportsGridAdmin = (t) => {
+export const reportsGridAdmin = (t, refreshReports) => {
   return [
     {
       headerText: t("dashboard.reports.table.admin.CaseImage"),
@@ -1778,10 +1889,17 @@ export const reportsGridAdmin = (t) => {
       textAlign: "Center",
       template: GridEditReportTemplate, 
     },
+    {
+      field: "Delete",
+      headerText: t("dashboard.reports.table.delete-report.delete"),
+      width: "80",
+      textAlign: "Center",
+      template: props => <GridDeleteReport {...props} refreshReports={refreshReports} />,
+    },
   ];
 };
 
-export const reportsGridNoVerified = (t) => {
+export const reportsGridNoVerified = (t, refreshReports) => {
   return [
     {
       headerText: t("dashboard.reports.table.admin-no-verfied.property"),
@@ -1853,6 +1971,14 @@ export const reportsGridNoVerified = (t) => {
       width: "80",
       textAlign: "Center",
       template: GridEditReportTemplate,
+    },
+
+    {
+      field: "Delete",
+      headerText: t("dashboard.reports.table.delete-report.delete"),
+      width: "80",
+      textAlign: "Center",
+      template: props => <GridDeleteReport {...props} refreshReports={refreshReports} />,
     },
   ];
 };

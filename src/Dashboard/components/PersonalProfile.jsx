@@ -6,23 +6,30 @@ import { UserContext } from "../../context/UserContext";
 import { getRoles } from "../helper/getRoles";
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
-
+import { updateUserImg } from "../helper/userProfile/PersonalProfile/updateUserImg";
 
 
   export const PersonalProfile = ({ userProvider, setUserProvider, initialRolName }) => {
 
-      const [t, i18n] = useTranslation("global");
-      const [roles, setRoles] = useState([]);
+    const [t, i18n] = useTranslation("global");
+    const [roles, setRoles] = useState([]);
       
-      const [showPasword, setShowPasword] = useState(false);
-      const {name, rol, image} = userProvider;
-      let user = JSON.parse(localStorage.getItem("user"));
-      let userRole = user.role.rolName;
+    const [showPasword, setShowPasword] = useState(false);
+    const {name, rol, image} = userProvider;
+    let user = JSON.parse(localStorage.getItem("user"));
+    let userRole = user.role.rolName;
     const [selectedRoleId, setSelectedRoleId] = useState(userProvider.rol?.rolKey);
-    const [tempRole, setTempRole] = useState(null); // Este estado almacenará temporalmente el nuevo rol seleccionado
+    const [tempRole, setTempRole] = useState(null); 
+    const userId = userProvider.id;
 
+    const fileInputRef = useRef();
 
-
+    const handleFileChange = (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        updateUserImg(userProvider.id, file, t);
+      }
+    };
     const [input, setInput] = useState({
       name: userProvider.name,
       email: userProvider.email,
@@ -62,7 +69,7 @@ import { makeStyles } from '@material-ui/core/styles';
           const rolesArray = rolesData.map(({ id, rolName }) => ({
             rolKey: id,
             rolName: t(`dashboard.users.dialog-add-user.roles.roles-dropdown.${rolName}`),
-            originalName: rolName  // Guarda el nombre original para uso en la base de datos
+            originalName: rolName  
           }));
           setRoles(rolesArray);
 
@@ -83,7 +90,7 @@ import { makeStyles } from '@material-ui/core/styles';
       setSelectedRoleId(e.value);
       const selectedRole = roles.find(role => role.rolKey === e.value);
       if (selectedRole) {
-        setTempRole(selectedRole.originalName); // Guarda el originalName del rol seleccionado
+        setTempRole(selectedRole.originalName);
       }
     };
 
@@ -115,9 +122,19 @@ import { makeStyles } from '@material-ui/core/styles';
                     alt="Bordered avatar" />
   
                   <div className="flex flex-col space-y-5 sm:ml-8">
-                    <button type="button"
-                      className="py-3.5 px-7 text-base font-medium text-indigo-100 focus:outline-none bg-[#c2880b] rounded-lg border border-[#f5b73293] hover:bg-indigo-900 focus:z-10 focus:ring-4 focus:ring-indigo-200 ">
-                    {t(`dashboard.user-details.personal-profile.change-picture`)}
+                    <button
+                      type="button"
+                      className="py-3.5 px-7 text-base font-medium text-indigo-100 focus:outline-none bg-[#c2880b] rounded-lg border border-[#f5b73293] hover:bg-indigo-900 focus:z-10 focus:ring-4 focus:ring-indigo-200"
+                      onClick={() => fileInputRef.current.click()}
+                    >
+                      {t('dashboard.user-details.personal-profile.change-picture')}
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        style={{ display: 'none' }}
+                        accept="image/*"
+                        onChange={handleFileChange}
+                      />
                     </button>
                   </div>
                 </div>

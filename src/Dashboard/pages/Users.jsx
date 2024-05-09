@@ -178,6 +178,7 @@ export const Users = () => {
       }
     }
   };
+
   const saveNewUser = async () => {
     
     if (!validateUserDetails()) {
@@ -345,7 +346,9 @@ export const Users = () => {
         <div className="card flex justify-end py-2">
           {userRole == "Admin" ? (
             <Button
-              onClick={() => setUserDialog(true)}
+              onClick={() => {
+                setUserDialog(true);
+                setUserProvider({ }); }}
               severity="info"
               label={t("dashboard.users.add-user")}
               className="p-button-text ml-2"

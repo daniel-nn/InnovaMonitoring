@@ -17,6 +17,8 @@ import { Calendar } from "primereact/calendar";
 import { RadioButton } from 'primereact/radiobutton';
 import exportPDF from "../helper/exportPdf"
 import { getAdminsAndMonitors } from "../helper/getUserAdminsaAndMonitors";
+import { FileUpload } from 'primereact/fileupload';
+import "../pages/css/newReport/newReport.css"
 
 const NewReport = () => {
     const { propertyContext, reportSaved, setreportSaved } = useContext(UserContext);
@@ -39,7 +41,7 @@ const NewReport = () => {
             company: "",
             numerCase: "",
             camerasFunctioning: true,
-            listMalfuncioningCameras: "",
+            listMalfunctioningCameras: "",
             observerdViaCameras: true,
             policeFirstResponderNotified: false,
             policeFirstResponderScene: "",
@@ -50,8 +52,7 @@ const NewReport = () => {
             emailedReport: "",
             reportDetails: "",
             pdf: "",
-            images: [],
-            videos: []
+            evidences: []
         });
     };
 
@@ -75,7 +76,7 @@ const NewReport = () => {
             'caseType.incident': t("dashboard.reports.new-report.select-incident"),
             'level': t("dashboard.reports.new-report.select-report-level"),
             'company': t("dashboard.reports.new-report.select-company"),
-            'listMalfuncioningCameras': t("dashboard.reports.new-report.listMalfuncioningCameras"),
+            'listMalfunctioningCameras': t("dashboard.reports.new-report.listMalfunctioningCameras"),
             'policeFirstResponderNotified': t("dashboard.reports.new-report.is-policeFirstResponderNotified"),
             'policeFirstResponderScene': t("dashboard.reports.new-report.police-first-responder-scene"),
             'securityGuardsNotified': t("dashboard.reports.new-report.securityGuardsNotified"),
@@ -93,7 +94,7 @@ const NewReport = () => {
                 if (value === undefined) return true;
             }
             return value === "" || value === null || (Array.isArray(value) && value.length === 0); 
-        });
+        }); 
 
         if (missingFieldKey) {
             const missingFieldName = fieldsToValidate[missingFieldKey];
@@ -105,24 +106,21 @@ const NewReport = () => {
                 customClass: {
                     confirmButton: 'custom-swal2-confirm'
                 },
-                buttonsStyling: false,
-                didOpen: () => {
-                    const confirmButton = Swal.getConfirmButton();
-                    if (confirmButton) {
-                        confirmButton.style.backgroundColor = "#007bff"; // Color de fondo
-                        confirmButton.style.color = "#ffffff"; 
-                        confirmButton.style.border = "none"; 
-                        confirmButton.style.boxShadow = "0 4px 8px rgba(0,123,255,.5)"; 
-                        confirmButton.style.borderRadius = "0.375rem"; 
-                        confirmButton.style.padding = "0.75rem 1.5rem";
-                        confirmButton.onmouseenter = () => {
-                            confirmButton.style.backgroundColor = "#0056b3"; 
-                        };
-                        confirmButton.onmouseleave = () => {
-                            confirmButton.style.backgroundColor = "#007bff";
-                        };
-                    }
-                }
+                buttonsStyling: false
+            });
+            return false;
+        }
+
+        if (reportForm.evidences.length === 0) {
+            Swal.fire({
+                title: t("dashboard.reports.new-report.swal.missing-evidence-title"),
+                text: t("dashboard.reports.new-report.swal.missing-evidence"),
+                icon: 'warning',
+                confirmButtonText: "Ok",
+                customClass: {
+                    confirmButton: 'custom-swal2-confirm'
+                },
+                buttonsStyling: false
             });
             return false;
         }
@@ -131,7 +129,7 @@ const NewReport = () => {
     };
 
 
-    const { property, createdBy, dateOfReport, timeOfReport, incidentDate, incidentStartTime, incidentEndTime, caseType, level, company, numerCase, camerasFunctioning, listMalfuncioningCameras, observerdViaCameras, policeFirstResponderNotified, policeFirstResponderScene, securityGuardsNotified, securityGuardsScene, policeNumerCase, reportDetails, formNotificationClient, emailedReport, pdf, images, videos } = reportForm;
+    const { property, createdBy, dateOfReport, timeOfReport, incidentDate, incidentStartTime, incidentEndTime, caseType, level, company, numerCase, camerasFunctioning, listMalfunctioningCameras, observerdViaCameras, policeFirstResponderNotified, policeFirstResponderScene, securityGuardsNotified, securityGuardsScene, policeNumerCase, reportDetails, formNotificationClient, emailedReport, pdf, evidences } = reportForm;
     const [properties, setProperties] = useState([]);
     const [Users, setUsers] = useState([])
     const [incidents, setIncidents] = useState([]);
@@ -139,6 +137,68 @@ const NewReport = () => {
     const team = ["Innova Monitoring", "Impro",];
     let user = JSON.parse(localStorage.getItem("user"));
     let userRole = user.role.rolName;
+
+    const fileAlreadyExists = (newFile, existingFiles) => {
+        return existingFiles.some(file =>
+            file.name === newFile.name &&
+            file.size === newFile.size &&
+            file.type === newFile.type
+        );
+    };
+
+    const handleFileChange = (event) => {
+        const files = event.target.files;
+        processFiles(files);
+    };
+
+    const handleFileDrop = (event) => {
+        event.preventDefault();
+        const files = event.dataTransfer.files;
+        processFiles(files);
+    };
+
+    const processFiles = (files) => {
+        const fileObjects = Array.from(files).reduce((acc, file) => {
+            if (!fileAlreadyExists(file, reportForm.evidences)) {
+                acc.push({
+                    id: Date.now() + file.name,
+                    name: file.name,
+                    size: file.size,
+                    type: file.type,
+                    file: file,  
+                    url: URL.createObjectURL(file)
+                });
+            }
+            return acc;
+        }, []);
+
+        if (fileObjects.length > 0) {
+            setReportForm(prev => ({
+                ...prev,
+                evidences: [...prev.evidences, ...fileObjects]
+            }));
+        }
+    };
+
+
+    const handleFileRemove = (fileIdToRemove, fileUrl) => {
+        URL.revokeObjectURL(fileUrl); 
+        setReportForm(prev => ({
+            ...prev,
+            evidences: prev.evidences.filter(file => file.id !== fileIdToRemove)
+        }));
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: t('falta la traducción esta sera la ruta: dashboard.reports.new-report.evidence-removed'),
+            showConfirmButton: false,
+            timer: 3000
+        });
+    };
+
+
+
    
     useEffect(() => {
         const fetchProperties = async () => {
@@ -250,144 +310,18 @@ const NewReport = () => {
         };
     }, [i18n, t, reportForm.property]);
 
-    const formatDate = (date) => {
-        if (!date) date = new Date();
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const day = date.getDate().toString().padStart(2, '0');
-        return `${month}-${day}-${date.getFullYear()}`;
-    };
-
-
-    const formatTime = (date) => {
-        if (!date) date = new Date();
-        let hours = date.getHours().toString().padStart(2, '0');
-        let minutes = date.getMinutes().toString().padStart(2, '0');
-        return `${hours}:${minutes}`;
-    };
-
-    const saveReport = async (reportForm) => {
-        let evidences = [];
-        let images = reportForm.images || [];
-        let videos = reportForm.videos || [];
-
-        if (reportForm.images?.length > 0) {
-            images = reportForm.images?.split(",") || [];
-        }
-        if (reportForm.videos?.length > 0) {
-            videos = reportForm.videos?.split(",") || [];
-        }
-        images.forEach((img) => {
-            evidences.push({
-                link: img,
-                name: "Img",
-            });
-        });
-
-        videos.forEach((vid) => {
-            evidences.push({
-                link: vid,
-                name: "Vid",
-            });
-        });
-
-        const {
-            user,
-            caseType,
-            company,
-            level,
-            numerCase,
-            property,
-            camerasFunctioning,
-            listMalfuncioningCameras,
-            observerdViaCameras,
-            policeFirstResponderNotified,
-            policeFirstResponderScene,
-            securityGuardsNotified,
-            securityGuardsScene,
-            policeNumerCase,
-            formNotificationClient,
-            emailedReport,
-            reportDetails,
-            pdf
-        } = reportForm;
-        let reportDto = {
-            createdBy: reportForm.createdBy, 
-            caseType,
-            company,
-            level,
-            numerCase,
-            property,
-            listMalfuncioningCameras,
-            camerasFunctioning: camerasFunctioning ? 1 : 0,
-            observerdViaCameras: observerdViaCameras ? 1 : 0,
-            policeFirstResponderNotified: policeFirstResponderNotified ? 1 : 0,
-            policeFirstResponderScene,
-            securityGuardsNotified: securityGuardsNotified ? 1 : 0,
-            securityGuardsScene: securityGuardsScene ? 1 : 0,
-            policeNumerCase,
-            formNotificationClient,
-            emailedReport,
-            reportDetails,
-            pdf,
-            evidences,
-            dateOfReport: formatDate(reportForm.dateOfReport),
-            timeOfReport: formatTime(reportForm.timeOfReport),
-            incidentDate: formatDate(reportForm.incidentDate),
-            incidentStartTime: formatTime(reportForm.incidentStartTime) + ' ' + formatTime(reportForm.incidentStartTime),
-            incidentEndTime: formatTime(reportForm.incidentEndTime) + ' ' + formatTime(reportForm.incidentEndTime),
-        };
-        console.log('Objeto a enviar:', reportDto);
-
-        await postReport(reportDto);
-        setreportSaved(!reportSaved);
-    };
+    
 
     const sendingreport = () => {
-        if (!validateForm()) return; 
-        const swalStyles = `
-            .swal2-confirm-button-success {
-                background-color: rgb(50,135,64);
-                color: white;
-                border: none;
-                border-radius: 0.25rem;
-                padding: 0.5rem 1rem;
-                font-size: 1rem;
-                margin-right: 0.5rem;
-            }
+        if (!validateForm()) return;
 
-            .swal2-deny-button {
-                background-color: #ff5f57; /* Rojo para 'Don't save' */
-                color: white;
-                border: none;
-                border-radius: 0.25rem;
-                padding: 0.5rem 1rem;
-                font-size: 1rem;
-                margin-right: 0.5rem;
-            }
-
-            .swal2-cancel-button {
-                background-color: gray; /* Gris para 'Cancel' */
-                color: white;
-                border: none;
-                border-radius: 0.25rem;
-                padding: 0.5rem 1rem;
-                font-size: 1rem;
-            }
-        `;
-        const styleSheet = document.createElement("style");
-        styleSheet.type = "text/css";
-        styleSheet.innerText = swalStyles;
-        document.head.appendChild(styleSheet);
-        const propertyName = reportForm.property?.name ?? ' ';
-        const confirmationTitle = t("dashboard.reports.new-report.swal.confirmation") + propertyName;
         Swal.fire({
-            title: confirmationTitle,
+            title: t("dashboard.reports.new-report.swal.confirmation") + (reportForm.property?.name || ' '),
             icon: "info",
             showDenyButton: true,
             showCancelButton: true,
             confirmButtonText: '<i class="pi pi-check"></i> ' + t("dashboard.reports.new-report.swal.send"),
             denyButtonText: `<i class="pi pi-times"></i> ` + t("dashboard.reports.new-report.swal.don't-save"),
-
             cancelButtonText: t("dashboard.reports.new-report.swal.cancel"),
             buttonsStyling: false,
             customClass: {
@@ -397,78 +331,23 @@ const NewReport = () => {
             }
         }).then((result) => {
             if (result.isConfirmed) {
-                saveReport(reportForm).then(() => {
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: "top-end",
-                        showConfirmButton: false,
-                        timer: 3000,
-                        timerProgressBar: true,
-                        didOpen: (toast) => {
-                            toast.onmouseenter = Swal.stopTimer;
-                            toast.onmouseleave = Swal.resumeTimer;
-                        }
-                    });
-                    Toast.fire({
-                        icon: "success",
-                        title: t("dashboard.reports.new-report.swal.report-send")
-                    });
-                }).catch((error) => {
-
-                    console.error("Error saving the report:", error);
-                });
+                postReport(reportForm, t);      
             } else if (result.isDenied) {
-                setReportForm({
-                    id: "",
-                    property: {},
-                    user: {},
-                    dateOfReport: new Date(),
-                    timeOfReport: new Date(),
-                    incidentDate: new Date(),
-                    incidentStartTime: new Date(),
-                    incidentEndTime: new Date(),
-                    caseType: {},
-                    level: "",
-                    company: "",
-                    numerCase: "",
-                    camerasFunctioning: true,
-                    listMalfuncioningCameras: "",
-                    observerdViaCameras: true,
-                    policeFirstResponderNotified: false,
-                    policeFirstResponderScene: "",
-                    securityGuardsNotified: false,
-                    securityGuardsScene: false,
-                    policeNumerCase: "",
-                    formNotificationClient: "",
-                    emailedReport: "",
-                    reportDetails: "",
-                    pdf: "",
-                    images: [],
-                    videos: [],
-                });
-                const Toast = Swal.mixin({
+                resetReportForm();
+                Swal.fire({
+                    icon: "error",
+                    title: t("dashboard.reports.new-report.swal.canceled-report"),
                     toast: true,
                     position: "top-end",
                     showConfirmButton: false,
                     timer: 3000,
-                    timerProgressBar: true,
-                    didOpen: (toast) => {
-                        toast.onmouseenter = Swal.stopTimer;
-                        toast.onmouseleave = Swal.resumeTimer;
-                    }
+                    timerProgressBar: true
                 });
-                Toast.fire({
-                    icon: "error",
-                    title: t("dashboard.reports.new-report.swal.canceled-report")
-                });
-
             }
         });
-        return () => {
-            document.head.removeChild(styleSheet);
-        };
+    };
 
-    }
+
 
 
     return (
@@ -747,17 +626,17 @@ const NewReport = () => {
 
                 <div className="w-full md:w-1/3 px-3 mb-6">
                     <label htmlFor="MalfuncioningCameras" className="font-bold block mb-2">
-                        {t("dashboard.reports.new-report.listMalfuncioningCameras")}
+                        {t("dashboard.reports.new-report.listMalfunctioningCameras")}
                     </label>
                     <div className="p-inputgroup">
                         <span className="p-inputgroup-addon">
                             <i className="pi pi-camera"></i>
                         </span>
                         <Dropdown
-                            value={listMalfuncioningCameras}
+                            value={listMalfunctioningCameras}
                             onChange={(e) => setReportForm((prev) => ({
                                 ...prev,
-                                listMalfuncioningCameras: e.value
+                                listMalfunctioningCameras: e.value
                             }))}
                             options={malFunctionCameras}
                             optionLabel="label"
@@ -1008,44 +887,44 @@ const NewReport = () => {
                     </div>
                 </div>
 
-                <div className="w-2/4 px-3 mb-6 text-center">
-                    <label htmlFor="images" className="font-bold block mb-2">
-                        {t("imagenes")}
-                    </label>
-                    <div className="p-inputgroup">
-                        <InputTextarea
-                            value={reportForm.images}
-                            onChange={(e) => setReportForm((prev) => ({
-                                ...prev,
-                                images: e.target.value
-                            }))}
-                            rows={5}
-                            cols={30}
-                            autoResize
-                            placeholder={t("Imagenes")}
+                <div className="w-full px-3 mb-6">
+                    <div className="file-upload bg-white p-4 rounded-lg shadow">
+                        <input
+                            type="file"
+                            id="file-input"
+                            multiple
+                            onChange={handleFileChange}
+                            accept="image/*,video/*"
+                            style={{ display: 'none' }}
                         />
+                        <div className="file-select-button mb-3">
+                            <label htmlFor="file-input" className="cursor-pointer text-blue-500 flex items-center">
+                                <i className="pi pi-plus" style={{ 'fontSize': '1.5em' }}></i> <span className="ml-2">{t("dashboard.reports.new-report.upload-evidences")}</span>
+                            </label>
+                        </div>
+                            <div className="drop-area text-center p-10 bg-blue-100 border-blue-500 border-dashed rounded-lg hover:bg-blue-200"
+                                onDragOver={e => e.preventDefault()}
+                                onDrop={handleFileDrop}
+                                onClick={() => document.getElementById('file-input').click()}  
+                            >
+                                <i className="pi pi-upload" style={{ 'fontSize': '2em' }}></i>
+                            <p>{t("dashboard.reports.new-report.drop-evidences")}</p>
+                            </div>
+                        <div className="files-list">
+                            {reportForm.evidences.map((file, index) => (
+                                <div key={index} className="file-item flex items-center justify-between mb-2 bg-gray-100 p-2 rounded">
+                                    {file.type.startsWith('image/') && (
+                                        <img src={file.url} alt={file.name} className="file-image-preview w-20 h-20 mr-2" />
+                                    )}
+                                    <div className="file-details flex-grow">
+                                        <span className="file-name font-semibold">{file.name}</span>
+                                        <Button icon="pi pi-times" className="p-button-rounded p-button-danger margin-delete-button" onClick={() => handleFileRemove(file.id, file.url)} />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
-
-                <div className="w-2/4 px-3 mb-6 text-center">
-                    <label htmlFor="videos" className="font-bold block mb-2">
-                        {t("videos")}
-                    </label>
-                    <div className="p-inputgroup">
-                        <InputTextarea
-                            value={reportForm.videos}
-                            onChange={(e) => setReportForm((prev) => ({
-                                ...prev,
-                                videos: e.target.value
-                            }))}
-                            rows={5}
-                            cols={30}
-                            autoResize
-                            placeholder={t("Videos")}
-                        />
-                    </div>
-                </div>
-
 
                 <div className="w-full px-3 mb-6">
                     <label htmlFor="reportDetails" className="font-bold block mb-2">

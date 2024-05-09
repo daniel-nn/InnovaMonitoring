@@ -57,7 +57,7 @@ const createHTMLString = (data) => {
                 <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.level || 'Null'}</span>
             </p>
             <p style="color: rgb(47, 117, 181); font-weight: bold;"> LIST OF MALFUNCTIONING CAMERAS:
-               <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.listMalfuncioningCameras || 'Null'}</span>
+               <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.listMalfunctioningCameras || 'Null'}</span>
             </p>
             <p style="color: rgb(47, 117, 181); font-weight: bold; margin-top: 20px;"> POLICE/FIRST RESPONDER NOTIFIED:
                <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.policeFirstResponderNotified ? 'Yes': 'No'}</span>

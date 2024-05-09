@@ -36,6 +36,7 @@ export const UserDatails = () => {
 
     fetchData();
   }, [userProvider]);
+
   const [initialRolName, setInitialRolName] = useState('');
 
   useEffect(() => {
@@ -80,3 +81,4 @@ export const UserDatails = () => {
 };
 
  
+

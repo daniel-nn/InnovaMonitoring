@@ -22,7 +22,7 @@ import { HiOutlineDocumentReport } from "react-icons/hi";
 import { MdEmail, MdOutlineMail } from "react-icons/md";
 import { BiTimeFive } from "react-icons/bi";
 import { FiUser } from "react-icons/fi";
-import { verifyReport } from "../helper/verifyReport";
+import { editReport } from "../helper/editReport";
 import { getReportId } from "../helper/getReportId";
 import { deleteItem } from "../helper/delete";
 import Swal from "sweetalert2";
@@ -90,7 +90,7 @@ export const ReportDatails = () => {
   };
 
   const checkReport = async () => {
-    let reportVerified = await verifyReport({
+    let reportVerified = await editReport({
       ...reportDetails,
       verified: true,
     });
@@ -382,7 +382,7 @@ export const ReportDatails = () => {
                     )}
                   </p>
                   <p className="text-lg text-gray-900 ml-3">
-                    {reportDetails?.listMalfuncioningCameras}
+                    {reportDetails?.listMalfunctioningCameras}
                   </p>
                 </div>
               </div>

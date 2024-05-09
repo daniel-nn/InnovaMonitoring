@@ -1,50 +1,88 @@
 import Swal from 'sweetalert2';
 
+  const formatDate = (date) => {
+    if (typeof date === 'string') {
+      date = new Date(date);
+    }
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${month}-${day}-${date.getFullYear()}`;
+  };
 
+  const formatTime = (date) => {
+    if (typeof date === 'string') {
+      date = new Date(date);
+    }
+    let hours = date.getHours().toString().padStart(2, '0');
+    let minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
+  };
 
-export const postReport = async(report) => {
+export const postReport = async (reportForm, t) => {
+  const formData = new FormData();
 
-  let resp = {}
+  formData.append("report", new Blob([JSON.stringify({
+    createdBy: reportForm.createdBy,
+    caseType: reportForm.caseType,
+    company: reportForm.company,
+    level: reportForm.level,
+    numerCase: reportForm.numerCase,
+    property: reportForm.property,
+    listMalfunctioningCameras: reportForm.listMalfunctioningCameras,
+    camerasFunctioning: reportForm.camerasFunctioning ? 1 : 0,
+    observerdViaCameras: reportForm.observerdViaCameras ? 1 : 0,
+    policeFirstResponderNotified: reportForm.policeFirstResponderNotified ? 1 : 0,
+    policeFirstResponderScene: reportForm.policeFirstResponderScene,
+    securityGuardsNotified: reportForm.securityGuardsNotified ? 1 : 0,
+    securityGuardsScene: reportForm.securityGuardsScene ? 1 : 0,
+    policeNumerCase: reportForm.policeNumerCase,
+    formNotificationClient: reportForm.formNotificationClient,
+    emailedReport: reportForm.emailedReport,
+    reportDetails: reportForm.reportDetails,
+    pdf: reportForm.pdf,
+    dateOfReport: formatDate(reportForm.dateOfReport),
+    timeOfReport: formatTime(reportForm.timeOfReport),
+    incidentDate: formatDate(reportForm.incidentDate),
+    incidentStartTime: formatTime(reportForm.incidentStartTime),
+    incidentEndTime: formatTime(reportForm.incidentEndTime),
+  })], { type: 'application/json' }));
 
-    const url = `${process.env.REACT_APP_SERVER_IP}/reports`;
-   let data = {}
+  // Se cada archivo de las evidencias
+  reportForm.evidences.forEach((evidence) => {
+    formData.append('evidences', evidence.file); 
+  });
 
-   try {
-    
-      resp = await fetch(url, {
-       method: "POST",
-       body: JSON.stringify(report),
-        headers: {
-     "Content-Type": "application/json",
-     
-   },
-     })
-    data = await resp.json();
-    Swal.fire({
+  const url = `${process.env.REACT_APP_SERVER_IP}/reports`;
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      body: formData,
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      Swal.fire({
         icon: 'success',
-        title: 'Success',
-        text:"Report has been successfully saved",
-      })
-   } catch (error) {
+        title: t("dashboard.reports.new-report.swal.report-send"),
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true
+      });
+      return data;
+    } else {
+      throw new Error(data.message || t("dashboard.reports.new-report.swal.error-saving"));
+    }
+  } catch (error) {
+    console.error("Error saving the report:", error);
     Swal.fire({
       icon: 'error',
       title: 'Error',
-      text: error,
-
-    })
-   }
-
-    if(resp.status == 500){
-     
-      Swal.fire({
-        icon: 'error',
-        title: 'Credentials error',
-        text: 'Error saving the report, verify that all fields are completed and try again.',
-  
-      })
-      return 
-    }
-  
-    console.log(data)
-  return data
-}
+      text: error.message || t("dashboard.reports.new-report.swal.error-saving")
+    });
+    return null;
+  }
+};

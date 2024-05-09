@@ -31,7 +31,7 @@ export const UserProvider = ({ children }) => {
     company: "",
     numerCase: "",
     camerasFunctioning: true,
-    listMalfuncioningCameras: "",
+    listMalfunctioningCameras: "",
     observerdViaCameras: true,
     policeFirstResponderNotified: false,
     policeFirstResponderScene: "",
@@ -42,9 +42,8 @@ export const UserProvider = ({ children }) => {
     emailedReport: "",
     reportDetails: "",
     pdf: "",
-    images: [],
-    videos: [],
-  });
+    evidences: [] 
+    });
 
   const [cameraForm, setCameraForm] = useState({
     name: "",
