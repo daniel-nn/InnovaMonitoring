@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useMemo } from "react";
+import React, { useContext, useEffect, useState, useMemo, useRef } from "react";
 import { Header } from "../components";
 import { UserContext } from "../../context/UserContext";
 import "primeicons/primeicons.css";
@@ -15,6 +15,8 @@ import { InputNumber } from "primereact/inputnumber";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Calendar } from "primereact/calendar";
 import { RadioButton } from 'primereact/radiobutton';
+import Stomp from 'stompjs';
+import { Toast } from 'primereact/toast';
 import exportPDF from "../helper/exportPdf"
 import { getAdminsAndMonitors } from "../helper/getUserAdminsaAndMonitors";
 import { FileUpload } from 'primereact/fileupload';
@@ -24,7 +26,8 @@ const NewReport = () => {
     const { propertyContext, reportSaved, setreportSaved } = useContext(UserContext);
     const [t, i18n] = useTranslation("global");
     const navigate = useNavigate();
-
+    const [messages, setMessages] = useState([]);
+    const toast = useRef(null);
     const { reportForm, setReportForm } = useContext(UserContext);
     const resetReportForm = () => {
         setReportForm({
@@ -55,6 +58,29 @@ const NewReport = () => {
             evidences: []
         });
     };
+
+    useEffect(() => {
+        const socket = new WebSocket('ws://localhost:8080/ws'); // URL del WebSocket del servidor Spring Boot
+    
+        const stompClient = Stomp.over(socket);
+        stompClient.connect({}, () => {
+    
+          stompClient.subscribe('/topic/receiveMessage', (response) => {
+            console.log(response)
+            const newMessage = response.body;
+            console.log(newMessage)
+            setMessages([newMessage]);
+            toast.current.show({ severity: 'success', summary: 'Evidencia Subida', detail: newMessage, life: 5000 });
+          });
+    
+          // Aquí puedes enviar cualquier mensaje adicional después de que la conexión esté establecida
+          // Ejemplo: stompClient.send('/app/sendMessage', {}, JSON.stringify({ message: 'Hola servidor!' }));
+        });
+    
+        return () => {
+          stompClient.disconnect();
+        };
+      }, []);
 
     useEffect(() => {
         resetReportForm();
@@ -338,6 +364,7 @@ const NewReport = () => {
 
     return (
         <div className="m-20 md:m-10 mt-14 p-2 md:p-0 bg-white rounded-3xl">
+        <Toast ref={toast} />
             <Header title={headerTitle} />
             <div className="flex flex-wrap -mx-3">
 
