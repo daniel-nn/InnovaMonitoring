@@ -60,7 +60,6 @@ const NewReport = () => {
         resetReportForm();
     }, []);
 
-
     // Funcion para validar el formulario
     const validateForm = () => {
   
@@ -128,7 +127,6 @@ const NewReport = () => {
         return true;
     };
 
-
     const { property, createdBy, dateOfReport, timeOfReport, incidentDate, incidentStartTime, incidentEndTime, caseType, level, company, numerCase, camerasFunctioning, listMalfunctioningCameras, observerdViaCameras, policeFirstResponderNotified, policeFirstResponderScene, securityGuardsNotified, securityGuardsScene, policeNumerCase, reportDetails, formNotificationClient, emailedReport, pdf, evidences } = reportForm;
     const [properties, setProperties] = useState([]);
     const [Users, setUsers] = useState([])
@@ -180,7 +178,6 @@ const NewReport = () => {
         }
     };
 
-
     const handleFileRemove = (fileIdToRemove, fileUrl) => {
         URL.revokeObjectURL(fileUrl); 
         setReportForm(prev => ({
@@ -197,9 +194,6 @@ const NewReport = () => {
         });
     };
 
-
-
-   
     useEffect(() => {
         const fetchProperties = async () => {
             const propertiesData = await getPropertiesInfo(navigate);
@@ -242,8 +236,6 @@ const NewReport = () => {
     }, [navigate]);
 
 
-
-
     const malFunctionCameras = useMemo(() => [
         { label: t("dashboard.reports.new-report.list-Malfuncion-cameras.na"), value: 'N/A' },
         { label: t("dashboard.reports.new-report.list-Malfuncion-cameras.listedOnReport"), value: 'Listed on Report' }
@@ -263,7 +255,6 @@ const NewReport = () => {
             { label: t("dashboard.reports.new-report.List-policeFirstResponderNotified.ambulance"), value: 'Ambulance' },
         ]);
     }, [t, i18n.language]);
-
 
 
     const [listNotificationClient, setlistNotificationClient] = useState([]);
@@ -310,8 +301,6 @@ const NewReport = () => {
         };
     }, [i18n, t, reportForm.property]);
 
-    
-
     const sendingreport = () => {
         if (!validateForm()) return;
 
@@ -346,9 +335,6 @@ const NewReport = () => {
             }
         });
     };
-
-
-
 
     return (
         <div className="m-20 md:m-10 mt-14 p-2 md:p-0 bg-white rounded-3xl">
@@ -948,11 +934,9 @@ const NewReport = () => {
 
             </div>
 
-
             <div className="flex justify-end mt-4 pr-20">
                 <Button label={t("dashboard.reports.new-report.swal.send")} severity="success" onClick={sendingreport} />
                 <Button label={t("User")} severity="success" onClick={() => console.log(reportForm)} />
-
             </div>
         </div>
 
