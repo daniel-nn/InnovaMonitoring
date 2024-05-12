@@ -40,8 +40,7 @@ const Navbar = () => {
   const userRole = userProfile.role.rolName; 
   const [properties, setProperties] = useState(userProfile.properties); 
 
-  let userImage = "";
-  
+
   let link = userProfile.image?.split("/");
   let userImg = "";
   if (link) {

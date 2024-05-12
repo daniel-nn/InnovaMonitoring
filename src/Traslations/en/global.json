@@ -700,6 +700,10 @@
           "empty": "Enter the case number",
           "edit": "Report has been successfully saved"
         },
+        "update-evidences": {
+          "button-update-evidences": "Updated Evidence",
+          "updated-evidence": "Updated Evidence"
+        },
         "error": {
           "property": "Fill the property field.",
           "agent": "Select an agent.",
@@ -773,6 +777,7 @@
       "title": "Cameras Of - ",
       "dialog": {
         "add-camera": "Add Camera",
+        "edit-camera": "Edit Camera",
         "camera-name": "Camera Name",
         "camera-name-placeholder": "Add The Camera Name",
         "brand": "Brand",
@@ -789,8 +794,8 @@
         "date-installed-placeholder": "When Was The Camera Installed?",
         "property": "Select The Camera Property",
         "property-placeholder": "Select The Camera Property",
-        "image-url": "Camera Image",
-        "image-url-placeholder": "Enter The Image"
+        "search-img": "Search Image",
+        "send": "Send"
       },
       "table": {
         "img": "Image",
@@ -812,7 +817,18 @@
             "deleted-camera": "Camera Deleted"
           }
         }
+      },
+      "update": {
+        "camera-update": "Update Camera",
+        "camera-updated": "Camera Updated",
+        "update-button": "Update Image",
+        "swal": {
+          "caution": "Cautión",
+          "different-image": "Select A Different Image",
+          "image-updated": "Camera Image Updated"
+        }
       }
+     
     },
 
     "users": {
@@ -1029,8 +1045,8 @@
           "validate-property-details": {
             "name": "Name field is required.",
             "direction": "Address is required.",
-            "img-url": "Image URL is required.",
-            "map-url": "Enter the map URL."
+            "img-url": "Enther The Image of the property",
+            "map-url": "Enther The Map of the property"
           }
         }
       },

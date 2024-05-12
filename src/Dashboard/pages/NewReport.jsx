@@ -18,7 +18,7 @@ import { RadioButton } from 'primereact/radiobutton';
 import exportPDF from "../helper/exportPdf"
 import { getAdminsAndMonitors } from "../helper/getUserAdminsaAndMonitors";
 import { FileUpload } from 'primereact/fileupload';
-import "../pages/css/newReport/newReport.css"
+import "../pages/css/Reports/NewReport.css"
 
 const NewReport = () => {
     const { propertyContext, reportSaved, setreportSaved } = useContext(UserContext);

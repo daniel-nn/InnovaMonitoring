@@ -1,18 +1,33 @@
 import { InputText } from "primereact/inputtext";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { UserContext } from "../../../../context/UserContext";
 import { Dropdown } from "primereact/dropdown";
 import { Calendar } from "primereact/calendar";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
-import { postCamera } from "../../../helper/postCamera";
+import { postCamera } from "../../../helper/Cameras/postCamera";
 import { MdScreenRotationAlt } from "react-icons/md";
 import { BsArrowRightShort, BsArrowUpShort } from "react-icons/bs";
 import { useTranslation } from "react-i18next";
 
-export const CameraForm = ({ properties }) => {
+export const CameraForm = ({ properties, setCameraFormFlag, setCameraSaved, cameraSaved, onClose }) => {
+
   const navigate = useNavigate();
   const { cameraForm, setCameraForm } = useContext(UserContext);
+  
+  const initialState = {
+    name: '',
+    brand: '',
+    installedByUs: '',
+    dateInstalled: null,
+    imageFile: null,  
+    imageUrl: '',     
+    status: '',
+    type: '',
+    property: '',
+    model: '',
+  };
+
   const {
     name,
     brand,
@@ -34,12 +49,36 @@ export const CameraForm = ({ properties }) => {
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
+      if (cameraForm.imageUrl) {
+        URL.revokeObjectURL(cameraForm.imageUrl);
+      }
+      const imageUrl = URL.createObjectURL(file);
       setCameraForm(prevState => ({
         ...prevState,
-        imageFile: file
+        imageFile: file,
+        imageUrl: imageUrl  
       }));
     }
   };
+
+  useEffect(() => {
+    setCameraForm(cameraForm ? { ...initialState, ...cameraForm } : initialState);
+  }, []);
+
+
+  const handleSaveCamera = async () => {
+    if (typeof setCameraSaved === "function") {
+      await postCamera(cameraForm, navigate);
+      setCameraSaved(!cameraSaved);
+      setCameraFormFlag(false);
+      setCameraForm({});
+    } else {
+      console.error('setCameratSaved is not a function', { setCameraSaved });
+    }
+  };
+
+  
+console.log(cameraForm)
 
   return (
     <div>
@@ -162,6 +201,7 @@ export const CameraForm = ({ properties }) => {
         </div>
               
       </div>
+
       <div className="flex">
         <div className="p-inputgroup my-3 ml-3 flex flex-col">
           <label htmlFor="username">{t("dashboard.cameras.dialog.date-installed")}</label>
@@ -181,6 +221,7 @@ export const CameraForm = ({ properties }) => {
           </div>
         </div>
       </div>
+
       <div className="flex">
         <div className="p-inputgroup my-3 ml-3 flex flex-col">
           <label htmlFor="username">{t("dashboard.cameras.dialog.property")}</label>
@@ -201,10 +242,12 @@ export const CameraForm = ({ properties }) => {
               className="w-full md:w-14rem"
             />
           </div>
-        </div>
+        </div>  
+      </div>
 
-        <div className="mb-6 mx-auto w-7/12">
-          <label htmlFor="image">{t("dashboard.cameras.dialog.image")}</label>
+      
+      <div className="w-full p-3">
+        <div className="p-inputgroup my-3 flex flex-col">
           <div className="file-upload-container">
             <input
               type="file"
@@ -215,10 +258,20 @@ export const CameraForm = ({ properties }) => {
               style={{ display: 'none' }}
             />
             <label htmlFor="image" className="file-input-label">{t("dashboard.cameras.dialog.search-img")}</label>
-            <span id="file-name" className="file-name">{cameraForm.imageFile ? cameraForm.imageFile.name : ''}</span>
+            {cameraForm.imageUrl && (
+              <div className="image-preview-container mt-3 flex flex-col items-center">
+                <img src={cameraForm.imageUrl} alt="Preview" className="image-preview" style={{ maxHeight: '300px', maxWidth: '100%', borderRadius: '10%'  }} />
+                <span className="file-name mt-2">{cameraForm.imageFile ? cameraForm.imageFile.name : ''}</span>
+              </div>
+            )}
           </div>
         </div>
-      
+      </div>
+
+      <div className="w-full flex justify-around mt-5 ">
+        <Button icon="pi pi-times" severity="danger" label="Cancel" onClick={onClose} />
+        <div className="w-3"></div>
+        <Button icon="pi pi-check" className="p-button-success" label="Send" onClick={handleSaveCamera} />
       </div>
 
       {/* <div className="flex">
@@ -280,27 +333,4 @@ export const CameraForm = ({ properties }) => {
   );
 };
 
-export const CameraFormFooter = ({
-  cameraSaved,
-  setCameratSaved,
-  setCameraFormFlag,
-  onClose
-}) => {
-  const { cameraForm, setCameraForm } = useContext(UserContext);
-  const navigate = useNavigate();
 
-  const handleSaveCamera = async () => {
-    await postCamera(cameraForm, navigate);
-    setCameratSaved(!cameraSaved);
-    setCameraFormFlag(false);
-    setCameraForm({})
-  };
-
-  return (
-    <div className="w-full flex justify-end">
-      <Button icon="pi pi-times" severity="danger" label="Cancel" onClick={onClose} />
-      <div className="w-3"></div>
-      <Button icon="pi pi-check" label="Send" onClick={handleSaveCamera} />
-    </div>
-  );
-};

@@ -22,7 +22,7 @@ import { HiOutlineDocumentReport } from "react-icons/hi";
 import { MdEmail, MdOutlineMail } from "react-icons/md";
 import { BiTimeFive } from "react-icons/bi";
 import { FiUser } from "react-icons/fi";
-import { editReport } from "../helper/editReport";
+import { editReport } from "../helper/Reports/UpdateReport/editReport";
 import { getReportId } from "../helper/getReportId";
 import { deleteItem } from "../helper/delete";
 import Swal from "sweetalert2";

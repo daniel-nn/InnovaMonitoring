@@ -9,7 +9,7 @@ export const UserProvider = ({ children }) => {
   const [cameraContext, setCameraContext] = useState({});
   const [prueba, setPrueba] = useState("Prueba");
   const [reportSaved, setreportSaved] = useState(false);
-  const [cameraSaved, setCameratSaved] = useState(false);
+  const [cameraSaved, setCameraSaved] = useState(false);
   const [propertySaved, setPropertySaved] = useState(false)
   const [edit, setEdit] = useState(false)
   const [userLogged, setUserLogged] = useState(false);
@@ -120,7 +120,7 @@ const [editReportFormVisible, setEditReportFormVisible] = useState(false)
         reportSaved,
         setreportSaved,
         cameraSaved,
-        setCameratSaved,
+        setCameraSaved,
         caseProvider,
         setCaseProvider,
         caseDialog,

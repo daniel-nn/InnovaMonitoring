@@ -16,9 +16,10 @@ import { Calendar } from "primereact/calendar";
 import { RadioButton } from 'primereact/radiobutton';
 import exportPDF from "../helper/exportPdf"
 import { getAdminsAndMonitors } from "../helper/getUserAdminsaAndMonitors";
-import { editReport } from "../helper/editReport";
+import { editReport } from "../helper/Reports/UpdateReport/editReport";
+import { putAddEvidences } from "../helper/Reports/UpdateReport/putAddEvidences";
 import deleteEvidence from "../helper/Reports/delete/deleteEvidence"; 
-import "../pages/css/newReport/newReport.css"
+import "../pages/css/Reports/EditReport.css"
 
 
 
@@ -54,24 +55,19 @@ const EditReport = () => {
 
     
 
-    const fileAlreadyExists = (newFile, existingFiles) => {
-        return existingFiles.some(file =>
-            file.name === newFile.name &&
-            file.size === newFile.size &&
-            file.type === newFile.type
-        );
+    const fileAlreadyExists = (newFile, existingFiles, serverFiles = []) => {
+        const fileNames = new Set();
+        serverFiles.forEach(file => fileNames.add(file.name));
+        existingFiles.forEach(file => fileNames.add(file.name));
+        return fileNames.has(newFile.name);
     };
 
     useEffect(() => {
-        // Asegurar que solo se procesan las evidencias sin URL
         if (reportForm.evidences && reportForm.evidences.length > 0 && !reportForm.evidences.some(e => e.url)) {
             const processedEvidences = reportForm.evidences.map(evidence => ({
                 ...evidence,
-                // Añadir la URL completa solo si es necesario
                 url: evidence.url || `${process.env.REACT_APP_S3_BUCKET_URL}/${evidence.path}`
             }));
-
-            // Actualizar el estado solo si realmente hay cambios
             if (JSON.stringify(processedEvidences) !== JSON.stringify(reportForm.evidences)) {
                 setReportForm(prev => ({
                     ...prev,
@@ -94,8 +90,11 @@ const EditReport = () => {
     };
 
     const processFiles = (files) => {
+        const serverEvidences = reportForm.evidences.filter(e => e.url && e.url.startsWith(process.env.REACT_APP_S3_BUCKET_URL));
+        const localEvidences = reportForm.evidences.filter(e => !e.url || !e.url.startsWith(process.env.REACT_APP_S3_BUCKET_URL));
+
         const fileObjects = Array.from(files).reduce((acc, file) => {
-            if (!fileAlreadyExists(file, reportForm.evidences)) {
+            if (!fileAlreadyExists(file, localEvidences, serverEvidences)) {
                 acc.push({
                     id: Date.now() + file.name,
                     name: file.name,
@@ -114,8 +113,12 @@ const EditReport = () => {
                 evidences: [...prev.evidences, ...fileObjects]
             }));
         }
-    };
+    };  
 
+    const updateEvidences = async () => {
+        const localEvidences = reportForm.evidences.filter(e => !e.url || !e.url.startsWith(process.env.REACT_APP_S3_BUCKET_URL));
+        await putAddEvidences(reportForm.id, localEvidences, t);
+    };
 
     const handleFileRemove = async (evidence) => {
         await deleteEvidence(evidence, reportForm.id, setReportForm, t);
@@ -900,7 +903,12 @@ const EditReport = () => {
                                 </div>
                             ))}
                         </div>
-
+                        <Button
+                            label={t("dashboard.reports.edit-report.update-evidences.button-update-evidences")}
+                            icon="pi pi-refresh"
+                            className="p-button update-button" 
+                            onClick={updateEvidences}
+                        />
                     </div>
                 </div>
 
@@ -930,7 +938,7 @@ const EditReport = () => {
 
 
             <div className="flex justify-end mt-4 pr-20">
-                <Button label={t("dashboard.reports.edit-report.swal.send")} severity="success" onClick={sendingReport} />
+                <Button label={t("dashboard.reports.edit-report.swal.send")} severity="success" onClick={() => console.log(reportForm)} />
             </div>
         </div>
 
@@ -938,3 +946,5 @@ const EditReport = () => {
 };
 
 export default EditReport;
+
+

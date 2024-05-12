@@ -2,7 +2,7 @@ import React, { useContext, useRef, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { AiFillFilePdf, AiFillEdit, AiFillCheckCircle } from "react-icons/ai";
 import { FiCreditCard, FiStar, FiShoppingCart, } from "react-icons/fi";
-import { FaSpinner } from 'react-icons/fa'; 
+import { FaSpinner } from 'react-icons/fa';
 import { BsCurrencyDollar, BsShield, BsChatLeft, } from "react-icons/bs";
 import { HiOutlineEye, HiStatusOffline, HiStatusOnline, } from "react-icons/hi";
 import { TiDeleteOutline, TiTick } from "react-icons/ti";
@@ -39,62 +39,69 @@ export const useGlobalTranslation = () => {
   return useTranslation("global");
 };
 
-export const gridUserImage = ({UserImage}) => {
- 
-  return(
-  <div>
-    <img
-      className="rounded-xl w-20 h-20  md:ml-3"
-      src={UserImage}
-      alt="order-item"
-    />
-  </div>
-)};
+export const gridUserImage = ({ UserImage }) => {
 
-//TODO: refactorizar este funcion para que valide si hay evidencias y no bote error
+  return (
+    <div>
+      <img
+        className="rounded-xl w-20 h-20  md:ml-3"
+        src={UserImage}
+        alt="order-item"
+      />
+    </div>
+  )
+};
+
+
 export const gridOrderImage = ({ evidences }) => {
+  const srcNoImage = `${process.env.REACT_APP_S3_BUCKET_URL}/Resources/NoImage.png`;
+
   if (!evidences || evidences.length === 0 || !evidences[0]) {
     return (
       <div>
         <img
           className="rounded-xl w-20 h-20 md:ml-3"
-          src={`${process.env.REACT_APP_S3_BUCKET_URL}/Resources/NoImage.png`}
+          src={srcNoImage}
           alt="No evidence"
         />
       </div>
     );
   }
 
-  // Procede si las validaciones son exitosas
+  const imgEvidence = `${process.env.REACT_APP_S3_BUCKET_URL}/${evidences[0].path}`;
+
   return (
     <div>
       <img
         className="rounded-xl w-20 h-20 md:ml-3"
-        src={`${process.env.REACT_APP_S3_BUCKET_URL}/${evidences[0].path}`}
+        src={imgEvidence}
         alt="order-item"
+        style={{ borderRadius: '10%' }}
       />
     </div>
   );
 };
 
 
-export const gridPropertyImage = ({PropertyImage}) => (
-  <div>
-    <img
-      className="rounded-xl w-20 h-20  md:ml-3"
-      src={PropertyImage}
-       alt="order-item"
-    />
-  </div>
-);
-
+export const GridPropertyImage = ({ propertyImage }) => {
+  const imageUrl = propertyImage || "default-placeholder.png";
+  return (
+    <div>
+      <img
+        className="rounded-xl w-20 h-20 md:ml-3"
+        src={imageUrl}
+        alt="Property Image"
+      />
+    </div>
+  );
+};
 
 export const gridOrderProperties = (props) => {
-    return (
-      <a className="flex justify-center m-0 p-0 cursor-pointer">
-        Detalles
-      </a>
-    );
+  return (
+    <a className="flex justify-center m-0 p-0 cursor-pointer">
+      Detalles
+    </a>
+  );
 };
 /*export const gridOrderProperties = (props) => {
 
@@ -142,9 +149,9 @@ export const GridPdf = (props) => {
     if (!props.id) {
       Swal.fire(t("dashboard.reports.table.admin.no-pdf"));
     } else {
-      console.log("Esto es la data del PDF:", props);  
+      console.log("Esto es la data del PDF:", props);
       try {
-        await exportPDF(props);  
+        await exportPDF(props);
       } catch (error) {
         console.error('Error al generar el PDF:', error);
         Swal.fire(t("Error"), t("dashboard.reports.table.admin.pdf-error"), "error");
@@ -160,7 +167,7 @@ export const GridPdf = (props) => {
 };
 
 export const GridDetails = (props) => {
-  let id = props?.id;  
+  let id = props?.id;
   return (
     <Link
       className="flex justify-center m-0 p-0"
@@ -194,7 +201,7 @@ export const GridisVerifiedAndVerification = ({ id, verified: initialVerified })
 
   useEffect(() => {
     setVerified(initialVerified);
-  }, [initialVerified]);  
+  }, [initialVerified]);
   const handleToggleVerification = async () => {
     const newVerifiedStatus = await toggleReportVerification(id, verified, t);
     setVerified(newVerifiedStatus);
@@ -262,7 +269,6 @@ export const GridEditReportTemplate = (props) => {
 const GridEditCamera = ({ camera, setSelectedCamera }) => {
 
   const showCameraToEdit = () => {
-    // Abre el diálogo para editar la cámara
     setSelectedCamera(camera);
   };
 
@@ -273,6 +279,19 @@ const GridEditCamera = ({ camera, setSelectedCamera }) => {
   );
 };
 
+const GridEditProperty = ({ property, handleOpenEditPropertyDialog }) => {
+  const handleEditClick = () => {
+    if (property) {
+      handleOpenEditPropertyDialog(property);
+    }
+  };
+
+  return (
+    <div onClick={handleEditClick} className="cursor-pointer flex justify-center m-0 p-0">
+      <AiFillEdit className="text-lg" />
+    </div>
+  );
+};
 
 
 export const GridEdit = ({ caseType }) => {
@@ -382,12 +401,12 @@ export const GridDelete = ({ id }) => {
               showConfirmButton: false,
               timer: 3000
             });
-            setFlag(!flag);  
+            setFlag(!flag);
           })
           .catch(error => {
             Swal.fire(
               t('Error!'),
-              t('dashboard.users.delete.error-deleting-user'), 
+              t('dashboard.users.delete.error-deleting-user'),
               'error'
             );
           });
@@ -416,7 +435,7 @@ export const GridDeleteReport = ({ id, refreshReports }) => {
     const success = await deleteReport(id, t);
     if (success) {
       console.log("se borro reporte", id)
-      refreshReports(); 
+      refreshReports();
 
     }
   };
@@ -527,7 +546,6 @@ export const GridDeleteProperty = ({ id }) => {
   const { setFlag } = useContext(UserContext);
   const [t, i18n] = useTranslation("global");
 
-
   const confirmDeletion = () => {
     Swal.fire({
       title: t('dashboard.properties.table.delete.swal.confirmation'),
@@ -556,8 +574,9 @@ export const GridDeleteProperty = ({ id }) => {
           title: t('dashboard.properties.table.delete.swal.property-removed'),
           showConfirmButton: false,
           timer: 3000
+        }).then(() => {
+          setFlag(flag => !flag); // Solo actualiza el flag cuando el modal se cierra, minimizando re-renderizaciones
         });
-        setFlag(flag => !flag);
       } else {
         throw new Error('Failed to delete the property');
       }
@@ -613,8 +632,9 @@ export const GridDeleteCamera = ({ id }) => {
     </div>
   );
 };
+
 export const GridLiveView = ({ LiveView }) => {
-  console.log(LiveView);
+  // console.log(LiveView);
   const { cameraContext, setCameraContext } = useContext(UserContext);
 
   return (
@@ -636,7 +656,7 @@ export const gridOrderStatus = (props) => (
     style={{ background: props.StatusBg }}
     className="text-white py-1 px-2 capitalize rounded-2xl text-md"
   >
-    {props.Status}
+    {props.status}
   </button>
 );
 
@@ -654,16 +674,23 @@ export const kanbanGrid = [
 
   { headerText: "Done", keyField: "Close", allowToggle: true },
 ];
-const gridEmployeeProfile = (props) => (
-  <div className="flex items-center gap-2">
-    <img
-      className="rounded-sm w-full h-full object-cover"
-      src={props.EmployeeImage}
-      alt="employee"
-    />
-    {/*  <p>{props.Name}</p> */}
-  </div>
-);
+
+
+const gridCameraimage = (props) => {
+  const imageURL = `${process.env.REACT_APP_S3_BUCKET_URL}/${props.image}`;
+  return (
+    <div className="flex items-center gap-2">
+
+      <img
+        className="rounded-sm w-full h-full object-cover"
+        src={imageURL}
+        alt="employee"
+        style={{ borderRadius: '10%' }}
+      />
+
+    </div>
+  );
+};
 
 const gridEmployeeCountry = (props) => (
   <div className="flex items-center justify-center gap-2">
@@ -987,7 +1014,7 @@ export const cameraGrid = (t) => {
     {
       headerText: t("dashboard.table.img"),
       width: "115",
-      template: gridEmployeeProfile,
+      template: gridCameraimage,
       textAlign: "Center",
     },
 
@@ -1015,46 +1042,41 @@ export const cameraGrid = (t) => {
       format: "yMd",
       textAlign: "Center",
     },
-    {
-      field: "LiveView",
-      headerText: "Details",
-      width: "100",
-      textAlign: "Center",
-      template: GridLiveView,
-    },
+
   ]
 }
- 
-export const cameraGridAdmin = (t, setSelectedCamera) => {
+
+export const cameraGridAdmin = (t, setSelectedCamera, onClose) => {
   return [
     {
       headerText: t("dashboard.cameras.table.img"),
       width: "115",
-      template: gridEmployeeProfile,
+      template: gridCameraimage,
       textAlign: "Center",
     },
 
-    { 
+    {
       headerText: t("dashboard.cameras.table.name"),
-      width: "190", 
-      field: "Name", 
-      textAlign: "Center" },
+      width: "190",
+      field: "name",
+      textAlign: "Center"
+    },
     {
       headerText: t("dashboard.cameras.table.status"),
       width: "110",
       textAlign: "Center",
       template: gridOrderStatus,
     },
-    { 
+    {
       headerText: t("dashboard.cameras.table.brand"),
-      field: "Title",
-      width: "100", 
-      textAlign: "Center" 
+      field: "brand",
+      width: "100",
+      textAlign: "Center"
     },
-    { 
-      field: "Type",
+    {
+      field: "type ",
       headerText: t("dashboard.cameras.table.type"),
-      width: "90", 
+      width: "90",
       textAlign: "Center"
     },
 
@@ -1070,7 +1092,7 @@ export const cameraGridAdmin = (t, setSelectedCamera) => {
       headerText: t("dashboard.cameras.table.edit"),
       width: "100",
       textAlign: "Center",
-      template: props => <GridEditCamera {...props} setSelectedCamera={setSelectedCamera} />,
+      template: props => <GridEditCamera camera={props} setSelectedCamera={setSelectedCamera} />,
     },
     {
       field: "id",
@@ -1080,10 +1102,7 @@ export const cameraGridAdmin = (t, setSelectedCamera) => {
       template: GridDeleteCamera,
     },
   ]
-} 
-  
-
-let Permission = true;
+}
 
 
 
@@ -1319,22 +1338,22 @@ export const GridUserEdit = ({ user }) => {
 };
 */
 
-  const PropertiesTemplate = ({user}) => {
+const PropertiesTemplate = ({ user }) => {
 
-    const [t, i18n] = useTranslation("global");
-    const { userProvider, setUserProvider } = useContext(UserContext);
-    const handlerClick = () => {
-      console.log(user);
-      setUserProvider(user);  // Actualiza el contexto con los datos del usuario
-      navigate("/dashboard/UserDetails");
-    };
-    const navigate = useNavigate();
-    return (  
-      <a onClick={() => handlerClick()} className="flex justify-center m-0 p-0 cursor-pointer">
-        {t("dashboard.users.table.details")}
-        </a>
-    );
+  const [t, i18n] = useTranslation("global");
+  const { userProvider, setUserProvider } = useContext(UserContext);
+  const handlerClick = () => {
+    console.log(user);
+    setUserProvider(user);  // Actualiza el contexto con los datos del usuario
+    navigate("/dashboard/UserDetails");
   };
+  const navigate = useNavigate();
+  return (
+    <a onClick={() => handlerClick()} className="flex justify-center m-0 p-0 cursor-pointer">
+      {t("dashboard.users.table.details")}
+    </a>
+  );
+};
 
 export const userGrid = (t) => {
   return [
@@ -1363,7 +1382,7 @@ export const userGrid = (t) => {
       headerText: t("dashboard.users.table.rol"),
       width: "100",
       textAlign: "Center",
-      template: rowData => roleTemplate(rowData, t),  
+      template: rowData => roleTemplate(rowData, t),
       editType: "dropdownedit"
     },
     {
@@ -1406,7 +1425,7 @@ export const ImgPropertyUsersProfile = (rowData) => {
 
 export const propertiesUserGrid = (t, userId, setUserData) => {
   return [
-    
+
     {
       headerText: t("dashboard.user-details.properties.table.image"),
       template: ImgPropertyUsersProfile,
@@ -1450,6 +1469,7 @@ export const propertiesUserGridAdmin = (t, userId, setUserData) => {
       editType: "dropdownedit",
       textAlign: "Center",
     },
+
     {
       headerText: t("dashboard.user-details.properties.table.remove"),
       template: (props) => <RemovePropertyToUser propertyId={props.id} userId={userId} setUserData={setUserData} />,
@@ -1480,7 +1500,7 @@ export const AddPropertyIconTemplate = ({ data, userId, t, setUserData, fetchUpd
 };
 
 export const assignproperties = (t, userId, setUserData, fetchUpdatedProperties) => {
- 
+
 
   return [
     {
@@ -1598,7 +1618,7 @@ export const orderAgentsAdmin = (t) => {
   return [
     {
       headerText: t("dashboard.agents.table.image"),
-      template: gridOrderImage,
+      template: gridUserImage,
       textAlign: "Center",
       width: "120",
     },
@@ -1615,17 +1635,12 @@ export const orderAgentsAdmin = (t) => {
       width: "120",
     },
     {
-      headerText: t("dashboard.agents.table.password"),
-      field: "user.pasword",  
+      field: "Properties",
+      headerText: t("dashboard.users.table.properties"),
+      width: "200",
       textAlign: "Center",
-      width: "120",
-    },
-    {
-      headerText: t("dashboard.agents.table.edit"),
-      template: GridAgentEdit,
-      textAlign: "Center",
-      width: "80",
-      field: "agent",
+      template: PropertiesTemplate,
+      //template: gridOrderProperties,
     },
     {
       headerText: t("dashboard.agents.table.delete"),
@@ -1640,9 +1655,9 @@ export const orderAgentsAdmin = (t) => {
 
 export const propertyGrid = (t) => {
   return [
-  {
+    {
       headerText: t("dashboard.properties.table.image"),
-      template: gridPropertyImage,
+      template: GridPropertyImage,
       textAlign: "Center",
       field: "img",
       width: "120",
@@ -1672,82 +1687,66 @@ export const propertyGrid = (t) => {
       width: "120",
     },
 
-    {
-      headerText: t("dashboard.properties.table.delete.delete"),
-      template: GridDeleteProperty,
-      textAlign: "Center",
-      width: "80",
-      field: "id",
-    },
   ];
 };
 
-export const propertyGridAdmin = [
-  {
-    headerText: "Image",
-    template: gridOrderImage,
-    textAlign: "Center",
-    field: "img",
-    width: "120",
-  },
-  {
-    headerText: "ID",
-    field: "id",
-    textAlign: "Center",
-    width: "80",
-  },
-  {
-    headerText: "Name",
-    field: "Name",
-    textAlign: "Center",
-    width: "140",
-  },
-  {
-    headerText: "Address",
-    field: "Direction",
-    textAlign: "Center",
-    width: "120",
-  },
-  {
-    headerText: "Cameras",
-    field: "Cameras",
-    textAlign: "Center",
-    width: "120",
-  },
-  {
-    headerText: "Reports",
-    field: "Reports",
-    textAlign: "Center",
-    width: "120",
-  },
-  /*   {
-    headerText: "Edit",
-    textAlign: "Center",
-    Property: "property",
-    template: GridPropertyEdit,
-    width: "80",
-  }, */
-  {
-    headerText: "Delete",
-    textAlign: "Center",
-    template: GridDeleteProperty,
-    width: "85",
-    field: "id",
-  },
+export const propertyGridAdmin = (t, handleOpenEditPropertyDialog) => {
 
-  /* ,
+  return [
     {
-      headerText: "Edit",
-    template: GridAgentEdit,
-    textAlign: "Center",
-    width: "80",
- 
-    } */
-];
+      headerText: "Image",
+      template: props => props && <GridPropertyImage propertyImage={props.PropertyImage} />,
+      textAlign: "Center",
+      field: "img",
+      width: "120",
+    },
+    {
+      headerText: "name",
+      field: "name",
+      textAlign: "Center",
+      width: "140",
+    },
+    {
+      headerText: "direction",
+      field: "direction",
+      textAlign: "Center",
+      width: "120",
+    },
+    {
+      headerText: "cameras",
+      field: "cameras",
+      textAlign: "Center",
+      width: "120",
+    },
+    {
+      headerText: "reports",
+      field: "reports",
+      textAlign: "Center",
+      width: "120",
+    },
+    {
+      field: "property",
+      headerText: t("dashboard.cameras.table.edit"),
+      width: "100",
+      textAlign: "Center",
+      template: props => <GridEditProperty property={props} handleOpenEditPropertyDialog={handleOpenEditPropertyDialog} />
+    }, 
+
+    {
+      headerText: "Delete",
+      textAlign: "Center",
+      template: props => <GridDeleteProperty id={props} />,
+      width: "85",
+      field: "id",
+    },
+
+  ]
+
+};
 
 
 export const reportsGrid = (t) => {
-  
+
   return [
     {
       headerText: t("dashboard.reports.table.client.CaseImage"),
@@ -1795,21 +1794,21 @@ export const reportsGrid = (t) => {
       textAlign: "Center",
     },
 
-      {
-        field: "PDF",
-        headerText: "PDF",
-        width: "80",
-        textAlign: "Center",
-        template: GridPdf,
-      },
-    
-      {
-        field: "Details",
-        headerText: t("dashboard.reports.table.admin.CaseDetails"),
-        width: "105",  
-        textAlign: "Center",
-        template: GridDetails,
-      },
+    {
+      field: "PDF",
+      headerText: "PDF",
+      width: "80",
+      textAlign: "Center",
+      template: GridPdf,
+    },
+
+    {
+      field: "Details",
+      headerText: t("dashboard.reports.table.admin.CaseDetails"),
+      width: "105",
+      textAlign: "Center",
+      template: GridDetails,
+    },
 
   ];
 
@@ -1852,7 +1851,7 @@ export const reportsGridAdmin = (t, refreshReports) => {
       width: "130",
       textAlign: "Center",
     },
-  
+
     {
       field: "numerCase",
       headerText: t("dashboard.reports.table.admin.IdCase"),
@@ -1887,7 +1886,7 @@ export const reportsGridAdmin = (t, refreshReports) => {
       headerText: t("dashboard.reports.table.admin.CaseEdit"),
       width: "80",
       textAlign: "Center",
-      template: GridEditReportTemplate, 
+      template: GridEditReportTemplate,
     },
     {
       field: "Delete",
@@ -1989,7 +1988,7 @@ export const reportsGridMonitor = (t) => {
   return [
     {
       headerText: t("dashboard.reports.table.admin.CaseImage"),
-      template: gridOrderImage,
+      template: GridPropertyImage,
       textAlign: "Center",
       width: "120",
     },

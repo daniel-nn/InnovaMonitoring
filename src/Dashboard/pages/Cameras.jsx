@@ -34,7 +34,7 @@ const Cameras = () => {
   const [camerasList, setCamerasList] = useState([]);
   let propertiesUser = JSON.parse(localStorage.getItem("user"));
   let listOfPropertiesByUser = propertiesUser.properties;
-  const { propertyContext, setCameraForm,setPropertyContext, cameraSaved, setCameratSaved, cameraFormFlag, setCameraFormFlag } = useContext(UserContext);
+  const { propertyContext, setCameraForm, setPropertyContext, cameraSaved, setCameraSaved, cameraFormFlag, setCameraFormFlag } = useContext(UserContext);
 
   let propertyStorage = JSON.parse(localStorage.getItem("propertySelected"));
   let idStorage = propertyStorage.id;
@@ -51,8 +51,15 @@ const Cameras = () => {
   }, [propertyContext, cameraSaved]);
 
   const handleClose = () => {
-    setCameraFormFlag(false);  // Cierra el diálogo
-    setCameraForm({});         // Resetea el formulario
+    setCameraFormFlag(false); 
+    setCameraForm({});        
+  };
+
+  const handleCloseEdit = (updatedCamera) => {
+    setSelectedCamera(null);
+    if (updatedCamera) {
+      getCameras(propertyContext.id || id, navigate).then(setCamerasList);
+    }
   };
 
 
@@ -65,24 +72,23 @@ const Cameras = () => {
         modal
         dismissableMask 
         onHide={handleClose}
-        footer={<CameraFormFooter
-          cameraSaved={cameraSaved}
-          setCameraFormFlag={setCameraFormFlag}
-          setCameratSaved={setCameratSaved}
-          onClose={handleClose}
-        />}
       >
-        <CameraForm properties={listOfPropertiesByUser} />
+        <CameraForm 
+        properties={listOfPropertiesByUser} cameraSaved={cameraSaved}
+        setCameraFormFlag={setCameraFormFlag}
+        setCameraSaved={setCameraSaved} 
+        onClose={handleClose} />
       </Dialog>
 
       <Dialog
-        header="Editar cámara"
+        header={t("dashboard.cameras.dialog.edit-camera")}
         visible={selectedCamera !== null}
         style={{ width: "50vw" }}
         modal
+        dismissableMask 
         onHide={() => setSelectedCamera(null)}
       >
-        <CameraEditForm camera={selectedCamera} properties={listOfPropertiesByUser} />
+        <CameraEditForm camera={selectedCamera} properties={listOfPropertiesByUser} onClose={handleCloseEdit} />
       </Dialog>
 
       <div className="m-0 md:m-8 mt-14 p-2 md:p-0 bg-white rounded-3xl">
@@ -118,7 +124,6 @@ const Cameras = () => {
         
 
           <ColumnsDirective>
-            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             {userRole === "Admin" ?
               cameraGridAdmin(t, setSelectedCamera).map((item, index) => (
                 <ColumnDirective key={index} {...item} />

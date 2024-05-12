@@ -5,20 +5,22 @@ import { Dropdown } from "primereact/dropdown";
 import { Calendar } from "primereact/calendar";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
-import { postCamera } from "../../../helper/postCamera";
+import { putImageCamera } from "../../../helper/Cameras/UpdateCamera/putImageCamera";
 import { MdScreenRotationAlt } from "react-icons/md";
 import { BsArrowRightShort, BsArrowUpShort } from "react-icons/bs";
 import { useTranslation } from "react-i18next";
+import "../../../pages/css/Cameras/Cameras.css"
+import Swal from "sweetalert2";
+import { putEditCamera } from "../../../helper/Cameras/UpdateCamera/putEditCamera";
 
-
-export const CameraEditForm = ({ camera, properties }) => {
+export const CameraEditForm = ({ camera, properties, onClose }) => {
     const [cameraForm, setCameraForm] = useState({});
     const {
         name,
         brand,
         installedByUs,
         dateInstalled,
-        imageFile= null,
+        imageFile,
         status,
         type,
         property,
@@ -27,25 +29,78 @@ export const CameraEditForm = ({ camera, properties }) => {
     const statusList = ["Working", "Offline", "Vandalized"];
     const { t, i18n } = useTranslation("global");
 
+
     const handleImageChange = (event) => {
         const file = event.target.files[0];
         if (file) {
+            if (cameraForm.imageUrl) {
+                URL.revokeObjectURL(cameraForm.imageUrl);  
+            }
+            const imageUrl = URL.createObjectURL(file); 
             setCameraForm(prevState => ({
                 ...prevState,
-                imageFile: file
+                imageFile: file,  
+                imageUrl: imageUrl  
             }));
         }
     };
 
+
     useEffect(() => {
-        setCameraForm(camera);
-    }, [camera, setCameraForm]);
+        if (camera) {
+            const imageUrl = camera.image ? `${process.env.REACT_APP_S3_BUCKET_URL}/${camera.image}` : '';
+
+            setCameraForm({
+                ...camera,
+                imageFile: null,  
+                imageUrl: imageUrl  
+            });
+        }
+    }, [camera]);
+
+    const handleUpdateCameraImage = async () => {
+        if (cameraForm.imageFile) {
+            const result = await putImageCamera(camera.id, cameraForm.imageFile, t);
+            if (result) {
+                onClose(result); 
+            }
+        } else {
+            Swal.fire({
+                icon: 'warning',
+                title: t("dashboard.cameras.update.swal.caution"),
+                text: t("dashboard.cameras.update.swal.different-image"),
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                customClass: {
+                    container: 'swal-overlay'
+                }
+            });
+        }
+    };
+
+    const handleUpdateCameraInfo = async () => {
+        if (cameraForm) {
+            try {
+                const updatedCamera = await putEditCamera(camera.id, cameraForm, t);
+                if (updatedCamera) {
+                    onClose(updatedCamera); 
+                }
+            } catch (error) {
+                console.log("Failed to update camera info: ", error);
+            }
+        }
+    };
+
+    console.log(cameraForm)
 
     return (
         <div>
-            <div className="flex">
+            <div className="flex">  
                 <div className="p-inputgroup my-3 ml-3 flex flex-col">
-                    <label htmlFor="username">{t("dashboard.cameras.dialog.cdasdasdsaamera-name")}</label>
+                    <label htmlFor="username">{t("dashboard.cameras.dialog.camera-name")}</label>
                     <div className="p-inputgroup">
                         <span className="p-inputgroup-addon">
                             <i className="pi pi-user"></i>
@@ -61,6 +116,7 @@ export const CameraEditForm = ({ camera, properties }) => {
                         />
                     </div>
                 </div>
+
                 <div className="p-inputgroup my-3 ml-3 flex flex-col">
                     <label htmlFor="username">{t("dashboard.cameras.dialog.brand")}</label>
                     <div className="p-inputgroup">
@@ -79,6 +135,7 @@ export const CameraEditForm = ({ camera, properties }) => {
                     </div>
                 </div>
             </div>
+
             <div className="flex">
                 <div className="p-inputgroup my-3 ml-3 flex flex-col">
                     <label htmlFor="username">{t("dashboard.cameras.dialog.type")}</label>
@@ -120,6 +177,7 @@ export const CameraEditForm = ({ camera, properties }) => {
             </div>
 
             <div className="flex">
+
                 <div className="p-inputgroup my-3 ml-3 flex flex-col">
                     <label htmlFor="username">{t("dashboard.cameras.dialog.camera-status")}</label>
                     <div className="p-inputgroup">
@@ -140,6 +198,7 @@ export const CameraEditForm = ({ camera, properties }) => {
                         />
                     </div>
                 </div>
+
                 <div className="p-inputgroup my-3 ml-3 flex flex-col">
                     <label htmlFor="username">{t("dashboard.cameras.dialog.installed-by")}</label>
                     <div className="p-inputgroup">
@@ -160,8 +219,8 @@ export const CameraEditForm = ({ camera, properties }) => {
                         />
                     </div>
                 </div>
-
             </div>
+
             <div className="flex">
                 <div className="p-inputgroup my-3 ml-3 flex flex-col">
                     <label htmlFor="username">{t("dashboard.cameras.dialog.date-installed")}</label>
@@ -181,6 +240,7 @@ export const CameraEditForm = ({ camera, properties }) => {
                     </div>
                 </div>
             </div>
+
             <div className="flex">
                 <div className="p-inputgroup my-3 ml-3 flex flex-col">
                     <label htmlFor="username">{t("dashboard.cameras.dialog.property")}</label>
@@ -202,9 +262,10 @@ export const CameraEditForm = ({ camera, properties }) => {
                         />
                     </div>
                 </div>
+            </div>
 
-                <div className="mb-6 mx-auto w-7/12">
-                    <label htmlFor="image">{t("dashboard.cameras.dialog.image")}</label>
+            <div className="w-full p-3">
+                <div className="p-inputgroup my-3 flex flex-col">
                     <div className="file-upload-container">
                         <input
                             type="file"
@@ -215,37 +276,29 @@ export const CameraEditForm = ({ camera, properties }) => {
                             style={{ display: 'none' }}
                         />
                         <label htmlFor="image" className="file-input-label">{t("dashboard.cameras.dialog.search-img")}</label>
-                        {/* Mostrar el nombre del archivo si existe */}
-                        <span id="file-name" className="file-name">{cameraForm?.imageFile?.name || ''}</span>
+                        {cameraForm.imageUrl && (
+                            <div className="image-preview-container mt-3 flex flex-col items-center">
+                                <img src={cameraForm.imageUrl} alt="Preview" className="image-preview" style={{ maxHeight: '300px', maxWidth: '100%', borderRadius: '10%' }} />
+                                <span className="file-name mt-2">{cameraForm.imageFile ? cameraForm.imageFile.name : ''}</span>
+                            </div>
+                        )}
                     </div>
                 </div>
-
+                <Button
+                    label={t("dashboard.cameras.update.update-button")}
+                    icon="pi pi-refresh"
+                    className="p-button update-camera-button"
+                    onClick={handleUpdateCameraImage}
+                />
             </div>
+
+            <div className="w-full flex justify-around   mt-7">
+                <Button icon="pi pi-times" severity="danger" label="Cancel" onClick={onClose} />
+                <div className="w-3"></div>
+                <Button icon="pi pi-check" className="p-button-success" label="Send" onClick={handleUpdateCameraInfo} />
+            </div>
+
         </div>
     );
 };
 
-export const CameraFormFooter = ({
-    cameraSaved,
-    setCameratSaved,
-    setCameraFormFlag,
-    onClose
-}) => {
-    const { cameraForm, setCameraForm } = useContext(UserContext);
-    const navigate = useNavigate();
-
-    const handleSaveCamera = async () => {
-        await postCamera(cameraForm, navigate);
-        setCameratSaved(!cameraSaved);
-        setCameraFormFlag(false);
-        setCameraForm({})
-    };
-
-    return (
-        <div className="w-full flex justify-end">
-            <Button icon="pi pi-times" severity="danger" label="Cancel" onClick={onClose} />
-            <div className="w-3"></div>
-            <Button icon="pi pi-check" label="Send" onClick={handleSaveCamera} />
-        </div>
-    );
-};

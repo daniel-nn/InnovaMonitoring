@@ -2,183 +2,132 @@ import { Dialog } from "primereact/dialog";
 import React, { useContext, useEffect, useState } from "react";
 import { Button } from "primereact/button";
 import { AiOutlinePlusCircle } from "react-icons/ai";
-import { GridComponent, ColumnsDirective, ColumnDirective, Resize, Sort, ContextMenu, Filter, Page, Search, PdfExport, Inject, Toolbar,} from "@syncfusion/ej2-react-grids";
+import { GridComponent, ColumnsDirective, ColumnDirective, Resize, Sort, ContextMenu, Filter, Page, Search, PdfExport, Inject, Toolbar, } from "@syncfusion/ej2-react-grids";
 import { useTranslation } from "react-i18next";
-import { contextMenuItems, propertyGrid,} from "../data/dummy";
+import { contextMenuItems, propertyGrid, propertyGridAdmin } from "../data/dummy";
 import { Header } from "../components";
 import { useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import { UserContext } from "../../context/UserContext";
 import { getPropertiesMapped } from "../helper/getPropertiesMapped";
-import { postNewProperty } from "../helper/postNewProperty";
+import { postNewProperty } from "../helper/Properties/postNewProperty";
 import Swal from 'sweetalert2';
+import { NewPropertyForm } from "../components/Forms/Properties/NewPropertyForm";
+import { EditPropertyForm } from "../components/Forms/Properties/EditPropertyForm";
+
 
 
 export const Properties = () => {
-  const toolbarOptions = ["Search"];
+  // Hook de navegación
   const { navigate } = useNavigate();
+
+ //barra de buscar
+  const toolbarOptions = ["Search"];
+
+  
+  // Traducciones
   const [t, i18n] = useTranslation("global");
+
+  // Estados
+
   const [error, setError] = useState(null);
-
-
   const [properties, setProperties] = useState([]);
   const [propertySaved, setPropertySaved] = useState(false);
-  const [visible, setVisible] = useState(false);
-  let propertiesUser = JSON.parse(localStorage.getItem("user"));
-  let listOfPropertiesByUser = propertiesUser.properties;
+  const [newPropertyDialog, setNewPropertyDialog] = useState(false);
+  const [editPropertyDialog, setEditPropertyDialog] = useState(false);
+  const [selectedProperty, setSelectedProperty] = useState(null);
+  const [validationErrors, setValidationErrors] = useState({});
+  
+
+  // Contexto
   const {
     propertyProvider, setPropertyProvider, agentDialog,
-    setAgentDialog,
-    flag,
-    setFlag,
+    setAgentDialog, flag, setFlag,
   } = useContext(UserContext);
+
+  // Información del usuario
+  let propertiesUser = JSON.parse(localStorage.getItem("user"));
+  let listOfPropertiesByUser = propertiesUser.properties;
   let user = JSON.parse(localStorage.getItem("user"));
   let userRole = user.role.rolName;
-  const [validationErrors, setValidationErrors] = useState({});
 
-
+  // Efecto para cargar propiedades
   useEffect(() => {
-    getPropertiesMapped(navigate).then(data => {
-      console.log("Received data:", data);
-      if (!data || data.some(property => property == null)) {
-        throw new Error("Invalid or incomplete data returned");
+    const fetchProperties = async () => {
+      try {
+        const data = await getPropertiesMapped(navigate);
+        if (data && data.length > 0) {
+          setProperties(data);
+        } else {
+          console.error("No properties found");
+        }
+      } catch (error) {
+        console.error("Failed to fetch properties:", error);
       }
-      setProperties(data);
-      setError(null);
-    }).catch(error => {
-      console.error("Failed to fetch properties, setting empty array:", error);
-      setError("Failed to load properties");
-      setProperties([]); // Se asegura un arreglo vacío en caso de error
-    });
-  }, [agentDialog, flag, navigate]);
+    };
 
-  const saveNewProperty = async () => {
-    await postNewProperty(propertyProvider, t);
-    setAgentDialog(!agentDialog);
-    setPropertySaved(!propertySaved);
+    fetchProperties();
+  }, [navigate, flag]);
+
+
+  // Handlers para diálogos
+  const handleCloseNewPropertyDialog = () => {
+    setNewPropertyDialog(false);
     setPropertyProvider({});
   };
 
-
-  const validatePropertyDetails = () => {
-    const errors = {};
-    const { name, direction, img, mapImg } = propertyProvider;
-    if (!name) errors.name = t("dashboard.properties.dialog.swal.validate-property-details.name");
-    if (!direction) errors.direction = t("dashboard.properties.dialog.swal.validate-property-details.direction");
-    if (!img) errors.img = t("dashboard.properties.dialog.swal.validate-property-details.img-url");
-    if (!mapImg) errors.mapImg = t("dashboard.properties.dialog.swal.validate-property-details.map-url");
-
-    setValidationErrors(errors);
-    return Object.keys(errors).length === 0;
+  const handleOpenEditPropertyDialog = (property) => {
+    setSelectedProperty(property);
+    setEditPropertyDialog(true);
   };
 
-  const handleInputChange = (field, value) => {
-    setPropertyProvider((prevState) => ({
-      ...prevState,
-      [field]: value
-    }));
-
-    if (validationErrors[field] && value.trim()) {
-      setValidationErrors((prevState) => ({
-        ...prevState,
-        [field]: null
-      }));
+  const handleCloseEditPropertyDialog = (updatedProperty) => {
+    setEditPropertyDialog(false);
+    if (updatedProperty) {
+      setProperties(prevProperties => prevProperties.map(property =>
+        property.id === updatedProperty.id ? updatedProperty : property
+      ));
+    }
+  };
+  
+  const refreshProperties = async () => {
+    try {
+      const newData = await getPropertiesMapped();
+      if (newData && newData.length > 0) {
+        console.log('New data after refresh:', newData);
+        setProperties(newData);
+      } else {
+        throw new Error("No data received");
+      }
+    } catch (error) {
+      console.error('Error refreshing properties:', error);
+      setProperties([]);  
     }
   };
 
-  const handleSaveProperty = () => {
-    if (validatePropertyDetails()) {
-      saveNewProperty();
-    }
-  };
-
- 
-
-  const handleClose = () => {
-    setAgentDialog(false);  
-    setPropertyProvider({}); 
-      setValidationErrors({})
-  };
 
   return (
     <>
       <Dialog
         header={t("dashboard.properties.dialog.dialog-title")}
-        onHide={handleClose} 
-        visible={agentDialog}
-        modal={true}          
-        dismissableMask={true}
-        style={{ width: "30vw", display: "flex", justifyContent: "center" }}
-        footer={
-          <div className="w-full flex justify-end">
-            <Button
-              icon="pi pi-times"
-              severity="danger"
-              label={t("dashboard.properties.dialog.cancel")}
-              onClick={handleClose}  
-            />            
-            <div className="w-3"></div>
-            <Button
-              icon="pi pi-check"
-              label={t("dashboard.properties.dialog.send")}
-              onClick={() => {
-                handleSaveProperty();
-              }}
-            />
-          </div>
-        }
+        visible={newPropertyDialog}
+        style={{ width: "50vw" }}
+        modal
+        dismissableMask
+        onHide={handleCloseNewPropertyDialog}
       >
+        <NewPropertyForm onClose={handleCloseNewPropertyDialog} />
+      </Dialog>
 
-        <div className="w-full flex flex-col mx-auto">
-          <div className="mb-6 mx-auto">
-            <span className="p-float-label">
-              <InputText
-                id="name"
-                value={propertyProvider.name}
-                onChange={(e) => handleInputChange('name', e.target.value)}
-              />
-              <label htmlFor="name">{t("dashboard.properties.dialog.property-name")}</label>
-            </span>
-            {validationErrors.name && <small className="p-error">{validationErrors.name}</small>}
-          </div>
-
-          <div className="mb-6 mx-auto">
-            <span className="p-float-label">
-              <InputText
-                id="direction"
-                value={propertyProvider.direction}
-                onChange={(e) => handleInputChange('direction', e.target.value)}
-              />
-              <label htmlFor="direction">{t("dashboard.properties.dialog.address")}</label>
-            </span>
-            {validationErrors.direction && <small className="p-error">{validationErrors.direction}</small>}
-          </div>
-
-          <div className="mb-6 mx-auto">
-            <span className="p-float-label">
-              <InputText
-                id="img"
-                value={propertyProvider.img}
-                onChange={(e) => handleInputChange('img', e.target.value)}
-              />
-              <label htmlFor="img">{t("dashboard.properties.dialog.img-url")}</label>
-            </span>
-            {validationErrors.img && <small className="p-error">{validationErrors.img}</small>}
-          </div>
-
-          <div className="mb-6 mx-auto">
-            <span className="p-float-label">
-              <InputText
-                id="mapImg"
-                value={propertyProvider.mapImg}
-                onChange={(e) => handleInputChange('mapImg', e.target.value)}
-              />
-              <label htmlFor="mapImg">{t("dashboard.properties.dialog.property-map")}</label>
-            </span>
-            {validationErrors.mapImg && <small className="p-error">{validationErrors.mapImg}</small>}
-          </div>
-        </div>
-
+      <Dialog
+        header={t("dashboard.properties.dialog.edit-property")}
+        visible={editPropertyDialog}
+        style={{ width: "50vw" }}
+        modal
+        dismissableMask
+        onHide={handleCloseEditPropertyDialog}
+      >
+        <EditPropertyForm property={selectedProperty} onClose={handleCloseEditPropertyDialog} refreshProperties={refreshProperties} />
       </Dialog>
 
       <div className="m-20 md:m-10 mt-14 p-2 md:p-0 bg-white rounded-3xl">
@@ -190,9 +139,7 @@ export const Properties = () => {
               severity="info"
               label={t("dashboard.properties.add-property")}
               className="p-button-text ml-2"
-              onClick={() => {
-                setAgentDialog(!agentDialog);
-              }}
+              onClick={() => setNewPropertyDialog(true)}
             >
               <AiOutlinePlusCircle className="ml-2"></AiOutlinePlusCircle>
             </Button>
@@ -201,10 +148,10 @@ export const Properties = () => {
           )}
         </div>
 
-        {properties && properties.length > 0 ? (
+        {properties && properties.length > 0 && (
           <GridComponent
             id="gridcomp"
-            key={i18n.language}
+            key={`${i18n.language}-${JSON.stringify(properties)}`}
             dataSource={properties}
             allowPaging
             allowSorting
@@ -215,19 +162,17 @@ export const Properties = () => {
             style={{ position: "absolute", zIndex: 0 }}
           >
             <ColumnsDirective>
-              {propertyGrid(t).map((item, index) => (
-                <ColumnDirective key={index} {...item} />
+              {propertyGridAdmin(t, handleOpenEditPropertyDialog).map((item, index)  => (
+                  <ColumnDirective key={index} {...item} />
+            
               ))}
             </ColumnsDirective>
-            <Inject
-              services={[Resize, Sort, ContextMenu, Filter, Page, PdfExport, Toolbar, Search]}
-            />
+
+            <Inject services={[Resize, Sort, ContextMenu, Filter, Page, PdfExport, Toolbar, Search]} />
           </GridComponent>
-        ) : (
-          <div>Loading properties...</div>  
         )}
-        
+
       </div>
     </>
-  );
+  ); 
 };
