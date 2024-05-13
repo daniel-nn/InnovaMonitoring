@@ -1,11 +1,19 @@
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/UserContext";
-import Header from "./Header";
 import ReactImageGallery from "react-image-gallery";
 import { useNavigate, useParams } from "react-router-dom";
 import { GiPoliceBadge } from "react-icons/gi";
 import { MdLocalPolice } from "react-icons/md";
 import { GiCctvCamera } from "react-icons/gi";
+import JSZip from "jszip";
+import DownloadIcon from '@mui/icons-material/Download';
+import SendIcon from '@mui/icons-material/Send';
+import CircularProgress, {
+  CircularProgressProps,
+} from "@mui/material/CircularProgress";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import PropTypes from "prop-types";
 
 import {
   AiFillCheckCircle,
@@ -43,12 +51,59 @@ let images = [];
 let videos = [];
 
 export const ReportDatails = () => {
+  const [filesToDownload, setFilesToDownload] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [showButton, setShowButton] = useState(true);
+
+  const handleDownload = async () => {
+    setShowButton(false); // Ocultar el botón al comenzar la descarga
+    setLoading(true); // Activar el loader
+
+    const zip = new JSZip();
+
+    // Obtener la longitud total de archivos para calcular el progreso
+    const totalFiles = filesToDownload.length;
+    let filesProcessed = 0;
+
+    await Promise.all(
+      filesToDownload.map(async (file) => {
+        const response = await fetch(file.url, {
+          method: "GET",
+          mode: "cors",
+          cache: "no-store", // Evitar el almacenamiento en caché en Chrome
+        });
+        const data = await response.arrayBuffer(); // Obtener el cuerpo de la respuesta como un ArrayBuffer
+        zip.file(file.name, data);
+
+        // Incrementar el contador de archivos procesados y calcular el progreso
+        filesProcessed++;
+        const currentProgress = Math.round((filesProcessed / totalFiles) * 100);
+        setProgress(currentProgress);
+      })
+    );
+
+    // Generar el archivo ZIP
+    zip.generateAsync({ type: "blob" }).then((content) => {
+      // Crear el enlace de descarga
+      const downloadLink = document.createElement("a");
+      downloadLink.href = URL.createObjectURL(content);
+      downloadLink.download = folderName; // Nombre del archivo ZIP y la carpeta
+      downloadLink.click();
+
+      setLoading(false); // Desactivar el loader una vez que la descarga esté completa
+      setProgress(0); // Restablecer el progreso
+      setShowButton(true); // Mostrar el botón nuevamente
+    });
+  };
+
   const [t, i18n] = useTranslation("global");
   let dataImages = [];
   let dataVideos = [];
   const navigate = useNavigate();
   let { id } = useParams();
   const [flag, setFlag] = useState(false);
+  const [folderName, setFolderName] = useState("");
   const [reportDetails, setReportDetails] = useState({});
   //const {report, isLoading} = useFetchReportId(id, navigate);
   let user = JSON.parse(localStorage.getItem("user"));
@@ -59,10 +114,29 @@ export const ReportDatails = () => {
     reportFormVisible,
     setReportFormVisible,
   } = useContext(UserContext);
-
   useEffect(() => {
     getReportId(id, navigate).then((data) => {
       setReportDetails(data);
+      let evidences = data?.evidences?.map((evidence) => ({
+        name: evidence.name,
+        url: "https://innova-input.s3.us-east-1.amazonaws.com/" + evidence.path,
+      }));
+      setFilesToDownload(evidences);
+
+      const { company, property, level, numerCase, caseType } = data;
+
+      // Normalizar el nombre de la propiedad para reemplazar los espacios con guiones
+      const propertyNormalized = property.name.replace(/\s+/g, "-");
+
+      // Normalizar el nombre del equipo para reemplazar los espacios con guiones
+      const companyNormalized = company.replace(/\s+/g, "-");
+
+      // Construir el nombre de la carpeta
+      const folder = `report/${companyNormalized}_${propertyNormalized}_Level-${level}_#${numerCase}-${caseType.incident}.zip`;
+
+      // Actualizar el estado con el nombre de la carpeta generado
+      setFolderName(folder);
+
       console.log("Report data:", data);
     });
   }, [reportSaved]);
@@ -116,10 +190,18 @@ export const ReportDatails = () => {
     const translationPath = `dashboard.reports.case-details.types-of-incident.${incidentKey}`;
     setIncidentType(t(translationPath));
   }, [reportDetails, t]);
-
+  console.log("progress");
+  console.log(progress);
   return (
     <div className="mx-20 md:m-10  md:p-0 bg-white rounded-3xl">
-      {/*  <Header category="Report" title="Narcotics Consumption - #3345" /> */}
+      <div className="w-full flex justify-end">
+      <div className="card">
+            
+          </div>
+        <div className="col-xs-12 col-sm-12 col-lg-6 col-md-6">
+        
+        </div>
+      </div>{" "}
       <div>
         {userRole == "Admin" ? (
           <div className="flex justify-end">
@@ -157,26 +239,33 @@ export const ReportDatails = () => {
               }}
             />
 
-            {/*  <Button
-              icon="pi pi-file-export"
-              rounded
-              severity="success"
-              aria-label="Search"
-            /> */}
           </div>
         ) : (
           <></>
         )}
 
         <div className="px-4 py-3 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-3">
+        <div className="absolute right-6">
+              {showButton && (
+                
+              <Button onClick={handleDownload} label="Evidences" severity="warning" icon="pi pi-save" size="small" />
+
+              )}
+              {loading && (
+                <CircularProgressWithLabel color="success" value={progress} />
+              )}
+            </div>
           <div className="max-w-xl mb-10 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12">
-            <div>
+            <div className="">
+            
               <h6 className="inline-block px-3 py-px mb-4 text-xs font-semibold tracking-wider text-gray-700 uppercase rounded-full bg-teal-accent-400">
                 INNOVA MONITORING
               </h6>
             </div>
             <h2 className="max-w-lg mb-6 font-sans text-3xl font-bold leading-none tracking-tight text-yellow-600 sm:text-4xl md:mx-auto">
+              
               <span className="relative inline-block">
+                
                 <svg
                   viewBox="0 0 52 24"
                   fill="currentColor"
@@ -200,7 +289,7 @@ export const ReportDatails = () => {
                   />
                 </svg>
                 <span className="relative">
-                  {t("dashboard.reports.case-details.incident-report")}
+                  {t("dashboard.reports.case-details.incident-report")} #{ reportDetails?.numerCase}
                 </span>
               </span>
             </h2>
@@ -650,7 +739,6 @@ export const ReportDatails = () => {
           </span>
         </h2>
       </div>
-
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
         {dataVideos?.map((video) => (
           <div className="flex flex-col items-center w-auto">
@@ -705,3 +793,26 @@ export const ReportDatails = () => {
     </div>
   );
 };
+function CircularProgressWithLabel(props) {
+  return (
+    <Box sx={{ position: "relative", display: "inline-flex" }}>
+      <CircularProgress variant="determinate" {...props} />
+      <Box
+        sx={{
+          top: 0,
+          left: 0,
+          bottom: 0,
+          right: 0,
+          position: "absolute",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Typography variant="caption" component="div" color="text.secondary">
+          {`${Math.round(props.value)}%`}
+        </Typography>
+      </Box>
+    </Box>
+  );
+}

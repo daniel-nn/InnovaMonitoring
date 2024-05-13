@@ -60,7 +60,7 @@ const NewReport = () => {
     };
 
     useEffect(() => {
-        const socket = new WebSocket('ws://localhost:8080/ws'); // URL del WebSocket del servidor Spring Boot
+        const socket = new WebSocket('ws://ec2-52-90-149-16.compute-1.amazonaws.com:8080/ws'); // URL del WebSocket del servidor Spring Boot
     
         const stompClient = Stomp.over(socket);
         stompClient.connect({}, () => {
