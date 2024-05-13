@@ -10,6 +10,9 @@ import { UserContext } from "../../../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { UseDataPieLevels } from "../../Hooks/useDataPieLevels";
+import { useTranslation
+
+ } from "react-i18next";
 const PieLevels = () => {
   const { propertyContext, setPropertyContext } = useContext(UserContext);
   const navigate = useNavigate();
@@ -19,22 +22,14 @@ const PieLevels = () => {
   let user = JSON.parse(localStorage.getItem("user"));
   let userRole = user.role.rolName;
   const [reportes, setReportes] = useState([]);
+  const [t, i18n] = useTranslation("global");
 
-  let chart = [
-    { x: "Labour", y: 18, text: "18%" },
-    { x: "Legal", y: 8, text: "8%" },
-    { x: "Production", y: 15, text: "15%" },
-    { x: "License", y: 11, text: "11%" },
-    { x: "Facilities", y: 18, text: "18%" },
-    { x: "Taxes", y: 14, text: "14%" },
-    { x: "Insurance", y: 16, text: "16%" },
-  ];
 
   let finalChart = [];
   const calculate = (data) => {
     
     const { unicosElementos, almacenadorDeVecesRepetidas, porcentajes } =
-    UseDataPieLevels(data);
+    UseDataPieLevels(data, t);
 
     for (let k = 0; k < unicosElementos.length; k++) {
       finalChart.push({
@@ -58,7 +53,7 @@ const PieLevels = () => {
 
   return (
     <div className="m-4 md:m-10 mt-24 p-10 bg-white dark:bg-secondary-dark-bg rounded-3xl">
-      <ChartsHeader category="Pie" title="Project Cost Breakdown" />
+      <ChartsHeader category="  " title="Project Cost Breakdown" translate={t} />
       <div className="w-full">
         <PieChart
           id="chart-pie"

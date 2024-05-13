@@ -24,6 +24,8 @@ const Doughnut = ({ id, data, legendVisiblity, height }) => {
 
 
   return (
+
+    
     <AccumulationChartComponent
       id={id}
       legendSettings={{ visible: legendVisiblity, background: "white" }}
@@ -41,7 +43,6 @@ const Doughnut = ({ id, data, legendVisiblity, height }) => {
       />
       <AccumulationSeriesCollectionDirective>
         <AccumulationSeriesDirective
-          name="Case"
           dataSource={data}
           xName="x"
           yName="y"
@@ -61,9 +62,16 @@ const Doughnut = ({ id, data, legendVisiblity, height }) => {
               color: "#fff",
             },
           }}
+          tooltip={{
+            enable: true,
+            format: '${point.x}: ${point.y}'  
+          }}
         />
+
       </AccumulationSeriesCollectionDirective>
     </AccumulationChartComponent>
+    
+    
   );
 };
 

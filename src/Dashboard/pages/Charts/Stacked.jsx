@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { ChartsHeader, Stacked as StackedChart } from '../../components';
 

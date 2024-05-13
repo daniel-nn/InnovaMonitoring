@@ -1,28 +1,19 @@
-import React from "react";
 
 
+export const UseDataPieLevels = (data, t) => {
+  let levelList = [];
 
-export const UseDataPieLevels = (data) => {
-    let caseStringList = [];
-    
-  data.map((report) => {
-    console.log(report.Status)
+  data.forEach((report) => {
+    levelList.push(report.level);
   });
-
-  data.map((report) => {
-    caseStringList.push(report.Status);
-  });
-
-  console.log(caseStringList)
 
   let unicosElementos = [];
   let almacenadorDeVecesRepetidas = [];
   let contador = 1;
-  const arreglo = caseStringList.sort();
-  const totalReports = caseStringList.length;
+  const arreglo = levelList.sort();
+  const totalReports = levelList.length;
   for (let i = 0; i < arreglo.length; i++) {
     if (arreglo[i + 1] === arreglo[i]) {
-      console.log("Se repite el caso: " + arreglo[i]);
       contador++;
     } else {
       unicosElementos.push(arreglo[i]);
@@ -31,15 +22,10 @@ export const UseDataPieLevels = (data) => {
     }
   }
 
-  let percent;
-  let porcentajes = [];
-  for (let j = 0; j < almacenadorDeVecesRepetidas.length; j++) {
-    percent = ((almacenadorDeVecesRepetidas[j] * 100) / totalReports).toFixed(
-      0
-    );
-    porcentajes.push(percent + "%");
-  }
+  let porcentajes = almacenadorDeVecesRepetidas.map((count, index) => {
+    const levelText = t(`dashboard.charts.level-of-reports.report-level.${unicosElementos[index]}`);
+    return `${levelText}: ${((count * 100) / totalReports).toFixed(0)}%`;
+  });
 
-  console.log(unicosElementos, almacenadorDeVecesRepetidas, porcentajes)
-  return {unicosElementos, almacenadorDeVecesRepetidas, porcentajes};
+  return { unicosElementos: unicosElementos.map(level => t(`dashboard.charts.level-of-reports.report-level.${level}`)), almacenadorDeVecesRepetidas, porcentajes };
 };

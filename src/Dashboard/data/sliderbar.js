@@ -93,12 +93,12 @@ const SidebarLinks = () => {
                     permit: "Yes",
                 },
 
-                {
-                    name: t("dashboard.dashboard-sliderbar.graphical-insights-section.reports-per-month"),
-                    icon: <AiOutlineBarChart />,
-                    url: "stacked",
-                    permit: "Yes",
-                },
+                // {
+                //     name: t("dashboard.dashboard-sliderbar.graphical-insights-section.reports-per-month"),
+                //     icon: <AiOutlineBarChart />,
+                //     url: "stacked",
+                //     permit: "Yes",
+                // },
             ],
         },
     ]

@@ -200,19 +200,6 @@ const EditReport = () => {
             return false;
         }
 
-        if (reportForm.evidences.length === 0) {
-            Swal.fire({
-                title: t("dashboard.reports.new-report.swal.missing-evidence-title"),
-                text: t("dashboard.reports.new-report.swal.missing-evidence"),
-                icon: 'warning',
-                confirmButtonText: "Ok",
-                customClass: {
-                    confirmButton: 'custom-swal2-confirm'
-                },
-                buttonsStyling: false
-            });
-            return false;
-        }
         return true;
     };
 
@@ -297,7 +284,7 @@ const EditReport = () => {
     }, [i18n, t, reportForm.property]);
 
 
-    const sendingReport = () => {
+    const editReportForm = () => {
         if (!validateForm()) return;
 
         Swal.fire({
@@ -938,7 +925,7 @@ const EditReport = () => {
 
 
             <div className="flex justify-end mt-4 pr-20">
-                <Button label={t("dashboard.reports.edit-report.swal.send")} severity="success" onClick={() => console.log(reportForm)} />
+                <Button label={t("dashboard.reports.edit-report.swal.send")} severity="success" onClick={editReportForm} />
             </div>
         </div>
 

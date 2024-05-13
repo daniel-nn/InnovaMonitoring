@@ -1,69 +1,46 @@
-import React from "react";
-
-import { pieChartData } from "../../data/dummy";
+import React, { useEffect, useState, useContext } from "react";
 import { ChartsHeader, Pie as PieChart } from "../../components";
 import { useStateContext } from "../../../context/ContextProvider";
-import { useEffect } from "react";
 import { GetReports } from "../../helper/GetReports";
-import { useContext } from "react";
 import { UserContext } from "../../../context/UserContext";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { UseDataStatics } from "../../Hooks/useDataStatics";
+
 const Pie = () => {
-  const { propertyContext, setPropertyContext } = useContext(UserContext);
-  const navigate = useNavigate();
-  let propertyStorage = JSON.parse(localStorage.getItem("propertySelected"));
-  let idStorage = propertyStorage.id;
-  let user = JSON.parse(localStorage.getItem("user"));
-  let userRole = user.role.rolName;
-  let id1 = propertyContext.id || idStorage;
+  const { propertyContext } = useContext(UserContext);
   const [reportes, setReportes] = useState([]);
-
-  let chart = [
-    { x: "Labour", y: 18, text: "18%" },
-    { x: "Legal", y: 8, text: "8%" },
-    { x: "Production", y: 15, text: "15%" },
-    { x: "License", y: 11, text: "11%" },
-    { x: "Facilities", y: 18, text: "18%" },
-    { x: "Taxes", y: 14, text: "14%" },
-    { x: "Insurance", y: 16, text: "16%" },
-  ];
-
-  let finalChart = [];
-  const calculate = (data) => {
-    
-    const { unicosElementos, almacenadorDeVecesRepetidas, porcentajes } =
-      UseDataStatics(data);
-
-    for (let k = 0; k < unicosElementos.length; k++) {
-      finalChart.push({
-        x: unicosElementos[k],
-        y: almacenadorDeVecesRepetidas[k],
-        text: porcentajes[k],
-      });
-    }
-
-    setReportes(finalChart);
-    finalChart = [];
-  };
+  const { t, i18n } = useTranslation("global");
 
   useEffect(() => {
-    setReportes([]);
+    const fetchData = async () => {
+      const propertyStorage = JSON.parse(localStorage.getItem("propertySelected"));
+      const idStorage = propertyStorage.id;
+      const user = JSON.parse(localStorage.getItem("user"));
+      const userRole = user.role.rolName;
 
-    GetReports(propertyContext.id || id1, userRole).then((data) => {
-      calculate(data);
-    });
-  }, [propertyContext]);
+      const data = await GetReports(propertyContext.id || idStorage, userRole);
+      const { unicosElementos, almacenadorDeVecesRepetidas, porcentajes } = UseDataStatics(data);
+
+      const finalChartData = unicosElementos.map((element, index) => ({
+        x: element,
+        y: almacenadorDeVecesRepetidas[index],
+        text: porcentajes[index]
+      }));
+
+      setReportes(finalChartData);
+    };
+
+    fetchData();
+  }, [propertyContext, i18n.language]); // Dependencias actualizadas para reaccionar al cambio de idioma
 
   return (
     <div className="m-4 md:m-10 mt-24 p-10 bg-white dark:bg-secondary-dark-bg rounded-3xl">
-      <ChartsHeader category="Pie" title="Project Cost Breakdown" />
+      <ChartsHeader category=''  translate={t} />
       <div className="w-full">
         <PieChart
           id="chart-pie"
           data={reportes}
-          legendVisiblity
+          legendVisibility={true}
           height="full"
         />
       </div>

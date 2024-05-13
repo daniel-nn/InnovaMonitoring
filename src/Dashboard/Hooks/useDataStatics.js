@@ -1,19 +1,16 @@
-import React from "react";
-
-
-
 export const UseDataStatics = (data) => {
-  let caseStringList = [];
-  data.map((report) => {
-    caseStringList.push(report.OrderItems);
-
+  let incidentList = [];
+  data.forEach((report) => {
+    if (report.caseType && report.caseType.incident) {
+      incidentList.push(report.caseType.incident);
+    }
   });
 
   let unicosElementos = [];
   let almacenadorDeVecesRepetidas = [];
   let contador = 1;
-  const arreglo = caseStringList.sort();
-  const totalReports = caseStringList.length;
+  const arreglo = incidentList.sort();
+  const totalReports = incidentList.length;
   for (let i = 0; i < arreglo.length; i++) {
     if (arreglo[i + 1] === arreglo[i]) {
       contador++;
@@ -24,15 +21,7 @@ export const UseDataStatics = (data) => {
     }
   }
 
-  let percent;
-  let porcentajes = [];
-  for (let j = 0; j < almacenadorDeVecesRepetidas.length; j++) {
-    percent = ((almacenadorDeVecesRepetidas[j] * 100) / totalReports).toFixed(
-      0
-    );
-    porcentajes.push(percent + "%");
-  }
+  let porcentajes = almacenadorDeVecesRepetidas.map(count => `${((count * 100) / totalReports).toFixed(0)}%`);
 
-/*   console.log(unicosElementos, almacenadorDeVecesRepetidas, porcentajes) */
-  return {unicosElementos, almacenadorDeVecesRepetidas, porcentajes};
+  return { unicosElementos, almacenadorDeVecesRepetidas, porcentajes };
 };

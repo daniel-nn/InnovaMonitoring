@@ -688,14 +688,19 @@
         "report-details-placeholder": "Descripción del reporte",
         "images": "Imagenes",
         "swal": {
-          "confirmation": "Estas seguro de enviar el reporte para la propiedad - ",
-          "send": "Enviar",
+          "confirmation": "Estas seguro de editar el reporte para la propiedad - ",
+          "send": "Editar",
           "don't-save": "No enviar",
           "cancel": "Cancelar",
           "report-send": "Reporte enviado.",
           "canceled-report": "No se guardaron los cambios.",
           "empty": "",
           "edit": "El informe se ha guardado correctamente."
+        },
+        "swal-updated-report-form": {
+          "success": "Exito",
+          "report-updated": "Formulario actualizado con exito",
+          "error-saving": "Error guardando el reporte"
         },
         "update-evidences": {
           "button-update-evidences": "Actualizar evidencias",
@@ -1055,6 +1060,24 @@
         }
       }
     },
+    "charts": {
+      "report-charts": "Informes graficos",
+      "report-bar": {
+        "report-bar-header": "Barra de informes",
+        "reports-per-level": "Reportes Totales",
+        "level": "Nivel",
+        "number-of-reports": "Numero de reportes"
+        },
+        "level-of-reports": {
+          "report-level": {
+           "1": "Nivel 1",
+          "2": "Nivel 2",
+          "3": "Nivel 3",
+          "4": "Nivel 4"
+          }
+        }
+    },
+    
     "footer": "Todos los derechos reservados Innova Monitioring"
   },
   "space": " "

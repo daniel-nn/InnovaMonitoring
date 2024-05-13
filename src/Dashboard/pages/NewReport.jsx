@@ -60,7 +60,6 @@ const NewReport = () => {
         resetReportForm();
     }, []);
 
-    // Funcion para validar el formulario
     const validateForm = () => {
   
         const fieldsToValidate = {
@@ -302,6 +301,7 @@ const NewReport = () => {
     }, [i18n, t, reportForm.property]);
 
     const sendingreport = () => {
+        
         if (!validateForm()) return;
 
         Swal.fire({
@@ -321,6 +321,7 @@ const NewReport = () => {
         }).then((result) => {
             if (result.isConfirmed) {
                 postReport(reportForm, t);      
+                navigate("/dashboard/reports"); 
             } else if (result.isDenied) {
                 resetReportForm();
                 Swal.fire({
@@ -936,7 +937,6 @@ const NewReport = () => {
 
             <div className="flex justify-end mt-4 pr-20">
                 <Button label={t("dashboard.reports.new-report.swal.send")} severity="success" onClick={sendingreport} />
-                <Button label={t("User")} severity="success" onClick={() => console.log(reportForm)} />
             </div>
         </div>
 

@@ -34,7 +34,6 @@ export const editReport = async (reportForm, t) => {
 
   const url = `${process.env.REACT_APP_SERVER_IP}/reports/${formattedData.id}`;
   try {
-    console.log("Enviando datos al servidor:", JSON.stringify(formattedData));
     const response = await fetch(url, {
       method: "PUT",
       body: JSON.stringify(formattedData),
@@ -44,13 +43,12 @@ export const editReport = async (reportForm, t) => {
     });
 
     const data = await response.json();
-    console.log("Respuesta recibida del servidor:", data);
 
     if (response.ok) {
       Swal.fire({
         icon: 'success',
-        title: 'Success',
-        text: t("dashboard.reports.edit-report.swal.report-updated"),
+        title: t("dashboard.reports.edit-report.swal-updated-report-form.success"),
+        text: t("dashboard.reports.edit-report.swal-updated-report-form.report-updated"),
         toast: true,
         position: "top-end",
         showConfirmButton: false,
@@ -59,14 +57,14 @@ export const editReport = async (reportForm, t) => {
       });
       return data;
     } else {
-      throw new Error(data.message || t("dashboard.reports.edit-report.swal.error-saving"));
+      throw new Error(data.message || t("dashboard.reports.edit-report.swal-updated-report-form.error-saving"));
     }
   } catch (error) {
     console.error("Error updating the report:", error);
     Swal.fire({
       icon: 'error',
       title: 'Error',
-      text: error.message || t("dashboard.reports.edit-report.swal.error-saving"),
+      text: error.message || t("dashboard.reports.edit-report.swal-updated-report-form.error-saving"),
     });
     return null;
   }

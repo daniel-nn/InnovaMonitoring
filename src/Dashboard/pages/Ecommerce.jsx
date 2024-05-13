@@ -55,24 +55,19 @@ const Ecommerce = () => {
   }, [propertyContext, userRole]);
 
 
-  const backgroundImageUrl = propertyFetched.name ? `${process.env.PUBLIC_URL}/images/${formatImageName(propertyFetched.name)}` : '';
+  const backgroundImageUrl = propertyContext.name ? `${process.env.PUBLIC_URL}/images/${formatImageName(propertyContext.name)}` : '';
 
   const numOfReports = reportsData ? reportsData.length : "...";
   useEffect(() => {
     if (propertyContext && propertyContext.id) {
-      // Restablece reportsData a cero cuando se selecciona una nueva propiedad
-      setReportsData([]);
-
-      // Carga los reportes para la propiedad seleccionada
+          setReportsData([]);
       getNumberOfReportsByRole(propertyContext.id, userId, userRole)
         .then(reports => {
-          // Si no hay error y la respuesta es un array (incluso si está vacío)
-          setReportsData(reports || []); // Asignamos el array de reportes o uno vacío
+          setReportsData(reports || []); 
         })
         .catch(error => {
-          // Manejamos el error sin cambiar reportsData
           console.error("Error al obtener los reportes: ", error);
-          setReportsData(null); // O podrías establecer algún estado de error si es necesario
+          setReportsData(null);
         });
     }
   }, [propertyContext, userRole, userId]);
@@ -80,7 +75,7 @@ const Ecommerce = () => {
   return (
     
     <div className="m-10 md:m-8 mt-5 p-2 md:p-0 bg-white rounded-3xl">
-      <Header category={t("dashboard.dashboard-index.home")} title={propertyFetched.name || t("dashboard.dashboard-index.property")} />
+      <Header category={t("dashboard.dashboard-index.home")} title={propertyContext.name} />
       <div className="mt-3 ">
         <div
           className="flex flex-wrap lg:flex-nowrap justify-center bg-no-repeat bg-cover bg-center py-20"

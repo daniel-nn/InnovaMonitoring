@@ -299,7 +299,7 @@
           "shared": "Shared",
           "dedicated": "Dedicated"
         }
-      }, 
+      },
       "control-acces": "Do you have control acces?"
     },
     "personal_section": {
@@ -448,13 +448,13 @@
     "reports": {
       "reports-of": "Reports of - ",
       "non-verified-tittle": "Unverified Reports",
-      "reports-tittle"  : "Reports",
-        "buttons": {  
-          "add-report": "Add Report",
-          "reports-per-property": "Property Reports",
-          "non-verified-reports": "Unverified Reports"
-        },
-        "table": {
+      "reports-tittle": "Reports",
+      "buttons": {
+        "add-report": "Add Report",
+        "reports-per-property": "Property Reports",
+        "non-verified-reports": "Unverified Reports"
+      },
+      "table": {
         "admin": {
           "CaseImage": "Image",
           "Case": "Incident",
@@ -470,7 +470,7 @@
           "CaseDetails": "Details",
           "no-pdf": "This report does not have a pdf"
         },
-        "admin-no-verfied":{
+        "admin-no-verfied": {
           "property": "Property",
           "Case": "Incident",
           "Agent": "Monitor",
@@ -534,7 +534,7 @@
         "no": "No",
         "listMalfunctioningCameras": "List Of Malfunctioning  Cameras",
         "selectMalfunctioningCamerasPlaceholder": "List Of Malfunctioning  Cameras",
-        "list-Malfuncion-cameras":{
+        "list-Malfuncion-cameras": {
           "na": "N/A",
           "listedOnReport": "listed On Report"
         },
@@ -543,14 +543,14 @@
         "policeFirstResponderSceneeholder": "Police First Responder",
         "police-first-responder-scene": "Police First Responder On Scene",
         "List-policeFirstResponderNotified": {
-        "yes": "Yes",
-        "no": "No",
-        "n/a": "N/A",
-        "fiat-security": "Fiat Security",
-        "security": "Security",
-        "police": "Police",
-        "firemen": "Firemen",
-        "ambulance": "Ambulance"
+          "yes": "Yes",
+          "no": "No",
+          "n/a": "N/A",
+          "fiat-security": "Fiat Security",
+          "security": "Security",
+          "police": "Police",
+          "firemen": "Firemen",
+          "ambulance": "Ambulance"
         },
         "securityGuardsNotified": "Security Guards Notified",
         "securityGuardsNotifiedholder": "Security Guards Notified",
@@ -691,14 +691,19 @@
         "report-details-placeholder": "Report Description",
         "images": "Images",
         "swal": {
-          "confirmation": "Are you sure to submit the report for the property - ",
+          "confirmation": "Are you sure to Edit the report for the property - ",
           "cancel": "Cancel",
-          "send": "Send",
+          "send": "Edit",
           "don't-save": "Do Not Send",
           "report-send": "Report Send",
           "canceled-report": "Changes Are Not Saved",
           "empty": "Enter the case number",
           "edit": "Report has been successfully saved"
+        },
+        "swal-updated-report-form": {
+          "success": "Succes",
+          "report-updated": "Report Updated",
+          "error-saving": "Error Saving The Report"
         },
         "update-evidences": {
           "button-update-evidences": "Updated Evidence",
@@ -719,7 +724,6 @@
           "evidences": "Evidences"
         }
       },
-
       "case-details": {
         "incident-report": "Incident Report:",
         "property": "Property:",
@@ -769,10 +773,7 @@
         "video-gallery": "Video Gallery:",
         "image-gallery": "Image Gallery:"
       }
-      
-
     },
-
     "cameras": {
       "title": "Cameras Of - ",
       "dialog": {
@@ -828,9 +829,7 @@
           "image-updated": "Camera Image Updated"
         }
       }
-     
     },
-
     "users": {
       "users-tittle": "Users",
       "add-user": "Add User",
@@ -874,7 +873,7 @@
         },
         "successful-response": "Added user"
       },
-      "table": {  
+      "table": {
         "image": "Image",
         "name": "Name",
         "email": "Email",
@@ -883,7 +882,7 @@
           "Admin": "Admin",
           "Client": "Client",
           "Monitor": "Monitor"
-        }, 
+        },
         "properties": "Properties",
         "details": "Details",
         "delete": "Delete"
@@ -894,9 +893,8 @@
         "confirmButton": "Yes",
         "cancel-button": "Cancel",
         "user-removed": "User Removed"
-      }  
+      }
     },
-    
     "agents": {
       "agents-tittle": "Monitoring Agents",
       "add-agent": "Add Agent",
@@ -932,7 +930,7 @@
         "send": "Send",
         "successful-response": "Added Agent"
       },
-      "table":{
+      "table": {
         "image": "Imagen",
         "name": "Name",
         "email": "Email",
@@ -941,7 +939,6 @@
         "delete": "Delete"
       }
     },
-
     "user-details": {
       "panel": {
         "panel": "Panel",
@@ -990,45 +987,39 @@
         }
       }
     },
-
     "cases": {
       "cases-tittle": "Cases",
       "add-case": "Add Case",
-      
-        "add-dialog": {
-          "add-title": "Add Case",
-          "name-case-label": "New Case",
-          "send": "Send",
-          "cancel": "Cancel"
-        },
-
-        "swal": {
-          "added-case": "Added Case"
-        },
-
-        "edit-dialog": {
-          "edit-tittle": "Edit Case",
-          "name-case-label": "Edit Case Name",
-          "send": "Send",
-          "cancel": "Cancel"
-        },
-
-    "table": {
-      "case-type": "Case Type",
-      "edit": "Edit",
-      "delete": {
-        "delete": "Delete",
-        "swal": {
-          "confirmation": "Are you sure?",
-          "delete-case": "You won't be able to revert this!",
-          "yes": "Yes",
-          "no": "Cancel",
-          "case-removed": "Case Removed"
+      "add-dialog": {
+        "add-title": "Add Case",
+        "name-case-label": "New Case",
+        "send": "Send",
+        "cancel": "Cancel"
+      },
+      "swal": {
+        "added-case": "Added Case"
+      },
+      "edit-dialog": {
+        "edit-tittle": "Edit Case",
+        "name-case-label": "Edit Case Name",
+        "send": "Send",
+        "cancel": "Cancel"
+      },
+      "table": {
+        "case-type": "Case Type",
+        "edit": "Edit",
+        "delete": {
+          "delete": "Delete",
+          "swal": {
+            "confirmation": "Are you sure?",
+            "delete-case": "You won't be able to revert this!",
+            "yes": "Yes",
+            "no": "Cancel",
+            "case-removed": "Case Removed"
+          }
         }
       }
-    }
     },
-
     "properties": {
       "properties-title": "Properties",
       "add-property": "Add Property",
@@ -1065,6 +1056,23 @@
             "no": "Cancel",
             "property-removed": "Property Removed"
           }
+        }
+      }
+    },
+    "charts": {
+      "report-charts": "Report Charts",
+      "report-bar": {
+        "report-bar-header": "Report Bar",
+        "reports-per-level": "Total Reports",
+        "level": "Level",
+        "number-of-reports": "Number Of Reports"
+      },
+      "level-of-reports":{
+        "report-level": {
+          "1": "Level 1",
+          "2": "Level 2",
+          "3": "Level 3",
+          "4": "Level 4"
         }
       }
     },
