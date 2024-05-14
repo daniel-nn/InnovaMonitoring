@@ -68,7 +68,7 @@ export const CameraForm = ({ properties, setCameraFormFlag, setCameraSaved, came
 
   const handleSaveCamera = async () => {
     if (typeof setCameraSaved === "function") {
-      await postCamera(cameraForm, navigate);
+      await postCamera(cameraForm, t);
       setCameraSaved(!cameraSaved);
       setCameraFormFlag(false);
       setCameraForm({});

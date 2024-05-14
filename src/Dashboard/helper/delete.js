@@ -84,7 +84,7 @@ export const deleteProperty = async (
   return {};
 };
 
-export const deleteCamera = async (url, id, cameraSaved, setCameraSaved) => {
+export const deleteCamera = async (url, id, cameraSaved, setCameraSaved, t) => {
   const path = `${url}/${id}`;
 
   try {
@@ -101,15 +101,22 @@ export const deleteCamera = async (url, id, cameraSaved, setCameraSaved) => {
         title: "Error",
         text: "Error deleting report from database",
       });
+
+
+
       return;
     }
 
     if (response.ok) {
       setCameraSaved(!cameraSaved);
       Swal.fire({
-        icon: "success",
-        title: "Success",
-        text: "Successfully removed",
+        icon: 'success',
+        text: t("dashboard.cameras.delete.delete-camera"),
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true
       });
     } else {
       throw new Error('Failed to delete the camera');

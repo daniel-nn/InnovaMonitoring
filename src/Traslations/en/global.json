@@ -402,6 +402,7 @@
     "tittle_carrousel": "Entities with which we have collaborated:"
   },
   "dashboard": {
+
     "dashboard-navbar": {
       "cart": {
         "property": "Property",
@@ -414,6 +415,7 @@
         "logout-button": "Logout"
       }
     },
+
     "dashboard-sliderbar": {
       "dashboard-section": {
         "dashboard-tittle": "Dashboard",
@@ -437,6 +439,7 @@
         "logout": "Logout"
       }
     },
+
     "dashboard-index": {
       "home": "Home",
       "number-reports": "Number of reports",
@@ -774,6 +777,7 @@
         "image-gallery": "Image Gallery:"
       }
     },
+
     "cameras": {
       "title": "Cameras Of - ",
       "dialog": {
@@ -819,6 +823,9 @@
           }
         }
       },
+      "create": {
+        "success": "The camera has been created correctly"
+      },
       "update": {
         "camera-update": "Update Camera",
         "camera-updated": "Camera Updated",
@@ -828,6 +835,9 @@
           "different-image": "Select A Different Image",
           "image-updated": "Camera Image Updated"
         }
+      },
+      "delete": {
+        "delete-camera": "The Camera Has Been Deleted"
       }
     },
     "users": {

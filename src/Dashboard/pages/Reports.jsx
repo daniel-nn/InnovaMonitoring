@@ -95,7 +95,7 @@ const Reports = () => {
             {userRole === "Admin" && (
               <Button
                 onClick={toggleView}
-                label={t(activeView === 'default' ? "dashboard.reports.buttons.reports-per-property" : "dashboard.reports.buttons.non-verified-reports")}
+                label={t(activeView === 'default' ? "dashboard.reports.buttons.non-verified-reports" : "dashboard.reports.buttons.reports-per-property")}
                 className="p-button-text ml-2"
               >
                 <AiOutlineFileSearch />

@@ -1,9 +1,12 @@
 import React, { useContext } from "react";
 import { UserContext } from "../../context/UserContext";
 import Header from "./Header";
+import { useTranslation } from "react-i18next";
 
 export const CameraLiveView = () => {
   const { cameraContext, setCameraContext } = useContext(UserContext);
+  const { t, i18n } = useTranslation("global");
+
 
   const setStatusColor=(status)=>{
 
@@ -12,18 +15,24 @@ export const CameraLiveView = () => {
       if(status=="Vandalized") return { background: "red" }
   }
 
+  const imageCamera = `${process.env.REACT_APP_S3_BUCKET_URL}/${cameraContext.image}`;
+
+
   return (
     <div className="m-0 md:m-8 mt-14 p-2 md:p-0 bg-white rounded-3xl">
       <Header category="Cameras" title="Camera Details" />
+      {/* <Header category="Cameras" title={t('dashboard.cameras.dialog.camera-name')} /> */}
 
       <section className="text-gray-600 body-font overflow-hidden ">
         <div className="container px-2 py-4 mx-auto">
           <div className="lg:w-full mx-auto flex flex-wrap">
-            <img
-              alt="ecommerce"
-              className="lg:w-8/12 w-full lg:h-auto h-64 object-cover object-center rounded"
-              src={cameraContext?.cameraImg}
-            />
+            <div className="lg:w-8/12 w-full lg:h-auto h-64 overflow-hidden rounded">
+              <img
+                alt="camera"
+                className="object-cover object-center w-full h-full"
+                src={imageCamera}
+              />
+            </div>
             <div className="lg:w-4/12 w-full lg:pl-10 lg:py-6 mb-6 lg:mb-0 ">
               <h2 className="text-sm title-font text-gray-500 tracking-widest">
                 Innova Monitoring

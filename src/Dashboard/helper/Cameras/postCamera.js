@@ -12,7 +12,7 @@ const formatDate = (date) => {
   return `${month}-${day}-${date.getFullYear()}`;
 };
 
-export const postCamera = async(cameraForm) => {
+export const postCamera = async (cameraForm, t) => {
 
   const formData = new FormData();
   const cameraData = {
@@ -44,10 +44,15 @@ export const postCamera = async(cameraForm) => {
     }
 
     const data = await response.json();
+
     Swal.fire({
       icon: 'success',
-      title: 'Success',
-      text: "The camera has been created correctly",
+      text: t("dashboard.cameras.create.success"), 
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true
     });
 
     return data;

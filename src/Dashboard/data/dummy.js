@@ -615,10 +615,9 @@ export const GridDeleteCamera = ({ id }) => {
       cancelButtonText: t("dashboard.cameras.table.delete.no"),
     }).then((result) => {
       if (result.isConfirmed) {
-        deleteCamera(url, id, cameraSaved, setCameraSaved).then(
+        deleteCamera(url, id, cameraSaved, setCameraSaved, t).then(
 
         );
-        Swal.fire("Deleted!", "Successfully removed.", "success");
       }
     });
   }
@@ -634,7 +633,7 @@ export const GridDeleteCamera = ({ id }) => {
   );
 };
 
-export const GridLiveView = ({ LiveView }) => {
+export const GridLiveView = ({ camera }) => {
   // console.log(LiveView);
   const { cameraContext, setCameraContext } = useContext(UserContext);
 
@@ -642,7 +641,7 @@ export const GridLiveView = ({ LiveView }) => {
     <Link
       className="flex justify-center m-0 p-0"
       onClick={() => {
-        setCameraContext(LiveView);
+        setCameraContext(camera);
       }}
       to={`/dashboard/camera/live-view`}
     >
@@ -1086,7 +1085,7 @@ export const cameraGridAdmin = (t, setSelectedCamera, onClose) => {
       headerText: t("dashboard.cameras.table.details"),
       width: "100",
       textAlign: "Center",
-      template: GridLiveView,
+      template: props => < GridLiveView camera={props}/>
     },
     {
       field: "camera",
