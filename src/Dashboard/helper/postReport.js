@@ -1,4 +1,6 @@
+import { useContext } from 'react';
 import Swal from 'sweetalert2';
+import { UserContext } from '../../context/UserContext';
 
   const formatDate = (date) => {
     if (typeof date === 'string') {
@@ -18,7 +20,7 @@ import Swal from 'sweetalert2';
     return `${hours}:${minutes}`;
   };
 
-export const postReport = async (reportForm, t) => {
+export const postReport = async (reportForm, t, setCreatingReport) => {
   const formData = new FormData();
 
   formData.append("report", new Blob([JSON.stringify({
@@ -72,6 +74,8 @@ export const postReport = async (reportForm, t) => {
         timer: 3000,
         timerProgressBar: true
       });
+          
+      setCreatingReport(false);
       return data;
     } else {
       throw new Error(data.message || t("dashboard.reports.new-report.swal.error-saving"));
