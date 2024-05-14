@@ -70,21 +70,26 @@ const NewReport = () => {
             const newMessage = response.body;
             console.log(newMessage)
             setMessages([newMessage]);
-            toast.current.show({ severity: 'success', summary: 'Evidencia Subida', detail: newMessage, life: 5000 });
-          });
+            let mensaje = JSON.parse(newMessage)
+            console.log(mensaje)
+            //toast.current.show({ severity: 'success', summary: 'Evidencia Subida', detail: JSON.parse(newMessage).type, life: 5000 });
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'success',
+                title: mensaje.type,
+                showConfirmButton: false,
+                timer: 5000
+            });  
+        });
     
           // Aquí puedes enviar cualquier mensaje adicional después de que la conexión esté establecida
           // Ejemplo: stompClient.send('/app/sendMessage', {}, JSON.stringify({ message: 'Hola servidor!' }));
         });
-    
         return () => {
-          stompClient.disconnect();
+            toast.current = null; // Limpiar la referencia cuando el componente se desmonte
         };
       }, []);
-
-    useEffect(() => {
-        resetReportForm();
-    }, []);
 
     const validateForm = () => {
   
