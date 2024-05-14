@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "primereact/button";
 import Swal from 'sweetalert2'
 import { Dropdown } from "primereact/dropdown";
-import { postReport } from "../helper/postReport";
+import {postReport } from "../helper/postReport";
 import { InputNumber } from "primereact/inputnumber";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Calendar } from "primereact/calendar";
@@ -23,12 +23,13 @@ import { FileUpload } from 'primereact/fileupload';
 import "../pages/css/Reports/NewReport.css"
 
 const NewReport = () => {
-    const { propertyContext, reportSaved, setreportSaved } = useContext(UserContext);
+    const { propertyContext, reportSaved, setreportSaved, setCreatingReport } = useContext(UserContext);
     const [t, i18n] = useTranslation("global");
     const navigate = useNavigate();
     const [messages, setMessages] = useState([]);
     const toast = useRef(null);
     const { reportForm, setReportForm } = useContext(UserContext);
+    
     const resetReportForm = () => {
         setReportForm({
             id: "",
@@ -351,9 +352,10 @@ const NewReport = () => {
             }
         }).then((result) => {
             if (result.isConfirmed) {
-                postReport(reportForm, t);    
+                postReport(reportForm, t, setCreatingReport);  
+                setCreatingReport(true)  
                 navigate("/dashboard/reports");
-                 
+                resetReportForm();
             } else if (result.isDenied) {
                 resetReportForm();
                 Swal.fire({

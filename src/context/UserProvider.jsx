@@ -99,6 +99,7 @@ export const UserProvider = ({ children }) => {
   const [agentDialog, setAgentDialog] = useState(false);
   const [editCase, setEditCase] = useState(false);
 const [editReportFormVisible, setEditReportFormVisible] = useState(false)
+const [creatingReport, setCreatingReport] = useState(false);
 
   return (
     <UserContext.Provider
@@ -140,7 +141,8 @@ const [editReportFormVisible, setEditReportFormVisible] = useState(false)
         flag, setFlag,
          editReportFormVisible,
     setEditReportFormVisible,
-    cameraFormFlag, setCameraFormFlag
+    cameraFormFlag, setCameraFormFlag,
+    creatingReport, setCreatingReport
       }}
     >
       {children}

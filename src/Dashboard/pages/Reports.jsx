@@ -11,13 +11,16 @@ import { useFetchIncidents } from "../Hooks/useFetchIncidents";
 import { useTranslation } from "react-i18next";
 import { getNumberOfReportsByRole } from "../helper/getNumberOfReportsByRole";
 import { getReportsNoVerified } from "../helper/getReportsNoVerified";
-
+import CircularProgress, {
+  CircularProgressProps,
+} from "@mui/material/CircularProgress";
+import { Box, Typography } from "@material-ui/core";
 
 
 const Reports = () => {
   const navigate = useNavigate();
   const toolbarOptions = ["Search"];
-  const { propertyContext } = useContext(UserContext);
+  const { propertyContext, creatingReport, setCreatingReport } = useContext(UserContext);
   const [reportes, setReportes] = useState([]);
   const [t, i18n] = useTranslation("global");
   const [activeView, setActiveView] = useState('default');
@@ -72,6 +75,12 @@ const Reports = () => {
 
   return (
     <div className="m-20 md:m-10 mt-14 p-2 md:p-0 bg-white rounded-3xl">
+    {creatingReport && 
+      <div className="mx-auto">
+        <h1 className="text-lg font-semibold text-blue-500">El repoorte se esta guardado...</h1>
+<CircularProgress />
+      </div>
+                }
       <Header category={t("dashboard.reports.reports-tittle")} title={t("dashboard.reports.reports-of") + propertyContext.name} />
       <div className="card flex justify-end py-2 mb-7">
         {(userRole === "Admin" || userRole === "Monitor") && (
@@ -133,3 +142,4 @@ const Reports = () => {
   );
 };
 export default Reports;
+
