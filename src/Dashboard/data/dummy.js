@@ -541,11 +541,10 @@ export const GridDeleteCase = ({ caseType }) => {
   );
 };
 
-export const GridDeleteProperty = ({ id }) => {
-  const url = `${process.env.REACT_APP_SERVER_IP}/properties`;
+export const GridDeleteProperty = ({ property }) => {
+  const url = `${process.env.REACT_APP_SERVER_IP}/properties/${property.id}`;
   const { setFlag } = useContext(UserContext);
   const [t, i18n] = useTranslation("global");
-
   const confirmDeletion = () => {
     Swal.fire({
       title: t('dashboard.properties.table.delete.swal.confirmation'),
@@ -558,6 +557,7 @@ export const GridDeleteProperty = ({ id }) => {
       cancelButtonText: t('dashboard.properties.table.delete.swal.no')
     }).then((result) => {
       if (result.isConfirmed) {
+       
         deleteProperty();
       }
     });
@@ -565,7 +565,8 @@ export const GridDeleteProperty = ({ id }) => {
 
   const deleteProperty = async () => {
     try {
-      const response = await fetch(`${url}/${id}`, { method: 'DELETE' });
+      
+      const response = await fetch(url, { method: 'DELETE' });
       if (response.ok) {
         Swal.fire({
           toast: true,
@@ -598,7 +599,7 @@ export const GridDeleteProperty = ({ id }) => {
 
 export const GridDeleteCamera = ({ id }) => {
   let url = `${process.env.REACT_APP_SERVER_IP}/cameras`;
-  const { cameraSaved, setCameratSaved } = useContext(UserContext);
+  const { cameraSaved, setCameraSaved } = useContext(UserContext);
   const [t, i18n] = useTranslation("global");
 
   const deleteCameraFunction = () => {
@@ -614,7 +615,7 @@ export const GridDeleteCamera = ({ id }) => {
       cancelButtonText: t("dashboard.cameras.table.delete.no"),
     }).then((result) => {
       if (result.isConfirmed) {
-        deleteCamera(url, id, cameraSaved, setCameratSaved).then(
+        deleteCamera(url, id, cameraSaved, setCameraSaved).then(
 
         );
         Swal.fire("Deleted!", "Successfully removed.", "success");
@@ -1735,7 +1736,7 @@ export const propertyGridAdmin = (t, handleOpenEditPropertyDialog) => {
     {
       headerText: "Delete",
       textAlign: "Center",
-      template: props => <GridDeleteProperty id={props} />,
+      template: props => <GridDeleteProperty property={props} />,
       width: "85",
       field: "id",
     },

@@ -84,44 +84,45 @@ export const deleteProperty = async (
   return {};
 };
 
-export const deleteCamera = async (url, id, cameraSaved, setCameratSaved) => {
-  let resp = {};
-
-  const path = url + "/" + id;
+export const deleteCamera = async (url, id, cameraSaved, setCameraSaved) => {
+  const path = `${url}/${id}`;
 
   try {
-
-    
-    resp = await fetch(path, {
+    const response = await fetch(path, {
       method: "DELETE",
-      "Content-Type": "application/json",
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
-    setCameratSaved(!cameraSaved);
-    /* Swal.fire({
-      icon: "success",
-      title: "Success",
-      text: "Successfully removed",
-    }); */
+
+    if (response.status === 404) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Error deleting report from database",
+      });
+      return;
+    }
+
+    if (response.ok) {
+      setCameraSaved(!cameraSaved);
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: "Successfully removed",
+      });
+    } else {
+      throw new Error('Failed to delete the camera');
+    }
   } catch (error) {
     Swal.fire({
       icon: "error",
       title: "Error",
-      text: error,
+      text: error.message,
     });
 
     console.log(error);
   }
-
-  
-  if (resp.status == 404) {
-    Swal.fire({
-      icon: "error",
-      title: "Error",
-      text: "Error deleting report from database",
-    });
-    return;
-  }
-  return {};
 };
 
 export const DeleteCase = async (url, id,reportSaved, setreportSaved ) => {

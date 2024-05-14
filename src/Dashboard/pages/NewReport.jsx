@@ -346,8 +346,9 @@ const NewReport = () => {
             }
         }).then((result) => {
             if (result.isConfirmed) {
-                postReport(reportForm, t);      
-                navigate("/dashboard/reports"); 
+                postReport(reportForm, t);    
+                navigate("/dashboard/reports");
+                 
             } else if (result.isDenied) {
                 resetReportForm();
                 Swal.fire({
