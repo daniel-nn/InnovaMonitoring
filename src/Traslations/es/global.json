@@ -816,6 +816,9 @@
           }
         }
       },
+      "create": {
+        "success": "Camara Creada"
+      },
       "update": {
         "camera-update": "Actualizar camara",
         "camera-updated": "Camara actualizada",
@@ -825,7 +828,10 @@
           "different-image": "Seleccione una imagen diferente",
           "image-updated": "Imagen de la camara actualizada"
         }
-      }
+      },
+     "delete": {
+      "delete-camera": "Camara eliminada"
+    }
     },
     "users": {
       "users-tittle": "Usuarios",
@@ -1067,17 +1073,16 @@
         "reports-per-level": "Reportes Totales",
         "level": "Nivel",
         "number-of-reports": "Numero de reportes"
-        },
-        "level-of-reports": {
-          "report-level": {
-           "1": "Nivel 1",
+      },
+      "level-of-reports": {
+        "report-level": {
+          "1": "Nivel 1",
           "2": "Nivel 2",
           "3": "Nivel 3",
           "4": "Nivel 4"
-          }
         }
+      }
     },
-    
     "footer": "Todos los derechos reservados Innova Monitioring"
   },
   "space": " "

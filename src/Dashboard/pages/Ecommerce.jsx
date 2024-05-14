@@ -55,7 +55,7 @@ const Ecommerce = () => {
   }, [propertyContext, userRole]);
 
 
-  const backgroundImageUrl = propertyContext.name ? `${process.env.PUBLIC_URL}/images/${formatImageName(propertyContext.name)}` : '';
+  const backgroundImageUrl = propertyContext.propertyImage;
 
   const numOfReports = reportsData ? reportsData.length : "...";
   useEffect(() => {
