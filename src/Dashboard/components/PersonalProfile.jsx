@@ -6,7 +6,8 @@ import { UserContext } from "../../context/UserContext";
 import { getRoles } from "../helper/getRoles";
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
-import { updateUserImg } from "../helper/userProfile/PersonalProfile/updateUserImg";
+import { putUserImg } from "../helper/userProfile/PersonalProfile/putUserImg";
+import { putUserInfo } from "../helper/userProfile/PersonalProfile/putUserInfo";
 
 
   export const PersonalProfile = ({ userProvider, setUserProvider, initialRolName }) => {
@@ -27,7 +28,7 @@ import { updateUserImg } from "../helper/userProfile/PersonalProfile/updateUserI
     const handleFileChange = (event) => {
       const file = event.target.files[0];
       if (file) {
-        updateUserImg(userProvider.id, file, t);
+        putUserImg(userProvider.id, file, t);
       }
     };
     const [input, setInput] = useState({
@@ -73,7 +74,6 @@ import { updateUserImg } from "../helper/userProfile/PersonalProfile/updateUserI
           }));
           setRoles(rolesArray);
 
-          // Establece el selectedRoleId basado en el id del rol de userProvider
           if (userProvider && userProvider.rol && userProvider.rol.id) {
             setSelectedRoleId(userProvider.rol.id);
           }
@@ -91,14 +91,25 @@ import { updateUserImg } from "../helper/userProfile/PersonalProfile/updateUserI
       const selectedRole = roles.find(role => role.rolKey === e.value);
       if (selectedRole) {
         setTempRole(selectedRole.originalName);
+        setInput(prev => ({ ...prev, rol: selectedRole })); // Actualiza el estado de 'input' para incluir el nuevo rol seleccionado
       }
     };
 
+console.log(userProvider.id)
 
-
-    const handleSaveClick = () => {
+    const handleSaveClick = async () => {
       console.log('Current form values:', input);
     
+        try {
+          const updatedUser = await putUserInfo(input, userProvider.id, t);
+          console.log('Updated User:', updatedUser);
+          if (updatedUser) {
+            setUserProvider(updatedUser); 
+          }
+        } catch (error) {
+          console.error('Failed to update user info:', error);
+        }
+     
     };
 
     

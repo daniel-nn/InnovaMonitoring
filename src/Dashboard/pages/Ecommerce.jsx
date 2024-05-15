@@ -55,7 +55,6 @@ const Ecommerce = () => {
   }, [propertyContext, userRole]);
 
 
-  const backgroundImageUrl = propertyContext.propertyImage;
 
   const numOfReports = reportsData ? reportsData.length : "...";
   useEffect(() => {
@@ -71,6 +70,9 @@ const Ecommerce = () => {
         });
     }
   }, [propertyContext, userRole, userId]);
+
+
+  const backgroundImageUrl = `${process.env.REACT_APP_S3_BUCKET_URL}/${propertyContext.img}`;
 
   return (
     
