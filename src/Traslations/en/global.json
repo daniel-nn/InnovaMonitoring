@@ -972,7 +972,8 @@
           "Client": "Client",
           "Monitor": "Monitor"
         },
-        "save": "Save"
+        "save": "Edit",
+        "update-success": "User Updated"
       },
       "properties": {
         "assigned-properties": "Assigned Properties",

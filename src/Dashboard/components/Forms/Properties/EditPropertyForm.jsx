@@ -105,14 +105,11 @@ export const EditPropertyForm = ({ property, onClose, refreshProperties }) => {
             hasFile = true;
         }
 
-        // Logging para debuggear qué se está enviando
-        console.log('Sending Image:', propertyData.img);
-        console.log('Sending Map:', propertyData.mapImg);
 
         if (hasFile) {
             const result = await putPropertyImage(property.id, formData, t);
             if (result) {
-                onClose(result); // Actualizar los datos mostrados o cerrar el formulario
+                onClose(result); 
             }
         } else {
             console.log('No file to update');
@@ -141,7 +138,7 @@ export const EditPropertyForm = ({ property, onClose, refreshProperties }) => {
                 if (updatedProperty) {
                     onClose(updatedProperty);
                     setPropertyProvider(propertyData);
-                    refreshProperties();  // Asegúrate de que esta función no cause una condición de carrera o re-renderizado no deseado
+                    refreshProperties();  
                 }
             } catch (error) {
                 console.error("Failed to update property info: ", error);
@@ -149,9 +146,7 @@ export const EditPropertyForm = ({ property, onClose, refreshProperties }) => {
         }
     };
 
-    console.log("esto es property provider", propertyProvider)
-
-    console.log("esto es propertyData", propertyData)
+ 
 
     return (
         <div>
@@ -253,6 +248,12 @@ export const EditPropertyForm = ({ property, onClose, refreshProperties }) => {
                     />
                     <div className="w-3"></div>
                     <Button
+                        icon="pi pi-check"
+                        label={t("dashboard.properties.dialog.send")}
+                        className="p-button-success"
+                        onClick={handleUpdateProperty}
+                    />
+                     <Button
                         icon="pi pi-check"
                         label={t("dashboard.properties.dialog.send")}
                         className="p-button-success"

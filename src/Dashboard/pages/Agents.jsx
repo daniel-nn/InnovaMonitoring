@@ -328,7 +328,7 @@ export const Agents = () => {
       </Dialog>
       <div className="m-20 md:m-10 mt-14 p-2 md:p-0 bg-white rounded-3xl">
         <Header title={t("dashboard.agents.agents-tittle")} />
-        <div className="card flex justify-end py-2">
+        {/* <div className="card flex justify-end py-2">
         {userRole == "Admin" ? (
           <Button
           severity="info"
@@ -343,7 +343,7 @@ export const Agents = () => {
             <></>
           )}
       
-        </div>
+        </div> */}
 
         <GridComponent
           id="gridcomp"

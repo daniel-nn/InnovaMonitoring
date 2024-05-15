@@ -1617,8 +1617,8 @@ export const ordersCasesAdmin = (t) => {
 export const orderAgentsAdmin = (t) => {
   return [
     {
-      headerText: t("dashboard.agents.table.image"),
-      template: gridUserImage,
+      headerText: "Image",
+      template: gridOrderImage,
       textAlign: "Center",
       width: "120",
     },
@@ -1988,7 +1988,7 @@ export const reportsGridMonitor = (t) => {
   return [
     {
       headerText: t("dashboard.reports.table.admin.CaseImage"),
-      template: GridPropertyImage,
+      template: gridOrderImage,
       textAlign: "Center",
       width: "120",
     },
@@ -2034,6 +2034,13 @@ export const reportsGridMonitor = (t) => {
       width: "80",
       textAlign: "Center",
       template: GridPdf,
+    },
+    {
+      field: "Details",
+      headerText: t("dashboard.reports.table.admin.CaseDetails"),
+      width: "105",
+      textAlign: "Center",
+      template: GridDetails,
     },
     {
       field: "verified",

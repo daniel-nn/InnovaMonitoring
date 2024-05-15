@@ -77,7 +77,7 @@ const Reports = () => {
     <div className="m-20 md:m-10 mt-14 p-2 md:p-0 bg-white rounded-3xl">
     {creatingReport && 
       <div className="mx-auto">
-        <h1 className="text-lg font-semibold text-blue-500">El repoorte se esta guardado...</h1>
+        <h1 className="text-lg font-semibold text-blue-500">El reporte se esta guardado...</h1>
 <CircularProgress />
       </div>
                 }

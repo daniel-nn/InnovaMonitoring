@@ -1,6 +1,6 @@
 import Swal from 'sweetalert2';
 
-export const updateUserImg = async (userId, file, t) => {
+export const putUserImg = async (userId, file, t) => {
     const url = `${process.env.REACT_APP_SERVER_IP}/users/${userId}/update-profile-image`;
 
     try {

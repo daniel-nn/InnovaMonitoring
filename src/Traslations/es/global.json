@@ -201,7 +201,7 @@
     "join_us": "¡unete!",
     "IDS": "Inicia sesión en nuestro Dashboard",
     "swal-fire": {
-      "properties-don't-assigned": "El usssssssssssuario no tiene ninguna propiedad asignada",
+      "properties-don't-assigned": "El usuario no tiene ninguna propiedad asignada",
       "empty-text": "",
       "resolution-higher-900px": "Para acceder al portal deberá ingresar desde una computadora con una resolución igual o superior a 900px.",
       "credential-error": "Error en las credenciales",
@@ -969,7 +969,8 @@
           "Client": "Usuario",
           "Monitor": "Monitor"
         },
-        "save": "Guardar"
+        "save": "Guardar",
+        "update-success": "Usuario actualizado"
       },
       "properties": {
         "assigned-properties": "Propiedades asignadas",
