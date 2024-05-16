@@ -91,7 +91,7 @@ import { putUserInfo } from "../helper/userProfile/PersonalProfile/putUserInfo";
       const selectedRole = roles.find(role => role.rolKey === e.value);
       if (selectedRole) {
         setTempRole(selectedRole.originalName);
-        setInput(prev => ({ ...prev, rol: selectedRole })); // Actualiza el estado de 'input' para incluir el nuevo rol seleccionado
+        setInput(prev => ({ ...prev, rol: selectedRole })); 
       }
     };
 
@@ -100,7 +100,7 @@ console.log(userProvider.id)
     const handleSaveClick = async () => {
       console.log('Current form values:', input);
     
-        try {
+        try { 
           const updatedUser = await putUserInfo(input, userProvider.id, t);
           console.log('Updated User:', updatedUser);
           if (updatedUser) {

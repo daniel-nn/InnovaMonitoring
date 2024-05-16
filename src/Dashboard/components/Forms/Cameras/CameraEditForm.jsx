@@ -293,9 +293,9 @@ export const CameraEditForm = ({ camera, properties, onClose }) => {
             </div>
 
             <div className="w-full flex justify-around   mt-7">
-                <Button icon="pi pi-times" severity="danger" label="Cancel" onClick={onClose} />
+                <Button icon="pi pi-times" severity="danger" label={t('dashboard.cameras.dialog.cancel')} onClick={onClose} />
                 <div className="w-3"></div>
-                <Button icon="pi pi-check" className="p-button-success" label="Send" onClick={handleUpdateCameraInfo} />
+                <Button icon="pi pi-check" className="p-button-success" label={t('dashboard.cameras.dialog.send')} onClick={handleUpdateCameraInfo} />
             </div>
 
         </div>

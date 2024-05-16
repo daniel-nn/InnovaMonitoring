@@ -1731,6 +1731,7 @@ export const propertyGridAdmin = (t, handleOpenEditPropertyDialog) => {
       textAlign: "Center",
       template: props => <GridEditProperty property={props} handleOpenEditPropertyDialog={handleOpenEditPropertyDialog} />
     }, 
+    
 
     {
       headerText: "Delete",

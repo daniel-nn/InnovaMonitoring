@@ -10,6 +10,7 @@ import { FiShoppingBag } from "react-icons/fi";
 import { BiLogOut } from "react-icons/bi";
 import { useTranslation } from "react-i18next";
 import './Siderbar.css'
+
 const Sidebar = () => {
   const { currentColor, activeMenu, setActiveMenu, screenSize } =
     useStateContext();

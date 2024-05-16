@@ -35,7 +35,7 @@ const Dashboard = () => {
     };
     window.addEventListener('storage', handleStorageChange);
 
-    // función de limpieza que remueve el event listener
+
     return () => {
       window.removeEventListener('storage', handleStorageChange);
     };

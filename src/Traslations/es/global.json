@@ -793,6 +793,7 @@
         "property": "Selecciona la propiedad de la camara",
         "property-placeholder": "Seleccióna la propiedad de la camara",
         "search-img": "Buscar imagen",
+        "cancel": "Cancelar",
         "send": "Enviar"
       },
       "table": {
@@ -829,9 +830,9 @@
           "image-updated": "Imagen de la camara actualizada"
         }
       },
-     "delete": {
-      "delete-camera": "Camara eliminada"
-    }
+      "delete": {
+        "delete-camera": "Camara eliminada"
+      }
     },
     "users": {
       "users-tittle": "Usuarios",
@@ -1032,13 +1033,34 @@
       "properties-title": "Propiedades",
       "add-property": "Agregar propiedad",
       "dialog": {
-        "dialog-title": "Agregar propiedad",
-        "property-name": "Nombre de la propiedad",
-        "address": "Dirección",
-        "img-url": "URL de la imagen",
-        "property-map": "Mapa de la propiedad",
-        "send": "Enviar",
-        "cancel": "Cancelar",
+        "add-property": {
+          "add-property-title": "Agregar propiedad",
+          "property-name": "Nombre de la propiedad",
+          "address": "Dirección",
+          "property-img": "Imagen de la propiedad",
+          "preview-img": "Preview De la propiedad",
+          "property-map": "Mapa de la propiedad",
+          "previer-map": "Preview del mapa",
+          "search-img": "Buscar imagen",
+          "send": "Enviar",
+          "cancel": "Cancelar"
+        },
+        "edit-property": {
+          "edit-title-tittle": "Editar propiedad",
+          "property-name": "Nombre de la propiedad",
+          "address": "Dirección",
+          "property-img": "Imagen de la propiedad",
+          "preview-img": "Preview De la propiedad",
+          "property-map": "Mapa de la propiedad",
+          "previer-map": "Preview del mapa",
+          "search-img": "Buscar imagen",
+          "update-images": "Actualizar imagenes",
+          "send": "Enviar",
+          "cancel": "Cancelar",
+          "swal": {
+            "image-updated": "Actualizado"
+          }
+        },
         "swal": {
           "added-property": "Propiedad agregada",
           "validate-property-details": {
