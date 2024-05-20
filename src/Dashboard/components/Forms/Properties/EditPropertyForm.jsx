@@ -11,25 +11,25 @@ import Swal from "sweetalert2";
 
 export const EditPropertyForm = ({ property, onClose, refreshProperties }) => {
     const [propertyData, setPropertyData] = useState(property);
-    const { propertyProvider, setPropertyProvider } = useContext(UserContext);
     const [validationErrors, setValidationErrors] = useState({});
     const { t } = useTranslation("global");
     const [imgPreview, setImgPreview] = useState('');
     const [mapImgPreview, setMapImgPreview] = useState('');
-
-
+    const [initialImages, setInitialImages] = useState({ img: null, mapImg: null });
+    const { propertyProvider, setPropertyProvider } = useContext(UserContext);
 
     useEffect(() => {
-    if (property) {
-        setPropertyData(property); // Asegúrate de que toda la información de la propiedad está cargada
-        const imgURL = property.img ? `${process.env.REACT_APP_S3_BUCKET_URL}/${property.img}` : undefined;
-        const mapImgURL = property.mapImg ? `${process.env.REACT_APP_S3_BUCKET_URL}/${property.mapImg}` : undefined;
-        setImgPreview(imgURL);
-        setMapImgPreview(mapImgURL);
-        setPropertyProvider(property);
+        if (property) {
+            setPropertyData(property);
+            const imgURL = property.img ? `${process.env.REACT_APP_S3_BUCKET_URL}/${property.img}` : undefined;
+            const mapImgURL = property.mapImg ? `${process.env.REACT_APP_S3_BUCKET_URL}/${property.mapImg}` : undefined;
+            setImgPreview(imgURL);
+            setMapImgPreview(mapImgURL);
+            setInitialImages({ img: property.img, mapImg: property.mapImg });
+            setPropertyProvider(property);
+        }
+    }, [property]);
 
-    }
-}, [property]);
 
     
     const handleInputChange = (event, field) => {
@@ -70,7 +70,6 @@ export const EditPropertyForm = ({ property, onClose, refreshProperties }) => {
     const handleImageChange = (event, type) => {
         const file = event.target.files[0];
         if (file) {
-            // Eliminar el URL anterior si existe
             if (type === 'img' && imgPreview && imgPreview.startsWith('blob:')) {
                 URL.revokeObjectURL(imgPreview);
             } else if (type === 'mapImg' && mapImgPreview && mapImgPreview.startsWith('blob:')) {
@@ -96,23 +95,30 @@ export const EditPropertyForm = ({ property, onClose, refreshProperties }) => {
         const formData = new FormData();
         let hasFile = false;
 
-        if (propertyData.img instanceof File) {
+        if (propertyData.img instanceof File && propertyData.img !== initialImages.img) {
             formData.append('img', propertyData.img);
             hasFile = true;
         }
-        if (propertyData.mapImg instanceof File) {
+        if (propertyData.mapImg instanceof File && propertyData.mapImg !== initialImages.mapImg) {
             formData.append('map', propertyData.mapImg);
             hasFile = true;
         }
 
-
         if (hasFile) {
-            const result = await putPropertyImage(property.id, formData, t);
-            if (result) {
-                onClose(result); 
+            try {
+                const result = await putPropertyImage(property.id, formData, t);
+                if (result) {
+                    onClose(result);
+                }
+            } catch (error) {
+                console.error('Error sending the property image or map:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: t("dashboard.properties.update.swal.error-title"),
+                    text: t("dashboard.properties.update.swal.error-updating"),
+                });
             }
         } else {
-            console.log('No file to update');
             Swal.fire({
                 icon: 'warning',
                 title: t("dashboard.properties.update.swal.no-image"),
@@ -127,6 +133,7 @@ export const EditPropertyForm = ({ property, onClose, refreshProperties }) => {
             });
         }
     };
+
 
     
 
@@ -152,7 +159,7 @@ export const EditPropertyForm = ({ property, onClose, refreshProperties }) => {
         <div>
             <div className="flex">
                 <div className="p-inputgroup my-3 ml-3 flex flex-col">
-                    <label htmlFor="name">{t("dashboard.properties.dialog.property-name")}</label>
+                    <label htmlFor="name">{t("dashboard.properties.dialog.edit-property.property-name")}</label>
                     <div className="p-inputgroup">
                         <span className="p-float-label">
                             <InputText
@@ -166,7 +173,7 @@ export const EditPropertyForm = ({ property, onClose, refreshProperties }) => {
                 </div>
 
                 <div className="p-inputgroup my-3 ml-3 flex flex-col">
-                    <label htmlFor="direction">{t("dashboard.properties.dialog.address")}</label>
+                    <label htmlFor="direction">{t("dashboard.properties.dialog.edit-property.address")}</label>
                     <div className="p-inputgroup">
                         <span className="p-float-label">
                             <InputText
@@ -182,7 +189,7 @@ export const EditPropertyForm = ({ property, onClose, refreshProperties }) => {
 
             <div className="flex">
                 <div className="p-inputgroup my-3 ml-3 flex flex-col">
-                    <label htmlFor="img">{t("dashboard.properties.dialog.img-url")}</label>
+                    <label htmlFor="img">{t("dashboard.properties.dialog.edit-property.property-img")}</label>
                     <div className="file-upload-container">
                         <input
                             type="file"
@@ -192,10 +199,10 @@ export const EditPropertyForm = ({ property, onClose, refreshProperties }) => {
                             className="file-input"
                             style={{ display: 'none' }}
                         />
-                        <label htmlFor="img" className="file-input-label">{t("dashboard.cameras.dialog.search-img")}</label>
+                        <label htmlFor="img" className="file-input-label">{t("dashboard.properties.dialog.edit-property.search-img")}</label>
                         {imgPreview && (
                             <div className="image-preview-container mt-3 flex flex-col items-center">
-                                <img src={imgPreview} alt="Property Image Preview" style={{ maxHeight: '300px', maxWidth: '100%', borderRadius: '10%' }} />
+                                <img src={imgPreview} alt={t("dashboard.properties.dialog.edit-property.preview-img")} style={{ maxHeight: '300px', maxWidth: '100%', borderRadius: '10%' }} />
                                 <span className="file-name mt-2">{propertyProvider.img ? propertyProvider.img.name : 'No file chosen'}</span>
                             </div>
                         )}
@@ -204,7 +211,7 @@ export const EditPropertyForm = ({ property, onClose, refreshProperties }) => {
                 </div>
 
                 <div className="p-inputgroup my-3 ml-3 flex flex-col">
-                    <label htmlFor="mapImg">{t("dashboard.properties.dialog.property-map")}</label>
+                    <label htmlFor="mapImg">{t("dashboard.properties.dialog.edit-property.property-map")}</label>
                     <div className="file-upload-container">
                         <input
                             type="file"
@@ -214,10 +221,10 @@ export const EditPropertyForm = ({ property, onClose, refreshProperties }) => {
                             className="file-input"
                             style={{ display: 'none' }}
                         />
-                        <label htmlFor="mapImg" className="file-input-label">{t("dashboard.cameras.dialog.search-img")}</label>
+                        <label htmlFor="mapImg" className="file-input-label">{t("dashboard.properties.dialog.edit-property.search-img")}</label>
                         {mapImgPreview && (
                             <div className="image-preview-container mt-3 flex flex-col items-center">
-                                <img src={mapImgPreview} alt="Map Image Preview" style={{ maxHeight: '300px', maxWidth: '100%', borderRadius: '10%' }} />
+                                <img src={mapImgPreview} alt={t("dashboard.properties.dialog.edit-property.preview-map")} style={{ maxHeight: '300px', maxWidth: '100%', borderRadius: '10%' }} />
                                 <span className="file-name mt-2">{propertyProvider.mapImg ? propertyProvider.mapImg.name : 'No file chosen'}</span>
                             </div>
                         )}
@@ -230,7 +237,7 @@ export const EditPropertyForm = ({ property, onClose, refreshProperties }) => {
             <div className="flex">
                 <div className="justify-center">
                     <Button
-                        label={t("dashboard.reports.edit-report.update-evidences.button-update-evidences")}
+                        label={t("dashboard.properties.dialog.edit-property.update-images")}
                         icon="pi pi-refresh"
                         className="p-button update-button"
                         onClick={handleUpdateImages}
@@ -248,12 +255,6 @@ export const EditPropertyForm = ({ property, onClose, refreshProperties }) => {
                     />
                     <div className="w-3"></div>
                     <Button
-                        icon="pi pi-check"
-                        label={t("dashboard.properties.dialog.send")}
-                        className="p-button-success"
-                        onClick={handleUpdateProperty}
-                    />
-                     <Button
                         icon="pi pi-check"
                         label={t("dashboard.properties.dialog.send")}
                         className="p-button-success"

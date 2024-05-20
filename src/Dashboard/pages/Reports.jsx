@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, useMemo, useCallback } from "react";
-import { GridComponent, ColumnsDirective, ColumnDirective, Resize, Sort, ContextMenu, Filter, Page, Search, PdfExport, Inject, Toolbar, } from "@syncfusion/ej2-react-grids";
+import { GridComponent, ColumnsDirective, ColumnDirective, Resize, Sort, ContextMenu, Filter, Page, Search, PdfExport, Inject, Toolbar} from "@syncfusion/ej2-react-grids";
 import { contextMenuItems, reportsGrid, reportsGridAdmin, reportsGridMonitor, reportsGridNoVerified } from "../data/dummy";
 import { Header } from "../components";
 import { UserContext } from "../../context/UserContext";
@@ -68,27 +68,28 @@ const Reports = () => {
 
   const noVerifiedGridColumns = useMemo(() => reportsGridNoVerified(t, refreshReports), [t, refreshReports]);
   const adminGridColumns = useMemo(() => reportsGridAdmin(t, refreshReports), [t, refreshReports]);
-  const monitorGridColumns = useMemo(() => reportsGridMonitor(t), [t]);  
-  const clientGridColumns = useMemo(() => reportsGrid(t), [t]);          
+  const monitorGridColumns = useMemo(() => reportsGridMonitor(t), [t]);
+  const clientGridColumns = useMemo(() => reportsGrid(t), [t]);
 
-  
+
 
   return (
-    <div className="m-20 md:m-10 mt-14 p-2 md:p-0 bg-white rounded-3xl">
-    {creatingReport && 
-      <div className="mx-auto">
-        <h1 className="text-lg font-semibold text-blue-500">El reporte se esta guardado...</h1>
-<CircularProgress />
-      </div>
-                }
+
+    <div className="m-20 md:m-10 mt-14 p-2 md:p-0 bg-white rounded-3xl 	overflow-x: hidden;">
+      {creatingReport &&
+        <div className="mx-auto">
+          <h1 className="text-lg font-semibold text-blue-500">{t("dashboard.reports.report-loading")}</h1>
+          <CircularProgress />
+        </div>
+      }
       <Header category={t("dashboard.reports.reports-tittle")} title={t("dashboard.reports.reports-of") + propertyContext.name} />
-      <div className="card flex justify-end py-2 mb-7">
+      
+      <div className="card flex justify-start py-2 mb-7">
         {(userRole === "Admin" || userRole === "Monitor") && (
-          <>
+          <div className='flex w-[400px] justify-between'>
             <Button
               onClick={() => navigate("/dashboard/NewReport")}
               label={t("dashboard.reports.buttons.add-report")}
-              className="p-button-text ml-2"
             >
               <AiOutlinePlusCircle />
             </Button>
@@ -96,12 +97,12 @@ const Reports = () => {
               <Button
                 onClick={toggleView}
                 label={t(activeView === 'default' ? "dashboard.reports.buttons.non-verified-reports" : "dashboard.reports.buttons.reports-per-property")}
-                className="p-button-text ml-2"
               >
                 <AiOutlineFileSearch />
               </Button>
             )}
-          </>
+          </div>
+
         )}
       </div>
       <GridComponent
@@ -114,17 +115,9 @@ const Reports = () => {
         allowPdfExport
         contextMenuItems={contextMenuItems}
         toolbar={toolbarOptions}
-      >
-        <ColumnsDirective>
-          {activeView === 'noVerified'
-            ? noVerifiedGridColumns.map((item, index) => <ColumnDirective key={index} {...item} />)
-            : (userRole === "Admin"
-              ? adminGridColumns.map((item, index) => <ColumnDirective key={index} {...item} />)
-              : (userRole === "Monitor"
-                ? monitorGridColumns.map((item, index) => <ColumnDirective key={index} {...item} />)
-                : clientGridColumns.map((item, index) => <ColumnDirective key={index} {...item} />)))
-          }
-        </ColumnsDirective>
+        allowResizing={true}
+          width={1150}
+      > 
         <Inject
           services={[
             Resize,
@@ -136,9 +129,20 @@ const Reports = () => {
             Search,
             Toolbar,
           ]}
-        />
+        />  
+        <ColumnsDirective>
+          {activeView === 'noVerified'
+            ? noVerifiedGridColumns.map((item, index) => <ColumnDirective key={index} {...item} />)
+            : (userRole === "Admin"
+              ? adminGridColumns.map((item, index) => <ColumnDirective key={index} {...item} />)
+              : (userRole === "Monitor"
+                ? monitorGridColumns.map((item, index) => <ColumnDirective key={index} {...item} />)
+                : clientGridColumns.map((item, index) => <ColumnDirective key={index} {...item} />)))
+          }
+        </ColumnsDirective>
+      
       </GridComponent>
-      </div>
+    </div>
   );
 };
 export default Reports;

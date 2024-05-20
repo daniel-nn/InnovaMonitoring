@@ -109,7 +109,7 @@ export const Properties = () => {
   return (
     <>
       <Dialog
-        header={t("dashboard.properties.dialog.dialog-title")}
+        header={t("dashboard.properties.dialog.add-property.add-property-title")}
         visible={newPropertyDialog}
         style={{ width: "50vw" }}
         modal
@@ -120,7 +120,7 @@ export const Properties = () => {
       </Dialog>
 
       <Dialog
-        header={t("dashboard.properties.dialog.edit-property")}
+        header={t("dashboard.properties.dialog.edit-property.edit-title-tittle")}
         visible={editPropertyDialog}
         style={{ width: "50vw" }}
         modal
@@ -133,12 +133,11 @@ export const Properties = () => {
       <div className="m-20 md:m-10 mt-14 p-2 md:p-0 bg-white rounded-3xl">
         <Header title={t("dashboard.properties.properties-title")} />
 
-        <div className="card flex justify-end py-2">
+        <div className="card flex justify-start py-2">
           {userRole == "Admin" ? (
             <Button
               severity="info"
               label={t("dashboard.properties.add-property")}
-              className="p-button-text ml-2"
               onClick={() => setNewPropertyDialog(true)}
             >
               <AiOutlinePlusCircle className="ml-2"></AiOutlinePlusCircle>
@@ -159,7 +158,7 @@ export const Properties = () => {
             allowPdfExport
             contextMenuItems={contextMenuItems}
             toolbar={toolbarOptions}
-            style={{ position: "absolute", zIndex: 0 }}
+            allowResizing={true}
           >
             <ColumnsDirective>
               {propertyGridAdmin(t, handleOpenEditPropertyDialog).map((item, index)  => (

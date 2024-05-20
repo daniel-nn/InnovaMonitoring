@@ -343,7 +343,7 @@ export const Users = () => {
 
       <div className="m-20 md:m-10 mt-14 p-2 md:p-0 bg-white rounded-3xl">
         <Header title={t("dashboard.users.users-tittle")} />
-        <div className="card flex justify-end py-2">
+        <div className="card flex justify-start py-2">
           {userRole == "Admin" ? (
             <Button
               onClick={() => {
@@ -351,7 +351,6 @@ export const Users = () => {
                 setUserProvider({ }); }}
               severity="info"
               label={t("dashboard.users.add-user")}
-              className="p-button-text ml-2"
             >
               <AiOutlinePlusCircle className="ml-2" />
             </Button>

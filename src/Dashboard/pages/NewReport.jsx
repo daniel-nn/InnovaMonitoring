@@ -940,7 +940,7 @@ const NewReport = () => {
                                     )}
                                     <div className="file-details flex-grow">
                                         <span className="file-name font-semibold">{file.name}</span>
-                                        <Button icon="pi pi-times" className="p-button-rounded p-button-danger margin-delete-button" onClick={() => handleFileRemove(file.id, file.url)} />
+                                        <Button icon="pi pi-times" className="p-button-rounded p-button-danger margin-delete-button" outlined onClick={() => handleFileRemove(file.id, file.url)} />
                                     </div>
                                 </div>
                             ))}

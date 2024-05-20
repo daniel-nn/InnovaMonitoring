@@ -402,7 +402,6 @@
     "tittle_carrousel": "Entities with which we have collaborated:"
   },
   "dashboard": {
-
     "dashboard-navbar": {
       "cart": {
         "property": "Property",
@@ -415,7 +414,6 @@
         "logout-button": "Logout"
       }
     },
-
     "dashboard-sliderbar": {
       "dashboard-section": {
         "dashboard-tittle": "Dashboard",
@@ -439,7 +437,6 @@
         "logout": "Logout"
       }
     },
-
     "dashboard-index": {
       "home": "Home",
       "number-reports": "Number of reports",
@@ -777,7 +774,6 @@
         "image-gallery": "Image Gallery:"
       }
     },
-
     "cameras": {
       "title": "Cameras Of - ",
       "dialog": {
@@ -800,6 +796,7 @@
         "property": "Select The Camera Property",
         "property-placeholder": "Select The Camera Property",
         "search-img": "Search Image",
+        "cancel": "Cancel",
         "send": "Send"
       },
       "table": {
@@ -1035,13 +1032,34 @@
       "properties-title": "Properties",
       "add-property": "Add Property",
       "dialog": {
-        "dialog-title": "Add Property",
-        "property-name": "Property Name",
-        "address": "Address",
-        "img-url": "Image URL",
-        "property-map": "Property Map",
-        "send": "Send",
-        "cancel": "Cancel",
+        "add-property": {
+          "dialog-title": "Add Property",
+          "property-name": "Property Name",
+          "address": "Address",
+          "property-img": "Property Image",
+          "preview-image":"Preview Image",
+          "property-map": "Property Map",
+          "preview-map": "Map Image Preview",
+          "search-img": "Search Image",
+          "send": "Send",
+          "cancel": "Cancel"
+        },
+        "edit-property": {
+          "edit-property-title": "Edit Property",
+          "property-name": "Property Name",
+          "address": "Address",
+          "property-img": "Property Image",
+          "preview-image": "Preview Image",
+          "property-map": "Property Map",
+          "preview-map": "Map Image Preview",
+          "search-img": "Search Image",
+          "update-images": "Update Images",
+          "send": "Send",
+          "cancel": "Cancel",
+          "swal": {
+            "image-updated": "Updated"
+          }
+        },
         "swal": {
           "added-property": "Added property",
           "validate-property-details": {
@@ -1078,7 +1096,7 @@
         "level": "Level",
         "number-of-reports": "Number Of Reports"
       },
-      "level-of-reports":{
+      "level-of-reports": {
         "report-level": {
           "1": "Level 1",
           "2": "Level 2",
