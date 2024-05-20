@@ -263,7 +263,7 @@ export const EditPropertyForm = ({ property, onClose, refreshProperties }) => {
                 </div>
 
             </div>
-        </div >
+        </div >
 
-    );
+    );
 };

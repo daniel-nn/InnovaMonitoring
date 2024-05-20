@@ -20,7 +20,7 @@ import { UserContext } from '../../context/UserContext';
     return `${hours}:${minutes}`;
   };
 
-export const postReport = async (reportForm, t, setCreatingReport) => {
+export const postReport = async (reportForm, t, setCreatingReport, userId) => {
   const formData = new FormData();
 
   formData.append("report", new Blob([JSON.stringify({
@@ -57,8 +57,15 @@ export const postReport = async (reportForm, t, setCreatingReport) => {
   const url = `${process.env.REACT_APP_SERVER_IP}/reports`;
 
   try {
+    console.log("User id")
+    console.log(userId)
     const response = await fetch(url, {
+
       method: 'POST',
+      headers: {
+        "Userid": userId,
+        // Otras cabeceras si es necesario
+    },
       body: formData,
     });
 

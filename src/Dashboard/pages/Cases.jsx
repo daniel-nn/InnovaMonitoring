@@ -1,12 +1,12 @@
 import { Dialog } from "primereact/dialog";
 import React, { useContext, useEffect, useState } from "react";
-
+ 
 import { Button } from "primereact/button";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { GridComponent, ColumnsDirective, ColumnDirective, Resize, Sort, ContextMenu, Filter, Page, Search, PdfExport, Inject,} from "@syncfusion/ej2-react-grids";
 import { useTranslation } from "react-i18next";
-
-
+ 
+ 
 import { contextMenuItems, ordersCases, ordersCasesAdmin, ordersGrid } from "../data/dummy";
 import { Header } from "../components";
 import { getIncidents } from "../helper/getIncidents";
@@ -15,15 +15,15 @@ import { UserContext } from "../../context/UserContext";
 import { InputText } from "primereact/inputtext";
 import { PostIncident, postIncident } from "../helper/postIncident";
 import { putIncident } from "../helper/putIncident";
-
+ 
     export const Cases = () => {
       const toolbarOptions = ["Search"];
       const { navigate } = useNavigate();
       const [cases, setCases] = useState([]);
       const [t, i18n] = useTranslation("global");
       const [validationErrors, setValidationErrors] = useState({});
-
-
+ 
+ 
       const {
         caseProvider,
         setCaseProvider,
@@ -31,43 +31,43 @@ import { putIncident } from "../helper/putIncident";
         setCaseDialog,
         editCase,
         setEditCase,
-        reportSaved, 
+        reportSaved,
         setreportSaved
       } = useContext(UserContext);
       let user = JSON.parse(localStorage.getItem("user"));
       let userRole = user.role.rolName;
-
-
+ 
+ 
       useEffect(() => {
         getIncidents(navigate).then((data) => setCases(data));
       }, [reportSaved]);
-
-
-      
+ 
+ 
+     
       const validateCaseDetails = () => {
         const errors = {};
         if (!caseProvider.incident || caseProvider.incident.trim() === "") {
           errors.incident = "Case incident is required.";
         }
-
+ 
         setValidationErrors(errors);
         return Object.keys(errors).length === 0;
       };
-
-
+ 
+ 
       const editIncident = async () => {
         if (validateCaseDetails()) {
           await putIncident(caseProvider, setreportSaved, reportSaved, t);
-          setCaseDialog(!caseDialog); 
-          setCaseProvider({}); 
+          setCaseDialog(!caseDialog);
+          setCaseProvider({});
         }
       };
-
-
+ 
+ 
       const saveIncident = async () => {
-        if (validateCaseDetails()) { 
+        if (validateCaseDetails()) {
           await postIncident(caseProvider, setreportSaved, reportSaved, t);
-          setCaseDialog(!caseDialog); 
+          setCaseDialog(!caseDialog);
         }
       };
       const handleInputChange = (field, value) => {
@@ -75,7 +75,7 @@ import { putIncident } from "../helper/putIncident";
           ...prevState,
           [field]: value
         }));
-
+ 
         // Si hay un error asociado con este campo y el nuevo valor no está vacío, limpia el error.
         if (validationErrors[field] && value.trim()) {
           setValidationErrors((prevState) => {
@@ -85,16 +85,16 @@ import { putIncident } from "../helper/putIncident";
           });
         }
       };
-
-      
+ 
+     
       const handleClose = () => {
         setCaseDialog(false);    
         setCaseProvider({});
         setEditCase(false);    
-        setValidationErrors({}) 
+        setValidationErrors({})
       };
-
-
+ 
+ 
       return (
         <>
           <Dialog
@@ -108,14 +108,14 @@ import { putIncident } from "../helper/putIncident";
               setValidationErrors({});
             }}
             modal={true}              
-            dismissableMask={true} 
+            dismissableMask={true}
             footer={
               <div className="w-full flex justify-end">
                 <Button
                   icon="pi pi-times"
                   severity="danger"
                   label={t(editCase ? "dashboard.cases.edit-dialog.cancel" : "dashboard.cases.add-dialog.cancel")}
-                  onClick={handleClose}     
+                  onClick={handleClose}    
                 />
                 <div className="w-3"></div>
                 {editCase ? (
@@ -150,12 +150,12 @@ import { putIncident } from "../helper/putIncident";
                 {validationErrors.incident && <small className="p-error">{validationErrors.incident}</small>}
               </div>
             </div>
-
+ 
       </Dialog>
       <div className="m-20 md:m-10 mt-14 p-2 md:p-0 bg-white rounded-3xl">
         <Header title={t("dashboard.cases.add-case")} />
         <div className="card flex justify-start py-2">
-
+ 
         {userRole == "Admin" ? (
                  
                 <Button
@@ -172,7 +172,7 @@ import { putIncident } from "../helper/putIncident";
                    <></>
                  )}
         </div>
-
+ 
         <GridComponent
           id="gridcomp"
           dataSource={cases}
@@ -202,8 +202,9 @@ import { putIncident } from "../helper/putIncident";
             ]}
           />
         </GridComponent>
-
+ 
       </div>
     </>
   );
 };
+ 
