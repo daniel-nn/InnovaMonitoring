@@ -154,15 +154,13 @@ import { putIncident } from "../helper/putIncident";
       </Dialog>
       <div className="m-20 md:m-10 mt-14 p-2 md:p-0 bg-white rounded-3xl">
         <Header title={t("dashboard.cases.add-case")} />
-        <div className="card flex justify-end py-2">
+        <div className="card flex justify-start py-2">
 
         {userRole == "Admin" ? (
                  
                 <Button
                 severity="info"
                 label={t("dashboard.cases.add-case")}
-                className="p-button-text ml-2"
-
                  onClick={() => {
                    setCaseDialog(!caseDialog);
                  }}
@@ -185,7 +183,7 @@ import { putIncident } from "../helper/putIncident";
           allowPdfExport
           contextMenuItems={contextMenuItems}
           toolbar={toolbarOptions}
-          style={{ position: "absolute", zIndex: 0 }}
+          allowResizing={true}
         >
           <ColumnsDirective>
             {ordersCasesAdmin(t).map((item, index) => (

@@ -90,7 +90,7 @@ export const NewPropertyForm = ({  onClose }) => {
         <div>
             <div className="flex">
                 <div className="p-inputgroup my-3 ml-3 flex flex-col">
-                    <label htmlFor="name">{t("dashboard.properties.dialog.property-name")}</label>
+                    <label htmlFor="name">{t("dashboard.properties.dialog.add-property.property-name")}</label>
                     <div className="p-inputgroup">
                         <span className="p-float-label">
                             <InputText
@@ -104,7 +104,7 @@ export const NewPropertyForm = ({  onClose }) => {
                 </div>
 
                 <div className="p-inputgroup my-3 ml-3 flex flex-col">
-                    <label htmlFor="direction">{t("dashboard.properties.dialog.address")}</label>
+                    <label htmlFor="direction">{t("dashboard.properties.dialog.add-property.address")}</label>
                     <div className="p-inputgroup">
                         <span className="p-float-label">
                             <InputText
@@ -120,7 +120,7 @@ export const NewPropertyForm = ({  onClose }) => {
 
             <div className="flex">
                 <div className="p-inputgroup my-3 ml-3 flex flex-col">
-                    <label htmlFor="img">{t("dashboard.properties.dialog.img-url")}</label>
+                    <label htmlFor="img">{t("dashboard.properties.dialog.add-property.property-img")}</label>
                     <div className="file-upload-container">
                         <input
                             type="file"
@@ -130,10 +130,10 @@ export const NewPropertyForm = ({  onClose }) => {
                             className="file-input"
                             style={{ display: 'none' }}
                         />
-                        <label htmlFor="img" className="file-input-label">{t("dashboard.cameras.dialog.search-img")}</label>
+                        <label htmlFor="img" className="file-input-label">{t("dashboard.properties.dialog.add-property.search-img")}</label>
                         {imgPreview && (
                             <div className="image-preview-container mt-3 flex flex-col items-center">
-                                <img src={imgPreview} alt="Property Image Preview" className="image-preview" style={{ maxHeight: '300px', maxWidth: '100%', borderRadius: '10%' }} />
+                                <img src={imgPreview} alt={t('dashboard.properties.dialog.add-property.preview-img')} className="image-preview" style={{ maxHeight: '300px', maxWidth: '100%', borderRadius: '10%' }} />
                                 <span className="file-name mt-2">{propertyProvider.img ? propertyProvider.img.name : 'No file chosen'}</span>
                             </div>
                         )}
@@ -142,7 +142,7 @@ export const NewPropertyForm = ({  onClose }) => {
                 </div>
 
                 <div className="p-inputgroup my-3 ml-3 flex flex-col">
-                    <label htmlFor="mapImg">{t("dashboard.properties.dialog.property-map")}</label>
+                    <label htmlFor="mapImg">{t("dashboard.properties.dialog.add-property.property-map")}</label>
                     <div className="file-upload-container">
                         <input
                             type="file"
@@ -152,10 +152,10 @@ export const NewPropertyForm = ({  onClose }) => {
                             className="file-input"
                             style={{ display: 'none' }}
                         />
-                        <label htmlFor="mapImg" className="file-input-label">{t("dashboard.cameras.dialog.search-img")}</label>
+                        <label htmlFor="mapImg" className="file-input-label">{t("dashboard.properties.dialog.add-property.search-img")}</label>
                         {mapImgPreview && (
                             <div className="image-preview-container mt-3 flex flex-col items-center">
-                                <img src={mapImgPreview} alt="Map Image Preview" className="image-preview" style={{ maxHeight: '300px', maxWidth: '100%', borderRadius: '10%' }} />
+                                <img src={mapImgPreview} alt={t('dashboard.properties.dialog.add-property.previer-map')} className="image-preview" style={{ maxHeight: '300px', maxWidth: '100%', borderRadius: '10%' }} />
                                 <span className="file-name mt-2">{propertyProvider.mapImg ? propertyProvider.mapImg.name : 'No file chosen'}</span>
                             </div>
                         )}
@@ -169,13 +169,13 @@ export const NewPropertyForm = ({  onClose }) => {
                     <Button
                         icon="pi pi-times"
                         severity="danger"
-                        label={t("dashboard.properties.dialog.cancel")}
+                        label={t("dashboard.properties.dialog.add-property.cancel")}
                         onClick={onClose}
                     />
                     <div className="w-3"></div>
                     <Button
                         icon="pi pi-check"
-                        label={t("dashboard.properties.dialog.send")}
+                        label={t("dashboard.properties.dialog.add-property.send")}
                         className="p-button-success"
                         onClick={() => {
                             handleSaveProperty();

@@ -269,9 +269,9 @@ console.log(cameraForm)
       </div>
 
       <div className="w-full flex justify-around mt-5 ">
-        <Button icon="pi pi-times" severity="danger" label="Cancel" onClick={onClose} />
+        <Button icon="pi pi-times" severity="danger" label={t('dashboard.cameras.dialog.cancel')} onClick={onClose} />
         <div className="w-3"></div>
-        <Button icon="pi pi-check" className="p-button-success" label="Send" onClick={handleSaveCamera} />
+        <Button icon="pi pi-check" className="p-button-success" label={t('dashboard.cameras.dialog.send')} onClick={handleSaveCamera} />
       </div>
 
       {/* <div className="flex">

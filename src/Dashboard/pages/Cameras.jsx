@@ -94,7 +94,7 @@ const Cameras = () => {
       <div className="m-0 md:m-8 mt-14 p-2 md:p-0 bg-white rounded-3xl">
         <Header title={t("dashboard.cameras.title") +propertyContext.name} />
 
-        <div className="card flex justify-end py-2 mb-7">
+        <div className="card flex justify-start py-2 mb-7">
           {userRole == "Admin" ? (
             <Button
             onClick={() => setCameraFormFlag(true)}
@@ -119,7 +119,7 @@ const Cameras = () => {
           pageSettings={{ pageCount: 5 }}
           editSettings={editing}
           toolbar={toolbarOptions}
-          style={{ position: "absolute", zIndex: 0 }}
+          allowResizing={true}
         >
         
 

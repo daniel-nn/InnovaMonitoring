@@ -21,6 +21,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
   let newUser = null;
+  const [showPassword, setShowPassword] = useState(false);
 
 
   const handleOnSubmit = async (e) => {
@@ -131,8 +132,8 @@ const Login = () => {
                   </div>
 
                   <div className="mt-6">
-                    <div className="flex justify-between mb-2">
-                      <label htmlFor="password" className="text-sm text-gray-600 ">
+                    <div className="flex justify-between items-center mb-2">
+                      <label htmlFor="password" className="text-sm text-gray-600">
                         {t("login.password")}
                       </label>
                       <p
@@ -143,17 +144,33 @@ const Login = () => {
                       </p>
                     </div>
 
-                    <input
-                      type="password"
-                      name="password"
-                      id="password"
-                      placeholder={t("login.password_placeholder")}
-                      value={password}
-                      required
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg  focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
-                    />
+                    <div id="login-form" className="relative">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        name="password"
+                        id="password"
+                        placeholder={t("login.password_placeholder")}
+                        value={password}
+                        required
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40 pr-10"
+                      />
+                      <button
+                        type="button"
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? (
+                          <i className="mdi mdi-eye-off"></i>
+                        ) : (
+                          <i className="mdi mdi-eye"></i>
+                        )}
+                      </button>
+                    </div>
+
+
                   </div>
+
 
                   {error && (
 
