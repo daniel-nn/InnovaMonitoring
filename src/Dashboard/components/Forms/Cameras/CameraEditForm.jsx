@@ -29,7 +29,8 @@ export const CameraEditForm = ({ camera, properties, onClose }) => {
     const statusList = ["Working", "Offline", "Vandalized"];
     const { t, i18n } = useTranslation("global");
 
-
+    console.log("propiedad", property)
+    
     const handleImageChange = (event) => {
         const file = event.target.files[0];
         if (file) {

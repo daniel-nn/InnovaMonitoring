@@ -183,7 +183,7 @@ import { putIncident } from "../helper/putIncident";
           allowPdfExport
           contextMenuItems={contextMenuItems}
           toolbar={toolbarOptions}
-              allowResizing={true}
+          allowResizing={true}
         >
           <ColumnsDirective>
             {ordersCasesAdmin(t).map((item, index) => (

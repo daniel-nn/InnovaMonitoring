@@ -445,6 +445,7 @@
       "reports-of": "Reportes de - ",
       "reports-tittle": "Informes",
       "non-verified-tittle": "Reportes no verificados",
+      "report-loading": "El reporte se esta guardando",
       "buttons": {
         "add-report": "Agregar reporte",
         "reports-per-property": "Reportes por propiedad",
@@ -579,6 +580,7 @@
         "report-details-placeholder": "Descripción del reporte",
         "upload-evidences": "Agregar evidencias.",
         "drop-evidences": "Suelta las evidencias",
+        "evidence-removed": "Evidence removed",
         "swal": {
           "confirmation": "Estas seguro de enviar el reporte para la propiedad - ",
           "send": "Enviar",

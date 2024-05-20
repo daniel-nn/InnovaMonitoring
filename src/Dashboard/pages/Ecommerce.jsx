@@ -18,12 +18,6 @@ import { getNumberOfReportsByRole } from "../helper/getNumberOfReportsByRole";
 import { Button } from "primereact/button";
 
 
-let mag = {
-  id: 2,
-  name: "Bell Air",
-  direction: "Fl 1231 Opa-Loka",
-  img: "https://drive.google.com/uc?export=view&id=1y3mtI4oTCz9Dk_ME4bHuw9q0aW44-sur",
-};
 
 const Ecommerce = () => {
   const formatImageName = (name) => {
@@ -42,21 +36,30 @@ const Ecommerce = () => {
   const [reportsData, setReportsData] = useState(null); 
 
   useEffect(() => {
-    if (propertyContext && propertyContext.id) {
-      console.log("Buscando información actualizada para la propiedad seleccionada:", propertyContext);
-      GetPropertyInfo(propertyContext.id, userRole).then((data) => {
-        if (data) {
-          setPropertyFetched(data);
-        } else {
-          console.error("No se pudo obtener la información de la propiedad.");
+    let isActive = true;  // Flag para manejar la limpieza del efecto
+
+    const fetchData = async () => {
+      if (propertyContext?.id && userRole) {
+        try {
+          const data = await GetPropertyInfo(propertyContext.id, userRole);
+          if (data && isActive) {
+            setPropertyFetched(data);
+            console.log("data retornada", data)
+          }
+        } catch (error) {
+          console.error("No se pudo obtener la información de la propiedad:", error);
         }
-      });
-    }
+      } else {
+        setPropertyFetched(null);
+      }
+    };
+    fetchData();
+    return () => {
+      isActive = false;
+    };
   }, [propertyContext, userRole]);
 
 
-
-  const numOfReports = reportsData ? reportsData.length : "...";
   useEffect(() => {
     if (propertyContext && propertyContext.id) {
           setReportsData([]);
@@ -71,7 +74,7 @@ const Ecommerce = () => {
     }
   }, [propertyContext, userRole, userId]);
 
-
+  console.log("asldjñaslidjaslikdjsad asdjasl djsda ",propertyFetched)
   const backgroundImageUrl = `${process.env.REACT_APP_S3_BUCKET_URL}/${propertyContext.img}`;
 
   return (
@@ -122,7 +125,7 @@ const Ecommerce = () => {
               
               <p className="p-0 mt-3">
                 <span className="text-lg font-semibold">
-                  {propertyFetched.cameras?.length || 40}
+                  {propertyFetched ? (propertyFetched.numOfCamerasTotal || 0) : 0}
                 </span>
               </p>
               <p className="p-0 text-md text-gray-700 mt-1">{t("dashboard.dashboard-index.total-cameras")}</p>
@@ -147,7 +150,7 @@ const Ecommerce = () => {
               </button>
               <p className="p-0 mt-3">
                 <span className="text-lg font-semibold">
-                  {propertyFetched.numCamerasWorking || 26}
+                  {propertyFetched ? (propertyFetched.camerasOnline || 0) : 0}
             
                 </span>
               </p>
@@ -171,7 +174,7 @@ const Ecommerce = () => {
               </button>
               <p className="p-0 mt-3">
                 <span className="text-lg font-semibold">
-                  {propertyFetched.numCamerasOffline || 3}
+                  {propertyFetched ? (propertyFetched.camerasOffline || 0) : 0}
                 </span>
               </p>
               <p className="p-0 text-md text-gray-700 mt-1">{t("dashboard.dashboard-index.cameras-off")}</p>
@@ -190,7 +193,7 @@ const Ecommerce = () => {
               </button>
               <p className="p-0 mt-3">
                 <span className="text-lg font-semibold">
-                  {propertyFetched.numCamerasVandalized || 5}
+                  {propertyFetched ? (propertyFetched.camerasVandalized || 0) : 0}
                 </span>
               </p>
               <p className="p-0 text-base text-gray-700 mt-1">

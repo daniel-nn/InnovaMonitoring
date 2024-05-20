@@ -28,7 +28,7 @@ const NewReport = () => {
     const navigate = useNavigate();
     const [messages, setMessages] = useState([]);
     const toast = useRef(null);
-    const { reportForm, setReportForm } = useContext(UserContext);
+    const { reportForm, setReportForm, userContext } = useContext(UserContext);
     
     const resetReportForm = () => {
         setReportForm({
@@ -61,36 +61,43 @@ const NewReport = () => {
     };
 
     useEffect(() => {
-        const socket = new WebSocket('ws://ec2-52-90-149-16.compute-1.amazonaws.com:8080/ws'); // URL del WebSocket del servidor Spring Boot
-    
+        const socket = new WebSocket('ws://52.90.149.16:8080/ws'); // URL del WebSocket del servidor Spring Boot
+        console.log("userContext");
+        console.log(userContext);
         const stompClient = Stomp.over(socket);
         stompClient.connect({}, () => {
-    
-          stompClient.subscribe('/topic/receiveMessage', (response) => {
-            console.log(response)
-            const newMessage = response.body;
-            console.log(newMessage)
-            setMessages([newMessage]);
-            let mensaje = JSON.parse(newMessage)
-            console.log(mensaje)
-            //toast.current.show({ severity: 'success', summary: 'Evidencia Subida', detail: JSON.parse(newMessage).type, life: 5000 });
-            Swal.fire({
-                toast: true,
-                position: 'top-end',
-                icon: 'success',
-                title: mensaje.type,
-                showConfirmButton: false,
-                timer: 5000
-            });  
-        });
-    
-          // Aquí puedes enviar cualquier mensaje adicional después de que la conexión esté establecida
-          // Ejemplo: stompClient.send('/app/sendMessage', {}, JSON.stringify({ message: 'Hola servidor!' }));
+            console.log(`/topic/user/user-${userContext.id.toString()}`)
+            stompClient.subscribe(`/topic/user/user-${userContext.id.toString()}`, (response) => {
+
+                console.log(response)
+                const newMessage = response.body;
+                console.log(newMessage)
+                setMessages([newMessage]);
+                let mensaje = JSON.parse(newMessage)
+                console.log(mensaje)
+                //toast.current.show({ severity: 'success', summary: 'Evidencia Subida', detail: JSON.parse(newMessage).type, life: 5000 });
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'success',
+                    title: mensaje.type,
+                    showConfirmButton: false,
+                    timer: 5000
+                });
+            });
+
+            // Aquí puedes enviar cualquier mensaje adicional después de que la conexión esté establecida
+            // Ejemplo: stompClient.send('/app/sendMessage', {}, JSON.stringify({ message: 'Hola servidor!' }));
         });
         return () => {
             toast.current = null; // Limpiar la referencia cuando el componente se desmonte
         };
-      }, []);
+    }, []);
+
+
+    useEffect(() => {
+        resetReportForm();
+    }, []);
 
     const validateForm = () => {
   
@@ -219,7 +226,7 @@ const NewReport = () => {
             toast: true,
             position: 'top-end',
             icon: 'success',
-            title: t('falta la traducción esta sera la ruta: dashboard.reports.new-report.evidence-removed'),
+            title: t('dashboard.reports.new-report.evidence-removed'),
             showConfirmButton: false,
             timer: 3000
         });
@@ -354,8 +361,8 @@ const NewReport = () => {
             if (result.isConfirmed) {
                 postReport(reportForm, t, setCreatingReport);  
                 setCreatingReport(true)  
-                navigate("/dashboard/reports");
                 resetReportForm();
+                navigate("/dashboard/reports");
             } else if (result.isDenied) {
                 resetReportForm();
                 Swal.fire({

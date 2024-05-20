@@ -11,6 +11,7 @@ import { useFetchIncidents } from "../Hooks/useFetchIncidents";
 import { useTranslation } from "react-i18next";
 import { getNumberOfReportsByRole } from "../helper/getNumberOfReportsByRole";
 import { getReportsNoVerified } from "../helper/getReportsNoVerified";
+import { useStateContext } from "../../context/ContextProvider"
 import CircularProgress, {
   CircularProgressProps,
 } from "@mui/material/CircularProgress";
@@ -24,6 +25,8 @@ const Reports = () => {
   const [reportes, setReportes] = useState([]);
   const [t, i18n] = useTranslation("global");
   const [activeView, setActiveView] = useState('default');
+
+  const { activeMenu } = useStateContext();
 
   let user = JSON.parse(localStorage.getItem("user"));
   let userRole = user.role.rolName;
@@ -71,6 +74,7 @@ const Reports = () => {
   const monitorGridColumns = useMemo(() => reportsGridMonitor(t), [t]);
   const clientGridColumns = useMemo(() => reportsGrid(t), [t]);
 
+  const gridWidth = activeMenu ? "1150" : "1450";
 
 
   return (
@@ -86,7 +90,7 @@ const Reports = () => {
       
       <div className="card flex justify-start py-2 mb-7">
         {(userRole === "Admin" || userRole === "Monitor") && (
-          <div className='flex w-[400px] justify-between'>
+          <div className='flex w-[450px] justify-between'>
             <Button
               onClick={() => navigate("/dashboard/NewReport")}
               label={t("dashboard.reports.buttons.add-report")}
@@ -102,7 +106,6 @@ const Reports = () => {
               </Button>
             )}
           </div>
-
         )}
       </div>
       <GridComponent
@@ -116,7 +119,7 @@ const Reports = () => {
         contextMenuItems={contextMenuItems}
         toolbar={toolbarOptions}
         allowResizing={true}
-          width={1150}
+        width={gridWidth}
       > 
         <Inject
           services={[

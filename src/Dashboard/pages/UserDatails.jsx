@@ -21,10 +21,13 @@
   import GridPropertiesProfile from "../components/GridPropertiesProfile";
 
 export const UserDatails = () => {
+
   const [userData, setUserData] = useState({ user: {} });
-    const [window, setWindow] = useState(true);
-    const { t, i18n } = useTranslation("global");
-    const { userProvider, setUserProvider } = useContext(UserContext);       
+  const [window, setWindow] = useState(true);
+  const { t, i18n } = useTranslation("global");
+  const { userProvider, setUserProvider } = useContext(UserContext); 
+  let user = JSON.parse(localStorage.getItem("user"));
+  let userRole = user.role.rolName;    
 
     useEffect(() => {
       const fetchData = async () => {
@@ -54,9 +57,11 @@ export const UserDatails = () => {
           <button onClick={() => setWindow(true)} className="flex items-center px-3 py-2.5 font-bold bg-white text-primary border rounded-full">
             {t('dashboard.user-details.panel.personal-profile')}
           </button>
-          <button onClick={() => setWindow(false)} className="flex items-center px-3 py-2.5 font-semibold hover:text-primary hover:border hover:rounded-full">
-            {t('dashboard.user-details.panel.properties')}
-          </button>
+          {userRole === "Admin" && (
+            <button onClick={() => setWindow(false)} className="flex items-center px-3 py-2.5 font-semibold hover:text-primary hover:border hover:rounded-full">
+              {t('dashboard.user-details.panel.properties')}
+            </button>
+          )}
         </div>
       </aside>
     
@@ -66,9 +71,13 @@ export const UserDatails = () => {
             userProvider={userData.user}
             setUserProvider={setUserProvider}
             initialRolName={initialRolName}
+            user={user}
+            userRole={userRole}
           />
         )
-      ) : (
+      ) :
+      
+      (
         userData && (
             <GridPropertiesProfile 
             properties={userData.user.properties} 

@@ -5,34 +5,35 @@ export const GetPropertyInfo = async (id, userRole) => {
 
   try {
     const resp = await fetch(url);
-    // Verifica si la respuesta es exitosa (status 200-299)
     if (!resp.ok) {
-      // Lanzar un error detendrá la ejecución y llevará al bloque catch
       throw new Error(`HTTP status ${resp.status}`);
     }
 
     const data = await resp.json();
 
-    // Manejar la lógica específica del rol
+    // Verificar si el backend devuelve una respuesta de error
+    if (data.message) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: data.message,
+      });
+      return null;
+    }
+
+    // Mapear los informes dependiendo del rol del usuario
     const reportsMapped = userRole === "Client"
-      ? data.reports?.filter(repo => repo.verified)
+      ? data.reports?.filter(report => report.verified)
       : data.reports;
 
-    // Procesamiento de imágenes y cámaras
-    const propertyImage = `${process.env.REACT_APP_S3_BUCKET_URL}/${data?.img}`
-    const camerasWorking = data.cameras?.filter(camera => camera.status === "Working");
-    const camerasOffline = data.cameras?.filter(camera => camera.status === "Offline");
-    const camerasVandalized = data.cameras?.filter(camera => camera.status === "Vandalized");
+    const propertyImage = `${process.env.REACT_APP_S3_BUCKET_URL}/${data.img}`;
 
-   
     const dataDto = {
       ...data,
-      reportsMapped,
-      numCamerasWorking: camerasWorking?.length,
-      numCamerasOffline: camerasOffline?.length,
-      numCamerasVandalized: camerasVandalized?.length,
-      numOfReports: reportsMapped?.length, 
-      propertyImage,
+      camerasWorking: data.camerasOnline, 
+      camerasOffline: data.camerasOffline,
+      camerasVandalized: data.camerasVandalized,
+      numOfCamerasTotal: data.camerasOnline + data.camerasOffline + data.camerasVandalized
     };
 
     return dataDto;
@@ -44,6 +45,6 @@ export const GetPropertyInfo = async (id, userRole) => {
       title: "Error",
       text: `Ha ocurrido un problema con la petición Fetch: ${error.message}`,
     });
-    return null; // Devuelve null o un objeto vacío para indicar que la petición falló
+    return null;
   }
 };

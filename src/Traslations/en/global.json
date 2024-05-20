@@ -449,6 +449,7 @@
       "reports-of": "Reports of - ",
       "non-verified-tittle": "Unverified Reports",
       "reports-tittle": "Reports",
+      "report-loading": "The Report Is Loading",
       "buttons": {
         "add-report": "Add Report",
         "reports-per-property": "Property Reports",
@@ -583,6 +584,7 @@
         "report-details-placeholder": "Report Description",
         "upload-evidences": "Agregar evidencias.",
         "drop-evidences": "Suelta las evidencias",
+        "evidence-removed": "Eviencia eliminada",
         "swal": {
           "confirmation": "Are you sure to submit the report for the property - ",
           "cancel": "Cancel",
@@ -593,7 +595,7 @@
           "empty": "Enter the case number",
           "edit": "Report has been successfully saved",
           "fill-missing-field-title": "Missing Field",
-          "fill-missing-field": "complete the field - ",
+          "fill-missing-field": "Complete The Field - ",
           "missing-evidence-title": "The evidences are required",
           "missing-evidence": "upload the evidences"
         },

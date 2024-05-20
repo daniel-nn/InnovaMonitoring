@@ -52,11 +52,26 @@ export const gridUserImage = ({ UserImage }) => {
   )
 };
 
+export const gridOrderImageAgent = ({ ImageUrl }) => {
+  console.log("image url dentro de la platnilla", ImageUrl)
+  return (
+    <div>
+
+      <img src={ImageUrl || 'default-placeholder.png'}
+        alt="No Agent"
+        className="rounded-xl w-20 h-20 md:ml-3"
+      />
+    </div>
+  );
+};
 
 export const gridOrderImage = ({ evidences }) => {
   const srcNoImage = `${process.env.REACT_APP_S3_BUCKET_URL}/Resources/NoImage.png`;
 
-  if (!evidences || evidences.length === 0 || !evidences[0]) {
+
+  const images = evidences.filter(evidence => evidence.type === "image");
+
+  if (!images || images.length === 0 || !images[0]) {
     return (
       <div>
         <img
@@ -68,7 +83,7 @@ export const gridOrderImage = ({ evidences }) => {
     );
   }
 
-  const imgEvidence = `${process.env.REACT_APP_S3_BUCKET_URL}/${evidences[0].path}`;
+  const imgEvidence = `${process.env.REACT_APP_S3_BUCKET_URL}/${images[0].path}`;
 
   return (
     <div>
@@ -84,7 +99,7 @@ export const gridOrderImage = ({ evidences }) => {
 
 
 export const GridPropertyImage = ({ propertyImage }) => {
-  const imageUrl = propertyImage || "default-placeholder.png";
+  const imageUrl = propertyImage ? `${process.env.REACT_APP_S3_BUCKET_URL}/${propertyImage}` : "default-placeholder.png";
   return (
     <div>
       <img
@@ -1012,37 +1027,36 @@ export const customersGrid = [
 export const cameraGrid = (t) => {
   return [
     {
-      headerText: t("dashboard.table.img"),
+      headerText: t("dashboard.cameras.table.img"),
       width: "115",
       template: gridCameraimage,
       textAlign: "Center",
     },
 
-    { width: "190", field: "Name", headerText: "Name", textAlign: "Center" },
     {
-      headerText: "Status",
+      headerText: t("dashboard.cameras.table.name"),
+      width: "190",
+      field: "name",
+      textAlign: "Center"
+    },
+    {
+      headerText: t("dashboard.cameras.table.status"),
       width: "110",
       textAlign: "Center",
       template: gridOrderStatus,
     },
-    { field: "Title", headerText: "Brand", width: "100", textAlign: "Center" },
-    { field: "Type", headerText: "Type", width: "90", textAlign: "Center" },
-
     {
-      field: "Installed",
-      headerText: "Installed",
+      headerText: t("dashboard.cameras.table.brand"),
+      field: "brand",
       width: "100",
-      textAlign: "Center",
+      textAlign: "Center"
     },
-
     {
-      field: "DateInstalled",
-      headerText: "Date",
-      width: "110",
-      format: "yMd",
-      textAlign: "Center",
+      field: "type ",
+      headerText: t("dashboard.cameras.table.type"),
+      width: "90",
+      textAlign: "Center"
     },
-
   ]
 }
 
@@ -1617,11 +1631,13 @@ export const ordersCasesAdmin = (t) => {
 export const orderAgentsAdmin = (t) => {
   return [
     {
-      headerText: "Image",
-      template: gridOrderImage,
+      headerText: t("dashboard.reports.table.admin.CaseImage"),
+      template: gridOrderImageAgent,
+      field: "ImageUrl",
       textAlign: "Center",
       width: "120",
     },
+  
     {
       headerText: t("dashboard.agents.table.name"),
       field: "Name",
@@ -1633,14 +1649,6 @@ export const orderAgentsAdmin = (t) => {
       field: "Email",
       textAlign: "Center",
       width: "120",
-    },
-    {
-      field: "Properties",
-      headerText: t("dashboard.users.table.properties"),
-      width: "200",
-      textAlign: "Center",
-      template: PropertiesTemplate,
-      //template: gridOrderProperties,
     },
     {
       headerText: t("dashboard.agents.table.delete"),
@@ -1695,7 +1703,7 @@ export const propertyGridAdmin = (t, handleOpenEditPropertyDialog) => {
   return [
     {
       headerText: "Image",
-      template: props => props && <GridPropertyImage propertyImage={props.PropertyImage} />,
+      template: props => props && <GridPropertyImage propertyImage={props.img} />,
       textAlign: "Center",
       field: "img",
       width: "120",

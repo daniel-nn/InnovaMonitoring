@@ -114,15 +114,15 @@ export const EditPropertyForm = ({ property, onClose, refreshProperties }) => {
                 console.error('Error sending the property image or map:', error);
                 Swal.fire({
                     icon: 'error',
-                    title: t("dashboard.properties.update.swal.error-title"),
-                    text: t("dashboard.properties.update.swal.error-updating"),
+                    title: t("Error"),
+                    text: t("error", error),
                 });
             }
         } else {
             Swal.fire({
                 icon: 'warning',
-                title: t("dashboard.properties.update.swal.no-image"),
-                text: t("dashboard.properties.update.swal.provide-image"),
+                title: t("dashboard.properties.dialog.edit-property.swal.careful"),
+                text: t("dashboard.properties.dialog.edit-property.swal.select-image"),
                 toast: true,
                 position: "top-end",
                 showConfirmButton: false,
@@ -250,13 +250,13 @@ export const EditPropertyForm = ({ property, onClose, refreshProperties }) => {
                     <Button
                         icon="pi pi-times"
                         severity="danger"
-                        label={t("dashboard.properties.dialog.cancel")}
+                        label={t("dashboard.properties.dialog.edit-property.cancel")}
                         onClick={onClose}
                     />
                     <div className="w-3"></div>
                     <Button
                         icon="pi pi-check"
-                        label={t("dashboard.properties.dialog.send")}
+                        label={t("dashboard.properties.dialog.edit-property.send")}
                         className="p-button-success"
                         onClick={handleUpdateProperty}
                     />
