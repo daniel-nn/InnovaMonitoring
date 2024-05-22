@@ -74,7 +74,7 @@ const Ecommerce = () => {
     }
   }, [propertyContext, userRole, userId]);
 
-  console.log("asldjñaslidjaslikdjsad asdjasl djsda ",propertyFetched)
+  console.log("propiedad fetched",propertyFetched)
   const backgroundImageUrl = `${process.env.REACT_APP_S3_BUCKET_URL}/${propertyContext.img}`;
 
   return (

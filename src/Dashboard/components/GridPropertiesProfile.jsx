@@ -4,48 +4,50 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { Button } from "primereact/button";
 import { propertiesUserGridAdmin, propertiesUserGrid, assignproperties } from '../data/dummy'
 import { useTranslation } from 'react-i18next'
-import { getNontPropertiesUser } from '../helper/userProfile/properties/getNontPropertiesUser';
+import { getNonPropertiesUser } from '../helper/userProfile/properties/getNonPropertiesUser';
+import { getUserAssignedProperties } from '../helper/userProfile/properties/getUserAssignedProperties';
+import TableSkeleton from './TableSkeleton';
 
-const GridPropertiesProfile = ({ properties, userId, setUserData }) => {
+const GridPropertiesProfile = ({ userId, setUserData }) => {
   const [t, i18n] = useTranslation("global");
   let user = JSON.parse(localStorage.getItem("user"));
   let userRole = user.role.rolName;
-
-  const [dataToShow, setDataToShow] = useState(properties);
+  const [dataToShow, setDataToShow] = useState([]);
   const [activeView, setActiveView] = useState('default');
+  const [loading, setLoading] = useState(true)
 
-  // Función para recargar propiedades actualizadas
-  const fetchUpdatedProperties = async () => {
-    try {
-      const nonAssignedProperties = await getNontPropertiesUser(userId);
-      console.log("Updated non-assigned properties:", nonAssignedProperties);
+  const fetchProperties = async () => {
+    setLoading(true);
+    if (activeView === 'assign') {
+      const nonAssignedProperties = await getNonPropertiesUser(userId);
       setDataToShow(nonAssignedProperties);
-    } catch (error) {
-      console.error('Error fetching updated properties:', error);
+    } else {
+      const assignedProperties = await getUserAssignedProperties(userId);
+      setDataToShow(assignedProperties);
     }
+    
+    setLoading(false)
   };
 
-  const columns = useMemo(() => {
-    if (activeView === 'default') {
-      return userRole === "Admin" ? propertiesUserGridAdmin(t, userId, setUserData) : propertiesUserGrid(t, userId, setUserData);
-    }
-    return assignproperties(t, userId, setUserData, fetchUpdatedProperties);
-  }, [t, userId, setUserData, userRole, activeView]);
-
-  const handleViewChange = () => {
-    if (activeView === 'default') {
-      fetchUpdatedProperties();
-      setActiveView('assign');
-    } else {
-      setDataToShow(properties);
-      setActiveView('default');
-    }
+  const fetchUpdatedProperties = async () => {
+    const nonAssignedProperties = await getNonPropertiesUser(userId);
+    setDataToShow(nonAssignedProperties);
   };
 
   useEffect(() => {
-    setDataToShow(properties);
-  }, [properties]);
+    fetchProperties();
+  }, [userId, activeView]);
 
+  const columns = useMemo(() => {
+    if (activeView === 'default') {
+      return propertiesUserGridAdmin(t, userId, fetchProperties, activeView);
+    }
+    return assignproperties(t, userId, fetchProperties, activeView);
+  }, [t, userId, setUserData, activeView, fetchUpdatedProperties]);
+
+  const handleViewChange = () => {
+    setActiveView(prevView => prevView === 'default' ? 'assign' : 'default');
+  };
   return (
     <div>
           
@@ -61,10 +63,13 @@ const GridPropertiesProfile = ({ properties, userId, setUserData }) => {
           />
         )}
         </div>
+
+      {loading ? <TableSkeleton /> : 
+      (
       <GridComponent
         id="userGrid"
         dataSource={dataToShow}
-        key={`${activeView}-${i18n.language}-${dataToShow.length}`}  // Utilizar una clave que cambie con los datos
+        key={`${activeView}-${i18n.language}`}  
         allowPaging
         allowSorting
         toolbar={["Search"]}
@@ -75,6 +80,8 @@ const GridPropertiesProfile = ({ properties, userId, setUserData }) => {
           ))}
         </ColumnsDirective>
       </GridComponent>
+
+      )}
     </div>
   )
 }

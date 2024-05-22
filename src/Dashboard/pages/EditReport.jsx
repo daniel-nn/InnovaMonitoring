@@ -19,6 +19,8 @@ import { getAdminsAndMonitors } from "../helper/getUserAdminsaAndMonitors";
 import { editReport } from "../helper/Reports/UpdateReport/editReport";
 import { putAddEvidences } from "../helper/Reports/UpdateReport/putAddEvidences";
 import deleteEvidence from "../helper/Reports/delete/deleteEvidence"; 
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import "../pages/css/Reports/EditReport.css"
 
 
@@ -29,7 +31,7 @@ const EditReport = () => {
     const navigate = useNavigate();
 
     const { reportForm, setReportForm } = useContext(UserContext);
-    const { property, agent, createdBy, dateOfReport, timeOfReport, incidentDate, incidentStartTime, incidentEndTime, caseType, level, company, numerCase, camerasFunctioning, listMalfunctioningCameras, observerdViaCameras, policeFirstResponderNotified, policeFirstResponderScene, securityGuardsNotified, securityGuardsScene, policeNumerCase, reportDetails, formNotificationClient, emailedReport, pdf, evidences } = reportForm;
+    const { property, agent, createdBy, dateOfReport, timeOfReport, incidentDate, incidentStartTime, incidentEndTime, persist, caseType, level, company, numerCase, camerasFunctioning, listMalfunctioningCameras, observerdViaCameras, policeFirstResponderNotified, policeFirstResponderScene, securityGuardsNotified, securityGuardsScene, policeNumerCase, reportDetails, formNotificationClient, emailedReport, pdf, evidences } = reportForm;
     console.log("EditReport data:", reportForm);
 
     const [properties, setProperties] = useState([]);
@@ -161,7 +163,6 @@ const EditReport = () => {
             'timeOfReport': t("dashboard.reports.new-report.select-time-of-report"),
             'incidentDate': t("dashboard.reports.new-report.select-date-of-incident"),
             'incidentStartTime': t("dashboard.reports.new-report.select-incident-start-time"),
-            'incidentEndTime': t("dashboard.reports.new-report.select-incident-end-time"),
             'caseType.incident': t("dashboard.reports.new-report.select-incident"),
             'level': t("dashboard.reports.new-report.select-report-level"),
             'company': t("dashboard.reports.new-report.select-company"),
@@ -175,6 +176,9 @@ const EditReport = () => {
             'emailedReport': t("dashboard.reports.new-report.emaildReport"),
             'reportDetails': t("dashboard.reports.new-report.report-details")
         };
+        if (!reportForm.persist) {
+            fieldsToValidate.incidentEndTime = t("dashboard.reports.new-report.select-incident-end-time");
+        }
         const missingFieldKey = Object.keys(fieldsToValidate).find(field => {
             const fieldParts = field.split('.');
             let value = reportForm;
@@ -468,22 +472,46 @@ const EditReport = () => {
                 </div>
 
                 <div className="w-full md:w-1/3 px-3 mb-6">
-                    <label htmlFor="incidentEndTime" className="font-bold block mb-2">
-                        {t("dashboard.reports.edit-report.select-incident-end-time")}
-                    </label>
-                    <div className="p-inputgroup">
-                        <span className="p-inputgroup-addon">
-                            <i className="pi pi-clock"></i>
-                        </span>
-                        <Calendar
-                            placeholder={t("dashboard.reports.edit-report.incident-end-time-placeholder")}
-                            value={incidentEndTime}
-                            onChange={(e) => setReportForm((i) => {
-
-                                return { ...reportForm, incidentEndTime: e.value };
-                            })}
-                            timeOnly
-                        />
+                    <div className="flex flex-col md:flex-row items-center justify-between mb-2">
+                        <div className="flex-grow">
+                            <label htmlFor="incidentEndTime" className="font-bold">
+                                {t("dashboard.reports.edit-report.select-incident-end-time")}
+                            </label>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={reportForm.persist}
+                                        onChange={(e) => {
+                                            setReportForm(prev => ({
+                                                ...prev,
+                                                persist: e.target.checked,
+                                                incidentEndTime: e.target.checked ? null : prev.incidentEndTime
+                                            }));
+                                        }}
+                                        color="primary"
+                                    />
+                                }
+                                label={t("dashboard.reports.edit-report.persist")}
+                                className="ml-2"
+                            />
+                        </div>
+                        <div className="flex-grow pt-8">
+                            <Calendar
+                                id="incidentEndTime"
+                                placeholder={reportForm.persist ? t("dashboard.reports.edit-report.persist-placeholder") : t(
+                                    "dashboard.reports.edit-report.incident-end-time-placeholder"
+                                )}
+                                value={reportForm.incidentEndTime}
+                                onChange={(e) =>
+                                    setReportForm((prev) => {
+                                        return { ...prev, incidentEndTime: e.value };
+                                    })
+                                }
+                                timeOnly
+                                disabled={reportForm.persist}
+                                className="w-full"
+                            />
+                        </div>
                     </div>
                 </div>
 

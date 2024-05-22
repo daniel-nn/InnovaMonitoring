@@ -53,9 +53,8 @@ export const gridUserImage = ({ UserImage }) => {
 };
 
 export const gridOrderImageAgent = ({ ImageUrl }) => {
-  console.log("image url dentro de la platnilla", ImageUrl)
   return (
-    <div>
+    <div className="flex justify-center items-center h-full">
 
       <img src={ImageUrl || 'default-placeholder.png'}
         alt="No Agent"
@@ -262,7 +261,7 @@ export const GridEditReportTemplate = (props) => {
       incidentStartTime: parseTime(props.incidentStartTime, props.incidentDate),
       incidentEndTime: parseTime(props.incidentEndTime, props.incidentDate)
     };
-    console.log("GridEditReportTemplate props xd  :", props);
+    console.log("GridEditReportTemplate props:", props);
 
     setReportForm(formattedProps);
     navigate('/dashboard/EditReport');
@@ -1052,7 +1051,7 @@ export const cameraGrid = (t) => {
       textAlign: "Center"
     },
     {
-      field: "type ",
+      field: "type",
       headerText: t("dashboard.cameras.table.type"),
       width: "90",
       textAlign: "Center"
@@ -1088,7 +1087,7 @@ export const cameraGridAdmin = (t, setSelectedCamera, onClose) => {
       textAlign: "Center"
     },
     {
-      field: "type ",
+      field: "type",
       headerText: t("dashboard.cameras.table.type"),
       width: "90",
       textAlign: "Center"
@@ -1417,11 +1416,14 @@ export const userGrid = (t) => {
   ];
 };
 
-export const RemovePropertyToUser = ({ propertyId, userId, setUserData }) => {
+export const RemovePropertyToUser = ({ propertyId, userId, fetchProperties, activeView }) => {
   const { t } = useTranslation("global");
 
-  const handleClick = () => {
-    putDeletePropertyToUser(userId, propertyId, t, setUserData);
+  const handleClick = async () => {
+    const result = await putDeletePropertyToUser(userId, propertyId, t);
+    if (result.success) {
+      fetchProperties();
+    }
   };
 
 
@@ -1431,6 +1433,8 @@ export const RemovePropertyToUser = ({ propertyId, userId, setUserData }) => {
     </div>
   );
 };
+
+
 
 export const ImgPropertyUsersProfile = (rowData) => {
   const imageURL = `${process.env.REACT_APP_S3_BUCKET_URL}/${rowData.img}`;
@@ -1462,7 +1466,7 @@ export const propertiesUserGrid = (t, userId, setUserData) => {
   ];
 };
 
-export const propertiesUserGridAdmin = (t, userId, setUserData) => {
+export const propertiesUserGridAdmin = (t, userId, fetchProperties, activeView) => {
   return [
     {
       headerText: t("dashboard.user-details.properties.table.image"),
@@ -1486,14 +1490,14 @@ export const propertiesUserGridAdmin = (t, userId, setUserData) => {
 
     {
       headerText: t("dashboard.user-details.properties.table.remove"),
-      template: (props) => <RemovePropertyToUser propertyId={props.id} userId={userId} setUserData={setUserData} />,
+      template: (props) => <RemovePropertyToUser propertyId={props.id} userId={userId} fetchProperties={fetchProperties} activeView={activeView} />,
       width: "100",
       textAlign: "Center",
     },
   ];
 };
 
-export const AddPropertyIconTemplate = ({ data, userId, t, setUserData, fetchUpdatedProperties }) => {
+export const AddPropertyIconTemplate = ({ data, userId, t, fetchProperties }) => {
   const handleClick = async () => {
     const propertyInfo = {
       id: data.id,
@@ -1503,9 +1507,11 @@ export const AddPropertyIconTemplate = ({ data, userId, t, setUserData, fetchUpd
       mapImg: data.mapImg
     };
 
-    await putAddPropertyUser(userId, [propertyInfo], t, setUserData, fetchUpdatedProperties);
+    const result = await putAddPropertyUser(userId, [propertyInfo], t);
+    if (result.success) {
+      fetchProperties();
+    }
   };
-
   return (
     <div onClick={handleClick} style={{ cursor: 'pointer', textAlign: 'center', fontSize: '1.5em', color: '#007ad9' }}>
       <MdOutlineAddCircleOutline />
@@ -1513,7 +1519,7 @@ export const AddPropertyIconTemplate = ({ data, userId, t, setUserData, fetchUpd
   );
 };
 
-export const assignproperties = (t, userId, setUserData, fetchUpdatedProperties) => {
+export const assignproperties = (t, userId, fetchProperties) => {
 
 
   return [
@@ -1538,7 +1544,7 @@ export const assignproperties = (t, userId, setUserData, fetchUpdatedProperties)
     },
     {
       headerText: t("dashboard.user-details.properties.table.add-property"),
-      template: (rowData) => <AddPropertyIconTemplate data={rowData} userId={userId} t={t} setUserData={setUserData} fetchUpdatedProperties={fetchUpdatedProperties} />,
+      template: (props) => <AddPropertyIconTemplate data={props} userId={userId} t={t} fetchProperties={fetchProperties} />,
       width: "100",
       textAlign: "Center",
     },
@@ -1651,6 +1657,12 @@ export const orderAgentsAdmin = (t) => {
       width: "120",
     },
     {
+      headerText: t("dashboard.agents.table.reports"),
+      field: "numOfReportsUser",
+      textAlign: "Center",
+      width: "120",
+    },
+    {
       headerText: t("dashboard.agents.table.delete"),
       template: GridDelete,
       textAlign: "Center",
@@ -1702,32 +1714,32 @@ export const propertyGridAdmin = (t, handleOpenEditPropertyDialog) => {
 
   return [
     {
-      headerText: "Image",
+      headerText: t("dashboard.properties.table.image"),
       template: props => props && <GridPropertyImage propertyImage={props.img} />,
       textAlign: "Center",
       field: "img",
       width: "120",
     },
     {
-      headerText: "name",
+      headerText: t("dashboard.properties.table.name"),
       field: "name",
       textAlign: "Center",
       width: "140",
     },
     {
-      headerText: "direction",
+      headerText: t("dashboard.properties.table.direction"),
       field: "direction",
       textAlign: "Center",
       width: "120",
     },
     {
-      headerText: "cameras",
-      field: "cameras",
+      headerText: t("dashboard.properties.table.cameras"),
+      field: "numOfCamerasTotal",
       textAlign: "Center",
       width: "120",
     },
     {
-      headerText: "reports",
+      headerText: t("dashboard.properties.table.reports"),
       field: "reports",
       textAlign: "Center",
       width: "120",
@@ -1742,7 +1754,7 @@ export const propertyGridAdmin = (t, handleOpenEditPropertyDialog) => {
     
 
     {
-      headerText: "Delete",
+      headerText: t("dashboard.cameras.table.delete"),
       textAlign: "Center",
       template: props => <GridDeleteProperty property={props} />,
       width: "85",

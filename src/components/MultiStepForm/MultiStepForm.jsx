@@ -711,7 +711,7 @@ export const MultiStepForm = () => {
   const { t, i18n } = useTranslation("global");
   const serviceId = "service_l6maf0k";
   const templateId = "template_7pr1w3x";
-  const apiKey = process.env.EMAILJS_API_KEY;
+  let apiKey = process.env.REACT_APP_EMAILJS_API_KEY;
   
   const sendEmail = () => {
 

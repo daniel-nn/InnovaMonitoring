@@ -1,16 +1,16 @@
 import Swal from "sweetalert2";
 
-const getNontPropertiesUser = async (id) => {
+const getUserAssignedProperties = async (id) => {
     if (!id) {
         Swal.fire({
             icon: "error",
             title: "Error",
             text: "No se ha proporcionado un ID de usuario válido",
         });
-        return; 
+        return;
     }
 
-    const url = `${process.env.REACT_APP_SERVER_IP}/properties/not-asigned/${id}`;
+    const url = `${process.env.REACT_APP_SERVER_IP}/properties/asigned/${id}`;
 
     try {
         const response = await fetch(url, {
@@ -21,22 +21,21 @@ const getNontPropertiesUser = async (id) => {
         });
 
         if (!response.ok) {
-            const error = await response.text(); 
-            throw new Error(error || `HTTP error! status: ${response.status}`); 
+            const error = await response.text();
+            throw new Error(error || `HTTP error! status: ${response.status}`);
         }
 
         const data = await response.json();
         return data;
     } catch (error) {
-        console.error('Error fetching properties not assigned to user:', error);
+        console.error('Error fetching assigned properties:', error);
         Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            text: `Failed to fetch properties for user ID ${id}: ${error.message || error.toString()}. Please try again later.`
+            text: `Failed to fetch assigned properties for user ID ${id}: ${error.message || error.toString()}. Please try again later.`
         });
-        return; 
+        return;
     }
 };
 
-
-export { getNontPropertiesUser };
+export { getUserAssignedProperties };

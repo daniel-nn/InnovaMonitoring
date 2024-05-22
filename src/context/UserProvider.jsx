@@ -25,7 +25,8 @@ export const UserProvider = ({ children }) => {
     timeOfReport: new Date(),
     incidentDate: new Date(),
     incidentStartTime: new Date(),
-    incidentEndTime: new Date(), 
+    incidentEndTime: new Date(),
+    persist: false,
     caseType: {},
     level: "",
     company: "",
@@ -48,7 +49,6 @@ export const UserProvider = ({ children }) => {
   const [cameraForm, setCameraForm] = useState({
     name: "",
     brand: "",
-    model: "",
     installedByUs: "",
     dateInstalled: new Date(),
     image: "",

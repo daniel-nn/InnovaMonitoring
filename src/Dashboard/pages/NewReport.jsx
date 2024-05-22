@@ -9,13 +9,14 @@ import { getIncidents } from "../helper/getIncidents";
 import { useTranslation } from "react-i18next";
 import { Button } from "primereact/button";
 import Swal from "sweetalert2";
-import Alert from "@mui/material/Alert";
+import Checkbox from '@mui/material/Checkbox';
 import { Dropdown } from "primereact/dropdown";
 import { postReport } from "../helper/postReport";
 import { InputNumber } from "primereact/inputnumber";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Calendar } from "primereact/calendar";
 import { RadioButton } from "primereact/radiobutton";
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 import exportPDF from "../helper/exportPdf";
 import { getAdminsAndMonitors } from "../helper/getUserAdminsaAndMonitors";
@@ -42,6 +43,7 @@ const NewReport = () => {
       incidentDate: new Date(),
       incidentStartTime: new Date(),
       incidentEndTime: new Date(),
+      persist: false,
       caseType: {},
       level: "",
       company: "",
@@ -62,6 +64,10 @@ const NewReport = () => {
     });
   };
 
+  useEffect(() => {
+    resetReportForm();
+  }, []);
+
   const validateForm = () => {
     const fieldsToValidate = {
       "property.name": t("dashboard.reports.new-report.select-property"),
@@ -72,9 +78,6 @@ const NewReport = () => {
       incidentDate: t("dashboard.reports.new-report.select-date-of-incident"),
       incidentStartTime: t(
         "dashboard.reports.new-report.select-incident-start-time"
-      ),
-      incidentEndTime: t(
-        "dashboard.reports.new-report.select-incident-end-time"
       ),
       "caseType.incident": t("dashboard.reports.new-report.select-incident"),
       level: t("dashboard.reports.new-report.select-report-level"),
@@ -101,6 +104,9 @@ const NewReport = () => {
       emailedReport: t("dashboard.reports.new-report.emaildReport"),
       reportDetails: t("dashboard.reports.new-report.report-details"),
     };
+    if (!reportForm.persist) {
+      fieldsToValidate.incidentEndTime = t("dashboard.reports.new-report.select-incident-end-time");
+    }
     const missingFieldKey = Object.keys(fieldsToValidate).find((field) => {
       const fieldParts = field.split(".");
       let value = reportForm;
@@ -157,6 +163,7 @@ const NewReport = () => {
     incidentDate,
     incidentStartTime,
     incidentEndTime,
+    persist,
     caseType,
     level,
     company,
@@ -237,7 +244,7 @@ const NewReport = () => {
       position: "top-end",
       icon: "success",
       title: t(
-        "falta la traducción esta sera la ruta: dashboard.reports.new-report.evidence-removed"
+        "dashboard.reports.new-report.evidence-removed"
       ),
       showConfirmButton: false,
       timer: 3000,
@@ -674,27 +681,49 @@ const NewReport = () => {
         </div>
 
         <div className="w-full md:w-1/3 px-3 mb-6">
-          <label htmlFor="incidentEndTime" className="font-bold block mb-2">
-            {t("dashboard.reports.new-report.select-incident-end-time")}
-          </label>
-          <div className="p-inputgroup">
-            <span className="p-inputgroup-addon">
-              <i className="pi pi-clock"></i>
-            </span>
-            <Calendar
-              placeholder={t(
-                "dashboard.reports.new-report.incident-end-time-placeholder"
-              )}
-              value={incidentEndTime}
-              onChange={(e) =>
-                setReportForm((i) => {
-                  return { ...reportForm, incidentEndTime: e.value };
-                })
-              }
-              timeOnly
-            />
+          <div className="flex flex-col md:flex-row items-center justify-between mb-2">
+            <div className="flex-grow">
+              <label htmlFor="incidentEndTime" className="font-bold">
+                {t("dashboard.reports.new-report.select-incident-end-time")}
+              </label>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={reportForm.persist}
+                    onChange={(e) => {
+                      setReportForm(prev => ({
+                        ...prev,
+                        persist: e.target.checked,
+                        incidentEndTime: e.target.checked ? null : prev.incidentEndTime
+                      }));
+                    }}
+                    color="primary"
+                  />
+                }
+                label={t("dashboard.reports.new-report.persist")}
+                className="ml-2"
+              />
+            </div>
+            <div className="flex-grow pt-8">
+              <Calendar
+                id="incidentEndTime"
+                placeholder={reportForm.persist ? t("dashboard.reports.new-report.persist-placeholder") : t(
+                  "dashboard.reports.new-report.incident-end-time-placeholder"
+                )}
+                value={reportForm.incidentEndTime}
+                onChange={(e) =>
+                  setReportForm((prev) => {
+                    return { ...prev, incidentEndTime: e.value };
+                  })
+                }
+                timeOnly
+                disabled={reportForm.persist}
+                className="w-full"
+              />
+            </div>
           </div>
         </div>
+
 
         <div className="w-full md:w-1/3 px-3 mb-6">
           <label htmlFor="caseType" className="font-bold block mb-2">

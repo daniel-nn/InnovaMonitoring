@@ -520,6 +520,8 @@
         "incident-start-time-placeholder": "Inicio del incidente",
         "select-incident-end-time": "Hora Final del incidente",
         "incident-end-time-placeholder": "Final del incidente",
+        "persist": "¿El incidente continua?",
+        "persist-placeholder": "Continua",
         "select-incident": "Selecciona el incidente",
         "incident": "Incidente",
         "select-report-level": "Selecciona el nivel del reporte",
@@ -630,6 +632,8 @@
         "incident-start-time-placeholder": "Inicio del incidente",
         "select-incident-end-time": "Hora Final del incidente",
         "incident-end-time-placeholder": "Final del incidente",
+        "persist": "¿El incidente continua?",
+        "persist-placeholder": "Continua",
         "select-incident": "Selecciona el incidente",
         "incident": "Incidente",
         "select-report-level": "Selecciona el nivel del reporte",
@@ -759,6 +763,7 @@
         "date-of-report": "Fecha:",
         "incident-start-time": "Hora de inicio del incidente:",
         "incident-end-time": "Hora de fin del incidente:",
+        "persist": "Continua",
         "time-of-report": "Hora del reporte:",
         "report-pdf": "Pdf del reporte:",
         "numer-case": "Número del caso:",
@@ -944,7 +949,7 @@
         "image": "Imagen",
         "name": "Nombre",
         "email": "Correo",
-        "password": "Contraseña",
+        "reports": "Reportes",
         "edit": "Editar",
         "delete": "Eliminar"
       }
@@ -1060,7 +1065,10 @@
           "send": "Enviar",
           "cancel": "Cancelar",
           "swal": {
-            "image-updated": "Actualizado"
+            "image-updated": "Actualizado",
+            "careful": "Cuidado",
+            "select-image": "Selecciona una imagen diferente"
+            
           }
         },
         "swal": {

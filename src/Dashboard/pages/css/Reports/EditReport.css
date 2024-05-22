@@ -146,3 +146,16 @@
     color: white; 
 }
 
+.my-form-control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.my-form-control .MuiFormControlLabel-root {
+  margin-right: auto; 
+}
+
+.my-calendar {
+  flex-grow: 1;
+}

@@ -23,6 +23,7 @@ import { getCameras } from "../helper/getCameras";
 import { UserContext } from "../../context/UserContext";
 import { cameraGrid, cameraGridAdmin } from "../data/dummy";
 import { useTranslation } from "react-i18next";
+import TableSkeleton from "../components/TableSkeleton";
 
 const Cameras = () => {
   const toolbarOptions = ["Search"];
@@ -41,6 +42,7 @@ const Cameras = () => {
   let id = propertyContext.id || idStorage;
   let user = JSON.parse(localStorage.getItem("user"));
   let userRole = user.role.rolName;
+  const [loading, setLoading] = useState(true);
 
   const [selectedCamera, setSelectedCamera] = useState(null);
 
@@ -56,6 +58,7 @@ const Cameras = () => {
   };
 
   const handleCloseEdit = (updatedCamera) => {
+    setLoading(false)
     setSelectedCamera(null);
     if (updatedCamera) {
       getCameras(propertyContext.id || id, navigate).then(setCamerasList);
@@ -88,7 +91,7 @@ const Cameras = () => {
         dismissableMask 
         onHide={() => setSelectedCamera(null)}
       >
-        <CameraEditForm camera={selectedCamera} properties={listOfPropertiesByUser} onClose={handleCloseEdit} />
+        <CameraEditForm camera={selectedCamera} onClose={handleCloseEdit} />
       </Dialog>
 
       <div className="m-0 md:m-8 mt-14 p-2 md:p-0 bg-white rounded-3xl">
@@ -109,7 +112,7 @@ const Cameras = () => {
           )}
         </div>
         
-   
+        {/* {loading ? <TableSkeleton /> : ( */}
         <GridComponent
           dataSource={camerasList}
           width="auto"
@@ -134,6 +137,7 @@ const Cameras = () => {
 
           <Inject services={[Search, Page, Toolbar]} />
         </GridComponent>
+        {/* )} */}
       </div>
     </>
   );

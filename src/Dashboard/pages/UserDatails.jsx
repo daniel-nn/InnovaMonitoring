@@ -80,7 +80,6 @@ export const UserDatails = () => {
       (
         userData && (
             <GridPropertiesProfile 
-            properties={userData.user.properties} 
             userId={userData.user.id} 
             setUserData={setUserData} />
         )

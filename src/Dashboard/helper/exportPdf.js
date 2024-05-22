@@ -74,7 +74,7 @@ const createHTMLString = (data) => {
                 <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.incidentDate || 'Null'}</span>
             </p>
             <p style="color: rgb(47, 117, 181); font-weight: bold;"> END TIME OF INCIDENT:
-                <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.incidentEndTime || 'Null'}</span>
+                <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.incidentEndTime || 'Continue'}</span>
             </p>
             <p style="color: rgb(47, 117, 181); font-weight: bold;"> CAMERAS FUNCTIONING:
                 <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.camerasFunctioning ? 'Yes' : 'No'}</span>

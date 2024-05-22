@@ -85,13 +85,13 @@
 
 
 .swal2-confirm-button-success {
-    background-color: rgb(50,135,64); /* Verde oscuro */
+    background-color: rgb(50,135,64); 
     color: white;
     border: none;
     border-radius: 0.25rem;
     padding: 0.5rem 1rem;
     font-size: 1rem;
-    margin-right: 0.5rem; /* Espacio a la derecha */
+    margin-right: 0.5rem; 
 }
 
     
@@ -114,8 +114,8 @@
 }
 
 .custom-swal2-confirm {
-    background-color: #007bff; /* Azul */
-    color: #ffffff; /* Blanco */
+    background-color: #007bff;
+    color: #ffffff; 
     border: none;
     box-shadow: 0 4px 8px rgba(0, 123, 255, 0.5);
     border-radius: 0.375rem;
@@ -124,5 +124,19 @@
 }
 
 .custom-swal2-confirm:hover {
-    background-color: #0056b3; /* Azul más oscuro */
+    background-color: #0056b3; 
+}
+
+.my-form-control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.my-form-control .MuiFormControlLabel-root {
+  margin-right: auto; 
+}
+
+.my-calendar {
+  flex-grow: 1;
 }

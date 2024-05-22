@@ -11,15 +11,17 @@ import { UserContext } from '../../context/UserContext';
     return `${month}-${day}-${date.getFullYear()}`;
   };
 
-  const formatTime = (date) => {
-    if (typeof date === 'string') {
-      date = new Date(date);
-    }
-    let hours = date.getHours().toString().padStart(2, '0');
-    let minutes = date.getMinutes().toString().padStart(2, '0');
-    return `${hours}:${minutes}`;
-  };
-
+const formatTime = (date) => {
+  if (!date) {
+    return null; // Retorna null directamente si la fecha es null o undefined
+  }
+  if (typeof date === 'string') {
+    date = new Date(date);
+  }
+  let hours = date.getHours().toString().padStart(2, '0');
+  let minutes = date.getMinutes().toString().padStart(2, '0');
+  return `${hours}:${minutes}`;
+};
 export const postReport = async (reportForm, t, setCreatingReport, userId) => {
   const formData = new FormData();
 
@@ -46,7 +48,8 @@ export const postReport = async (reportForm, t, setCreatingReport, userId) => {
     timeOfReport: formatTime(reportForm.timeOfReport),
     incidentDate: formatDate(reportForm.incidentDate),
     incidentStartTime: formatTime(reportForm.incidentStartTime),
-    incidentEndTime: formatTime(reportForm.incidentEndTime),
+    incidentEndTime: reportForm.persist ? null : formatTime(reportForm.incidentEndTime), // Envía null si persist es true
+    persist: reportForm.persist,
   })], { type: 'application/json' }));
 
   // Se cada archivo de las evidencias

@@ -25,7 +25,7 @@ export const CameraForm = ({ properties, setCameraFormFlag, setCameraSaved, came
     status: '',
     type: '',
     property: '',
-    model: '',
+
   };
 
   const {
@@ -37,7 +37,6 @@ export const CameraForm = ({ properties, setCameraFormFlag, setCameraSaved, came
     status,
     type,
     property,
-    model,
     // lon,
     // lat,
     // rotation,
@@ -135,24 +134,6 @@ console.log(cameraForm)
               options={["Dome", "PTZ", "Bullet", "LPR"]}
               placeholder={t("dashboard.cameras.dialog.type-placeholder")}
               className="w-full md:w-14rem"
-            />
-          </div>
-        </div>
-
-        <div className="p-inputgroup my-3 ml-3 flex flex-col">
-          <label htmlFor="username">{t("dashboard.cameras.dialog.model")}</label>
-          <div className="p-inputgroup">
-            <span className="p-inputgroup-addon">
-              <i className="pi pi-user"></i>
-            </span>
-            <InputText
-              value={model}
-              onChange={(e) =>
-                setCameraForm((i) => {
-                  return { ...cameraForm, model: e.target.value };
-                })
-              }
-              placeholder={t("dashboard.cameras.dialog.model-placeholder")}
             />
           </div>
         </div>

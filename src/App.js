@@ -73,7 +73,8 @@ function App() {
               <Route path="/dashboard/reports" element={<Reports />} />
               <Route path="/dashboard/NewReport" element={<NewReport />} />
               <Route path="/dashboard/EditReport" element={<EditReport />} />
-
+              <Route path="/dashboard/report-details/:id" element={<ReportDatails />} />
+              
               {/* */}
               <Route path="/dashboard/cameras" element={<Cameras />} />
               <Route path="/dashboard/Notifications" element={<Customers />} />
@@ -91,9 +92,6 @@ S
               <Route path="/dashboard/pie-reports" element={<Pie />} />
               <Route path="/dashboard/pie-levels" element={<PieLevels />} />
               <Route path="/dashboard/stacked" element={<Stacked />} />
-              <Route
-                path="/dashboard/report-details/:id"
-                element={<ReportDatails />}/>
               <Route path="/dashboard/camera/live-view" element={<CameraLiveView />}/> </Route>
           </Routes>
         {/* </Wrapper> */}

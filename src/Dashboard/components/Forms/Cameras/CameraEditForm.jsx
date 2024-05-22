@@ -13,7 +13,7 @@ import "../../../pages/css/Cameras/Cameras.css"
 import Swal from "sweetalert2";
 import { putEditCamera } from "../../../helper/Cameras/UpdateCamera/putEditCamera";
 
-export const CameraEditForm = ({ camera, properties, onClose }) => {
+export const CameraEditForm = ({ camera, onClose }) => {
     const [cameraForm, setCameraForm] = useState({});
     const {
         name,
@@ -23,13 +23,11 @@ export const CameraEditForm = ({ camera, properties, onClose }) => {
         imageFile,
         status,
         type,
-        property,
-        model,
     } = cameraForm || {};
     const statusList = ["Working", "Offline", "Vandalized"];
     const { t, i18n } = useTranslation("global");
 
-    console.log("propiedad", property)
+
     
     const handleImageChange = (event) => {
         const file = event.target.files[0];
@@ -157,24 +155,6 @@ export const CameraEditForm = ({ camera, properties, onClose }) => {
                         />
                     </div>
                 </div>
-
-                <div className="p-inputgroup my-3 ml-3 flex flex-col">
-                    <label htmlFor="username">{t("dashboard.cameras.dialog.model")}</label>
-                    <div className="p-inputgroup">
-                        <span className="p-inputgroup-addon">
-                            <i className="pi pi-user"></i>
-                        </span>
-                        <InputText
-                            value={model}
-                            onChange={(e) =>
-                                setCameraForm((i) => {
-                                    return { ...cameraForm, model: e.target.value };
-                                })
-                            }
-                            placeholder={t("dashboard.cameras.dialog.model-placeholder")}
-                        />
-                    </div>
-                </div>
             </div>
 
             <div className="flex">
@@ -237,29 +217,6 @@ export const CameraEditForm = ({ camera, properties, onClose }) => {
                                     return { ...cameraForm, dateInstalled: e.value };
                                 })
                             }
-                        />
-                    </div>
-                </div>
-            </div>
-
-            <div className="flex">
-                <div className="p-inputgroup my-3 ml-3 flex flex-col">
-                    <label htmlFor="username">{t("dashboard.cameras.dialog.property")}</label>
-                    <div className="p-inputgroup">
-                        <span className="p-inputgroup-addon">
-                            <i className="pi pi-user"></i>
-                        </span>
-                        <Dropdown
-                            value={property}
-                            onChange={(e) =>
-                                setCameraForm((i) => {
-                                    return { ...cameraForm, property: e.value };
-                                })
-                            }
-                            options={properties}
-                            optionLabel="name"
-                            placeholder={t("dashboard.cameras.dialog.property-placeholder")}
-                            className="w-full md:w-14rem"
                         />
                     </div>
                 </div>

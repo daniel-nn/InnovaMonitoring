@@ -14,7 +14,7 @@ import { postNewProperty } from "../helper/Properties/postNewProperty";
 import Swal from 'sweetalert2';
 import { NewPropertyForm } from "../components/Forms/Properties/NewPropertyForm";
 import { EditPropertyForm } from "../components/Forms/Properties/EditPropertyForm";
-
+import TableSkeleton from "../components/TableSkeleton";
 
 
 export const Properties = () => {
@@ -37,7 +37,7 @@ export const Properties = () => {
   const [editPropertyDialog, setEditPropertyDialog] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [validationErrors, setValidationErrors] = useState({});
-  
+  const [Loading, setLoading] = useState(true)
 
   // Contexto
   const {
@@ -53,6 +53,7 @@ export const Properties = () => {
 
   // Efecto para cargar propiedades
   useEffect(() => {
+    setLoading(false)
     const fetchProperties = async () => {
       try {
         const data = await getPropertiesMapped(navigate);
@@ -83,6 +84,7 @@ export const Properties = () => {
 
   const handleCloseEditPropertyDialog = (updatedProperty) => {
     setEditPropertyDialog(false);
+    setPropertyProvider({});
     if (updatedProperty) {
       setProperties(prevProperties => prevProperties.map(property =>
         property.id === updatedProperty.id ? updatedProperty : property
@@ -147,7 +149,7 @@ export const Properties = () => {
           )}
         </div>
 
-        {properties && properties.length > 0 && (
+        {Loading ? <TableSkeleton /> : (
           <GridComponent
             id="gridcomp"
             key={`${i18n.language}-${JSON.stringify(properties)}`}

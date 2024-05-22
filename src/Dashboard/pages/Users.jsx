@@ -34,6 +34,7 @@ import { getPropertiesInfo } from "../helper/getProperties";
 import { postNewUser } from "../helper/postNewUser";
 import Swal from 'sweetalert2';
 import './css/users/Users.css';
+import TableSkeleton from "../components/TableSkeleton";
 
 export const Users = () => {
   const {
@@ -53,10 +54,11 @@ export const Users = () => {
   const [roles, setRoles] = useState([]);
   const [properties, setProperties] = useState();
   const [validationErrors, setValidationErrors] = useState({});
-
+  const [loading, setLoading] = useState(true);
 
 
   useEffect(() => {
+    setLoading(false)
     getUsers().then((data) => setUsers(data));
     getPropertiesInfo(navigate).then((data) => {
       propertiesSelectedVar = data.map((i) => {
@@ -360,6 +362,7 @@ export const Users = () => {
           )}
         </div>
     
+        {loading ? <TableSkeleton /> : (
         <GridComponent
           id="userGrid"
           key={i18n.language}
@@ -387,6 +390,7 @@ export const Users = () => {
             ]}
           />
         </GridComponent>
+        )}
       </div>
     </>
   );

@@ -15,6 +15,7 @@ import CircularProgress, {
   CircularProgressProps,
 } from "@mui/material/CircularProgress";
 import Stomp from "stompjs";
+import TableSkeleton from "../components/TableSkeleton";
 import { Toast } from "primereact/toast";
 
 const Reports = () => {
@@ -24,6 +25,9 @@ const Reports = () => {
   const [reportes, setReportes] = useState([]);
   const [t, i18n] = useTranslation("global");
   const [activeView, setActiveView] = useState('default');
+  const [loading, setLoading] = useState(true);
+
+
 
   const { activeMenu } = useStateContext();
   const toast = useRef(null);
@@ -34,7 +38,9 @@ const Reports = () => {
   let idStorage = propertyStorage.id;
   let id = propertyContext.id || idStorage;
 
+
   const fetchReports = useCallback(async () => {
+      setLoading(false);
     let reports;
     try {
       reports = await getNumberOfReportsByRole(id, user.id, userRole);
@@ -109,7 +115,16 @@ const Reports = () => {
         </div>
       }
        <Toast ref={toast} />
-      <Header category={t("dashboard.reports.reports-tittle")} title={t("dashboard.reports.reports-of") + propertyContext.name} />
+      <Header title={
+        t(
+          activeView === 'default'
+            ? `${t("dashboard.reports.reports-of")}${propertyContext.name}`
+            : "dashboard.reports.buttons.non-verified-reports"
+        )
+      }
+      />
+
+    
       
       <div className="card flex justify-start py-2 mb-7">
         {(userRole === "Admin" || userRole === "Monitor") && (
@@ -131,6 +146,7 @@ const Reports = () => {
           </div>
         )}
       </div>
+      {loading ? <TableSkeleton />: (
       <GridComponent
         id="gridcomp"
         key={`${activeView}-${i18n.language}`}
@@ -168,6 +184,7 @@ const Reports = () => {
         </ColumnsDirective>
       
       </GridComponent>
+      )}
     </div>
   );
 };

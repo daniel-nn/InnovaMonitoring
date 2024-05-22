@@ -1,7 +1,6 @@
-// putDeletePropertyToUser.js
 import Swal from 'sweetalert2';
 
-const putDeletePropertyToUser = async (userId, propertyId, t, setUserData) => {
+const putDeletePropertyToUser = async (userId, propertyId, t) => {
     const url = `${process.env.REACT_APP_SERVER_IP}/users/${userId}/remover-propiedad`;
 
     // Confirmación de eliminación
@@ -16,6 +15,7 @@ const putDeletePropertyToUser = async (userId, propertyId, t, setUserData) => {
         cancelButtonText: t('dashboard.user-details.properties.table.delete-assigned-property.no')
     });
 
+
     if (result.isConfirmed) {
         try {
             const response = await fetch(url, {
@@ -24,33 +24,36 @@ const putDeletePropertyToUser = async (userId, propertyId, t, setUserData) => {
                 body: JSON.stringify({ id: propertyId })
             });
 
-            const data = await response.json(); // Intenta parsear siempre como JSON
-
-            if (response.ok) {
-                setUserData(prevData => ({
-                    ...prevData,
-                    user: {
-                        ...prevData.user,
-                        properties: prevData.user.properties.filter(p => p.id !== propertyId)
-                    }
-                }));
-                Swal.fire({
-                    toast: true,
-                    position: 'top-end',
-                    text: `${t('dashboard.user-details.properties.property-remove')}`,
-                    icon: 'success',
-                    showConfirmButton: false,
-                    timer: 3000
-                });
-            } else {
-                throw new Error(data.error || "Unknown error occurred");
+            if (!response.ok) {
+                const errorResponse = await response.json();
+                throw new Error(errorResponse.error || "Failed to delete property");
             }
-        } catch (error) {
-            console.error('Error al eliminar la propiedad:', error);
-            Swal.fire(t('Error!'), error.toString(), 'error');
-        }
-    };
 
-}
+            const data = await response.json();
+
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                text: `${t('dashboard.user-details.properties.property-remove')}`,
+                icon: 'success',
+                showConfirmButton: false,
+                timer: 3000
+            });
+            return { success: true, data: data };
+        } catch (error) {
+            console.error('Error deleting property:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: error.message,
+                showConfirmButton: true,
+            });
+            return { success: false, message: error.message };
+        }
+    } else {
+        return { success: false, message: "Operation cancelled" };
+    }
+};
+
 export default putDeletePropertyToUser;
 

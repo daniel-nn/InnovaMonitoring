@@ -19,6 +19,7 @@ import { postNewUser } from "../helper/postNewUser";
 import { getRoles } from "../helper/getRoles";
 import Swal from 'sweetalert2';
 import { getPropertiesInfo } from "../helper/getProperties";
+import TableSkeleton from "../components/TableSkeleton";
 
 
 export const Agents = () => {
@@ -35,9 +36,11 @@ export const Agents = () => {
   const [userSaved, setUserSaved] = useState(false);
   const [roles, setRoles] = useState([]);
   const [validationErrors, setValidationErrors] = useState({});
+  const [loading, setLoading] = useState(true);
 
 
   const fetchMonitors = async () => {
+    setLoading(false)
     const monitors = await getUserRolMonitor(navigate);
     setAgentData(monitors);
   };
@@ -344,33 +347,36 @@ export const Agents = () => {
           )}
       
         </div> */}
+        {loading ? <TableSkeleton /> : (
+          <GridComponent
+            id="gridcomp"
+            key={i18n.language}
+            dataSource={agentData}
+            allowPaging
+            allowSorting
+            allowExcelExport
+            contextMenuItems={contextMenuItems}
+            toolbar={toolbarOptions}
+            allowResizing={true}
 
-        <GridComponent
-          id="gridcomp"
-          key={i18n.language}
-          dataSource={agentData}
-          allowPaging
-          allowSorting
-          allowExcelExport
-          contextMenuItems={contextMenuItems}
-          toolbar={toolbarOptions}
-        >
-          <ColumnsDirective>
-            {orderAgentsAdmin(t).map((column, index) => (
-              <ColumnDirective key={index} {...column} />
-            ))}
-          </ColumnsDirective>
-          <Inject
-            services={[
-              Resize,
-              Sort,
-              ContextMenu,
-              Filter,
-              Page,
-              Search,
-            ]}
-          />
-        </GridComponent>
+          >
+            <ColumnsDirective>
+              {orderAgentsAdmin(t).map((column, index) => (
+                <ColumnDirective key={index} {...column} />
+              ))}
+            </ColumnsDirective>
+            <Inject
+              services={[
+                Resize,
+                Sort,
+                ContextMenu,
+                Filter,
+                Page,
+                Search,
+              ]}
+            />
+          </GridComponent>
+        )}
       </div>
     </>
   );

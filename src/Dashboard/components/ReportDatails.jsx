@@ -35,6 +35,7 @@ import { getReportId } from "../helper/getReportId";
 import { deleteItem } from "../helper/delete";
 import Swal from "sweetalert2";
 import { useTranslation } from "react-i18next";
+import postViewedUser from "../helper/postViewedUser ";
 import { GridPdf } from "../data/dummy";
 
 let url = `${process.env.REACT_APP_SERVER_IP}/reports`;
@@ -97,6 +98,7 @@ export const ReportDatails = () => {
     });
   };
 
+
   const [t, i18n] = useTranslation("global");
   let dataImages = [];
   let dataVideos = [];
@@ -107,7 +109,10 @@ export const ReportDatails = () => {
   const [reportDetails, setReportDetails] = useState({});
   //const {report, isLoading} = useFetchReportId(id, navigate);
   let user = JSON.parse(localStorage.getItem("user"));
-  let userRole = user.rol?.rolName || "";
+  let userRole = user.role?.rolName || "Monitor";
+  console.log("hola",user)
+  console.log("user Role das",userRole)
+
   const {
     reportSaved,
     setreportSaved,
@@ -140,6 +145,8 @@ export const ReportDatails = () => {
       console.log("Report data:", data);
     });
   }, [reportSaved]);
+
+
 
   const deleteReport = () => {
     Swal.fire({
@@ -190,7 +197,24 @@ export const ReportDatails = () => {
     const translationPath = `dashboard.reports.case-details.types-of-incident.${incidentKey}`;
     setIncidentType(t(translationPath));
   }, [reportDetails, t]);
-  console.log("progress");
+
+
+  useEffect(() => {
+    if (userRole === "Client" && user.id && reportDetails.id && !user.viewed) {
+      postViewedUser(user.id, reportDetails.id)
+        .then(() => {
+          user.viewed = true;
+          localStorage.setItem("user", JSON.stringify(user));
+          console.log("Marked as viewed and updated in localStorage.");
+        })
+        .catch(error => {
+          console.error("Error marking the report as viewed:", error);
+        });
+    } else {
+      console.log("No need to mark as viewed or already marked.");
+    }
+  }, []); 
+
   console.log(progress);
   return (
     <div className="mx-20 md:m-10  md:p-0 bg-white rounded-3xl">
@@ -203,8 +227,8 @@ export const ReportDatails = () => {
         </div>
       </div>{" "}
       <div>
-        {userRole == "Admin" ? (
-          <div className="flex justify-end">
+ 
+          {/* <div className="flex justify-end">
             <Button
               icon="pi pi-check"
               rounded
@@ -238,11 +262,10 @@ export const ReportDatails = () => {
                 deleteReport();
               }}
             />
-
-          </div>
-        ) : (
-          <></>
-        )}
+          </div> */}
+        
+        
+      
 
         <div className="px-4 py-3 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-3">
         <div className="absolute right-6">
@@ -530,21 +553,24 @@ export const ReportDatails = () => {
                   </p>
                 </div>
               </div>
+
               <div className="flex max-w-full">
                 <div className=" mr-3">
                   <div className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-50">
                     <BiTimeFive className="text-yellow-600 w-5 h-6"></BiTimeFive>
                   </div>
                 </div>
+
                 <div className="flex items-center w-full border-b-1">
                   <p className=" text-lg font-bold ">
                     {t("dashboard.reports.case-details.incident-end-time")}
                   </p>
                   <p className="text-lg text-gray-900 ml-3">
-                    {reportDetails?.incidentEndTime}
+                    {reportDetails?.incidentEndTime || t('dashboard.reports.case-details.persist')}
                   </p>
                 </div>
               </div>
+
               <div className="flex max-w-full ">
                 <div className=" mr-3">
                   <div className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-50">

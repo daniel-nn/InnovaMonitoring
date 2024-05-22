@@ -524,6 +524,8 @@
         "incident-start-time-placeholder": "Start Of The Incident",
         "select-incident-end-time": "Select The End Time Of The Incident",
         "incident-end-time-placeholder": "End Of The Incident",
+        "persist": "The Incident Continue?",
+        "persist-placeholder": "Continue",
         "select-incident": "Select The Incident",
         "incident": "Incident",
         "select-report-level": "Select The Report Level",
@@ -633,6 +635,8 @@
         "incident-start-time-placeholder": "Start Of The Incident",
         "select-incident-end-time": "Select The End Time Of The Incident",
         "incident-end-time-placeholder": "End Of The Incident",
+        "persist": "The Incident Continue?",
+        "persist-placeholder": "Continue",
         "select-incident": "Select The Incident",
         "incident": "Incident",
         "select-report-level": "Select The Report Level",
@@ -762,6 +766,7 @@
         "date-of-report": "Date:",
         "incident-start-time": "Incident Start Time:",
         "incident-end-time": "Incident End Time:",
+        "persist": "Contine",
         "time-of-report": "Time Of Report:",
         "report-pdf": "Report Pdf:",
         "numer-case": "Numer Case:",
@@ -943,7 +948,7 @@
         "image": "Imagen",
         "name": "Name",
         "email": "Email",
-        "password": "Password",
+        "reports": "Total Reports",
         "edit": "Edit",
         "delete": "Delete"
       }
@@ -1039,7 +1044,7 @@
           "property-name": "Property Name",
           "address": "Address",
           "property-img": "Property Image",
-          "preview-image":"Preview Image",
+          "preview-image": "Preview Image",
           "property-map": "Property Map",
           "preview-map": "Map Image Preview",
           "search-img": "Search Image",
@@ -1059,7 +1064,9 @@
           "send": "Send",
           "cancel": "Cancel",
           "swal": {
-            "image-updated": "Updated"
+            "image-updated": "Updated",
+            "careful": "Be Careful",
+            "select-image": "Select A Different Image"
           }
         },
         "swal": {
