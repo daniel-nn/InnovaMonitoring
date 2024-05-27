@@ -43,7 +43,6 @@ const EditReport = () => {
 
     
 
-
     
     useEffect(() => {
         const fetchProperties = async () => {
@@ -837,7 +836,7 @@ const EditReport = () => {
                     </div>
                 </div>
 
-                <div className="w-full md:w-1/3 px-3 mb-6">
+                {/* <div className="w-full md:w-1/3 px-3 mb-6">
                     <label htmlFor="policeNumerCase" className="font-bold block mb-2">
                         {t("dashboard.reports.edit-report.policeNumerCase")}
                     </label>
@@ -850,7 +849,51 @@ const EditReport = () => {
                         })} placeholder={t("dashboard.reports.edit-report.policeNumerCase-placeholder")}
                             mode="decimal" minFractionDigits={0} />
                     </div>
+                </div> */}
+
+                <div className="w-full md:w-1/3 px-3 mb-6">
+                    <div className="flex flex-col md:flex-row items-center justify-between mb-2">
+                        <div className="flex-grow">
+                            <label htmlFor="policeNumerCase" className="font-bold">
+                                {t("dashboard.reports.new-report.policeNumerCase")}
+                            </label>
+                            <FormControlLabel
+                                label={t("dashboard.reports.new-report.include-police-number-case")}
+                                control={
+                                    <Checkbox
+                                        checked={reportForm.checkBoxPoliceNumerCase}
+                                        onChange={(e) => {
+                                            setReportForm(prev => ({
+                                                ...prev,
+                                                checkBoxPoliceNumerCase: e.target.checked,
+                                                policeNumerCase: e.target.checked ? prev.policeNumerCase : ""
+                                            }));
+                                        }}
+                                        color="primary"
+                                    />
+                                }
+                                className="ml-2"
+                            />
+                        </div>
+                        <div className="flex-grow pt-8">
+                            <InputNumber
+                                value={reportForm.policeNumerCase}
+                                onValueChange={(e) =>
+                                    setReportForm((prev) => {
+                                        return { ...prev, policeNumerCase: e.value };
+                                    })
+                                }
+                                placeholder={t("dashboard.reports.new-report.policeNumerCase-placeholder")}
+                                mode="decimal"
+                                minFractionDigits={0}
+                                disabled={!reportForm.checkBoxPoliceNumerCase}
+                                className="w-full"
+                            />
+                        </div>
+                    </div>
                 </div>
+
+
 
                 <div className="w-full md:w-1/3 px-3 mb-6">
                     <label htmlFor="NotificationClient" className="font-bold block mb-2">

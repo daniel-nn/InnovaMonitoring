@@ -1,14 +1,16 @@
 import React, { useContext } from "react";
 import Swal from "sweetalert2";
 
-export const getPropertiesInfo = async (navigate) => {
+export const getPropertiesInfo = async (navigate, userRole) => {
  
   let resp = {};
  
   const url = `${process.env.REACT_APP_SERVER_IP}/properties`;
+  const headers = new Headers();
+  headers.append("Role", userRole)
   let data = {};
   try {
-    resp = await fetch(url);
+    resp = await fetch(url, { headers });
 
     data = await resp.json();
     

@@ -1062,7 +1062,7 @@ const NewReport = () => {
               <label htmlFor="policeNumerCase" className="font-bold">
                 {t("dashboard.reports.new-report.policeNumerCase")}
               </label>
-              <FormControlLabel
+              <FormControlLabel 
                 label={t("dashboard.reports.new-report.include-police-number-case")}
                 control={
                   <Checkbox
@@ -1083,6 +1083,7 @@ const NewReport = () => {
             <div className="flex-grow pt-8">
               <InputNumber
                 value={reportForm.policeNumerCase}
+                min="1" 
                 onValueChange={(e) =>
                   setReportForm((prev) => {
                     return { ...prev, policeNumerCase: e.value };

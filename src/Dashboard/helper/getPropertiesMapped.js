@@ -1,14 +1,15 @@
 import React, { useContext } from "react";
 import Swal from "sweetalert2";
 
-export const getPropertiesMapped = async (navigate) => {
+export const getPropertiesMapped = async (navigate, userRole) => {
   let resp = {};
   let properties = [];
-
+  const headers = new Headers();
+  headers.append("Role", userRole)
   const url = `${process.env.REACT_APP_SERVER_IP}/properties`;
 
   try {
-    resp = await fetch(url);
+    resp = await fetch(url, { headers });
 
     if (resp.status === 200) {
       let data = await resp.json();
@@ -17,8 +18,6 @@ export const getPropertiesMapped = async (navigate) => {
         // Añade la URL de la imagen al objeto property, asegurando que si 'img' es vacío, se use una imagen por defecto.
         property.PropertyImage = `${process.env.REACT_APP_S3_BUCKET_URL}/${property.img || "Resources/NoImage.png"}`;
 
-        // Aquí puedes añadir más lógica si necesitas manejar otros campos que podrían ser null o vacíos
-        // Por ejemplo:
         property.name = property.name || " ";
         property.direction = property.direction || " ";
         property.mapImg = property.mapImg || "Resources/NoImage.png";

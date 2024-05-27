@@ -55,7 +55,7 @@ export const Properties = () => {
     setLoading(false)
     const fetchProperties = async () => {
       try {
-        const data = await getPropertiesMapped(navigate);
+        const data = await getPropertiesMapped(navigate, userRole);
         if (data && data.length > 0) {
           setProperties(data);
         } else {
@@ -67,7 +67,7 @@ export const Properties = () => {
     };
 
     fetchProperties();
-  }, [navigate, flag]);
+  }, [navigate, flag, userRole]);
 
 
   // Handlers para diálogos

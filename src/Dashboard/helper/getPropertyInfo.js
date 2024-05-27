@@ -2,9 +2,10 @@ import Swal from "sweetalert2";
 
 export const GetPropertyInfo = async (id, userRole) => {
   const url = `${process.env.REACT_APP_SERVER_IP}/properties/${id}`;
-
+  const headers = new Headers();
+  headers.append("Role", userRole);
   try {
-    const resp = await fetch(url);
+    const resp = await fetch(url, { headers });
     if (!resp.ok) {
       throw new Error(`HTTP status ${resp.status}`);
     }
@@ -21,20 +22,14 @@ export const GetPropertyInfo = async (id, userRole) => {
       return null;
     }
 
-    // Mapear los informes dependiendo del rol del usuario
-    const reportsMapped = userRole === "Client"
-      ? data.reports?.filter(report => report.verified)
-      : data.reports;
-
     const propertyImage = `${process.env.REACT_APP_S3_BUCKET_URL}/${data.img}`;
 
     const dataDto = {
       ...data,
       camerasWorking: data.camerasOnline, 
-      camerasOffline: data.camerasOffline,
+      camerasOffline: data.camerasOffline || 2,
       camerasVandalized: data.camerasVandalized,
-      numOfCamerasTotal: data.camerasOnline + data.camerasOffline + data.camerasVandalized
-    };
+      numOfCamerasTotal: data.numOfCamerasTotal};
 
     return dataDto;
 

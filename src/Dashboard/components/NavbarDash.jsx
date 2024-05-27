@@ -71,7 +71,7 @@ const Navbar = () => {
     // Función asíncrona para obtener las propiedades dependiendo del rol
     const fetchProperties = async () => {
       if (userRole === 'Admin' || userRole === 'Monitor') {
-        const propertiesData = await getPropertiesInfo(navigate);
+        const propertiesData = await getPropertiesInfo(navigate, userRole);
         setProperties(propertiesData); // Actualizamos el estado con todas las propiedades si es Admin o Monitor
       }
     };
