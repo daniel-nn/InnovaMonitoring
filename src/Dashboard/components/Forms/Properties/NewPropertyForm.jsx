@@ -6,19 +6,24 @@ import { postNewProperty } from "../../../helper/Properties/postNewProperty";
 import { UserContext } from "../../../../context/UserContext";
 
 
-export const NewPropertyForm = ({  onClose }) => {
-    const { propertyProvider, setPropertyProvider } = useContext(UserContext);
+export const NewPropertyForm = ({ onClose }) => {
     const [validationErrors, setValidationErrors] = useState({});
     const { t } = useTranslation("global");
-    const [mapImgPreview, setMapImgPreview] = useState(propertyProvider.mapImg || '');
-    const [imgPreview, setImgPreview] = useState(propertyProvider.img || '');
-
+    const [propertyForm, setPropertyForm] = useState({
+        name: '',
+        direction: '',
+        img: null,
+        mapImg: null
+    });
+    const [mapImgPreview, setMapImgPreview] = useState(propertyForm.mapImg || '');
+    const [imgPreview, setImgPreview] = useState(propertyForm.img || '');
+    
     const handleInputChange = (event, field) => {
         if (field === 'img' || field === 'mapImg') {
             if (event.target && event.target.files && event.target.files.length > 0) {
                 const file = event.target.files[0];
                 const imageUrl = URL.createObjectURL(file);
-                setPropertyProvider(prev => ({
+                setPropertyForm(prev => ({
                     ...prev,
                     [field]: file
                 }));
@@ -31,7 +36,7 @@ export const NewPropertyForm = ({  onClose }) => {
         } else {
             if (event.target) {
                 const value = event.target.value;
-                setPropertyProvider(prev => ({
+                setPropertyForm(prev => ({
                     ...prev,
                     [field]: value
                 }));
@@ -49,7 +54,7 @@ export const NewPropertyForm = ({  onClose }) => {
     const validatePropertyDetails = () => {
 
         const errors = {};
-        const { name, direction, img, mapImg } = propertyProvider;
+        const { name, direction, img, mapImg } = propertyForm;
         if (!name) errors.name = t("dashboard.properties.dialog.swal.validate-property-details.name");
         if (!direction) errors.direction = t("dashboard.properties.dialog.swal.validate-property-details.direction");
         if (!img || typeof img === 'string' || !img.name) errors.img = t("dashboard.properties.dialog.swal.validate-property-details.img-url");
@@ -62,12 +67,12 @@ export const NewPropertyForm = ({  onClose }) => {
 
     const handleSaveProperty = async () => {
         if (validatePropertyDetails()) {
-            await postNewProperty(propertyProvider, t);
+            await postNewProperty(propertyForm, t);
             onClose();
-            setPropertyProvider({});
+            setPropertyForm({});
         }
     };
-    console.log(propertyProvider)
+    console.log(propertyForm)
 
     const handleImageChange = (event, type) => {
         const file = event.target.files[0];
@@ -75,16 +80,15 @@ export const NewPropertyForm = ({  onClose }) => {
             const imageUrl = URL.createObjectURL(file);
             if (type === 'img') {
                 setImgPreview(imageUrl);
-                setPropertyProvider(prev => ({ ...prev, img: file }));
+                setPropertyForm(prev => ({ ...prev, img: file }));
             } else if (type === 'mapImg') {
                 setMapImgPreview(imageUrl);
-                setPropertyProvider(prev => ({ ...prev, mapImg: file }));
+                setPropertyForm(prev => ({ ...prev, mapImg: file }));
             }
         }
     };
-    
 
-    console.log(propertyProvider)
+
 
     return (
         <div>
@@ -95,7 +99,7 @@ export const NewPropertyForm = ({  onClose }) => {
                         <span className="p-float-label">
                             <InputText
                                 id="name"
-                                value={propertyProvider.name}
+                                value={propertyForm.name}
                                 onChange={(e) => handleInputChange(e, 'name')}
                             />
                         </span>
@@ -109,7 +113,7 @@ export const NewPropertyForm = ({  onClose }) => {
                         <span className="p-float-label">
                             <InputText
                                 id="direction"
-                                value={propertyProvider.direction}
+                                value={propertyForm.direction}
                                 onChange={(e) => handleInputChange(e, 'direction')}
                             />
                         </span>
@@ -133,8 +137,8 @@ export const NewPropertyForm = ({  onClose }) => {
                         <label htmlFor="img" className="file-input-label">{t("dashboard.properties.dialog.add-property.search-img")}</label>
                         {imgPreview && (
                             <div className="image-preview-container mt-3 flex flex-col items-center">
-                                <img src={imgPreview} alt={t('dashboard.properties.dialog.add-property.preview-img')} className="image-preview" style={{ maxHeight: '300px', maxWidth: '100%', borderRadius: '10%' }} />
-                                <span className="file-name mt-2">{propertyProvider.img ? propertyProvider.img.name : 'No file chosen'}</span>
+                                <img src={imgPreview} alt="Property Image Preview" className="image-preview" style={{ maxHeight: '300px', maxWidth: '100%', borderRadius: '10%' }} />
+                                <span className="file-name mt-2">{propertyForm.img ? propertyForm.img.name : 'No file chosen'}</span>
                             </div>
                         )}
                         {validationErrors.img && <small className="p-error">{validationErrors.img}</small>}
@@ -155,8 +159,8 @@ export const NewPropertyForm = ({  onClose }) => {
                         <label htmlFor="mapImg" className="file-input-label">{t("dashboard.properties.dialog.add-property.search-img")}</label>
                         {mapImgPreview && (
                             <div className="image-preview-container mt-3 flex flex-col items-center">
-                                <img src={mapImgPreview} alt={t('dashboard.properties.dialog.add-property.previer-map')} className="image-preview" style={{ maxHeight: '300px', maxWidth: '100%', borderRadius: '10%' }} />
-                                <span className="file-name mt-2">{propertyProvider.mapImg ? propertyProvider.mapImg.name : 'No file chosen'}</span>
+                                <img src={mapImgPreview} alt="Map Image Preview" className="image-preview" style={{ maxHeight: '300px', maxWidth: '100%', borderRadius: '10%' }} />
+                                <span className="file-name mt-2">{propertyForm.mapImg ? propertyForm.mapImg.name : 'No file chosen'}</span>
                             </div>
                         )}
                         {validationErrors.mapImg && <small className="p-error">{validationErrors.mapImg}</small>}

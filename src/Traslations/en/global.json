@@ -541,7 +541,7 @@
           "na": "N/A",
           "listedOnReport": "listed On Report"
         },
-        "select-observerdViaCameras": "observer Via Cameras",
+        "select-observedViaCameras": "observer Via Cameras",
         "is-policeFirstResponderNotified": "Police First Responder Notified",
         "policeFirstResponderSceneeholder": "Police First Responder",
         "police-first-responder-scene": "Police First Responder On Scene",
@@ -559,6 +559,7 @@
         "securityGuardsNotifiedholder": "Security Guards Notified",
         "securityGuardsScene": "Security Guards On Scene",
         "securityGuardsScene-placeholder": "Security Guards On Scene",
+        "include-police-number-case": "Enable Field",
         "policeNumerCase": "Police Case Number",
         "policeNumerCase-placeholder": "Police Case Number",
         "NotificationClient": "Form Of Notification To Client",
@@ -584,11 +585,12 @@
         },
         "report-details": "Report Details",
         "report-details-placeholder": "Report Description",
-        "upload-evidences": "Agregar evidencias.",
-        "drop-evidences": "Suelta las evidencias",
-        "evidence-removed": "Eviencia eliminada",
+        "upload-evidences": "Add Evidences.",
+        "drop-evidences": "Drop the Evidences",
+        "evidence-removed": "Evidence removed",
         "swal": {
-          "confirmation": "Are you sure to submit the report for the property - ",
+          "new-report": "New Report",
+          "confirmation": "Select the Property to Report",
           "cancel": "Cancel",
           "send": "Send",
           "don't-save": "Do Not Send",
@@ -652,7 +654,7 @@
           "na": "N/A",
           "listedOnReport": "listed On Report"
         },
-        "select-observerdViaCameras": "observer Via Cameras",
+        "select-observedViaCameras": "observer Via Cameras",
         "is-policeFirstResponderNotified": "Police First Responder Notified",
         "policeFirstResponderSceneeholder": "Police First Responder",
         "police-first-responder-scene": "Police First Responder On Scene",
@@ -778,7 +780,13 @@
         "yes": "Yes",
         "no": "No",
         "video-gallery": "Video Gallery:",
-        "image-gallery": "Image Gallery:"
+        "image-gallery": "Image Gallery:",
+        "viewed": {
+          "title": "Viewed By",
+          "name": "Name",
+          "date-of-view": "Date Of View",
+          "time-of-view": "Time Of View"
+        }
       }
     },
     "cameras": {
@@ -1056,7 +1064,7 @@
           "property-name": "Property Name",
           "address": "Address",
           "property-img": "Property Image",
-          "preview-image": "Preview Image",
+          "preview-img": "Preview Image",
           "property-map": "Property Map",
           "preview-map": "Map Image Preview",
           "search-img": "Search Image",

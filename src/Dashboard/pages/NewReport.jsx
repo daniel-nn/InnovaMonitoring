@@ -4,7 +4,6 @@ import { UserContext } from "../../context/UserContext";
 import "primeicons/primeicons.css";
 import { useNavigate } from "react-router-dom";
 import { getPropertiesInfo } from "../helper/getProperties";
-import { getAgents } from "../helper/getAgents";
 import { getIncidents } from "../helper/getIncidents";
 import { useTranslation } from "react-i18next";
 import { Button } from "primereact/button";
@@ -17,6 +16,8 @@ import { InputTextarea } from "primereact/inputtextarea";
 import { Calendar } from "primereact/calendar";
 import { RadioButton } from "primereact/radiobutton";
 import FormControlLabel from '@mui/material/FormControlLabel';
+import ConfirmSendReport from "../components/Reports/NewReport/ConfirmSendReport";
+import { Dialog } from 'primereact/dialog';
 
 import exportPDF from "../helper/exportPdf";
 import { getAdminsAndMonitors } from "../helper/getUserAdminsaAndMonitors";
@@ -33,6 +34,8 @@ const NewReport = () => {
   const [t, i18n] = useTranslation("global");
   const navigate = useNavigate();
   const { reportForm, setReportForm } = useContext(UserContext);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+
   const resetReportForm = () => {
     setReportForm({
       id: "",
@@ -50,11 +53,12 @@ const NewReport = () => {
       numerCase: "",
       camerasFunctioning: true,
       listMalfunctioningCameras: "",
-      observerdViaCameras: true,
+      observedViaCameras: true,
       policeFirstResponderNotified: false,
       policeFirstResponderScene: "",
       securityGuardsNotified: false,
       securityGuardsScene: false,
+      checkBoxPoliceNumerCase: false,
       policeNumerCase: "",
       formNotificationClient: "",
       emailedReport: "",
@@ -97,7 +101,6 @@ const NewReport = () => {
       securityGuardsScene: t(
         "dashboard.reports.new-report.securityGuardsScene"
       ),
-      policeNumerCase: t("dashboard.reports.new-report.policeNumerCase"),
       formNotificationClient: t(
         "dashboard.reports.new-report.NotificationClient"
       ),
@@ -107,6 +110,23 @@ const NewReport = () => {
     if (!reportForm.persist) {
       fieldsToValidate.incidentEndTime = t("dashboard.reports.new-report.select-incident-end-time");
     }
+
+
+    if (reportForm.checkBoxPoliceNumerCase && !reportForm.policeNumerCase) {
+      Swal.fire({
+        title: t("dashboard.reports.new-report.swal.fill-missing-field-title"),
+        text: t("dashboard.reports.new-report.swal.fill-missing-field") + t("dashboard.reports.new-report.policeNumerCase"),
+        icon: "warning",
+        confirmButtonText: "Ok",
+        customClass: {
+          confirmButton: "custom-swal2-confirm",
+        },
+        buttonsStyling: false,
+      });
+      return false;
+    }
+
+    
     const missingFieldKey = Object.keys(fieldsToValidate).find((field) => {
       const fieldParts = field.split(".");
       let value = reportForm;
@@ -170,7 +190,7 @@ const NewReport = () => {
     numerCase,
     camerasFunctioning,
     listMalfunctioningCameras,
-    observerdViaCameras,
+    observedViaCameras,
     policeFirstResponderNotified,
     policeFirstResponderScene,
     securityGuardsNotified,
@@ -251,14 +271,14 @@ const NewReport = () => {
     });
   };
 
-  useEffect(() => {
-    const fetchProperties = async () => {
-      const propertiesData = await getPropertiesInfo(navigate);
-      setProperties(propertiesData);
-    };
+    useEffect(() => {
+      const fetchProperties = async () => {
+        const propertiesData = await getPropertiesInfo(navigate);
+        setProperties(propertiesData);
+      };
 
-    fetchProperties();
-  }, [navigate]);
+      fetchProperties();
+    }, [navigate]);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -467,48 +487,11 @@ const NewReport = () => {
 
   const sendingreport = () => {
     if (!validateForm()) return;
-
-    Swal.fire({
-      title:
-        t("dashboard.reports.new-report.swal.confirmation") +
-        (reportForm.property?.name || " "),
-      icon: "info",
-      showDenyButton: true,
-      showCancelButton: true,
-      confirmButtonText:
-        '<i class="pi pi-check"></i> ' +
-        t("dashboard.reports.new-report.swal.send"),
-      denyButtonText:
-        `<i class="pi pi-times"></i> ` +
-        t("dashboard.reports.new-report.swal.don't-save"),
-      cancelButtonText: t("dashboard.reports.new-report.swal.cancel"),
-      buttonsStyling: false,
-      customClass: {
-        confirmButton: "swal2-confirm-button-success",
-        denyButton: "swal2-deny-button",
-        cancelButton: "swal2-cancel-button",
-      },
-    }).then((result) => {
-      if (result.isConfirmed) {
-        postReport(reportForm, t, setCreatingReport, user.id);
-        setCreatingReport(true);
-        navigate("/dashboard/reports");
-        resetReportForm();
-      } else if (result.isDenied) {
-        resetReportForm();
-        Swal.fire({
-          icon: "error",
-          title: t("dashboard.reports.new-report.swal.canceled-report"),
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-        });
-      }
-    });
+    setShowConfirmDialog(true);
   };
 
+
+      
   return (
     <div className="m-20 md:m-10 mt-14 p-2 md:p-0 bg-white rounded-3xl">
         
@@ -866,23 +849,23 @@ const NewReport = () => {
         </div>
 
         <div className="w-full md:w-1/3 px-3 mb-6 text-center">
-          <label htmlFor="observerdViaCameras" className="font-bold block mb-2">
-            {t("dashboard.reports.new-report.select-observerdViaCameras")}
+          <label htmlFor="observedViaCameras" className="font-bold block mb-2">
+            {t("dashboard.reports.new-report.select-observedViaCameras")}
           </label>
           <div className="flex justify-center">
             <div className="flex align-items-center mr-2">
               <RadioButton
                 inputId="camerasYes"
-                name="observerdViaCameras"
+                name="observedViaCameras"
                 value={true}
                 onChange={(e) => {
                   console.log("Seleccionado:", e.value);
                   setReportForm((prevForm) => ({
                     ...prevForm,
-                    observerdViaCameras: e.value,
+                    observedViaCameras: e.value,
                   }));
                 }}
-                checked={reportForm.observerdViaCameras === true}
+                checked={reportForm.observedViaCameras === true}
               />
               <label htmlFor="camerasYes" className="ml-2">
                 {t("dashboard.reports.new-report.yes")}
@@ -891,16 +874,16 @@ const NewReport = () => {
             <div className="flex align-items-center ml-4">
               <RadioButton
                 inputId="camerasNo"
-                name="observerdViaCameras"
+                name="observedViaCameras"
                 value={false}
                 onChange={(e) => {
                   console.log("Seleccionado:", e.value);
                   setReportForm((prevForm) => ({
                     ...prevForm,
-                    observerdViaCameras: e.value,
+                    observedViaCameras: e.value,
                   }));
                 }}
-                checked={reportForm.observerdViaCameras === false}
+                checked={reportForm.observedViaCameras === false}
               />
               <label htmlFor="camerasNo" className="ml-2">
                 {t("dashboard.reports.new-report.no")}
@@ -1074,29 +1057,49 @@ const NewReport = () => {
         </div>
 
         <div className="w-full md:w-1/3 px-3 mb-6">
-          <label htmlFor="policeNumerCase" className="font-bold block mb-2">
-            {t("dashboard.reports.new-report.policeNumerCase")}
-          </label>
-          <div className="p-inputgroup">
-            <span className="p-inputgroup-addon">
-              <i className="pi pi-hashtag"></i>
-            </span>
-            <InputNumber
-              value={policeNumerCase}
-              onValueChange={(e) =>
-                setReportForm((i) => {
-                  return { ...reportForm, policeNumerCase: e.value };
-                })
-              }
-              placeholder={t(
-                "dashboard.reports.new-report.policeNumerCase-placeholder"
-              )}
-              mode="decimal"
-              minFractionDigits={0}
-            />
+          <div className="flex flex-col md:flex-row items-center justify-between mb-2">
+            <div className="flex-grow">
+              <label htmlFor="policeNumerCase" className="font-bold">
+                {t("dashboard.reports.new-report.policeNumerCase")}
+              </label>
+              <FormControlLabel
+                label={t("dashboard.reports.new-report.include-police-number-case")}
+                control={
+                  <Checkbox
+                    checked={reportForm.checkBoxPoliceNumerCase}
+                    onChange={(e) => {
+                      setReportForm(prev => ({
+                        ...prev,
+                        checkBoxPoliceNumerCase: e.target.checked,
+                        policeNumerCase: e.target.checked ? prev.policeNumerCase : ""
+                      }));
+                    }}
+                    color="primary"
+                  />
+                }
+                className="ml-2"
+              />
+            </div>
+            <div className="flex-grow pt-8">
+              <InputNumber
+                value={reportForm.policeNumerCase}
+                onValueChange={(e) =>
+                  setReportForm((prev) => {
+                    return { ...prev, policeNumerCase: e.value };
+                  })
+                }
+                placeholder={t("dashboard.reports.new-report.policeNumerCase-placeholder")}
+                mode="decimal"
+                minFractionDigits={0}
+                disabled={!reportForm.checkBoxPoliceNumerCase} 
+                className="w-full"
+              />
+            </div>
           </div>
         </div>
 
+
+    
         <div className="w-full md:w-1/3 px-3 mb-6">
           <label htmlFor="NotificationClient" className="font-bold block mb-2">
             {t("dashboard.reports.new-report.NotificationClient")}
@@ -1232,11 +1235,25 @@ const NewReport = () => {
       </div>
 
       <div className="flex justify-end mt-4 pr-20">
-        <Button
-          label={t("dashboard.reports.new-report.swal.send")}
-          severity="success"
-          onClick={sendingreport}
-        />
+        <Button severity="success"
+        label={t("dashboard.reports.new-report.swal.send")} 
+        onClick={sendingreport} />
+
+        <Dialog 
+        visible={showConfirmDialog} 
+        onHide={() => setShowConfirmDialog(false)}
+        dismissableMask 
+          header={t("dashboard.reports.new-report.swal.new-report")}>
+          <ConfirmSendReport
+            properties={properties}
+            reportData={reportForm}
+            setCreatingReport={setCreatingReport}
+            navigate={navigate}
+            resetReportForm={resetReportForm}
+            user={user} 
+            setShowConfirmDialog={setShowConfirmDialog}
+          />
+        </Dialog>
       </div>
     </div>
   );

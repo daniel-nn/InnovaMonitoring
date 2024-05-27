@@ -537,7 +537,7 @@
           "na": "N/A",
           "listedOnReport": "Listado en el reporte"
         },
-        "select-observerdViaCameras": "¿Observado via camaras?",
+        "select-observedViaCameras": "¿Observado via camaras?",
         "is-policeFirstResponderNotified": "Notificación primaria a emergencias",
         "police-first-responder-scene": "Servicios de emergencias en la escena",
         "policeFirstResponderSceneeholder": "Servicios de emergencias",
@@ -555,6 +555,7 @@
         "securityGuardsNotifiedholder": "Guardias de seguridad notificados",
         "securityGuardsScene": "Guardias de seguridad en la escena",
         "securityGuardsScene-placeholder": "Guardias de seguridad en la escena",
+        "include-police-number-case": "Habilitar Campo",
         "policeNumerCase": "Numero de caso policial",
         "policeNumerCase-placeholder": "Numero de caso policial",
         "NotificationClient": "Forma de Notificación al Cliente",
@@ -582,9 +583,10 @@
         "report-details-placeholder": "Descripción del reporte",
         "upload-evidences": "Agregar evidencias.",
         "drop-evidences": "Suelta las evidencias",
-        "evidence-removed": "Evidence removed",
+        "evidence-removed": "Evidencia eliminada",
         "swal": {
-          "confirmation": "Estas seguro de enviar el reporte para la propiedad - ",
+          "new-report": "Nuevo reporte",
+          "confirmation": "Selecciona la propiedad a reportar",
           "send": "Enviar",
           "don't-save": "No enviar",
           "cancel": "Cancelar",
@@ -649,7 +651,7 @@
           "na": "N/A",
           "listedOnReport": "Listado en el reporte"
         },
-        "select-observerdViaCameras": "¿Observado via camaras?",
+        "select-observedViaCameras": "¿Observado via camaras?",
         "is-policeFirstResponderNotified": "Notificación primaria a emergencias",
         "police-first-responder-scene": "Servicios de emergencias en la escena",
         "policeFirstResponderSceneeholder": "Servicios de emergencias",
@@ -775,7 +777,13 @@
         "yes": "Si",
         "no": "No",
         "video-gallery": "Galería de videos:",
-        "image-gallery": "Galería de imágenes:"
+        "image-gallery": "Galería de imágenes:",
+        "viewed": {
+          "title": "Visualizaciones",
+          "name": "Nombre",
+          "date-of-view": "Fecha de visto",
+          "time-of-view": "Hora visto"
+        }
       }
     },
     "cameras": {
@@ -1047,7 +1055,7 @@
           "property-img": "Imagen de la propiedad",
           "preview-img": "Preview De la propiedad",
           "property-map": "Mapa de la propiedad",
-          "previer-map": "Preview del mapa",
+          "preview-map": "Preview del mapa",
           "search-img": "Buscar imagen",
           "send": "Enviar",
           "cancel": "Cancelar"
@@ -1059,7 +1067,7 @@
           "property-img": "Imagen de la propiedad",
           "preview-img": "Preview De la propiedad",
           "property-map": "Mapa de la propiedad",
-          "previer-map": "Preview del mapa",
+          "preview-map": "Preview del mapa",
           "search-img": "Buscar imagen",
           "update-images": "Actualizar imagenes",
           "send": "Enviar",

@@ -61,8 +61,11 @@ const Login = () => {
         });
 
         if (newUser.properties && newUser.properties.length > 0) {
-          localStorage.setItem("propertySelected", JSON.stringify(newUser.properties[0])); // Almacena la primera propiedad
-          setUserLogged(true); 
+          localStorage.setItem("propertySelected", JSON.stringify(newUser.properties[0])); 
+          setUserLogged(true);
+          
+          //nueva logica pendiente el inicio de sesión
+
           navigate("/dashboard");
         } else {
           Swal.fire("Info", t("login.swal-fire.properties-don't-assigned"), "info");

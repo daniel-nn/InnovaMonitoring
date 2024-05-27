@@ -17,7 +17,7 @@ import "primereact/resources/themes/lara-light-indigo/theme.css";
 //core
 import "primereact/resources/primereact.min.css";
 import { Ecommerce,Customers,Bar,Pie,Line,Reports,} from "./Dashboard/pages";
-import { ReportDatails } from "./Dashboard/components/ReportDatails";
+import { ReportDatails } from "./Dashboard/pages/ReportDatails";
 import { Mapa } from "./Dashboard/pages/Mapa";
 import { CameraLiveView } from "./Dashboard/components/CameraLiveView";
 import Cameras from "./Dashboard/pages/Cameras";

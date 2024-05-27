@@ -4,7 +4,6 @@ import { UserContext } from "../../context/UserContext";
 import "primeicons/primeicons.css";
 import { useNavigate } from "react-router-dom";
 import { getPropertiesInfo } from "../helper/getProperties";
-import { getAgents } from "../helper/getAgents";
 import { getIncidents } from "../helper/getIncidents";
 import { useTranslation } from "react-i18next";
 import { Button } from "primereact/button";
@@ -31,7 +30,7 @@ const EditReport = () => {
     const navigate = useNavigate();
 
     const { reportForm, setReportForm } = useContext(UserContext);
-    const { property, agent, createdBy, dateOfReport, timeOfReport, incidentDate, incidentStartTime, incidentEndTime, persist, caseType, level, company, numerCase, camerasFunctioning, listMalfunctioningCameras, observerdViaCameras, policeFirstResponderNotified, policeFirstResponderScene, securityGuardsNotified, securityGuardsScene, policeNumerCase, reportDetails, formNotificationClient, emailedReport, pdf, evidences } = reportForm;
+    const { property, agent, createdBy, dateOfReport, timeOfReport, incidentDate, incidentStartTime, incidentEndTime, persist, caseType, level, company, numerCase, camerasFunctioning, listMalfunctioningCameras, observedViaCameras, policeFirstResponderNotified, policeFirstResponderScene, securityGuardsNotified, securityGuardsScene, policeNumerCase, reportDetails, formNotificationClient, emailedReport, pdf, evidences } = reportForm;
     console.log("EditReport data:", reportForm);
 
     const [properties, setProperties] = useState([]);
@@ -171,14 +170,29 @@ const EditReport = () => {
             'policeFirstResponderScene': t("dashboard.reports.new-report.police-first-responder-scene"),
             'securityGuardsNotified': t("dashboard.reports.new-report.securityGuardsNotified"),
             'securityGuardsScene': t("dashboard.reports.new-report.securityGuardsScene"),
-            'policeNumerCase': t("dashboard.reports.new-report.policeNumerCase"),
             'formNotificationClient': t("dashboard.reports.new-report.NotificationClient"),
             'emailedReport': t("dashboard.reports.new-report.emaildReport"),
             'reportDetails': t("dashboard.reports.new-report.report-details")
         };
+        
         if (!reportForm.persist) {
             fieldsToValidate.incidentEndTime = t("dashboard.reports.new-report.select-incident-end-time");
         }
+
+        if (reportForm.checkBoxPoliceNumerCase && !reportForm.policeNumerCase) {
+            Swal.fire({
+                title: t("dashboard.reports.new-report.swal.fill-missing-field-title"),
+                text: t("dashboard.reports.new-report.swal.fill-missing-field") + t("dashboard.reports.new-report.policeNumerCase"),
+                icon: "warning",
+                confirmButtonText: "Ok",
+                customClass: {
+                    confirmButton: "custom-swal2-confirm",
+                },
+                buttonsStyling: false,
+            });
+            return false;
+        }
+
         const missingFieldKey = Object.keys(fieldsToValidate).find(field => {
             const fieldParts = field.split('.');
             let value = reportForm;
@@ -642,39 +656,39 @@ const EditReport = () => {
                 </div>
 
                 <div className="w-full md:w-1/3 px-3 mb-6 text-center">
-                    <label htmlFor="observerdViaCameras" className="font-bold block mb-2">
-                        {t("dashboard.reports.edit-report.select-observerdViaCameras")}
+                    <label htmlFor="observedViaCameras" className="font-bold block mb-2">
+                        {t("dashboard.reports.edit-report.select-observedViaCameras")}
                     </label>
                     <div className="flex justify-center">
                         <div className="flex align-items-center mr-2">
                             <RadioButton
                                 inputId="camerasYes"
-                                name="observerdViaCameras"
+                                name="observedViaCameras"
                                 value={true}
                                 onChange={(e) => {
                                     console.log('Seleccionado:', e.value);
                                     setReportForm(prevForm => ({
                                         ...prevForm,
-                                        observerdViaCameras: e.value
+                                        observedViaCameras: e.value
                                     }));
                                 }}
-                                checked={reportForm.observerdViaCameras === true}
+                                checked={reportForm.observedViaCameras === true}
                             />
                             <label htmlFor="camerasYes" className="ml-2">{t("dashboard.reports.edit-report.yes")}</label>
                         </div>
                         <div className="flex align-items-center ml-4">
                             <RadioButton
                                 inputId="camerasNo"
-                                name="observerdViaCameras"
+                                name="observedViaCameras"
                                 value={false}
                                 onChange={(e) => {
                                     console.log('Seleccionado:', e.value);
                                     setReportForm(prevForm => ({
                                         ...prevForm,
-                                        observerdViaCameras: e.value
+                                        observedViaCameras: e.value
                                     }));
                                 }}
-                                checked={reportForm.observerdViaCameras === false}
+                                checked={reportForm.observedViaCameras === false}
                             />
                             <label htmlFor="camerasNo" className="ml-2">{t("dashboard.reports.edit-report.no")}</label>
                         </div>

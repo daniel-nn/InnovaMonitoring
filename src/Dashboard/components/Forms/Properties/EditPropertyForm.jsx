@@ -239,7 +239,7 @@ export const EditPropertyForm = ({ property, onClose, refreshProperties }) => {
                         onClick={handleUpdateImages}
                     />
                 </div>
-            </div>onClose
+            </div>
 
             <div className="flex">
                 <div className="w-full flex justify-around mt-5 ">

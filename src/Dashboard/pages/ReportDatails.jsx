@@ -30,13 +30,15 @@ import { HiOutlineDocumentReport } from "react-icons/hi";
 import { MdEmail, MdOutlineMail } from "react-icons/md";
 import { BiTimeFive } from "react-icons/bi";
 import { FiUser } from "react-icons/fi";
-import { editReport } from "../helper/Reports/UpdateReport/editReport";
-import { getReportId } from "../helper/getReportId";
+import { editReport } from "../helper/Reports/UpdateReport/editReport"
+import { getReportId } from "../helper/getReportId"
 import { deleteItem } from "../helper/delete";
 import Swal from "sweetalert2";
 import { useTranslation } from "react-i18next";
-import postViewedUser from "../helper/postViewedUser ";
+import postViewedUser from "../helper/postViewedUser "
 import { GridPdf } from "../data/dummy";
+import ViewedsTable from "../components/Reports/ReportDetails/ViewedsTable";
+import TableSkeleton from '../components/TableSkeleton';
 
 let url = `${process.env.REACT_APP_SERVER_IP}/reports`;
 let noImages = [
@@ -56,6 +58,7 @@ export const ReportDatails = () => {
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [showButton, setShowButton] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleDownload = async () => {
     setShowButton(false); // Ocultar el botón al comenzar la descarga
@@ -108,10 +111,18 @@ export const ReportDatails = () => {
   const [folderName, setFolderName] = useState("");
   const [reportDetails, setReportDetails] = useState({});
   //const {report, isLoading} = useFetchReportId(id, navigate);
-  let user = JSON.parse(localStorage.getItem("user"));
+  const loadInitialUser = () => {
+    const userStored = localStorage.getItem('user');
+    if (userStored) {
+      return JSON.parse(userStored);
+    }
+    // Retorna un objeto inicial si no hay nada en localStorage
+    return { id: null, viewed: false, role: { rolName: '' } };
+  };
+  const [user, setUser] = useState(loadInitialUser);
+
   let userRole = user.role?.rolName || "Monitor";
-  console.log("hola",user)
-  console.log("user Role das",userRole)
+  
 
   const {
     reportSaved,
@@ -122,6 +133,7 @@ export const ReportDatails = () => {
   useEffect(() => {
     getReportId(id, navigate).then((data) => {
       setReportDetails(data);
+      setLoading(false);
       let evidences = data?.evidences?.map((evidence) => ({
         name: evidence.name,
         url: "https://innova-input.s3.us-east-1.amazonaws.com/" + evidence.path,
@@ -145,6 +157,7 @@ export const ReportDatails = () => {
       console.log("Report data:", data);
     });
   }, [reportSaved]);
+
 
 
 
@@ -198,24 +211,22 @@ export const ReportDatails = () => {
     setIncidentType(t(translationPath));
   }, [reportDetails, t]);
 
-
   useEffect(() => {
-    if (userRole === "Client" && user.id && reportDetails.id && !user.viewed) {
-      postViewedUser(user.id, reportDetails.id)
-        .then(() => {
-          user.viewed = true;
-          localStorage.setItem("user", JSON.stringify(user));
-          console.log("Marked as viewed and updated in localStorage.");
-        })
+       if (userRole === "Client" && user.id && id) {
+      console.log("Condiciones cumplidas para marcar como visto");
+      postViewedUser(user.id, id)
         .catch(error => {
-          console.error("Error marking the report as viewed:", error);
+          console.error("Error al marcar el reporte como visto:", error);
         });
     } else {
-      console.log("No need to mark as viewed or already marked.");
+      console.log("No es necesario marcar como visto o ya está marcado.");
     }
-  }, []); 
+  }, [userRole, user.id, id]); // As
+  
 
-  console.log(progress);
+  console.log("Vistas del reporte antes despues de", reportDetails.vieweds)
+
+
   return (
     <div className="mx-20 md:m-10  md:p-0 bg-white rounded-3xl">
       <div className="w-full flex justify-end">
@@ -469,7 +480,7 @@ export const ReportDatails = () => {
                     {t("dashboard.reports.case-details.observed-via-cameras")}
                   </p>
                   <p className="text-lg text-gray-900 ml-3">
-                    {reportDetails?.observerdViaCameras ? (
+                    {reportDetails?.observedViaCameras ? (
                       <p className="text-teal-600">
                         {t("dashboard.reports.case-details.yes")}
                       </p>
@@ -816,6 +827,16 @@ export const ReportDatails = () => {
         showPlayButton={false}
         items={dataImages ? dataImages : noImages}
       />
+
+        <div>
+      {loading ? (
+        <TableSkeleton />
+      ) : (
+        reportDetails.vieweds && reportDetails.vieweds.length > 0 && userRole === "Admin" &&( 
+              <ViewedsTable vieweds={reportDetails.vieweds} t={t} />
+        )
+      )}
+    </div>
     </div>
   );
 };

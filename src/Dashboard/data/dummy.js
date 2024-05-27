@@ -34,6 +34,7 @@ import deleteReport from "../helper/Reports/delete/deleteReport";
 import { t } from "i18next";
 import { putAddPropertyUser } from "../helper/userProfile/properties/putAddPropertyUser";
 import putDeletePropertyToUser from "../helper/userProfile/properties/putDeletePropertyToUser";
+import { postCasesSoftDelete } from "../helper/postCasesSoftDelete";
 
 export const useGlobalTranslation = () => {
   return useTranslation("global");
@@ -448,7 +449,7 @@ export const GridDeleteReport = ({ id, refreshReports }) => {
   const handleDelete = async () => {
     const success = await deleteReport(id, t);
     if (success) {
-      console.log("se borro reporte", id)
+
       refreshReports();
 
     }
@@ -504,8 +505,7 @@ export const GridDeleteAgents = ({ agent }) => {
 
 export const GridDeleteCase = ({ caseType }) => {
   const { setreportSaved, reportSaved } = useContext(UserContext);
-  const [t] = useTranslation("global");
-  let url = `${process.env.REACT_APP_SERVER_IP}/cases`;
+  const { t } = useTranslation("global");
 
   const confirmDeletion = () => {
     Swal.fire({
@@ -519,31 +519,10 @@ export const GridDeleteCase = ({ caseType }) => {
       cancelButtonText: t('dashboard.cases.table.delete.swal.no')
     }).then((result) => {
       if (result.isConfirmed) {
-        deleteIncident();
+        postCasesSoftDelete(caseType, setreportSaved, reportSaved, t);
       }
     });
   };
-
-  const deleteIncident = async () => {
-    caseType.deleted = true;
-    try {
-      await postIncident(caseType, setreportSaved, reportSaved);
-      Swal.fire({
-        toast: true,
-        position: 'top-end',
-        icon: 'success',
-        title: t('dashboard.cases.table.delete.swal.case-removed'),
-        showConfirmButton: false,
-        timer: 3000
-      });
-    } catch (error) {
-      Swal.fire(
-        'Error!',
-        t('dashboard.cases.table.delete.swal.error-deleting-case'),
-        'error'
-      );
-    }
-  }
 
   return (
     <div
@@ -1740,7 +1719,7 @@ export const propertyGridAdmin = (t, handleOpenEditPropertyDialog) => {
     },
     {
       headerText: t("dashboard.properties.table.reports"),
-      field: "reports",
+      field: "numOfReportsProperty",
       textAlign: "Center",
       width: "120",
     },

@@ -80,7 +80,7 @@ const createHTMLString = (data) => {
                 <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.camerasFunctioning ? 'Yes' : 'No'}</span>
             </p>
             <p style="color: rgb(47, 117, 181); font-weight: bold;"> OBSERVED VIA CAMERAS:
-                <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.observerdViaCameras ? 'Yes' : 'No'}</span>
+                <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.observedViaCameras ? 'Yes' : 'No'}</span>
             </p>
             <p style="color: rgb(47, 117, 181); font-weight: bold; margin-top: 20px;"> POLICE/FIRST RESPONDER ON SCENE:
                <span style="color: rgb(0, 0, 0); font-weight: bold;">${data.policeFirstResponderScene || 'Null'}</span>

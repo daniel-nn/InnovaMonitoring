@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, useMemo, useCallback, useRef } from "react";
-import { GridComponent, ColumnsDirective, ColumnDirective, Resize, Sort, ContextMenu, Filter, Page, Search, PdfExport, Inject, Toolbar} from "@syncfusion/ej2-react-grids";
+import { GridComponent, ColumnsDirective, ColumnDirective, Resize, Sort, ContextMenu, Filter, Page, Search, PdfExport, Inject, Toolbar } from "@syncfusion/ej2-react-grids";
 import { contextMenuItems, reportsGrid, reportsGridAdmin, reportsGridMonitor, reportsGridNoVerified } from "../data/dummy";
 import { Header } from "../components";
 import { UserContext } from "../../context/UserContext";
@@ -17,11 +17,14 @@ import CircularProgress, {
 import Stomp from "stompjs";
 import TableSkeleton from "../components/TableSkeleton";
 import { Toast } from "primereact/toast";
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+
 
 const Reports = () => {
   const navigate = useNavigate();
   const toolbarOptions = ["Search"];
-  const { propertyContext, creatingReport, userContext} = useContext(UserContext);
+  const { propertyContext, creatingReport, userContext } = useContext(UserContext);
   const [reportes, setReportes] = useState([]);
   const [t, i18n] = useTranslation("global");
   const [activeView, setActiveView] = useState('default');
@@ -40,7 +43,7 @@ const Reports = () => {
 
 
   const fetchReports = useCallback(async () => {
-      setLoading(false);
+    setLoading(false);
     let reports;
     try {
       reports = await getNumberOfReportsByRole(id, user.id, userRole);
@@ -79,8 +82,8 @@ const Reports = () => {
       stompClient.subscribe(
         `/topic/user/user-${userContext.id.toString()}`,
         (response) => {
-          const newMessage = response.body;          
-          if(toast.current!=null){
+          const newMessage = response.body;
+          if (toast.current != null) {
             console.log()
             console.log(newMessage)
             toast?.current?.show({ severity: 'success', summary: 'Info', detail: JSON.parse(newMessage).type });
@@ -103,18 +106,18 @@ const Reports = () => {
   const monitorGridColumns = useMemo(() => reportsGridMonitor(t), [t]);
   const clientGridColumns = useMemo(() => reportsGrid(t), [t]);
 
-  const gridWidth = activeMenu ? "1150" : "1450";
+  const gridWidth = "100%";
 
 
   return (
-    <div className="m-20 md:m-10 mt-14 p-2 md:p-0 bg-white rounded-3xl 	overflow-x: hidden;">
+    <div className="m-20 md:m-10 mt-14 p-2 md:p-0 bg-white rounded-3xl overflow: auto;">
       {creatingReport &&
         <div className="mx-auto">
           <h1 className="text-lg font-semibold text-blue-500">{t("dashboard.reports.report-loading")}</h1>
           <CircularProgress />
         </div>
       }
-       <Toast ref={toast} />
+      <Toast ref={toast} />
       <Header title={
         t(
           activeView === 'default'
@@ -124,8 +127,8 @@ const Reports = () => {
       }
       />
 
-    
-      
+
+
       <div className="card flex justify-start py-2 mb-7">
         {(userRole === "Admin" || userRole === "Monitor") && (
           <div className='flex w-[450px] justify-between'>
@@ -146,7 +149,8 @@ const Reports = () => {
           </div>
         )}
       </div>
-      {loading ? <TableSkeleton />: (
+      {/* {loading ? <TableSkeleton /> : ( */}
+
       <GridComponent
         id="gridcomp"
         key={`${activeView}-${i18n.language}`}
@@ -157,9 +161,9 @@ const Reports = () => {
         allowPdfExport
         contextMenuItems={contextMenuItems}
         toolbar={toolbarOptions}
-        allowResizing={true}
-        width={gridWidth}
-      > 
+        allowResizing
+
+      >
         <Inject
           services={[
             Resize,
@@ -171,22 +175,38 @@ const Reports = () => {
             Search,
             Toolbar,
           ]}
-        />  
+        />
         <ColumnsDirective>
-          {activeView === 'noVerified'
-            ? noVerifiedGridColumns.map((item, index) => <ColumnDirective key={index} {...item} />)
-            : (userRole === "Admin"
-              ? adminGridColumns.map((item, index) => <ColumnDirective key={index} {...item} />)
-              : (userRole === "Monitor"
-                ? monitorGridColumns.map((item, index) => <ColumnDirective key={index} {...item} />)
-                : clientGridColumns.map((item, index) => <ColumnDirective key={index} {...item} />)))
-          }
+          {activeView === "noVerified"
+            ? noVerifiedGridColumns.map((item, index) => (
+              <ColumnDirective key={index} {...item} />
+            ))
+            : userRole === "Admin"
+              ? adminGridColumns.map((item, index) => (
+                <ColumnDirective key={index} {...item} />
+              ))
+              : userRole === "Monitor"
+                ? monitorGridColumns.map((item, index) => (
+                  <ColumnDirective key={index} {...item} />
+                ))
+                : clientGridColumns.map((item, index) => (
+                  <ColumnDirective key={index} {...item} />
+                ))}
         </ColumnsDirective>
-      
       </GridComponent>
-      )}
+
+        {/* <DataTable value={reports} paginator rows={10} dataKey="id" filterDisplay="row" loading={loading}
+          globalFilterFields={['name', 'country.name', 'representative.name', 'status']} header={header} emptyMessage="No customers found.">
+            
+          <Column field="name" header="Name" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
+          <Column header="Country" filterField="country.name" style={{ minWidth: '12rem' }} body={countryBodyTemplate} filter filterPlaceholder="Search by country" />
+          <Column header="Agent" filterField="representative" showFilterMenu={false} filterMenuStyle={{ width: '14rem' }} style={{ minWidth: '14rem' }}
+            body={representativeBodyTemplate} filter filterElement={representativeRowFilterTemplate} />
+          <Column field="status" header="Status" showFilterMenu={false} filterMenuStyle={{ width: '14rem' }} style={{ minWidth: '12rem' }} body={statusBodyTemplate} filter filterElement={statusRowFilterTemplate} />
+          <Column field="verified" header="Verified" dataType="boolean" style={{ minWidth: '6rem' }} body={verifiedBodyTemplate} filter filterElement={verifiedRowFilterTemplate} />
+        </DataTable> */}
+      {/* )} */}
     </div>
   );
 };
 export default Reports;
-

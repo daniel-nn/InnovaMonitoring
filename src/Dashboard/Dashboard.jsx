@@ -14,7 +14,7 @@ const Dashboard = () => {
 
 
   const propertyStorage = JSON.parse(localStorage.getItem("propertySelected"));
-  const propertyId = propertyStorage.id || 1;
+  const propertyId = propertyStorage ? propertyStorage.id : 1;
   const { property, isLoading } = useFetchProperty(propertyId, navigate);
 
 

@@ -34,7 +34,7 @@ export const postReport = async (reportForm, t, setCreatingReport, userId) => {
     property: reportForm.property,
     listMalfunctioningCameras: reportForm.listMalfunctioningCameras,
     camerasFunctioning: reportForm.camerasFunctioning ? 1 : 0,
-    observerdViaCameras: reportForm.observerdViaCameras ? 1 : 0,
+    observedViaCameras: reportForm.observedViaCameras ? 1 : 0,
     policeFirstResponderNotified: reportForm.policeFirstResponderNotified ? 1 : 0,
     policeFirstResponderScene: reportForm.policeFirstResponderScene,
     securityGuardsNotified: reportForm.securityGuardsNotified ? 1 : 0,
@@ -67,7 +67,6 @@ export const postReport = async (reportForm, t, setCreatingReport, userId) => {
       method: 'POST',
       headers: {
         "Userid": userId,
-        // Otras cabeceras si es necesario
     },
       body: formData,
     });

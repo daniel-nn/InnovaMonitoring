@@ -8,12 +8,11 @@ import { AiOutlinePlusCircle } from "react-icons/ai";
 import { GridComponent, ColumnsDirective, ColumnDirective, Resize, Sort, ContextMenu, Filter, Page, Search, Inject,} from "@syncfusion/ej2-react-grids";
 import { contextMenuItems, orderAgents, orderAgentsAdmin } from "../data/dummy";
 import { Header } from "../components";
-import { getIncidents } from "../helper/getIncidents";
 import { useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { UserContext } from "../../context/UserContext";
-import { getUserRolMonitor } from "../helper/getUserRolMonitor";
+import { getAgents } from "../helper/getAgents";
 import { useTranslation } from "react-i18next";
 import { postNewUser } from "../helper/postNewUser";
 import { getRoles } from "../helper/getRoles";
@@ -41,8 +40,8 @@ export const Agents = () => {
 
   const fetchMonitors = async () => {
     setLoading(false)
-    const monitors = await getUserRolMonitor(navigate);
-    setAgentData(monitors);
+    const agents = await getAgents(navigate);
+    setAgentData(agents);
   };
 
   useEffect(() => {

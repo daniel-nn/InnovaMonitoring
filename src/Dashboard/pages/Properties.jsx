@@ -41,8 +41,7 @@ export const Properties = () => {
 
   // Contexto
   const {
-    propertyProvider, setPropertyProvider, agentDialog,
-    setAgentDialog, flag, setFlag,
+    propertyProvider, setPropertyProvider,  flag, setFlag,
   } = useContext(UserContext);
 
   // Información del usuario
@@ -160,7 +159,7 @@ export const Properties = () => {
             allowPdfExport
             contextMenuItems={contextMenuItems}
             toolbar={toolbarOptions}
-            allowResizing={true}
+        
           >
             <ColumnsDirective>
               {propertyGridAdmin(t, handleOpenEditPropertyDialog).map((item, index)  => (
