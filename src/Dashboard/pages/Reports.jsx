@@ -1,6 +1,32 @@
-import React, { useContext, useEffect, useState, useMemo, useCallback, useRef } from "react";
-import { GridComponent, ColumnsDirective, ColumnDirective, Resize, Sort, ContextMenu, Filter, Page, Search, PdfExport, Inject, Toolbar } from "@syncfusion/ej2-react-grids";
-import { contextMenuItems, reportsGrid, reportsGridAdmin, reportsGridMonitor, reportsGridNoVerified } from "../data/dummy";
+import React, {
+  useContext,
+  useEffect,
+  useState,
+  useMemo,
+  useCallback,
+  useRef,
+} from "react";
+import {
+  GridComponent,
+  ColumnsDirective,
+  ColumnDirective,
+  Resize,
+  Sort,
+  ContextMenu,
+  Filter,
+  Page,
+  Search,
+  PdfExport,
+  Inject,
+  Toolbar,
+} from "@syncfusion/ej2-react-grids";
+import {
+  contextMenuItems,
+  reportsGrid,
+  reportsGridAdmin,
+  reportsGridMonitor,
+  reportsGridNoVerified,
+} from "../data/dummy";
 import { Header } from "../components";
 import { UserContext } from "../../context/UserContext";
 import { Button } from "primereact/button";
@@ -10,27 +36,27 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { getNumberOfReportsByRole } from "../helper/getNumberOfReportsByRole";
 import { getReportsNoVerified } from "../helper/getReportsNoVerified";
-import { useStateContext } from "../../context/ContextProvider"
+import { useStateContext } from "../../context/ContextProvider";
 import CircularProgress, {
   CircularProgressProps,
 } from "@mui/material/CircularProgress";
 import Stomp from "stompjs";
 import TableSkeleton from "../components/TableSkeleton";
 import { Toast } from "primereact/toast";
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
-
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
+import AddIcon from '@mui/icons-material/Add';
+import ChecklistIcon from '@mui/icons-material/Checklist';
 
 const Reports = () => {
   const navigate = useNavigate();
   const toolbarOptions = ["Search"];
-  const { propertyContext, creatingReport, userContext } = useContext(UserContext);
+  const { propertyContext, creatingReport, userContext } =
+    useContext(UserContext);
   const [reportes, setReportes] = useState([]);
   const [t, i18n] = useTranslation("global");
-  const [activeView, setActiveView] = useState('default');
+  const [activeView, setActiveView] = useState("default");
   const [loading, setLoading] = useState(true);
-
-
 
   const { activeMenu } = useStateContext();
   const toast = useRef(null);
@@ -40,7 +66,6 @@ const Reports = () => {
   let propertyStorage = JSON.parse(localStorage.getItem("propertySelected"));
   let idStorage = propertyStorage.id;
   let id = propertyContext.id || idStorage;
-
 
   const fetchReports = useCallback(async () => {
     setLoading(false);
@@ -58,12 +83,12 @@ const Reports = () => {
       const nonVerifiedReports = await getReportsNoVerified();
       setReportes(nonVerifiedReports);
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   }, []);
 
   const refreshReports = useCallback(async () => {
-    if (activeView === 'noVerified') {
+    if (activeView === "noVerified") {
       await handleFetchNonVerifiedReports();
     } else {
       await fetchReports();
@@ -84,10 +109,13 @@ const Reports = () => {
         (response) => {
           const newMessage = response.body;
           if (toast.current != null) {
-            console.log()
-            console.log(newMessage)
-            toast?.current?.show({ severity: 'success', summary: 'Info', detail: JSON.parse(newMessage).type });
-
+            console.log();
+            console.log(newMessage);
+            toast?.current?.show({
+              severity: "success",
+              summary: "Info",
+              detail: JSON.parse(newMessage).type,
+            });
           }
         }
       );
@@ -98,59 +126,72 @@ const Reports = () => {
   }, []);
 
   const toggleView = () => {
-    setActiveView(activeView === 'default' ? 'noVerified' : 'default');
+    setActiveView(activeView === "default" ? "noVerified" : "default");
   };
 
-  const noVerifiedGridColumns = useMemo(() => reportsGridNoVerified(t, refreshReports), [t, refreshReports]);
-  const adminGridColumns = useMemo(() => reportsGridAdmin(t, refreshReports), [t, refreshReports]);
+  const noVerifiedGridColumns = useMemo(
+    () => reportsGridNoVerified(t, refreshReports),
+    [t, refreshReports]
+  );
+  const adminGridColumns = useMemo(
+    () => reportsGridAdmin(t, refreshReports),
+    [t, refreshReports]
+  );
   const monitorGridColumns = useMemo(() => reportsGridMonitor(t), [t]);
   const clientGridColumns = useMemo(() => reportsGrid(t), [t]);
 
   const gridWidth = "100%";
 
-
   return (
-    <div className="m-20 md:m-10 mt-14 p-2 md:p-0 bg-white rounded-3xl overflow: auto;">
-      {creatingReport &&
+    <div className=" md:m-6 mt-6 p-2 md:p-0 bg-white rounded-3xl overflow: auto;">
+      {creatingReport && (
         <div className="mx-auto">
-          <h1 className="text-lg font-semibold text-blue-500">{t("dashboard.reports.report-loading")}</h1>
+          <h1 className="text-lg font-semibold text-blue-500 ">
+            {t("dashboard.reports.report-loading")}
+          </h1>
           <CircularProgress />
         </div>
-      }
+      )}
       <Toast ref={toast} />
-      <Header title={
-        t(
-          activeView === 'default'
+      <Header
+        title={t(
+          activeView === "default"
             ? `${t("dashboard.reports.reports-of")}${propertyContext.name}`
             : "dashboard.reports.buttons.non-verified-reports"
-        )
-      }
+        )}
       />
 
-
-
-      <div className="card flex justify-start py-2 mb-7">
+      <div className="card flex justify-start py-2 mb-7 ">
         {(userRole === "Admin" || userRole === "Monitor") && (
-          <div className='flex w-[450px] justify-between'>
-            <Button
-              onClick={() => navigate("/dashboard/NewReport")}
-              label={t("dashboard.reports.buttons.add-report")}
-            >
-              <AiOutlinePlusCircle />
-            </Button>
+          <>
+          <button class="button">
+       Agregar Reporte
+        <svg fill="currentColor" viewBox="0 0 24 24" class="icon">
+          <path
+            clip-rule="evenodd"
+            d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm4.28 10.28a.75.75 0 000-1.06l-3-3a.75.75 0 10-1.06 1.06l1.72 1.72H8.25a.75.75 0 000 1.5h5.69l-1.72 1.72a.75.75 0 101.06 1.06l3-3z"
+            fill-rule="evenodd"
+          ></path>
+        </svg>
+      </button>
+            <span className="w-5"> </span>
             {userRole === "Admin" && (
-              <Button
-                onClick={toggleView}
-                label={t(activeView === 'default' ? "dashboard.reports.buttons.non-verified-reports" : "dashboard.reports.buttons.reports-per-property")}
-              >
-                <AiOutlineFileSearch />
-              </Button>
+        <button class="button">
+        Verificados
+        <svg fill="currentColor" viewBox="0 0 24 24" class="icon">
+          <path
+            clip-rule="evenodd"
+            d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm4.28 10.28a.75.75 0 000-1.06l-3-3a.75.75 0 10-1.06 1.06l1.72 1.72H8.25a.75.75 0 000 1.5h5.69l-1.72 1.72a.75.75 0 101.06 1.06l3-3z"
+            fill-rule="evenodd"
+          ></path>
+        </svg>
+      </button>  
             )}
-          </div>
+          </>
         )}
       </div>
       {/* {loading ? <TableSkeleton /> : ( */}
-
+{/*     <ChecklistIcon/> AddIcon*/}
       <GridComponent
         id="gridcomp"
         key={`${activeView}-${i18n.language}`}
@@ -162,7 +203,6 @@ const Reports = () => {
         contextMenuItems={contextMenuItems}
         toolbar={toolbarOptions}
         allowResizing
-
       >
         <Inject
           services={[
@@ -179,23 +219,23 @@ const Reports = () => {
         <ColumnsDirective>
           {activeView === "noVerified"
             ? noVerifiedGridColumns.map((item, index) => (
-              <ColumnDirective key={index} {...item} />
-            ))
-            : userRole === "Admin"
-              ? adminGridColumns.map((item, index) => (
                 <ColumnDirective key={index} {...item} />
               ))
-              : userRole === "Monitor"
-                ? monitorGridColumns.map((item, index) => (
-                  <ColumnDirective key={index} {...item} />
-                ))
-                : clientGridColumns.map((item, index) => (
-                  <ColumnDirective key={index} {...item} />
-                ))}
+            : userRole === "Admin"
+            ? adminGridColumns.map((item, index) => (
+                <ColumnDirective key={index} {...item} />
+              ))
+            : userRole === "Monitor"
+            ? monitorGridColumns.map((item, index) => (
+                <ColumnDirective key={index} {...item} />
+              ))
+            : clientGridColumns.map((item, index) => (
+                <ColumnDirective key={index} {...item} />
+              ))}
         </ColumnsDirective>
       </GridComponent>
 
-        {/* <DataTable value={reports} paginator rows={10} dataKey="id" filterDisplay="row" loading={loading}
+      {/* <DataTable value={reports} paginator rows={10} dataKey="id" filterDisplay="row" loading={loading}
           globalFilterFields={['name', 'country.name', 'representative.name', 'status']} header={header} emptyMessage="No customers found.">
             
           <Column field="name" header="Name" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />

@@ -12,7 +12,6 @@ const Dashboard = () => {
   const { propertyContext, setPropertyContext } = useContext(UserContext);
   const navigate = useNavigate();
 
-
   const propertyStorage = JSON.parse(localStorage.getItem("propertySelected"));
   const propertyId = propertyStorage ? propertyStorage.id : 1;
   const { property, isLoading } = useFetchProperty(propertyId, navigate);
@@ -35,16 +34,15 @@ const Dashboard = () => {
     };
     window.addEventListener('storage', handleStorageChange);
 
-
     return () => {
       window.removeEventListener('storage', handleStorageChange);
     };
   }, [navigate]);
 
   return (
-    <div className="flex relative dark:bg-main-dark-bg">
+    <div className="flex relative dark:bg-main-dark-bg w-screen">
       {activeMenu ? (
-        <div className="w-72 fixed sidebar dark:bg-secondary-dark-bg bg-white ">
+        <div className="w-1/5 fixed sidebar dark:bg-secondary-dark-bg bg-white ">
           <Sidebar />
         </div>
       ) : (
@@ -55,17 +53,17 @@ const Dashboard = () => {
       <div
         className={
           activeMenu
-            ? "dark:bg-main-dark-bg  bg-main-bg min-h-screen md:ml-72 w-full  "
-            : "bg-main-bg dark:bg-main-dark-bg  w-full min-h-screen flex-2 "
+            ? "dark:bg-main-dark-bg  bg-main-bg min-h-screen md:ml-[20%] w-4/5"
+            : "bg-main-bg dark:bg-main-dark-bg min-h-screen flex-2 w-full"
         }
       >
-        <div className="fixed md:static bg-main-bg dark:bg-main-dark-bg  w-full ">
+        <div className="fixed md:static bg-main-bg dark:bg-main-dark-bg ">
           <NavbarDash />
         </div>
         {/* {themeSettings && (<ThemeSettings />)} */}
-        <div>
+       
           <Outlet />
-        </div>
+      
         <FooterDash/>
       </div>
     </div>
