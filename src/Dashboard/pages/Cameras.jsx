@@ -31,7 +31,6 @@ const Cameras = () => {
   const editing = { allowDeleting: true, allowEditing: true };
   const { t, i18n } = useTranslation("global");
 
-
   const [camerasList, setCamerasList] = useState([]);
   let propertiesUser = JSON.parse(localStorage.getItem("user"));
   let listOfPropertiesByUser = propertiesUser.properties;
@@ -65,7 +64,6 @@ const Cameras = () => {
     }
   };
 
-
   return (
     <>
       <Dialog
@@ -96,7 +94,6 @@ const Cameras = () => {
 
       <div className="m-0 md:m-8 mt-14 p-2 md:p-0 bg-white rounded-3xl">
         <Header title={t("dashboard.cameras.title") +propertyContext.name} />
-
         <div className="card flex justify-start py-2 mb-7">
           {userRole == "Admin" ? (
             <Button
@@ -125,7 +122,6 @@ const Cameras = () => {
           allowResizing={true}
         >
         
-
           <ColumnsDirective>
             {userRole === "Admin" ?
               cameraGridAdmin(t, setSelectedCamera).map((item, index) => (
