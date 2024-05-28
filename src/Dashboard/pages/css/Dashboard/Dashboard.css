@@ -1,0 +1,62 @@
+.text-base-dashboard {
+  font-size: 36px;
+  text-transform: uppercase;
+    font-family: 'Playfair Display', serif;  /* Una fuente con serifs, elegante */
+
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(to right, #f4d47c 0%, #b08937 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-animation-dashboard {
+  font-size: 36px;
+  
+  text-transform: uppercase;
+  font-weight: bold;
+  color: white;
+ background: linear-gradient(
+to left,  
+    #d6aa25 47%,  
+    #e8dcb5 49%,  
+    #f8f5ee 50%,   
+    #e8dcb5 51%,   
+    #b08937 53%    
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% 100%;
+}
+
+
+.typewriter-text {
+  font-size: 36px;
+    font-family: 'Roboto', sans-serif;  /* Una fuente sans-serif, moderna y limpia */
+
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(to right, #d6aa25, #835c0e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 0.1em solid orange; /* Cursor más delgado */
+  animation: typing 3.5s steps(40, end) forwards, blink-caret 3.5s step-end; /* Remove 'infinite' */
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+    border-right-color: orange;
+  }
+  to {
+    width: calc(100% - 0.5ch);
+    border-right-color: transparent; /* Asegura que el cursor desaparezca al final */
+  }
+}
+
+@keyframes blink-caret {
+  0%, 50% { border-color: orange; }
+  100% { border-color: transparent; } /* Finaliza en transparente */
+}
