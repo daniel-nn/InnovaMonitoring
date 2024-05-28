@@ -71,7 +71,7 @@
   box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
   padding-block: 0.5rem;
   padding-inline: 1.25rem;
-  background-color: rgb(195, 171, 20);
+  background-color: rgb(0 107 179);
   border-radius: 9999px;
   display: flex;
   align-items: center;
@@ -92,10 +92,10 @@
   transition: all 0.3s ease-in-out;
 }
 
-/* .button:hover {
+.button:hover {
   transform: scale(1.05);
   border-color: #fff9;
-} */
+} 
 
 .button:hover .icon {
   transform: translate(4px);
@@ -133,50 +133,4 @@
   to {
     left: 100%;
   }
-}
-.Btn {
-  width: 140px;
-  height: 40px;
-  border: none;
-  border-radius: 10px;
-  background: linear-gradient(to right,#77530a,#ffd277,#77530a,#77530a,#ffd277,#77530a);
-  background-size: 250%;
-  background-position: left;
-  color: #ffd277;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition-duration: 1s;
-  overflow: hidden;
-}
-
-.Btn::before {
-  position: absolute;
-  content: "Agregar reporte";
-  color: #ffd277;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 97%;
-  height: 90%;
-  border-radius: 8px;
-  transition-duration: 1s;
-  background-color: rgba(0, 0, 0, 0.842);
-  background-size: 200%;
-}
-
-.Btn:hover {
-  background-position: right;
-  transition-duration: 1s;
-}
-
-.Btn:hover::before {
-  background-position: right;
-  transition-duration: 1s;
-}
-
-.Btn:active {
-  transform: scale(0.95);
 }

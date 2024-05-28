@@ -21,16 +21,9 @@ import {
   Toolbar,
 } from "@syncfusion/ej2-react-grids";
 import {
-  contextMenuItems,
-  reportsGrid,
-  reportsGridAdmin,
-  reportsGridMonitor,
-  reportsGridNoVerified,
-} from "../data/dummy";
+  contextMenuItems, reportsGrid, reportsGridAdmin, reportsGridMonitor, reportsGridNoVerified} from "../data/dummy";
 import { Header } from "../components";
 import { UserContext } from "../../context/UserContext";
-import { Button } from "primereact/button";
-import { AiOutlinePlusCircle, AiOutlineFileSearch } from "react-icons/ai";
 import "primeicons/primeicons.css";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -43,10 +36,8 @@ import CircularProgress, {
 import Stomp from "stompjs";
 import TableSkeleton from "../components/TableSkeleton";
 import { Toast } from "primereact/toast";
-import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
-import AddIcon from '@mui/icons-material/Add';
-import ChecklistIcon from '@mui/icons-material/Checklist';
+import AddIcon from "@mui/icons-material/Add";
+import ChecklistIcon from "@mui/icons-material/Checklist";
 
 const Reports = () => {
   const navigate = useNavigate();
@@ -143,7 +134,7 @@ const Reports = () => {
   const gridWidth = "100%";
 
   return (
-    <div className=" md:m-6 mt-6 p-2 md:p-0 bg-white rounded-3xl overflow: auto;">
+    <div className="mx-7 bg-white rounded-3xl overflow: auto;">
       {creatingReport && (
         <div className="mx-auto">
           <h1 className="text-lg font-semibold text-blue-500 ">
@@ -164,34 +155,28 @@ const Reports = () => {
       <div className="card flex justify-start py-2 mb-7 ">
         {(userRole === "Admin" || userRole === "Monitor") && (
           <>
-          <button class="button">
-       Agregar Reporte
-        <svg fill="currentColor" viewBox="0 0 24 24" class="icon">
-          <path
-            clip-rule="evenodd"
-            d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm4.28 10.28a.75.75 0 000-1.06l-3-3a.75.75 0 10-1.06 1.06l1.72 1.72H8.25a.75.75 0 000 1.5h5.69l-1.72 1.72a.75.75 0 101.06 1.06l3-3z"
-            fill-rule="evenodd"
-          ></path>
-        </svg>
-      </button>
+            <button
+              onClick={() => navigate("/dashboard/NewReport")}
+              class="button"
+            >
+              Agregar Reporte
+              <AddIcon/>
+            </button>
             <span className="w-5"> </span>
             {userRole === "Admin" && (
-        <button class="button">
-        Verificados
-        <svg fill="currentColor" viewBox="0 0 24 24" class="icon">
-          <path
-            clip-rule="evenodd"
-            d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm4.28 10.28a.75.75 0 000-1.06l-3-3a.75.75 0 10-1.06 1.06l1.72 1.72H8.25a.75.75 0 000 1.5h5.69l-1.72 1.72a.75.75 0 101.06 1.06l3-3z"
-            fill-rule="evenodd"
-          ></path>
-        </svg>
-      </button>  
+              <button class="button" onClick={toggleView}>
+                {t(
+                  activeView === "default"
+                    ? "dashboard.reports.buttons.non-verified-reports"
+                    : "dashboard.reports.buttons.reports-per-property"
+                )}
+                <ChecklistIcon />
+              </button>
             )}
           </>
         )}
       </div>
       {/* {loading ? <TableSkeleton /> : ( */}
-{/*     <ChecklistIcon/> AddIcon*/}
       <GridComponent
         id="gridcomp"
         key={`${activeView}-${i18n.language}`}
@@ -234,18 +219,6 @@ const Reports = () => {
               ))}
         </ColumnsDirective>
       </GridComponent>
-
-      {/* <DataTable value={reports} paginator rows={10} dataKey="id" filterDisplay="row" loading={loading}
-          globalFilterFields={['name', 'country.name', 'representative.name', 'status']} header={header} emptyMessage="No customers found.">
-            
-          <Column field="name" header="Name" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
-          <Column header="Country" filterField="country.name" style={{ minWidth: '12rem' }} body={countryBodyTemplate} filter filterPlaceholder="Search by country" />
-          <Column header="Agent" filterField="representative" showFilterMenu={false} filterMenuStyle={{ width: '14rem' }} style={{ minWidth: '14rem' }}
-            body={representativeBodyTemplate} filter filterElement={representativeRowFilterTemplate} />
-          <Column field="status" header="Status" showFilterMenu={false} filterMenuStyle={{ width: '14rem' }} style={{ minWidth: '12rem' }} body={statusBodyTemplate} filter filterElement={statusRowFilterTemplate} />
-          <Column field="verified" header="Verified" dataType="boolean" style={{ minWidth: '6rem' }} body={verifiedBodyTemplate} filter filterElement={verifiedRowFilterTemplate} />
-        </DataTable> */}
-      {/* )} */}
     </div>
   );
 };
