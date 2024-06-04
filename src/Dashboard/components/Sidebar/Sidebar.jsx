@@ -3,8 +3,8 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { SiShopware } from "react-icons/si";
 import { MdOutlineCancel } from "react-icons/md";
 import { TooltipComponent } from "@syncfusion/ej2-react-popups";
-import Logo from "../../../assets/images/Logos/Logo short.png"
-import  SidebarLinks  from "../../data/sliderbar";
+import Logo from "../../../assets/images/Logos/Logo-short.png"
+import SidebarLinks from "../../data/sliderbar";
 import { useStateContext } from "../../../context/ContextProvider";
 import { FiShoppingBag } from "react-icons/fi";
 import { BiLogOut } from "react-icons/bi";
@@ -14,7 +14,7 @@ import './Siderbar.css'
 const Sidebar = () => {
   const { currentColor, activeMenu, setActiveMenu, screenSize } =
     useStateContext();
-  let user = JSON.parse(localStorage.getItem("user") || '{}'); 
+  let user = JSON.parse(localStorage.getItem("user") || '{}');
   let userRole = user.role.rolName;
   const navigate = useNavigate();
 
@@ -37,13 +37,37 @@ const Sidebar = () => {
 
   const links = SidebarLinks();
   const [t, i18n] = useTranslation("global");
+
+  const [showImage, setShowImage] = useState(false);
+  const [textVisibility, setTextVisibility] = useState('hidden');
+
+  React.useEffect(() => {
+    const animate = () => {
+      setShowImage(false);  // Asegura que la imagen esté oculta inicialmente
+      setTimeout(() => {
+        setShowImage(true); // Activa la animación de la imagen
+        setTimeout(() => {
+          setShowImage(false); // Desactiva la animación de la imagen
+          setTextVisibility(true);  // Activa la animación del texto
+        }, 1000); // Tiempo después de que termina la animación de la imagen
+      }, 100); // Tiempo antes de iniciar la animación de la imagen
+    };
+
+    animate();
+    const interval = setInterval(animate, 13000); // Tiempo total del ciclo de animación
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <div className="ml-3 h-screen md:overflow-hidden overflow-auto md:hover:overflow-auto pb-10">
+    <div className="ml-3 h-screen md:overflow-hidden overflow-auto pb-10">
       {activeMenu && (
         <>
-          <div className="flex justify-between items-center">
-            <div className="items-center gap-3 ml-3 mt-4 flex text-xl font-extrabold tracking-tight dark:text-white text-slate-900">
-              <img className="logodash" src={Logo} alt="Logo" /> <span>Innova Monitoring</span>
+          <div className="flex  justify-between items-center">
+            <div className="flex-container">
+              <img className={`logodash ${showImage ? 'animate-assembleImage' : ''}`} src={Logo} alt="Logo" />
+              <p className={`typewriter-text-logo animate-typing pt-2 pl-3 `} style={{ visibility: textVisibility }}>
+                Innova Monitoring LLC
+              </p>
             </div>
             <TooltipComponent content="Menu" position="BottomCenter">
               <button
@@ -70,7 +94,7 @@ const Sidebar = () => {
                         key={link.name}
                         onClick={handleCloseSideBar}
                         style={({ isActive }) => ({
-                          backgroundColor: isActive ? currentColor : "",
+                          backgroundColor: isActive ? currentColor :  "",
                         })}
                         className={({ isActive }) =>
                           isActive ? activeLink : normalLink

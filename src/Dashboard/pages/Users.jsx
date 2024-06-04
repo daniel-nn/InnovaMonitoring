@@ -33,8 +33,10 @@ import { GetPropertyInfo } from "../helper/getPropertyInfo";
 import { getPropertiesInfo } from "../helper/getProperties";
 import { postNewUser } from "../helper/postNewUser";
 import Swal from 'sweetalert2';
+import '../pages/css/Outlet/Outlet.css'
 import './css/users/Users.css';
 import TableSkeleton from "../components/TableSkeleton";
+
 
 export const Users = () => {
   const {
@@ -88,7 +90,7 @@ export const Users = () => {
       })));
     };
     fetchData();
-  }, [navigate, flag]); 
+  }, [navigate, flag]);
 
   useEffect(() => {
     const fetchRoles = async () => {
@@ -111,7 +113,7 @@ export const Users = () => {
 
   const footer = (
     <>
-      <Divider/>
+      <Divider />
       <p className="mt-2">{t("dashboard.users.dialog-add-user.suggestion.suggestions")}</p>
       <ul className="pl-2 ml-2 mt-0 line-height-3">
         <li>{t("dashboard.users.dialog-add-user.suggestion.at-least-one-lowercase")}</li>
@@ -159,9 +161,9 @@ export const Users = () => {
   };
 
   const handleClose = () => {
-    setUserDialog(false);  
-    setUserProvider({}); 
-    setValidationErrors({});  
+    setUserDialog(false);
+    setUserProvider({});
+    setValidationErrors({});
   };
 
   const handleImageChange = (event) => {
@@ -182,9 +184,9 @@ export const Users = () => {
   };
 
   const saveNewUser = async () => {
-    
+
     if (!validateUserDetails()) {
-      return; 
+      return;
     }
 
     const formData = new FormData();
@@ -198,23 +200,23 @@ export const Users = () => {
       },
       properties: userProvider.properties || []
     })], { type: 'application/json' });
-    formData.append('user', userBlob);  
+    formData.append('user', userBlob);
 
     if (userProvider.image) {
-      formData.append('img', userProvider.image); 
+      formData.append('img', userProvider.image);
     }
     try {
       const data = await postNewUser(formData, t);
       if (data) {
-        setUserSaved(!userSaved);   
+        setUserSaved(!userSaved);
         setUserDialog(false);
-        setUserProvider({}); 
+        setUserProvider({});
       }
     } catch (error) {
     }
   };
 
-console.log(user)
+  console.log(user)
 
 
   return (
@@ -225,16 +227,17 @@ console.log(user)
         visible={userDialog}
         onHide={handleClose}
         modal
-        dismissableMask 
+        dismissableMask
         style={{ width: "40vw", display: "flex", justifyContent: "center" }}
         footer={
           <div className="w-full flex justify-center">
+
             <Button
               icon="pi pi-times"
               severity="danger"
               label={t("dashboard.users.dialog-add-user.cancel")}
-              onClick={handleClose}  
-            />            
+              onClick={handleClose}
+            />
             <div className="w-3"></div>
             <Button
               icon="pi pi-check"
@@ -300,7 +303,7 @@ console.log(user)
                 accept="image/*"
                 onChange={handleImageChange}
                 className="file-input"
-                style={{ display: 'none' }} 
+                style={{ display: 'none' }}
               />
               <label htmlFor="image" className="file-input-label">{t("dashboard.users.dialog-add-user.search-img")}</label>
               <span id="file-name" className="file-name">{userProvider.image ? userProvider.image.name : ''}</span>
@@ -321,7 +324,7 @@ console.log(user)
                   rol: {
                     rolKey: e.value.rolKey,
                     rolName: e.value.rolName,
-                    originalName: e.value.originalName 
+                    originalName: e.value.originalName
                   }
                 }));
                 if (validationErrors.rol) {
@@ -339,57 +342,59 @@ console.log(user)
             />
             {validationErrors.rol && <small className="p-error">{validationErrors.rol}</small>}
           </div>
-          
+
         </div>
       </Dialog>
 
-      <div className="m-20 md:m-10 mt-14 p-2 md:p-0 bg-white rounded-3xl">
-        <Header title={t("dashboard.users.users-tittle")} />
-        <div className="card flex justify-start py-2">
-          {userRole == "Admin" ? (
-            <Button
-              onClick={() => {
-                setUserDialog(true);
-                setUserProvider({ }); }}
-              severity="info"
-              label={t("dashboard.users.add-user")}
-            >
-              <AiOutlinePlusCircle className="ml-2" />
-            </Button>
-            
-          ) : (
-            <></>
-          )}
+      <div className="mx-7 bg-white rounded-3xl overflow-auto">
+        <div className="background">
+          <Header title={t("dashboard.users.users-tittle")} />
+          <div className="card flex justify-start ">
+            {userRole == "Admin" ? (
+              
+              <button
+                onClick={() => {
+                  setUserDialog(true);
+                  setUserProvider({});
+                }} class="button"
+              >
+                {t("dashboard.users.add-user")}
+                <AiOutlinePlusCircle/>
+              </button>
+            ) : (
+              <></>
+            )}
+          </div>
         </div>
-    
+
         {loading ? <TableSkeleton /> : (
-        <GridComponent
-          id="userGrid"
-          key={i18n.language}
-          dataSource={users}
-          allowPaging
-          allowSorting
-          allowExcelExport
-          allowPdfExport
-          toolbar={["Search"]}
-        >
-          <ColumnsDirective>
-            {userGrid(t).map((column, index) => (
-              <ColumnDirective key={index} {...column} />
-            ))}
-          </ColumnsDirective>
-          <Inject
-            services={[
-              Resize,
-              Sort,
-              ContextMenu,
-              Filter,
-              Page,
-              PdfExport,
-              Search,
-            ]}
-          />
-        </GridComponent>
+          <GridComponent
+            id="userGrid"
+            key={i18n.language}
+            dataSource={users}
+            allowPaging
+            allowSorting
+            allowExcelExport
+            allowPdfExport
+            toolbar={["Search"]}
+          >
+            <ColumnsDirective>
+              {userGrid(t).map((column, index) => (
+                <ColumnDirective key={index} {...column} />
+              ))}
+            </ColumnsDirective>
+            <Inject
+              services={[
+                Resize,
+                Sort,
+                ContextMenu,
+                Filter,
+                Page,
+                PdfExport,
+                Search,
+              ]}
+            />
+          </GridComponent>
         )}
       </div>
     </>

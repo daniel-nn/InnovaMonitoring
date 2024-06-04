@@ -586,6 +586,7 @@
         "evidence-removed": "Evidencia eliminada",
         "swal": {
           "new-report": "Nuevo reporte",
+          "wrong-property": "Propiedad erronea",
           "confirmation": "Selecciona la propiedad a reportar",
           "send": "Enviar",
           "don't-save": "No enviar",

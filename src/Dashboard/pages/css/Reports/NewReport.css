@@ -156,3 +156,19 @@
 .confirm-send-report .custom-button {
     margin-right: 0.5rem; 
 }
+
+.typewriter-text-new-report {
+  font-size: 24px;
+  font-family: 'Playfair Display', serif;
+  font-weight: bold;
+  color: rgb(100, 16, 16);
+  white-space: nowrap;
+  overflow: hidden;
+  width: 0;
+  animation: typing 4s steps(40, end) forwards; /* Animación más lenta */
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}

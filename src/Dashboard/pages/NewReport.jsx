@@ -10,7 +10,6 @@ import { Button } from "primereact/button";
 import Swal from "sweetalert2";
 import Checkbox from '@mui/material/Checkbox';
 import { Dropdown } from "primereact/dropdown";
-import { postReport } from "../helper/postReport";
 import { InputNumber } from "primereact/inputnumber";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Calendar } from "primereact/calendar";
@@ -18,11 +17,10 @@ import { RadioButton } from "primereact/radiobutton";
 import FormControlLabel from '@mui/material/FormControlLabel';
 import ConfirmSendReport from "../components/Reports/NewReport/ConfirmSendReport";
 import { Dialog } from 'primereact/dialog';
-
-import exportPDF from "../helper/exportPdf";
 import { getAdminsAndMonitors } from "../helper/getUserAdminsaAndMonitors";
-import { FileUpload } from "primereact/fileupload";
 import "../pages/css/Reports/NewReport.css";
+// import '../pages/css/Outlet/Outlet.css'
+import TypewriterTextNewReport from "../components/Texts/TypewriterTextNewReport";
 
 const NewReport = () => {
   const {
@@ -466,6 +464,8 @@ const NewReport = () => {
 
   const [headerTitle, setHeaderTitle] = useState("");
 
+  
+  
   useEffect(() => {
     const updateTitle = () => {
       if (reportForm.property && reportForm.property.name) {
@@ -480,10 +480,9 @@ const NewReport = () => {
     };
     updateTitle();
     i18n.on("languageChanged", updateTitle);
-    return () => {
-      i18n.off("languageChanged", updateTitle);
-    };
+    return () => i18n.off("languageChanged", updateTitle);
   }, [i18n, t, reportForm.property]);
+
 
   const sendingreport = () => {
     if (!validateForm()) return;
@@ -495,7 +494,9 @@ const NewReport = () => {
   return (
     <div className="m-20 md:m-10 mt-14 p-2 md:p-0 bg-white rounded-3xl">
         
-      <Header title={headerTitle} />
+      {/* <Header
+        title={<TypewriterTextNewReport text={headerTitle}/>} /> */}
+
       <div className="flex flex-wrap -mx-3">
         <div className="w-full md:w-1/3 px-3 mb-6">
           <label htmlFor="propertyType" className="font-bold block mb-2">

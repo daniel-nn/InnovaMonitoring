@@ -36,8 +36,10 @@ import CircularProgress, {
 import Stomp from "stompjs";
 import TableSkeleton from "../components/TableSkeleton";
 import { Toast } from "primereact/toast";
-import AddIcon from "@mui/icons-material/Add";
+import { AiOutlinePlusCircle } from "react-icons/ai";
 import ChecklistIcon from "@mui/icons-material/Checklist";
+import '../pages/css/Outlet/Outlet.css'
+import TypewriterText from "../components/Texts/TypewriterTex";
 
 const Reports = () => {
   const navigate = useNavigate();
@@ -59,7 +61,6 @@ const Reports = () => {
   let id = propertyContext.id || idStorage;
 
   const fetchReports = useCallback(async () => {
-    setLoading(false);
     let reports;
     try {
       reports = await getNumberOfReportsByRole(id, user.id, userRole);
@@ -67,6 +68,7 @@ const Reports = () => {
     } catch (error) {
       console.error("Error al obtener los reportes:", error);
     }
+    setLoading(false);
   }, [id, user.id, userRole]);
 
   const handleFetchNonVerifiedReports = useCallback(async () => {
@@ -134,8 +136,9 @@ const Reports = () => {
   const gridWidth = "100%";
 
   return (
-    <div className="mx-7 bg-white rounded-3xl overflow: auto;">
-      {creatingReport && (
+    <div className="mx-7 bg-white rounded-3xl overflow-auto">
+      <div className="background">
+   {creatingReport && (
         <div className="mx-auto">
           <h1 className="text-lg font-semibold text-blue-500 ">
             {t("dashboard.reports.report-loading")}
@@ -144,23 +147,25 @@ const Reports = () => {
         </div>
       )}
       <Toast ref={toast} />
-      <Header
-        title={t(
-          activeView === "default"
-            ? `${t("dashboard.reports.reports-of")}${propertyContext.name}`
-            : "dashboard.reports.buttons.non-verified-reports"
-        )}
-      />
+        <Header
+          title={<TypewriterText text={t(
+            activeView === "default"
+              ? `${t("dashboard.reports.reports-of")}${propertyContext.name}`
+              : "dashboard.reports.buttons.non-verified-reports"
+          )} />}
+        />
 
-      <div className="card flex justify-start py-2 mb-7 ">
+
+      <div className="card flex justify-start ">
         {(userRole === "Admin" || userRole === "Monitor") && (
           <>
             <button
               onClick={() => navigate("/dashboard/NewReport")}
               class="button"
             >
-              Agregar Reporte
-              <AddIcon/>
+              {t("dashboard.reports.buttons.add-report")}
+
+              <AiOutlinePlusCircle />
             </button>
             <span className="w-5"> </span>
             {userRole === "Admin" && (
@@ -176,7 +181,10 @@ const Reports = () => {
           </>
         )}
       </div>
-      {/* {loading ? <TableSkeleton /> : ( */}
+      </div>
+      {loading ? (
+        <TableSkeleton />
+      ) : (
       <GridComponent
         id="gridcomp"
         key={`${activeView}-${i18n.language}`}
@@ -219,6 +227,7 @@ const Reports = () => {
               ))}
         </ColumnsDirective>
       </GridComponent>
+      )}
     </div>
   );
 };

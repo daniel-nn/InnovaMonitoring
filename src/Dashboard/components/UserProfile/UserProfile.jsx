@@ -6,7 +6,7 @@ import { useStateContext } from "../../../context/ContextProvider";
 import { UserContext } from "../../../context/UserContext"; 
 import avatar from "../../data/avatar.jpg";
 import useUserProfileData from "../UserProfileData";
-import Shortlogo from "../../../assets/images/Logos/Logo short.png"
+import Shortlogo from "../../../assets/images/Logos/Logo-short.png"
 import LogoutButton from "../LogoutButton";
 import { useTranslation } from "react-i18next"; 
 import './UserProfile.css'
