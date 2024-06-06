@@ -36,7 +36,7 @@ import Swal from 'sweetalert2';
 import '../pages/css/Outlet/Outlet.css'
 import './css/users/Users.css';
 import TableSkeleton from "../components/TableSkeleton";
-
+import TypewriterText from "../components/Texts/TypewriterTex";
 
 export const Users = () => {
   const {
@@ -60,7 +60,6 @@ export const Users = () => {
 
 
   useEffect(() => {
-    setLoading(false)
     getUsers().then((data) => setUsers(data));
     getPropertiesInfo(navigate).then((data) => {
       propertiesSelectedVar = data.map((i) => {
@@ -88,6 +87,7 @@ export const Users = () => {
         direction: prop.direction,
         img: prop.img
       })));
+      setLoading(false)
     };
     fetchData();
   }, [navigate, flag]);
@@ -206,11 +206,15 @@ export const Users = () => {
       formData.append('img', userProvider.image);
     }
     try {
+      setLoading(true)
+
       const data = await postNewUser(formData, t);
       if (data) {
         setUserSaved(!userSaved);
         setUserDialog(false);
         setUserProvider({});
+        setLoading(false)
+
       }
     } catch (error) {
     }
@@ -348,7 +352,7 @@ export const Users = () => {
 
       <div className="mx-7 bg-white rounded-3xl overflow-auto">
         <div className="background">
-          <Header title={t("dashboard.users.users-tittle")} />
+          <Header title={<TypewriterText text={t("dashboard.users.users-tittle") }/> }/>
           <div className="card flex justify-start ">
             {userRole == "Admin" ? (
               

@@ -59,16 +59,20 @@ const Sidebar = () => {
   }, []);
 
   return (
-    <div className="ml-3 h-screen md:overflow-hidden overflow-auto pb-10">
+    <div className="ml-3 h-screen overflow-hidden overflow-y-auto pb-10">
       {activeMenu && (
         <>
-          <div className="flex  justify-between items-center">
-            <div className="flex-container">
+          <div className="flex justify-center items-start flex-col w-full">
+            
+            <div className="flex flex-col justify-center items-center mt-5">
               <img className={`logodash ${showImage ? 'animate-assembleImage' : ''}`} src={Logo} alt="Logo" />
-              <p className={`typewriter-text-logo animate-typing pt-2 pl-3 `} style={{ visibility: textVisibility }}>
+            </div>
+            <div className="flex flex-col justify-center items-center mt-5">
+
+              <p className={`typewriter-text-logo animate-typing pt-2 pl-3 text-sm md:text-lg lg:text-xl `} style={{ visibility: textVisibility }}>
                 Innova Monitoring LLC
               </p>
-            </div>
+</div>
             <TooltipComponent content="Menu" position="BottomCenter">
               <button
                 type="button"

@@ -83,13 +83,15 @@ export const postReport = async (reportForm, t, setCreatingReport, userId) => {
         timer: 3000,
         timerProgressBar: true
       });
-          
-      setCreatingReport(false);
+      setCreatingReport(false); 
       return data;
     } else {
+      setCreatingReport(false); 
+
       throw new Error(data.message || t("dashboard.reports.new-report.swal.error-saving"));
     }
   } catch (error) {
+    setCreatingReport(false); 
     console.error("Error saving the report:", error);
     Swal.fire({
       icon: 'error',

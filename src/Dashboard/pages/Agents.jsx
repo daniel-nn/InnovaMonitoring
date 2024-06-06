@@ -19,6 +19,7 @@ import { getRoles } from "../helper/getRoles";
 import Swal from 'sweetalert2';
 import { getPropertiesInfo } from "../helper/getProperties";
 import TableSkeleton from "../components/TableSkeleton";
+import TypewriterText from "../components/Texts/TypewriterTex";
 import '../pages/css/Outlet/Outlet.css'
 
 
@@ -40,13 +41,15 @@ export const Agents = () => {
 
 
   const fetchMonitors = async () => {
-    setLoading(false)
     const agents = await getAgents(navigate);
     setAgentData(agents);
+    setLoading(false)
   };
 
   useEffect(() => {
+    setLoading(true)
     fetchMonitors();
+    setLoading(false)
   }, [navigate, flag]);
 
   useEffect(() => {

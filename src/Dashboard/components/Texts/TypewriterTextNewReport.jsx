@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import "../../pages/css/Reports/NewReport.css";
+
 
 const TypewriterTextNewReport = ({ text }) => {
     const [displayText, setDisplayText] = useState('');
@@ -7,22 +8,21 @@ const TypewriterTextNewReport = ({ text }) => {
     useEffect(() => {
         setDisplayText(''); // Limpia el texto anterior
         let index = 0;
-        let intervalId;
-        const timeoutId = setTimeout(() => {
         const intervalId = setInterval(() => {
-                setDisplayText((prev) => prev + ( "Prueba uno dos tres" [index] || ''));
-                index++;
-                if (index > text.length) {
+            setDisplayText((prev) => {
+                if (index < text.length) {
+                    const nextChar = text[index];
+                    index += 1;
+                    return prev + nextChar;
+                } else {
                     clearInterval(intervalId);
+                    return prev;
                 }
-            }, 150); 
-        }, 500); // Retardo antes de empezar la animación para permitir que el texto antiguo desaparezca
+            });
+        }, 50); // Ajusta el tiempo de espera según tus necesidades
 
-        return () => {
-            clearTimeout(timeoutId);
-            clearInterval(intervalId);
-        };
-    }, [text]); 
+        return () => clearInterval(intervalId);
+    }, [text]);
 
     return (
         <div className="typewriter-text-new-report">

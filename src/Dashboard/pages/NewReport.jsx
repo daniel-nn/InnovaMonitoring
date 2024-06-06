@@ -493,10 +493,10 @@ const NewReport = () => {
       
   return (
     <div className="m-20 md:m-10 mt-14 p-2 md:p-0 bg-white rounded-3xl">
-        
-      {/* <Header
-        title={<TypewriterTextNewReport text={headerTitle}/>} /> */}
-
+      
+        <h1>
+          <TypewriterTextNewReport text={headerTitle} className="pt-2 pb-2" />
+        </h1>
       <div className="flex flex-wrap -mx-3">
         <div className="w-full md:w-1/3 px-3 mb-6">
           <label htmlFor="propertyType" className="font-bold block mb-2">

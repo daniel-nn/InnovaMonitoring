@@ -65,26 +65,32 @@ const Reports = () => {
     try {
       reports = await getNumberOfReportsByRole(id, user.id, userRole);
       setReportes(reports);
+      setLoading(false);
     } catch (error) {
       console.error("Error al obtener los reportes:", error);
     }
-    setLoading(false);
   }, [id, user.id, userRole]);
 
   const handleFetchNonVerifiedReports = useCallback(async () => {
+    setLoading(true)
     try {
       const nonVerifiedReports = await getReportsNoVerified();
       setReportes(nonVerifiedReports);
+      setLoading(false);
     } catch (error) {
       console.error("Error:", error);
     }
   }, []);
 
   const refreshReports = useCallback(async () => {
+    setLoading(true)
     if (activeView === "noVerified") {
       await handleFetchNonVerifiedReports();
+      setLoading(false);
     } else {
       await fetchReports();
+      setLoading(false);
+
     }
   }, [activeView, handleFetchNonVerifiedReports, fetchReports]);
 
@@ -133,7 +139,6 @@ const Reports = () => {
   const monitorGridColumns = useMemo(() => reportsGridMonitor(t), [t]);
   const clientGridColumns = useMemo(() => reportsGrid(t), [t]);
 
-  const gridWidth = "100%";
 
   return (
     <div className="mx-7 bg-white rounded-3xl overflow-auto">

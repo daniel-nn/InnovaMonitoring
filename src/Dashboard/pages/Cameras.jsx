@@ -50,10 +50,9 @@ const Cameras = () => {
   useEffect(() => {
 
     getCameras(navigate).then((data) =>
-      setCamerasList(data)
-
+      setCamerasList(data),
+      setLoading(false)
     );
-    setLoading(false)
 
   }, [cameraSaved]);
 
@@ -63,10 +62,11 @@ const Cameras = () => {
   };
 
   const handleCloseEdit = (updatedCamera) => {
-    setLoading(false)
+    setLoading(true)
     setSelectedCamera(null);
     if (updatedCamera) {
       getCameras(navigate).then(setCamerasList);
+      setLoading(false);
     }
   };
 

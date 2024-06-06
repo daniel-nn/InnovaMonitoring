@@ -42,7 +42,7 @@
 
 .typewriter-text-logo {
     visibility: hidden; 
-    font-size: 24px; /* Tamaño más pequeño */
+    font-size: 18px; /* Tamaño más pequeño */
     font-family: 'Playfair Display', serif;
     font-weight: bold;
     color: rgb(100, 16, 16); /* Asegúrate de que el color sea el adecuado */
