@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Navbar from "../../components/Navbar/Navbar";
@@ -8,21 +8,28 @@ import "./Login.css";
 import logo from "../../assets/images/Logos/innova-monitoring.png";
 import Swal from "sweetalert2";
 import Reveal from "react-reveal/Reveal";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import { a } from "react-spring";
 
 const Login = () => {
-  localStorage.clear("propertySelected")
-  localStorage.clear("user")
+ 
   const [width, setWidth] = useState(window.innerWidth);
   const navigate = useNavigate();
   const [t, i18n] = useTranslation("global");
-  const { userContext, setUserContext, userLogged, setUserLogged } = useContext(UserContext);
+  const { userContext, setUserContext, userLogged, setUserLogged } =
+    useContext(UserContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
   let newUser = null;
   const [showPassword, setShowPassword] = useState(false);
 
+
+  useEffect(() => {
+    localStorage.clear("propertySelected");
+    localStorage.clear("user");
+  }, [])
+  
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
@@ -33,55 +40,97 @@ const Login = () => {
     }
     const user = {
       email: email,
-      pasword: password 
+      pasword: password,
     };
-    
+
     try {
       const newUser = await getUser(user);
+      console.log(newUser);
+
       if (newUser && newUser.email) {
-        localStorage.setItem("user", JSON.stringify({
-          id: newUser.id,
-          email: newUser.email,
-          name: newUser.name,
-          image: newUser.image,
-          role: newUser.rol, 
-          properties: newUser.properties 
-        }));
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            id: newUser.id,
+            email: newUser.email,
+            name: newUser.name,
+            image: newUser.image,
+            role: newUser.rol,
+            properties: newUser.properties,
+          })
+        );
 
         // Actualiza el contexto de usuario con la nueva información
-        
+
         setUserContext({
-          ...userContext, 
+          ...userContext,
           id: newUser.id,
           email: newUser.email,
           name: newUser.name,
           image: newUser.image,
           role: newUser.rol,
-          properties: newUser.properties
+          properties: newUser.properties,
         });
 
-        if (newUser.properties && newUser.properties.length > 0) {
-          localStorage.setItem("propertySelected", JSON.stringify(newUser.properties[0])); 
-          setUserLogged(true);
-          
-          //nueva logica pendiente el inicio de sesión
+      if (newUser.properties && newUser.properties.length > 0) {
+          localStorage.setItem(
+            "propertySelected",
+            JSON.stringify(newUser.properties[0])
+          );
+          setUserLogged(true); 
 
+          /* El id del monitor debe ser 3 siempre */
+          console.log(" El id del monitor debe ser 3 siempre");
+
+        if (newUser.rol.id === 3) {
+  
+            let ipData = await fetch("https://api.ipify.org/?format=json");
+            const ip = await ipData.json();
+            const param = { ip: ip.ip };
+            // Construir la URL con los parámetros
+            const baseUrl = "http://localhost:8080/api/networks";
+            const url = new URL(baseUrl);
+            url.search = new URLSearchParams(param).toString();
+
+            let response = await fetch(url, {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+
+            let data = await response.json();
+            console.log(data.isApproved);
+            if(!data.isApproved){
+              Swal.fire(
+                "Info",
+              "Lo siento, no tienes acceso al IDS en este momento, tu red no esta registrada en nuestro sistema",
+                "info"
+              );
+              
+              navigate("/");
+              return;
+            } 
+          }
+          
           navigate("/dashboard");
         } else {
-          Swal.fire("Info", t("login.swal-fire.properties-don't-assigned"), "info");
+          Swal.fire(
+            "Info",
+            t("login.swal-fire.properties-don't-assigned"),
+            "info"
+          );
           navigate("/");
         }
+      } else {
+        Swal.fire("Info", "El usuario no existe en la base de datos ", "info");
+        navigate("/");
       }
     } catch (error) {
       setError(true);
       Swal.fire("Error", error.toString(), "error");
     }
   };
-
-
-
-
-
 
   return (
     <>
@@ -96,7 +145,9 @@ const Login = () => {
                     {t("login.IDS")}
                   </p>
 
-                  <p className="max-w-xl mt-3 text-gray-300 text-center">{t("login.text")}</p>
+                  <p className="max-w-xl mt-3 text-gray-300 text-center">
+                    {t("login.text")}
+                  </p>
                 </div>
               </div>
             </div>
@@ -106,7 +157,11 @@ const Login = () => {
             <div className="flex-1">
               <div className="text-center">
                 <div className="flex justify-center mx-auto">
-                  <img className="h-52 w-52" src={logo} alt="Innova Monitoring" />
+                  <img
+                    className="h-52 w-52"
+                    src={logo}
+                    alt="Innova Monitoring"
+                  />
                 </div>
                 <p className="mt-3 text-gray-500 p-0">
                   {t("login.header_sign_in")}
@@ -136,7 +191,10 @@ const Login = () => {
 
                   <div className="mt-6">
                     <div className="flex justify-between items-center mb-2">
-                      <label htmlFor="password" className="text-sm text-gray-600">
+                      <label
+                        htmlFor="password"
+                        className="text-sm text-gray-600"
+                      >
                         {t("login.password")}
                       </label>
                       <p
@@ -170,15 +228,12 @@ const Login = () => {
                         )}
                       </button>
                     </div>
-
-
                   </div>
 
-
                   {error && (
-
-                    <div className="mt-6 text-red-700">{t("login.required_fields")}</div>
-
+                    <div className="mt-6 text-red-700">
+                      {t("login.required_fields")}
+                    </div>
                   )}
 
                   <div className="mt-6">
@@ -201,7 +256,6 @@ const Login = () => {
                   >
                     {t("login.join_us")}
                   </Link>
-
                 </p>
               </div>
             </div>
