@@ -1000,6 +1000,7 @@
           "name": "Nombre",
           "address": "Dirección",
           "remove": "Eliminar",
+          "add-property": "Add Property",
           "delete-assigned-property": {
             "confirm-title": "¿Estas seguro?",
             "confirm-text": "No podras revertir este proceso",
@@ -1017,7 +1018,8 @@
       "add-case": "Añadir Caso",
       "add-dialog": {
         "add-title": "Caso nuevo",
-        "name-case-label": "Añadir Caso",
+        "incident-eng": "New Case English",
+        "incident-es": "New Case Spanish",
         "send": "Enviar",
         "cancel": "Cancelar"
       },

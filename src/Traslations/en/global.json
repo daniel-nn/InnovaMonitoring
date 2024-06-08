@@ -995,10 +995,11 @@
         "added-to-user": "Added to user",
         "property-remove": "Property Removed From User",
         "table": {
-          "img": "Image",
+          "image": "Image",
           "name": "Name",
           "address": "Address",
           "remove": "Remove",
+          "add-property": "Add Property",
           "delete-assigned-property": {
             "confirm-title": "Are You Sure?",
             "confirm-text": "You Will Not Be Able To Reverse This Process",
@@ -1016,7 +1017,8 @@
       "add-case": "Add Case",
       "add-dialog": {
         "add-title": "Add Case",
-        "name-case-label": "New Case",
+        "incident-eng": "New Case English",
+        "incident-es": "New Case Spanish",
         "send": "Send",
         "cancel": "Cancel"
       },

@@ -63,7 +63,8 @@ export const UserProvider = ({ children }) => {
 
   const [caseProvider, setCaseProvider] = useState({
     id: "",
-    incidente: "",
+    incident_eng: "",
+    incident_es: ""
   });
 
   const [userProvider, setUserProvider] = useState({

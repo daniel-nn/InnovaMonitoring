@@ -9,8 +9,8 @@ const LogoutButton = ({ bgColor, color, bgHoverColor, size, text, borderRadius, 
     const navigate = useNavigate();
 
     const logout = () => {
-        localStorage.removeItem('user');
-        localStorage.removeItem('propertySelected');
+        localStorage.clear('user');
+        localStorage.clear('propertySelected');
         navigate('/login');
     };
 

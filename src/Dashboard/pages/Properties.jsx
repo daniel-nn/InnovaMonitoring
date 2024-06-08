@@ -15,6 +15,7 @@ import Swal from 'sweetalert2';
 import { NewPropertyForm } from "../components/Forms/Properties/NewPropertyForm";
 import { EditPropertyForm } from "../components/Forms/Properties/EditPropertyForm";
 import TableSkeleton from "../components/TableSkeleton";
+import TypewriterText from "../components/Texts/TypewriterTex";
 import '../pages/css/Outlet/Outlet.css'
 
 
@@ -53,12 +54,12 @@ export const Properties = () => {
 
   // Efecto para cargar propiedades
   useEffect(() => {
-    setLoading(false)
     const fetchProperties = async () => {
       try {
         const data = await getPropertiesMapped(navigate, userRole);
         if (data && data.length > 0) {
           setProperties(data);
+          setLoading(false)
         } else {
           console.error("No properties found");
         }
@@ -83,6 +84,7 @@ export const Properties = () => {
   };
 
   const handleCloseEditPropertyDialog = (updatedProperty) => {
+    setLoading(true)
     setEditPropertyDialog(false);
     setPropertyProvider({});
     if (updatedProperty) {
@@ -90,10 +92,13 @@ export const Properties = () => {
         property.id === updatedProperty.id ? updatedProperty : property
       ));
     }
+    setLoading(false)
+
   };
 
   const refreshProperties = async () => {
     try {
+      setLoading(true);
       const newData = await getPropertiesMapped();
       if (newData && newData.length > 0) {
         console.log('New data after refresh:', newData);
@@ -104,6 +109,7 @@ export const Properties = () => {
     } catch (error) {
       console.error('Error refreshing properties:', error);
       setProperties([]);
+      setLoading(false)
     }
   };
 
@@ -134,7 +140,7 @@ export const Properties = () => {
 
       <div className="mx-7 bg-white rounded-3xl overflow-auto">
         <div className="background">
-          <Header title={t("dashboard.properties.properties-title")} />
+          <Header title={<TypewriterText text={t("dashboard.properties.properties-title")} />}/>
 
           <div className="card flex justify-start">
             {userRole == "Admin" ? (

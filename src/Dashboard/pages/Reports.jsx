@@ -99,7 +99,9 @@ const Reports = () => {
   }, [refreshReports]);
 
   useEffect(() => {
-    const socket = new WebSocket("ws://52.90.149.16:8080/ws"); // URL del WebSocket del servidor Spring Boot
+    const socketUrl = process.env.REACT_APP_WEB_SOCKET_IP;// URL del WebSocket del servidor Spring Boot
+
+    const socket = new WebSocket(socketUrl); 
     const stompClient = Stomp.over(socket);
     stompClient.connect({}, () => {
       console.log(`/topic/user/user-${user.id.toString()}`);

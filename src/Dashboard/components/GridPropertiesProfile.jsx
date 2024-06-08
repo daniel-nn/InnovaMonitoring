@@ -16,8 +16,10 @@ const GridPropertiesProfile = ({ userId, setUserData }) => {
   const [activeView, setActiveView] = useState('default');
   const [loading, setLoading] = useState(true)
 
+ 
   const fetchProperties = async () => {
     setLoading(true);
+ 
     if (activeView === 'assign') {
       const nonAssignedProperties = await getNonPropertiesUser(userId);
       setDataToShow(nonAssignedProperties);
@@ -29,14 +31,21 @@ const GridPropertiesProfile = ({ userId, setUserData }) => {
     setLoading(false)
   };
 
+
   const fetchUpdatedProperties = async () => {
+    setLoading(true);
     const nonAssignedProperties = await getNonPropertiesUser(userId);
     setDataToShow(nonAssignedProperties);
+    setLoading(false);
+
   };
 
-  useEffect(() => {
+  useEffect(() => {   
+    setLoading(true);
     fetchProperties();
-  }, [userId, activeView]);
+        setLoading(true);
+
+  }, [userId, activeView, i18n.language]);
 
   const columns = useMemo(() => {
     if (activeView === 'default') {
@@ -48,6 +57,9 @@ const GridPropertiesProfile = ({ userId, setUserData }) => {
   const handleViewChange = () => {
     setActiveView(prevView => prevView === 'default' ? 'assign' : 'default');
   };
+
+  console.log("Data to show:", dataToShow);
+  console.log("Columns:", columns); 
   return (
     <div>
           

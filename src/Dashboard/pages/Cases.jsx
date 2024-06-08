@@ -16,6 +16,7 @@ import { InputText } from "primereact/inputtext";
 import { PostIncident, postIncident } from "../helper/postIncident";
 import { putIncident } from "../helper/putIncident";
 import TableSkeleton from "../components/TableSkeleton";
+import TypewriterText from "../components/Texts/TypewriterTex";
 import '../pages/css/Outlet/Outlet.css'
 
 export const Cases = () => {
@@ -41,8 +42,8 @@ export const Cases = () => {
 
 
   useEffect(() => {
-    setLoading(false)
     getIncidents(navigate).then((data) => setCases(data));
+    setLoading(false)
   }, [reportSaved]);
 
 
@@ -60,17 +61,21 @@ export const Cases = () => {
 
   const editIncident = async () => {
     if (validateCaseDetails()) {
+      setLoading(true)
       await putIncident(caseProvider, setreportSaved, reportSaved, t);
       setCaseDialog(!caseDialog);
       setCaseProvider({});
+      setLoading(false);
     }
   };
 
 
   const saveIncident = async () => {
     if (validateCaseDetails()) {
+      setLoading(true)
       await postIncident(caseProvider, setreportSaved, reportSaved, t);
       setCaseDialog(!caseDialog);
+      setLoading(false)
     }
   };
   const handleInputChange = (field, value) => {
@@ -146,18 +151,42 @@ export const Cases = () => {
                   }
                 }}
               />
+      
               <label htmlFor="caseType">
-                {t(editCase ? "dashboard.cases.edit-dialog.name-case-label" : "dashboard.cases.add-dialog.name-case-label")}
+                {t(editCase ? "dashboard.cases.edit-dialog.name-case-label" : "dashboard.cases.add-dialog.incident-eng")}
               </label>
             </span>
             {validationErrors.incident && <small className="p-error">{validationErrors.incident}</small>}
+          </div>
+          <div className="mt-6 mb-6 mx-auto">
+            <span className="p-float-label">
+                
+              <InputText
+                id="translate"
+                value={caseProvider.translate}
+                onChange={(e) => {
+                  setCaseProvider(prev => ({ ...prev, translate: e.target.value }));
+                  if (validationErrors.translate && e.target.value.trim()) {
+                    setValidationErrors(prev => {
+                      const updatedErrors = { ...prev };
+                      delete updatedErrors.translate;
+                      return updatedErrors;
+                    });
+                  }
+                }}
+              />
+              <label htmlFor="caseType">
+                {t(editCase ? "dashboard.cases.edit-dialog.name-case-label" : "dashboard.cases.add-dialog.incident-es")}
+              </label>
+            </span>
+            {validationErrors.translate && <small className="p-error">{validationErrors.translate}</small>}
           </div>
         </div>
 
       </Dialog>
       <div className="mx-7 bg-white rounded-3xl overflow-auto">
         <div className="background">
-          <Header title={t("dashboard.cases.add-case")} />
+          <Header title={<TypewriterText text={t("dashboard.cases.add-case")} />}/>
           <div className="card flex justify-start">
 
             {userRole == "Admin" ? (

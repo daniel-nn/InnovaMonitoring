@@ -1719,7 +1719,7 @@ export const propertyGridAdmin = (t, handleOpenEditPropertyDialog) => {
     },
     {
       headerText: t("dashboard.properties.table.reports"),
-      field: "numOfReportsProperty",
+      field: "numOfReportsTotal",
       textAlign: "Center",
       width: "120",
     },

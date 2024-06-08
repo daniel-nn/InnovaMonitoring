@@ -334,7 +334,7 @@ export const Agents = () => {
       </Dialog>
       <div className="mx-7 bg-white rounded-3xl overflow-auto">
         <div className="background">
-          <Header title={t("dashboard.agents.agents-tittle")} />
+          <Header title={<TypewriterText text={t("dashboard.agents.agents-tittle")} />} />
           <div className="card flex justify-start ">
             {userRole == "Admin" ? (
               <button
