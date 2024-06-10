@@ -24,13 +24,14 @@ import { UserContext } from "../../context/UserContext";
 import { cameraGrid, cameraGridAdmin } from "../data/dummy";
 import { useTranslation } from "react-i18next";
 import TableSkeleton from "../components/TableSkeleton";
+import '../pages/css/Outlet/Outlet.css'
+import TypewriterText from "../components/Texts/TypewriterTex";
 
 const Cameras = () => {
   const toolbarOptions = ["Search"];
   const navigate = useNavigate();
   const editing = { allowDeleting: true, allowEditing: true };
   const { t, i18n } = useTranslation("global");
-
 
   const [camerasList, setCamerasList] = useState([]);
   let propertiesUser = JSON.parse(localStorage.getItem("user"));
@@ -47,24 +48,27 @@ const Cameras = () => {
   const [selectedCamera, setSelectedCamera] = useState(null);
 
   useEffect(() => {
-    getCameras(propertyContext.id || id, navigate).then((data) =>
-      setCamerasList(data)
+
+    getCameras(navigate).then((data) =>
+      setCamerasList(data),
+      setLoading(false)
     );
-  }, [propertyContext, cameraSaved]);
+
+  }, [cameraSaved]);
 
   const handleClose = () => {
-    setCameraFormFlag(false); 
-    setCameraForm({});        
+    setCameraFormFlag(false);
+    setCameraForm({});
   };
 
   const handleCloseEdit = (updatedCamera) => {
-    setLoading(false)
+    setLoading(true)
     setSelectedCamera(null);
     if (updatedCamera) {
-      getCameras(propertyContext.id || id, navigate).then(setCamerasList);
+      getCameras(navigate).then(setCamerasList);
+      setLoading(false);
     }
   };
-
 
   return (
     <>
@@ -73,14 +77,14 @@ const Cameras = () => {
         visible={cameraFormFlag}
         style={{ width: "50vw" }}
         modal
-        dismissableMask 
+        dismissableMask
         onHide={handleClose}
       >
-        <CameraForm 
-        properties={listOfPropertiesByUser} cameraSaved={cameraSaved}
-        setCameraFormFlag={setCameraFormFlag}
-        setCameraSaved={setCameraSaved} 
-        onClose={handleClose} />
+        <CameraForm
+          properties={listOfPropertiesByUser} cameraSaved={cameraSaved}
+          setCameraFormFlag={setCameraFormFlag}
+          setCameraSaved={setCameraSaved}
+          onClose={handleClose} />
       </Dialog>
 
       <Dialog
@@ -88,32 +92,32 @@ const Cameras = () => {
         visible={selectedCamera !== null}
         style={{ width: "50vw" }}
         modal
-        dismissableMask 
+        dismissableMask
         onHide={() => setSelectedCamera(null)}
       >
         <CameraEditForm camera={selectedCamera} onClose={handleCloseEdit} />
       </Dialog>
 
-      <div className="m-0 md:m-8 mt-14 p-2 md:p-0 bg-white rounded-3xl">
-        <Header title={t("dashboard.cameras.title") +propertyContext.name} />
-
-        <div className="card flex justify-start py-2 mb-7">
-          {userRole == "Admin" ? (
-            <Button
-            onClick={() => setCameraFormFlag(true)}
-            severity="info"
-            label={t("dashboard.cameras.dialog.add-camera")}
-          >
-            {" "}
-            <AiOutlinePlusCircle className="ml-2"></AiOutlinePlusCircle>
-          </Button>
-          ) : (
-            <></>
-          )}
+      <div className="mx-7 bg-white rounded-3xl overflow-auto">
+      <div className="background">
+          <Header title={<TypewriterText text={t("dashboard.cameras.title") + propertyContext.name} />}/>
+          <div className="card flex justify-start">
+            {userRole == "Admin" ? (
+              <button
+                onClick={() => setCameraFormFlag(true)}
+                class="button"
+              >
+                {t("dashboard.cameras.dialog.add-camera")}
+                <AiOutlinePlusCircle/>
+              </button>
+            ) : (
+              <></>
+            )}
         </div>
-        
-        {/* {loading ? <TableSkeleton /> : ( */}
-        <GridComponent
+          </div>
+        {loading ? (
+          <TableSkeleton />
+        ) : (<GridComponent
           dataSource={camerasList}
           width="auto"
           allowPaging
@@ -124,7 +128,6 @@ const Cameras = () => {
           toolbar={toolbarOptions}
           allowResizing={true}
         >
-        
 
           <ColumnsDirective>
             {userRole === "Admin" ?
@@ -137,7 +140,7 @@ const Cameras = () => {
 
           <Inject services={[Search, Page, Toolbar]} />
         </GridComponent>
-        {/* )} */}
+        )}
       </div>
     </>
   );

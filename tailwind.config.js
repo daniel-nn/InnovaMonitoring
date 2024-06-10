@@ -39,9 +39,23 @@ module.exports = {
       },
       backgroundImage: {
         'hero-pattern':
-        "url('http://www.pixelstalk.net/wp-content/uploads/2016/06/Light-Blue-Wallpaper-Backgrounds-Free-Download.jpg')",
+          "url('http://www.pixelstalk.net/wp-content/uploads/2016/06/Light-Blue-Wallpaper-Backgrounds-Free-Download.jpg')",
         'hero-magnolia':
-        "url('/src/assets/images/Components/About/securityImages.jpg')"
+          "url('/src/assets/images/Components/About/securityImages.jpg')"
+      },
+      animation: {
+        'sidebar-typing': 'sidebar-typing 3.5s steps(40, end) forwards',
+        'logo-assemble': 'logo-assemble 0.5s ease-in-out forwards',
+      },
+      keyframes: {
+        'sidebar-typing': {
+          'from': { width: '0', borderRight: '2px solid black' },
+          'to': { width: 'calc(100% - 0.5ch)', borderRightColor: 'transparent' },
+        },
+        'logo-assemble': {
+          '0%': { transform: 'scale(0)' },
+          '100%': { transform: 'scale(1)' },
+        },
       },
     },
     fontFamily: {

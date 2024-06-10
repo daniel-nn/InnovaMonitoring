@@ -7,19 +7,19 @@ const createHTMLString = (data) => {
     <br>
     <br>
     <div style="
-   display: grid;
+    display: grid;
     grid-template-columns: repeat(12, 1fr);
     font-family: Calibri, sans-serif;
     color: #333;
     max-width: 800px;
     margin: auto;
-    padding: 0; /* Establecido a 0 para permitir que los hijos se expandan completamente */
+    padding: 0; 
     background-color: ${backgroundColor};
     border: 3px solid black;
     margin-top: 25px;
-    box-sizing: border-box;
-">
-          <div style="grid-column: span 4; padding-left: 12px;">
+    box-sizing: border-box;">
+    
+        <div style="grid-column: span 4; padding-left: 12px;">
             <h1 style="font-size: 30px; color: rgb(48, 84, 150); border-bottom: 2px solid rgb(48, 84, 150); padding-bottom: 3px;  font-weight: bold;">INCIDENT REPORT
             </h1>
             <p style="color: rgb(48, 84, 150); font-weight: bold;">${data.property.name || 'Null'}  </p>

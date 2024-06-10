@@ -27,9 +27,9 @@ const ConfirmSendReport = ({ properties, reportData, setCreatingReport, navigate
             return;
         }
 
-        await postReport({ ...reportData, property: selectedProperty }, t, setCreatingReport, user.id);
-        setCreatingReport(true);
         navigate("/dashboard/reports");
+        setCreatingReport(true);
+        await postReport({ ...reportData, property: selectedProperty }, t, setCreatingReport, user.id);
         resetReportForm();
         setShowConfirmDialog(false);
     };

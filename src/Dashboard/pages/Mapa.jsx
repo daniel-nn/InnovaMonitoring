@@ -21,12 +21,6 @@ import { CRS, Icon } from "leaflet";
 import Dome from "../../assets/video-camera (1).png";
 import PTZ from "../../assets/PTZ.png";
 import offile from "../../assets/offline.jpg"
-import { glorieta } from "../../data/Glorieta";
-import { cordoba } from "../../data/Cordoba";
-import { magnolia } from "../../data/Magnolia";
-import { aswan } from "../../data/Aswan";
-import { bellAir } from "../../data/BellAir";
-import { lakeWood } from "../../data/LakeWood";
 import { UserContext } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import useFetchProperties from "../Hooks/useFetchProperties";

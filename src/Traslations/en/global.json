@@ -541,7 +541,7 @@
           "na": "N/A",
           "listedOnReport": "listed On Report"
         },
-        "select-observedViaCameras": "observer Via Cameras",
+        "select-observedViaCameras": "Observerd Via Cameras",
         "is-policeFirstResponderNotified": "Police First Responder Notified",
         "policeFirstResponderSceneeholder": "Police First Responder",
         "police-first-responder-scene": "Police First Responder On Scene",
@@ -590,6 +590,7 @@
         "evidence-removed": "Evidence removed",
         "swal": {
           "new-report": "New Report",
+          "wrong-property": "Wrong Property",
           "confirmation": "Select the Property to Report",
           "cancel": "Cancel",
           "send": "Send",
@@ -654,7 +655,7 @@
           "na": "N/A",
           "listedOnReport": "listed On Report"
         },
-        "select-observedViaCameras": "observer Via Cameras",
+        "select-observedViaCameras": "Observerd Via Cameras",
         "is-policeFirstResponderNotified": "Police First Responder Notified",
         "policeFirstResponderSceneeholder": "Police First Responder",
         "police-first-responder-scene": "Police First Responder On Scene",

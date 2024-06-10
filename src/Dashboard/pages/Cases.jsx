@@ -16,6 +16,7 @@ import { InputText } from "primereact/inputtext";
 import { PostIncident, postIncident } from "../helper/postIncident";
 import { putIncident } from "../helper/putIncident";
 import TableSkeleton from "../components/TableSkeleton";
+import '../pages/css/Outlet/Outlet.css'
 
 export const Cases = () => {
   const toolbarOptions = ["Search"];
@@ -154,25 +155,25 @@ export const Cases = () => {
         </div>
 
       </Dialog>
-      <div className="m-20 md:m-10 mt-14 p-2 md:p-0 bg-white rounded-3xl">
-        <Header title={t("dashboard.cases.add-case")} />
-        <div className="card flex justify-start py-2">
+      <div className="mx-7 bg-white rounded-3xl overflow-auto">
+        <div className="background">
+          <Header title={t("dashboard.cases.add-case")} />
+          <div className="card flex justify-start">
 
-          {userRole == "Admin" ? (
+            {userRole == "Admin" ? (
+              <button
+                onClick={() => {
+                  setCaseDialog(!caseDialog);
+                }} class="button"
+              >
+                {t("dashboard.cases.add-case")}
+                <AiOutlinePlusCircle />
+              </button>
 
-            <Button
-              severity="info"
-              label={t("dashboard.cases.add-case")}
-              onClick={() => {
-                setCaseDialog(!caseDialog);
-              }}
-            >
-              {" "}
-              <AiOutlinePlusCircle className="ml-2"></AiOutlinePlusCircle>
-            </Button>
-          ) : (
-            <></>
-          )}
+            ) : (
+              <></>
+            )}
+          </div>
         </div>
         {loading ? <TableSkeleton /> : (
 
