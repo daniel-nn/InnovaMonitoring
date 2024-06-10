@@ -586,6 +586,7 @@
         "evidence-removed": "Evidencia eliminada",
         "swal": {
           "new-report": "Nuevo reporte",
+          "wrong-property": "Propiedad erronea",
           "confirmation": "Selecciona la propiedad a reportar",
           "send": "Enviar",
           "don't-save": "No enviar",
@@ -735,26 +736,6 @@
         "name": "Agente de monitoreo:",
         "company": "Equipo:",
         "incident": "Caso del incidente:",
-        "types-of-incident": {
-          "narcotics": "Narcóticos",
-          "shooting": "Disparos",
-          "garbage": "Basura",
-          "illegal-parking": "Estacionamiento Ilegal",
-          "carrying-weapon": "Portación de Arma",
-          "damage-to-property": "Daño a la Propiedad",
-          "debris": "Escombros",
-          "drinking-alcohol-outdoor": "Consumo de Alcohol al Aire Libre",
-          "flooding": "Inundación",
-          "gambling": "Juego de Azar",
-          "hazardous": "Peligroso",
-          "medical-emergency": "Emergencia Médica",
-          "police-arrest": "Policía (Arresto)",
-          "police-interrogation": "Policía (Interrogatorio)",
-          "trespassing": "Intrusión",
-          "vandalism": "Vandalismo",
-          "other-see-report": "Otros (Ver Informe)",
-          "illegal-sales": "Ventas Ilegales"
-        },
         "level": "Nivel del reporte:",
         "security-guards-scene": "Guardia de seguridad en el lugar:",
         "security-guards-notified": "Guardia de seguridad notificado:",
@@ -999,6 +980,7 @@
           "name": "Nombre",
           "address": "Dirección",
           "remove": "Eliminar",
+          "add-property": "Add Property",
           "delete-assigned-property": {
             "confirm-title": "¿Estas seguro?",
             "confirm-text": "No podras revertir este proceso",
@@ -1016,7 +998,8 @@
       "add-case": "Añadir Caso",
       "add-dialog": {
         "add-title": "Caso nuevo",
-        "name-case-label": "Añadir Caso",
+        "incident-eng": "Nuevo caso en ingles",
+        "incident-es": "Nuevo caso en español",
         "send": "Enviar",
         "cancel": "Cancelar"
       },
@@ -1030,7 +1013,8 @@
         "cancel": "Cancelar"
       },
       "table": {
-        "case-type": "Tipo de caso",
+        "case-type-en": "Caso ingles",
+        "case-type-es": "Caso español",
         "edit": "Editar",
         "delete": {
           "delete": "Eliminar",

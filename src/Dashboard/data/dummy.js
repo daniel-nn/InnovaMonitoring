@@ -309,7 +309,7 @@ const GridEditProperty = ({ property, handleOpenEditPropertyDialog }) => {
 };
 
 
-export const GridEdit = ({ caseType }) => {
+export const GridEdit = ({ incident, translate }) => {
   const {
     caseProvider,
     setCaseProvider,
@@ -322,10 +322,16 @@ export const GridEdit = ({ caseType }) => {
   return (
     <div
       onClick={() => {
-        setCaseProvider(caseType);
+        setCaseProvider({
+          ...caseProvider,
+          incident: incident,
+          translate: translate
+        });
         setCaseDialog(!caseDialog);
         setEditCase(true);
-        console.log(caseType);
+        console.log(incident);
+        console.log(translate);
+
       }}
       className="flex justify-center m-0 p-0 cursor-pointer"
     >
@@ -335,23 +341,6 @@ export const GridEdit = ({ caseType }) => {
 };
 
 
-// export const GridUserEdit = ({ user }) => {
-//   const { userProvider, setUserProvider, userDialog, setUserDialog } =
-//     useContext(UserContext);
-
-//   return (
-//     <div
-//       onClick={() => {
-//         setUserProvider(user);
-
-//         setUserDialog(!userDialog);
-//       }}
-//       className="flex justify-center m-0 p-0 cursor-pointer"
-//     >
-//       <AiFillEdit className="text-lg"></AiFillEdit>
-//     </div>
-//   );
-// };
 export const GridAgentEdit = ({ agent }) => {
   const { agentProvider, setagentProvider, agentDialog, setAgentDialog } =
     useContext(UserContext);
@@ -1589,8 +1578,14 @@ export const ordersCases = [
 export const ordersCasesAdmin = (t) => {
   return [
     {
-      headerText: t("dashboard.cases.table.case-type"),
+      headerText: t("dashboard.cases.table.case-type-en"),
       field: "incident",
+      textAlign: "Center",
+      width: "150",
+    },
+    {
+      headerText: t("dashboard.cases.table.case-type-es"),
+      field: "translate",
       textAlign: "Center",
       width: "150",
     },
@@ -1719,7 +1714,7 @@ export const propertyGridAdmin = (t, handleOpenEditPropertyDialog) => {
     },
     {
       headerText: t("dashboard.properties.table.reports"),
-      field: "numOfReportsProperty",
+      field: "numOfReportsTotal",
       textAlign: "Center",
       width: "120",
     },

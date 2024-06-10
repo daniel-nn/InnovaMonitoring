@@ -17,7 +17,7 @@ export const PersonalProfile = ({ userProvider, setUserProvider, initialRolName,
 
   const [showPasword, setShowPasword] = useState(false);
   const { name, rol, image } = userProvider;
- 
+  
   const [selectedRoleId, setSelectedRoleId] = useState(userProvider.rol?.rolKey);
   const [tempRole, setTempRole] = useState(null);
 

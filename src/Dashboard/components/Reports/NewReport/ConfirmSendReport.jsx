@@ -27,9 +27,9 @@ const ConfirmSendReport = ({ properties, reportData, setCreatingReport, navigate
             return;
         }
 
-        await postReport({ ...reportData, property: selectedProperty }, t, setCreatingReport, user.id);
-        setCreatingReport(true);
         navigate("/dashboard/reports");
+        setCreatingReport(true);
+        await postReport({ ...reportData, property: selectedProperty }, t, setCreatingReport, user.id);
         resetReportForm();
         setShowConfirmDialog(false);
     };
@@ -59,6 +59,7 @@ const ConfirmSendReport = ({ properties, reportData, setCreatingReport, navigate
                 className="w-full"
             />
             <div className="button-container"> 
+                
                 <Button
                     label={t("dashboard.reports.new-report.swal.cancel")}
                     icon="pi pi-times"
@@ -74,7 +75,7 @@ const ConfirmSendReport = ({ properties, reportData, setCreatingReport, navigate
                 <Button
                     label={t("dashboard.reports.new-report.swal.send")}
                     icon="pi pi-check"
-                    className="p-button-success"
+                    className="p-button-info"
                     onClick={handleConfirm}
                 />
             </div>

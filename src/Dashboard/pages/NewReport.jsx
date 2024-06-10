@@ -10,7 +10,6 @@ import { Button } from "primereact/button";
 import Swal from "sweetalert2";
 import Checkbox from '@mui/material/Checkbox';
 import { Dropdown } from "primereact/dropdown";
-import { postReport } from "../helper/postReport";
 import { InputNumber } from "primereact/inputnumber";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Calendar } from "primereact/calendar";
@@ -18,11 +17,10 @@ import { RadioButton } from "primereact/radiobutton";
 import FormControlLabel from '@mui/material/FormControlLabel';
 import ConfirmSendReport from "../components/Reports/NewReport/ConfirmSendReport";
 import { Dialog } from 'primereact/dialog';
-
-import exportPDF from "../helper/exportPdf";
 import { getAdminsAndMonitors } from "../helper/getUserAdminsaAndMonitors";
-import { FileUpload } from "primereact/fileupload";
 import "../pages/css/Reports/NewReport.css";
+// import '../pages/css/Outlet/Outlet.css'
+import TypewriterTextNewReport from "../components/Texts/TypewriterTextNewReport";
 
 const NewReport = () => {
   const {
@@ -466,6 +464,8 @@ const NewReport = () => {
 
   const [headerTitle, setHeaderTitle] = useState("");
 
+  
+  
   useEffect(() => {
     const updateTitle = () => {
       if (reportForm.property && reportForm.property.name) {
@@ -480,13 +480,12 @@ const NewReport = () => {
     };
     updateTitle();
     i18n.on("languageChanged", updateTitle);
-    return () => {
-      i18n.off("languageChanged", updateTitle);
-    };
+    return () => i18n.off("languageChanged", updateTitle);
   }, [i18n, t, reportForm.property]);
 
+
   const sendingreport = () => {
-    if (!validateForm()) return;
+    // if (!validateForm()) return;
     setShowConfirmDialog(true);
   };
 
@@ -494,8 +493,10 @@ const NewReport = () => {
       
   return (
     <div className="m-20 md:m-10 mt-14 p-2 md:p-0 bg-white rounded-3xl">
-        
-      <Header title={headerTitle} />
+      
+        <h1>
+          <TypewriterTextNewReport text={headerTitle} className="pt-2 pb-2" />
+        </h1>
       <div className="flex flex-wrap -mx-3">
         <div className="w-full md:w-1/3 px-3 mb-6">
           <label htmlFor="propertyType" className="font-bold block mb-2">
@@ -669,9 +670,10 @@ const NewReport = () => {
               <label htmlFor="incidentEndTime" className="font-bold">
                 {t("dashboard.reports.new-report.select-incident-end-time")}
               </label>
-              <FormControlLabel
-                control={
-                  <Checkbox
+              <div className="checkbox-wrapper">
+                <label className="flex items-center"> {/* Añadir flex y items-center para alinear horizontalmente */}
+                  <input
+                    type="checkbox"
                     checked={reportForm.persist}
                     onChange={(e) => {
                       setReportForm(prev => ({
@@ -680,13 +682,13 @@ const NewReport = () => {
                         incidentEndTime: e.target.checked ? null : prev.incidentEndTime
                       }));
                     }}
-                    color="primary"
                   />
-                }
-                label={t("dashboard.reports.new-report.persist")}
-                className="ml-2"
-              />
+                  <span className="checkbox"></span>
+                  <span>{t("dashboard.reports.new-report.persist")}</span> {/* Añadir texto aquí */}
+                </label>
+              </div>
             </div>
+
             <div className="flex-grow pt-8">
               <Calendar
                 id="incidentEndTime"
@@ -719,12 +721,13 @@ const NewReport = () => {
             <Dropdown
               value={caseType}
               onChange={(e) =>
-                setReportForm((i) => {
-                  return { ...reportForm, caseType: e.value };
-                })
+                setReportForm((prevForm) => ({
+                  ...prevForm,
+                  caseType: e.value
+                }))
               }
               options={incidents}
-              optionLabel="incident"
+              optionLabel={(incident) => i18n.language === 'en' ? incident.incident : incident.translate}
               placeholder={t("dashboard.reports.new-report.incident")}
               className="w-full md:w-14rem"
             />
@@ -1062,10 +1065,10 @@ const NewReport = () => {
               <label htmlFor="policeNumerCase" className="font-bold">
                 {t("dashboard.reports.new-report.policeNumerCase")}
               </label>
-              <FormControlLabel 
-                label={t("dashboard.reports.new-report.include-police-number-case")}
-                control={
-                  <Checkbox
+              <div className="checkbox-wrapper">
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
                     checked={reportForm.checkBoxPoliceNumerCase}
                     onChange={(e) => {
                       setReportForm(prev => ({
@@ -1074,11 +1077,11 @@ const NewReport = () => {
                         policeNumerCase: e.target.checked ? prev.policeNumerCase : ""
                       }));
                     }}
-                    color="primary"
                   />
-                }
-                className="ml-2"
-              />
+                  <span className="checkbox"></span>
+                  <span>{t("dashboard.reports.new-report.include-police-number-case")}</span>
+                </label>
+              </div>
             </div>
             <div className="flex-grow pt-8">
               <InputNumber
@@ -1236,9 +1239,34 @@ const NewReport = () => {
       </div>
 
       <div className="flex justify-end mt-4 pr-20">
-        <Button severity="success"
-        label={t("dashboard.reports.new-report.swal.send")} 
-        onClick={sendingreport} />
+
+ 
+        <button
+          className="send-button"
+          onClick={sendingreport}
+        >
+          <div class="svg-wrapper-1">
+            <div class="svg-wrapper">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                width="24"
+                height="24"
+              >
+                <path fill="none" d="M0 0h24v24H0z"></path>
+                <path
+                  fill="currentColor"
+                  d="M1.946 9.315c-.522-.174-.527-.455.01-.634l19.087-6.362c.529-.176.832.12.684.638l-5.454 19.086c-.15.529-.455.547-.679.045L12 14l6-8-8 6-8.054-2.685z"
+                ></path>
+              </svg>
+            </div>
+          </div>
+          <span>
+            {t("dashboard.reports.new-report.swal.send")}
+          </span>
+        </button>
+        
+
 
         <Dialog 
         visible={showConfirmDialog} 

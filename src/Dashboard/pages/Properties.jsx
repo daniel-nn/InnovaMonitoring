@@ -15,16 +15,18 @@ import Swal from 'sweetalert2';
 import { NewPropertyForm } from "../components/Forms/Properties/NewPropertyForm";
 import { EditPropertyForm } from "../components/Forms/Properties/EditPropertyForm";
 import TableSkeleton from "../components/TableSkeleton";
+import TypewriterText from "../components/Texts/TypewriterTex";
+import '../pages/css/Outlet/Outlet.css'
 
 
 export const Properties = () => {
   // Hook de navegación
   const { navigate } = useNavigate();
 
- //barra de buscar
+  //barra de buscar
   const toolbarOptions = ["Search"];
 
-  
+
   // Traducciones
   const [t, i18n] = useTranslation("global");
 
@@ -41,7 +43,7 @@ export const Properties = () => {
 
   // Contexto
   const {
-    propertyProvider, setPropertyProvider,  flag, setFlag,
+    propertyProvider, setPropertyProvider, flag, setFlag,
   } = useContext(UserContext);
 
   // Información del usuario
@@ -52,12 +54,12 @@ export const Properties = () => {
 
   // Efecto para cargar propiedades
   useEffect(() => {
-    setLoading(false)
     const fetchProperties = async () => {
       try {
         const data = await getPropertiesMapped(navigate, userRole);
         if (data && data.length > 0) {
           setProperties(data);
+          setLoading(false)
         } else {
           console.error("No properties found");
         }
@@ -82,6 +84,7 @@ export const Properties = () => {
   };
 
   const handleCloseEditPropertyDialog = (updatedProperty) => {
+    setLoading(true)
     setEditPropertyDialog(false);
     setPropertyProvider({});
     if (updatedProperty) {
@@ -89,10 +92,13 @@ export const Properties = () => {
         property.id === updatedProperty.id ? updatedProperty : property
       ));
     }
+    setLoading(false)
+
   };
-  
+
   const refreshProperties = async () => {
     try {
+      setLoading(true);
       const newData = await getPropertiesMapped();
       if (newData && newData.length > 0) {
         console.log('New data after refresh:', newData);
@@ -102,7 +108,8 @@ export const Properties = () => {
       }
     } catch (error) {
       console.error('Error refreshing properties:', error);
-      setProperties([]);  
+      setProperties([]);
+      setLoading(false)
     }
   };
 
@@ -131,21 +138,24 @@ export const Properties = () => {
         <EditPropertyForm property={selectedProperty} onClose={handleCloseEditPropertyDialog} refreshProperties={refreshProperties} />
       </Dialog>
 
-      <div className="m-20 md:m-10 mt-14 p-2 md:p-0 bg-white rounded-3xl">
-        <Header title={t("dashboard.properties.properties-title")} />
+      <div className="mx-7 bg-white rounded-3xl overflow-auto">
+        <div className="background">
+          <Header title={<TypewriterText text={t("dashboard.properties.properties-title")} />}/>
 
-        <div className="card flex justify-start py-2">
-          {userRole == "Admin" ? (
-            <Button
-              severity="info"
-              label={t("dashboard.properties.add-property")}
-              onClick={() => setNewPropertyDialog(true)}
-            >
-              <AiOutlinePlusCircle className="ml-2"></AiOutlinePlusCircle>
-            </Button>
-          ) : (
-            <></>
-          )}
+          <div className="card flex justify-start">
+            {userRole == "Admin" ? (
+              <button
+                onClick={() => setNewPropertyDialog(true)}
+                class="button"
+              >
+                {t("dashboard.properties.add-property")}                
+                <AiOutlinePlusCircle />
+              </button>
+
+            ) : (
+              <></>
+            )}
+          </div>
         </div>
 
         {Loading ? <TableSkeleton /> : (
@@ -159,12 +169,12 @@ export const Properties = () => {
             allowPdfExport
             contextMenuItems={contextMenuItems}
             toolbar={toolbarOptions}
-        
+
           >
             <ColumnsDirective>
-              {propertyGridAdmin(t, handleOpenEditPropertyDialog).map((item, index)  => (
-                  <ColumnDirective key={index} {...item} />
-            
+              {propertyGridAdmin(t, handleOpenEditPropertyDialog).map((item, index) => (
+                <ColumnDirective key={index} {...item} />
+
               ))}
             </ColumnsDirective>
 
@@ -174,5 +184,5 @@ export const Properties = () => {
 
       </div>
     </>
-  ); 
+  );
 };

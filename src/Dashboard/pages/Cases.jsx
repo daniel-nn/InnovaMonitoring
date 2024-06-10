@@ -1,12 +1,9 @@
 import { Dialog } from "primereact/dialog";
 import React, { useContext, useEffect, useState } from "react";
-
 import { Button } from "primereact/button";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { GridComponent, ColumnsDirective, ColumnDirective, Resize, Sort, ContextMenu, Filter, Page, Search, PdfExport, Inject, } from "@syncfusion/ej2-react-grids";
 import { useTranslation } from "react-i18next";
-
-
 import { contextMenuItems, ordersCases, ordersCasesAdmin, ordersGrid } from "../data/dummy";
 import { Header } from "../components";
 import { getIncidents } from "../helper/getIncidents";
@@ -16,6 +13,8 @@ import { InputText } from "primereact/inputtext";
 import { PostIncident, postIncident } from "../helper/postIncident";
 import { putIncident } from "../helper/putIncident";
 import TableSkeleton from "../components/TableSkeleton";
+import TypewriterText from "../components/Texts/TypewriterTex";
+import '../pages/css/Outlet/Outlet.css'
 
 export const Cases = () => {
   const toolbarOptions = ["Search"];
@@ -40,8 +39,8 @@ export const Cases = () => {
 
 
   useEffect(() => {
-    setLoading(false)
     getIncidents(navigate).then((data) => setCases(data));
+    setLoading(false)
   }, [reportSaved]);
 
 
@@ -59,17 +58,21 @@ export const Cases = () => {
 
   const editIncident = async () => {
     if (validateCaseDetails()) {
+      setLoading(true)
       await putIncident(caseProvider, setreportSaved, reportSaved, t);
       setCaseDialog(!caseDialog);
       setCaseProvider({});
+      setLoading(false);
     }
   };
 
 
   const saveIncident = async () => {
     if (validateCaseDetails()) {
+      setLoading(true)
       await postIncident(caseProvider, setreportSaved, reportSaved, t);
       setCaseDialog(!caseDialog);
+      setLoading(false)
     }
   };
   const handleInputChange = (field, value) => {
@@ -133,7 +136,7 @@ export const Cases = () => {
             <span className="p-float-label">
               <InputText
                 id="incident"
-                value={caseProvider.incident}
+                value={caseProvider.incident || 'Hola'}
                 onChange={(e) => {
                   setCaseProvider(prev => ({ ...prev, incident: e.target.value }));
                   if (validationErrors.incident && e.target.value.trim()) {
@@ -145,34 +148,58 @@ export const Cases = () => {
                   }
                 }}
               />
+      
               <label htmlFor="caseType">
-                {t(editCase ? "dashboard.cases.edit-dialog.name-case-label" : "dashboard.cases.add-dialog.name-case-label")}
+                {t(editCase ? "dashboard.cases.edit-dialog.name-case-label" : "dashboard.cases.add-dialog.incident-eng")}
               </label>
             </span>
             {validationErrors.incident && <small className="p-error">{validationErrors.incident}</small>}
           </div>
+          <div className="mt-6 mb-6 mx-auto">
+            <span className="p-float-label">
+                
+              <InputText
+                id="translate"
+                value={caseProvider.translate || "hola"}
+                onChange={(e) => {
+                  setCaseProvider(prev => ({ ...prev, translate: e.target.value }));
+                  if (validationErrors.translate && e.target.value.trim()) {
+                    setValidationErrors(prev => {
+                      const updatedErrors = { ...prev };
+                      delete updatedErrors.translate;
+                      return updatedErrors;
+                    });
+                  }
+                }}
+              />
+              <label htmlFor="caseType">
+                {t(editCase ? "dashboard.cases.edit-dialog.name-case-label" : "dashboard.cases.add-dialog.incident-es")}
+              </label>
+            </span>
+            {validationErrors.translate && <small className="p-error">{validationErrors.translate}</small>}
+          </div>
         </div>
 
       </Dialog>
-      <div className="m-20 md:m-10 mt-14 p-2 md:p-0 bg-white rounded-3xl">
-        <Header title={t("dashboard.cases.add-case")} />
-        <div className="card flex justify-start py-2">
+      <div className="mx-7 bg-white rounded-3xl overflow-auto">
+        <div className="background">
+          <Header title={<TypewriterText text={t("dashboard.cases.add-case")} />}/>
+          <div className="card flex justify-start">
 
-          {userRole == "Admin" ? (
+            {userRole == "Admin" ? (
+              <button
+                onClick={() => {
+                  setCaseDialog(!caseDialog);
+                }} class="button"
+              >
+                {t("dashboard.cases.add-case")}
+                <AiOutlinePlusCircle />
+              </button>
 
-            <Button
-              severity="info"
-              label={t("dashboard.cases.add-case")}
-              onClick={() => {
-                setCaseDialog(!caseDialog);
-              }}
-            >
-              {" "}
-              <AiOutlinePlusCircle className="ml-2"></AiOutlinePlusCircle>
-            </Button>
-          ) : (
-            <></>
-          )}
+            ) : (
+              <></>
+            )}
+          </div>
         </div>
         {loading ? <TableSkeleton /> : (
 

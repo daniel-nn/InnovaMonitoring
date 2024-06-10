@@ -541,7 +541,7 @@
           "na": "N/A",
           "listedOnReport": "listed On Report"
         },
-        "select-observedViaCameras": "observer Via Cameras",
+        "select-observedViaCameras": "Observerd Via Cameras",
         "is-policeFirstResponderNotified": "Police First Responder Notified",
         "policeFirstResponderSceneeholder": "Police First Responder",
         "police-first-responder-scene": "Police First Responder On Scene",
@@ -590,6 +590,7 @@
         "evidence-removed": "Evidence removed",
         "swal": {
           "new-report": "New Report",
+          "wrong-property": "Wrong Property",
           "confirmation": "Select the Property to Report",
           "cancel": "Cancel",
           "send": "Send",
@@ -654,7 +655,7 @@
           "na": "N/A",
           "listedOnReport": "listed On Report"
         },
-        "select-observedViaCameras": "observer Via Cameras",
+        "select-observedViaCameras": "Observerd Via Cameras",
         "is-policeFirstResponderNotified": "Police First Responder Notified",
         "policeFirstResponderSceneeholder": "Police First Responder",
         "police-first-responder-scene": "Police First Responder On Scene",
@@ -738,26 +739,6 @@
         "name": "Monitoring Agent:",
         "company": "Team:",
         "incident": "Incident Case:",
-        "types-of-incident": {
-          "narcotics": "Narcotics",
-          "shooting": "Shooting",
-          "garbage": "Garbage",
-          "illegal-parking": "Illegal Parking",
-          "carrying-weapon": "Carrying Weapon",
-          "damage-to-property": "Damage To Property",
-          "debris": "Debris",
-          "drinking-alcohol_outdoor": "Drinking Alcohol (Outdoor)",
-          "flooding": "Flooding",
-          "gambling": "Gambling",
-          "hazardous": "Hazardous",
-          "medical-emergency": "Medical Emergency",
-          "police-arrest": "Police (Arrest)",
-          "police-interrogation": "Police (Interrogation)",
-          "trespassing": "Trespassing",
-          "vandalism": "Vandalism",
-          "other-see-report": "Other See Report",
-          "illegal-sales": "Illegal Sales"
-        },
         "level": "Level Of Report:",
         "security-guards-scene": "Security Guard On Scene:",
         "security-guards-notified": "Security Guard Notified:",
@@ -994,10 +975,11 @@
         "added-to-user": "Added to user",
         "property-remove": "Property Removed From User",
         "table": {
-          "img": "Image",
+          "image": "Image",
           "name": "Name",
           "address": "Address",
           "remove": "Remove",
+          "add-property": "Add Property",
           "delete-assigned-property": {
             "confirm-title": "Are You Sure?",
             "confirm-text": "You Will Not Be Able To Reverse This Process",
@@ -1015,7 +997,8 @@
       "add-case": "Add Case",
       "add-dialog": {
         "add-title": "Add Case",
-        "name-case-label": "New Case",
+        "incident-eng": "New Case English",
+        "incident-es": "New Case Spanish",
         "send": "Send",
         "cancel": "Cancel"
       },
@@ -1029,7 +1012,8 @@
         "cancel": "Cancel"
       },
       "table": {
-        "case-type": "Case Type",
+        "case-type-en": "Case English",
+        "case-type-es": "Case Spanish",
         "edit": "Edit",
         "delete": {
           "delete": "Delete",

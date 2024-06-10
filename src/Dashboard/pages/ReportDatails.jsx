@@ -203,13 +203,14 @@ export const ReportDatails = () => {
   );
   const [incidentType, setIncidentType] = useState("");
 
+
   useEffect(() => {
-    const incidentKey = reportDetails?.caseType?.incident
-      .toLowerCase()
-      .replace(/\s/g, "_");
-    const translationPath = `dashboard.reports.case-details.types-of-incident.${incidentKey}`;
-    setIncidentType(t(translationPath));
-  }, [reportDetails, t]);
+    if (!reportDetails || !reportDetails.caseType) return;
+ 
+    const incidentInCurrentLanguage = i18n.language === 'en' ? reportDetails.caseType.incident : reportDetails.caseType.translate;
+    setIncidentType(incidentInCurrentLanguage);
+  }, [reportDetails, i18n.language]);
+
 
   useEffect(() => {
        if (userRole === "Client" && user.id && id) {
@@ -713,27 +714,29 @@ export const ReportDatails = () => {
                   </p>
                 </div>
               </div>
-              <div className="flex max-w-full ">
-                <div className=" mr-3">
-                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-50">
-                    <AiFillCheckCircle className="text-yellow-600 w-5 h-6"></AiFillCheckCircle>
+
+              {reportDetails.policeNumerCase && (
+                <div className="flex max-w-full">
+                  <div className="mr-3">
+                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-50">
+                      <AiFillCheckCircle className="text-yellow-600 w-5 h-6"></AiFillCheckCircle>
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-center w-full border-b-1">
-                  <p className=" text-lg font-bold ">
-                    {t("dashboard.reports.case-details.police-numer-case")}
-                  </p>
-                  <p className="text-lg text-gray-900 ml-3">
-                    {reportDetails?.policeNumerCase ? (
+                  <div className="flex items-center w-full border-b-1">
+                    <p className="text-lg font-bold">
+                      {t("dashboard.reports.case-details.police-numer-case")}
+                    </p>
+                    <p className="text-lg text-gray-900 ml-3">
                       <p className="text-gray-800">
                         {reportDetails.policeNumerCase}
                       </p>
-                    ) : (
-                      <p className="text-red-700">" "</p>
-                    )}
-                  </p>
+                    </p>
+                  </div>
                 </div>
-              </div>
+              )}
+
+
+
             </div>
           </div>
         </div>

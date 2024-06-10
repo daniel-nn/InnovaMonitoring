@@ -18,7 +18,7 @@ import { getNumberOfReportsByRole } from "../helper/getNumberOfReportsByRole";
 import { Button } from "primereact/button";
 import '../pages/css/Dashboard/Dashboard.css'
 import { motion, useAnimation } from "framer-motion";
-
+import TypewriterText from "../components/Texts/TypewriterTex";
 
 const Ecommerce = () => {
   const formatImageName = (name) => {
@@ -105,23 +105,13 @@ const Ecommerce = () => {
       );
     };
 
-  const TypewriterText = ({ text }) => {
-    // Calcula el ancho basado en la longitud del texto y la fuente
-    const calculatedWidth = `${text.length}ch`; // Ajuste el multiplicador basado en la fuente específica
 
-    return (
-      <div className="typewriter-text" style={{ width: 'auto', maxWidth: calculatedWidth }}>
-        {text}
-      </div>
-    );
-  };
 
   
   return (
     
     <div className="m-10 md:m-8 mt-5 p-2 md:p-0 bg-white rounded-3xl">
       <Header category={t("dashboard.dashboard-index.home")} title={<TextAnimation text={propertyContext.name || ""} />} />
-      <Header category={t("dashboard.dashboard-index.home")} title={<TypewriterText text={propertyContext.name || ""} />} />
       <div className="mt-3 ">
         <div
           className="flex flex-wrap lg:flex-nowrap justify-center bg-no-repeat bg-cover bg-center py-20"

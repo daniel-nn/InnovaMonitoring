@@ -17,7 +17,7 @@ export const getIncidents = async (navigate) => {
         return {
           id: incident.id,
           incident: incident.incident,
-          caseType: incident,
+          translate: incident.translate
         };
       }
 

@@ -283,6 +283,7 @@ const EditReport = () => {
             }
         }
     }, [incidents, reportForm.caseType]);
+
     useEffect(() => {
         const updateTitle = () => {
             if (reportForm.property && reportForm.property.name) {
@@ -543,7 +544,7 @@ const EditReport = () => {
                                 return { ...reportForm, caseType: e.value };
                             })}
                             options={incidents}
-                            optionLabel="incident"
+                            optionLabel={(incident) => i18n.language === 'en' ? incident.incident : incident.translate}
                             placeholder={t("dashboard.reports.edit-report.incident")}
                             className="w-full md:w-14rem"
                         />

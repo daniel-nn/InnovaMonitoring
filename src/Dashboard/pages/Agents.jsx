@@ -5,7 +5,7 @@ import { Password } from "primereact/password";
 import { Divider } from "primereact/divider";
 
 import { AiOutlinePlusCircle } from "react-icons/ai";
-import { GridComponent, ColumnsDirective, ColumnDirective, Resize, Sort, ContextMenu, Filter, Page, Search, Inject,} from "@syncfusion/ej2-react-grids";
+import { GridComponent, ColumnsDirective, ColumnDirective, Resize, Sort, ContextMenu, Filter, Page, Search, Inject, } from "@syncfusion/ej2-react-grids";
 import { contextMenuItems, orderAgents, orderAgentsAdmin } from "../data/dummy";
 import { Header } from "../components";
 import { useNavigate } from "react-router-dom";
@@ -19,6 +19,8 @@ import { getRoles } from "../helper/getRoles";
 import Swal from 'sweetalert2';
 import { getPropertiesInfo } from "../helper/getProperties";
 import TableSkeleton from "../components/TableSkeleton";
+import TypewriterText from "../components/Texts/TypewriterTex";
+import '../pages/css/Outlet/Outlet.css'
 
 
 export const Agents = () => {
@@ -39,13 +41,15 @@ export const Agents = () => {
 
 
   const fetchMonitors = async () => {
-    setLoading(false)
     const agents = await getAgents(navigate);
     setAgentData(agents);
+    setLoading(false)
   };
 
   useEffect(() => {
+    setLoading(true)
     fetchMonitors();
+    setLoading(false)
   }, [navigate, flag]);
 
   useEffect(() => {
@@ -67,7 +71,7 @@ export const Agents = () => {
             rol: {
               rolKey: monitorRole.rolKey,
               rolName: monitorRole.rolName,
-              originalName: monitorRole.originalName  
+              originalName: monitorRole.originalName
             }
           }));
         }
@@ -147,7 +151,7 @@ export const Agents = () => {
 
     try {
       const data = await postNewUser(userToSend);
-      if (data && !data.error) {  
+      if (data && !data.error) {
         Swal.fire({
           toast: true,
           position: 'top-end',
@@ -156,10 +160,10 @@ export const Agents = () => {
           showConfirmButton: false,
           timer: 3000
         });
-        setUserSaved(userSaved => !userSaved);  
+        setUserSaved(userSaved => !userSaved);
         setUserDialog(false);
         setUserProvider({});
-        fetchMonitors(); 
+        fetchMonitors();
       } else {
         throw new Error(data.message || 'Failed to create agent');
       }
@@ -189,7 +193,7 @@ export const Agents = () => {
         visible={userDialog}
         onHide={handleClose}
         modal
-        dismissableMask 
+        dismissableMask
         style={{ width: "40vw", display: "flex", justifyContent: "center" }}
         footer={
           <div className="w-full flex justify-center">
@@ -276,7 +280,7 @@ export const Agents = () => {
                       pasword: null
                     }));
                   }
-                }}       
+                }}
                 className="w-full"
                 header={header}
                 footer={footer}
@@ -328,24 +332,26 @@ export const Agents = () => {
 
         </div>
       </Dialog>
-      <div className="m-20 md:m-10 mt-14 p-2 md:p-0 bg-white rounded-3xl">
-        <Header title={t("dashboard.agents.agents-tittle")} />
-        {/* <div className="card flex justify-end py-2">
-        {userRole == "Admin" ? (
-          <Button
-          severity="info"
-          label={t("dashboard.agents.add-agent")}
-          className="p-button-text ml-2"
+      <div className="mx-7 bg-white rounded-3xl overflow-auto">
+        <div className="background">
+          <Header title={<TypewriterText text={t("dashboard.agents.agents-tittle")} />} />
+          <div className="card flex justify-start ">
+            {userRole == "Admin" ? (
+              <button
+                onClick={() => setUserDialog(prev => !prev)}
+                class="button"
+              >
+                {t("dashboard.agents.add-agent")}
+                <AiOutlinePlusCircle />
 
-              onClick={() => setUserDialog(prev => !prev)}
-        >
-          <AiOutlinePlusCircle className="ml-2"></AiOutlinePlusCircle>
-        </Button>
-          ) : (
-            <></>
-          )}
-      
-        </div> */}
+              </button>
+
+            ) : (
+              <></>
+            )}
+
+          </div>
+        </div>
         {loading ? <TableSkeleton /> : (
           <GridComponent
             id="gridcomp"
