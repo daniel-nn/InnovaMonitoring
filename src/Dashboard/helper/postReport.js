@@ -22,12 +22,23 @@ const formatTime = (date) => {
   let minutes = date.getMinutes().toString().padStart(2, '0');
   return `${hours}:${minutes}`;
 };
-export const postReport = async (reportForm, t, setCreatingReport, userId) => {
+
+
+export const postReport = async (reportForm, t, setCreatingReport, userId, updateContext) => {
+
+
   const formData = new FormData();
+
+  const caseTypeData = {
+    id: reportForm.isOtherSeeReportActive ? 10 : reportForm.caseType.id,
+    incident: reportForm.isOtherSeeReportActive ? "Other See Report" : reportForm.caseType.incident,
+    translate: reportForm.isOtherSeeReportActive ? "Otro tipo de reporte" : reportForm.caseType.translate
+  };
 
   formData.append("report", new Blob([JSON.stringify({
     createdBy: reportForm.createdBy,
-    caseType: reportForm.caseType,
+    caseType: caseTypeData,
+    otherSeeReport: reportForm.isOtherSeeReportActive && reportForm.otherSeeReport ? reportForm.otherSeeReport : "nulo creo yo",
     company: reportForm.company,
     level: reportForm.level,
     numerCase: reportForm.numerCase,
@@ -58,7 +69,7 @@ export const postReport = async (reportForm, t, setCreatingReport, userId) => {
   });
 
   const url = `${process.env.REACT_APP_SERVER_IP}/reports`;
-
+  updateContext();
   try {
     console.log("User id")
     console.log(userId)
@@ -74,6 +85,7 @@ export const postReport = async (reportForm, t, setCreatingReport, userId) => {
     const data = await response.json();
 
     if (response.ok) {
+      console.log("Report Form si si", reportForm)
       Swal.fire({
         icon: 'success',
         title: t("dashboard.reports.new-report.swal.report-send"),
@@ -83,6 +95,7 @@ export const postReport = async (reportForm, t, setCreatingReport, userId) => {
         timer: 3000,
         timerProgressBar: true
       });
+      console.log(reportForm)
       setCreatingReport(false); 
       return data;
     } else {
@@ -91,6 +104,7 @@ export const postReport = async (reportForm, t, setCreatingReport, userId) => {
       throw new Error(data.message || t("dashboard.reports.new-report.swal.error-saving"));
     }
   } catch (error) {
+    console.log("Report Form Si no", reportForm) 
     setCreatingReport(false); 
     console.error("Error saving the report:", error);
     Swal.fire({

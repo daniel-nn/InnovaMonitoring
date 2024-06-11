@@ -7,7 +7,6 @@ import useOutsideClick from "../Hooks/useOutsideClick";
 import useFetchProperty from "../Hooks/useFetchProperty";
 import { Outlet, useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
-import { GetPropertyInfo } from "../helper/getPropertyInfo";
 import { useTranslation, i18n } from "react-i18next";
 
 const Chat = ({ properties }) => {

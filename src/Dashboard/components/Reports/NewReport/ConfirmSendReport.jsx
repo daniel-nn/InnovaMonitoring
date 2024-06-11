@@ -6,8 +6,7 @@ import { useTranslation } from "react-i18next";
 import { postReport } from '../../../helper/postReport';
 import "../../../pages/css/Reports/NewReport.css"
 
-    
-const ConfirmSendReport = ({ properties, reportData, setCreatingReport, navigate, resetReportForm, user, setShowConfirmDialog }) => {
+const ConfirmSendReport = ({ properties, reportData, setCreatingReport, navigate, resetReportForm, user, setShowConfirmDialog, setPropertyContext, isOtherSeeReportActive }) => {
     const [t] = useTranslation("global");
     const [selectedProperty, setSelectedProperty] = React.useState(null); 
     const handleConfirm = async () => {
@@ -29,7 +28,8 @@ const ConfirmSendReport = ({ properties, reportData, setCreatingReport, navigate
 
         navigate("/dashboard/reports");
         setCreatingReport(true);
-        await postReport({ ...reportData, property: selectedProperty }, t, setCreatingReport, user.id);
+        const updateContext = () => setPropertyContext(selectedProperty); 
+        await postReport({ ...reportData, property: selectedProperty, isOtherSeeReportActive: isOtherSeeReportActive }, t, setCreatingReport, user.id, updateContext);
         resetReportForm();
         setShowConfirmDialog(false);
     };

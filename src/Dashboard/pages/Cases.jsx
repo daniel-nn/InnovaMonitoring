@@ -6,7 +6,7 @@ import { GridComponent, ColumnsDirective, ColumnDirective, Resize, Sort, Context
 import { useTranslation } from "react-i18next";
 import { contextMenuItems, ordersCases, ordersCasesAdmin, ordersGrid } from "../data/dummy";
 import { Header } from "../components";
-import { getIncidents } from "../helper/getIncidents";
+import { getIncidents } from "../helper/Incidents/getIncidents";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
 import { InputText } from "primereact/inputtext";
@@ -73,6 +73,7 @@ export const Cases = () => {
       await postIncident(caseProvider, setreportSaved, reportSaved, t);
       setCaseDialog(!caseDialog);
       setLoading(false)
+      setCaseProvider({})
     }
   };
   const handleInputChange = (field, value) => {
@@ -136,7 +137,7 @@ export const Cases = () => {
             <span className="p-float-label">
               <InputText
                 id="incident"
-                value={caseProvider.incident || 'Hola'}
+                value={caseProvider.incident || ''}
                 onChange={(e) => {
                   setCaseProvider(prev => ({ ...prev, incident: e.target.value }));
                   if (validationErrors.incident && e.target.value.trim()) {
@@ -160,7 +161,7 @@ export const Cases = () => {
                 
               <InputText
                 id="translate"
-                value={caseProvider.translate || "hola"}
+                value={caseProvider.translate || ""}
                 onChange={(e) => {
                   setCaseProvider(prev => ({ ...prev, translate: e.target.value }));
                   if (validationErrors.translate && e.target.value.trim()) {

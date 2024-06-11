@@ -4,7 +4,8 @@ import { UserContext } from "../../context/UserContext";
 import "primeicons/primeicons.css";
 import { useNavigate } from "react-router-dom";
 import { getPropertiesInfo } from "../helper/getProperties";
-import { getIncidents } from "../helper/getIncidents";
+// import { getIncidents } from "../helper/getIncidents";
+import { getSelectableIncidents } from "../helper/Incidents/getSelectableIncidents";
 import { useTranslation } from "react-i18next";
 import { Button } from "primereact/button";
 import Swal from 'sweetalert2'
@@ -20,6 +21,7 @@ import { putAddEvidences } from "../helper/Reports/UpdateReport/putAddEvidences"
 import deleteEvidence from "../helper/Reports/delete/deleteEvidence"; 
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import TypewriterTextNewReport from "../components/Texts/TypewriterTextNewReport";
 import "../pages/css/Reports/EditReport.css"
 
 
@@ -36,6 +38,7 @@ const EditReport = () => {
     const [properties, setProperties] = useState([]);
     const [ Users, setUsers ] = useState ([]);
     const [incidents, setIncidents] = useState([]);
+    const [isOtherSeeReportActive, setIsOtherSeeReportActive] = useState(false);
     const levels = ["1", "2", "3", "4"];
     const team = ["Innova Monitoring", "Impro",];
     let user = JSON.parse(localStorage.getItem("user"));
@@ -144,11 +147,28 @@ const EditReport = () => {
 
     useEffect(() => {
         const fetchIncidents = async () => {
-            const incidentsData = await getIncidents(navigate);
+            const incidentsData = await getSelectableIncidents(navigate);
             setIncidents(incidentsData);
         };
         fetchIncidents();
     }, [navigate]);
+
+    const handleCheckboxChange = (event) => {
+        const checked = event.target.checked;
+        setIsOtherSeeReportActive(checked);
+        setReportForm(prev => ({
+            ...prev,
+            caseType: checked ? { id: 10, incident: "Other See Report", translate: "Otro tipo de reporte" } : {},
+            otherSeeReport: checked ? prev.otherSeeReport : ''
+        }));
+    };
+
+    const handleTextAreaChange = (event) => {
+        setReportForm(prev => ({
+            ...prev,
+            otherSeeReport: event.target.value
+        }));
+    };
 
 
     const validateForm = () => {
@@ -269,7 +289,6 @@ const EditReport = () => {
         ])
     }, [t, i18n.language])
 
-    const [headerTitle, setHeaderTitle] = useState('');
 
     useEffect(() => {
         if (incidents.length > 0 && reportForm.caseType && reportForm.caseType.id) {
@@ -284,21 +303,27 @@ const EditReport = () => {
         }
     }, [incidents, reportForm.caseType]);
 
+
+
+    const [headerTitle, setHeaderTitle] = useState("");
+
+
+
     useEffect(() => {
         const updateTitle = () => {
             if (reportForm.property && reportForm.property.name) {
-                const newTitleWithProperty = `${t('dashboard.reports.edit-report.edit-report-with-property')} ${reportForm.property.name}`;
+                const newTitleWithProperty = `${t(
+                    "dashboard.reports.edit-report.edit-report-with-property"
+                )} ${reportForm.property.name}`;
                 setHeaderTitle(newTitleWithProperty);
             } else {
-                const newTitle = t('dashboard.reports.edit-report.edit-tittle');
+                const newTitle = t("dashboard.reports.edit-report.edit-tittle");
                 setHeaderTitle(newTitle);
             }
         };
         updateTitle();
-        i18n.on('languageChanged', updateTitle);
-        return () => {
-            i18n.off('languageChanged', updateTitle);
-        };
+        i18n.on("languageChanged", updateTitle);
+        return () => i18n.off("languageChanged", updateTitle);
     }, [i18n, t, reportForm.property]);
 
 
@@ -339,7 +364,9 @@ const EditReport = () => {
 
     return (
         <div className="m-20 md:m-10 mt-14 p-2 md:p-0 bg-white rounded-3xl">
-            <Header title={headerTitle} />
+                <h1>
+                <TypewriterTextNewReport text={headerTitle} className="pt-2 pb-2" />
+                </h1>
             <div className="flex flex-wrap -mx-3">
 
                 <div className="w-full md:w-1/3 px-3 mb-6">
@@ -491,9 +518,10 @@ const EditReport = () => {
                             <label htmlFor="incidentEndTime" className="font-bold">
                                 {t("dashboard.reports.edit-report.select-incident-end-time")}
                             </label>
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
+                            <div className="checkbox-wrapper">
+                                <label className="flex items-center"> {/* Añadir flex y items-center para alinear horizontalmente */}
+                                    <input
+                                        type="checkbox"
                                         checked={reportForm.persist}
                                         onChange={(e) => {
                                             setReportForm(prev => ({
@@ -502,12 +530,11 @@ const EditReport = () => {
                                                 incidentEndTime: e.target.checked ? null : prev.incidentEndTime
                                             }));
                                         }}
-                                        color="primary"
                                     />
-                                }
-                                label={t("dashboard.reports.edit-report.persist")}
-                                className="ml-2"
-                            />
+                                    <span className="checkbox"></span>
+                                    <span>{t("dashboard.reports.edit-report.persist")}</span> {/* Añadir texto aquí */}
+                                </label>
+                            </div>
                         </div>
                         <div className="flex-grow pt-8">
                             <Calendar

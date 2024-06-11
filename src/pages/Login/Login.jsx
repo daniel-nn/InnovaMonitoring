@@ -80,8 +80,6 @@ const Login = () => {
           setUserLogged(true); 
 
           /* El id del monitor debe ser 3 siempre */
-          console.log(" El id del monitor debe ser 3 siempre");
-
         if (newUser.rol.id === 3) {
   
             let ipData = await fetch("https://api.ipify.org/?format=json");
