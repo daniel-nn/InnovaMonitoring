@@ -32,7 +32,6 @@ let skater = new Icon({
   iconSize: [21, 21],
 });
 
-// "https://drive.google.com/uc?export=view&id=1-yTNu9wS8MbUdgXxGSoB3VbWfrRhZsDr"
 
 const RotatedMarker = forwardRef(({ children, ...props }, forwardRef) => {
   const markerRef = useRef();
@@ -65,25 +64,17 @@ export const Mapa = () => {
   const [camerasList, setCamerasList] = useState([]);
 
   const { propertyContext, setPropertyContext, cameraSaved, setCameratSaved } = useContext(UserContext);
-  let  propertyMap = "";
-  let link = propertyContext.mapImg?.split("/");
   
-  if(link !==undefined){
-    let idImg = link[5]; 
-    propertyMap = "https://drive.google.com/uc?export=view&id=" + idImg;
-  }else{
-    propertyMap= "https://tse1.mm.bing.net/th?id=OIP.EboNfMk08KrJ4sNIAELmcAHaHa&pid=Api&P=0&h=180"
-  }
-
   let propertyStorage = JSON.parse(localStorage.getItem("propertySelected"));
   let idStorage = propertyStorage.id;
   let id = propertyContext.id || idStorage;
+  let map = `${process.env.REACT_APP_S3_BUCKET_URL}/${propertyStorage.mapImg}`;
 
 
   useEffect(() => {
-    getCameras(propertyContext.id || id, navigate).then((data) =>
-      setCamerasList(data)
-      
+    getCameras(propertyContext.id || id, navigate).then((data) =>{
+      setCamerasList(data);
+      console.log(data);}
     );
 
  
@@ -123,21 +114,23 @@ export const Mapa = () => {
           style={{ height: "700px", width: "100%", overflow: "visible" }}
         >
           <ImageOverlay
-            url={propertyMap || ""}
+           url={map || ""}
             bounds={bounds}
             
           />
-          {
+           {
           
-          camerasList?.map((element, index) => {
-            let camera = element.LiveView
-            if (camera.type == "Dome") {
+          /* camerasList?.map((element, index) => {
+          
+            let camera = element
+            if (element.type === "Dome") {
+              console.log(element.type)
               skater = new Icon({
                 iconUrl: Dome,
                 iconSize: [30, 30],
               });
             }
-            if (camera.type == "PTZ") {
+            if (element.type === "PTZ") {
               skater = new Icon({
                 iconUrl: PTZ,
                 iconSize: [25, 25],
@@ -147,17 +140,15 @@ export const Mapa = () => {
             return (
               <RotatedMarker
                 key={index}
-                position={[camera.lon || 0, camera.lat || 0]}
-                /* onClick={() => {
-    setActivePark(camera);
-  }} */
+                position={[ element.lat|| 0, element.lon || 0]}
+              
                 eventHandlers={{
                   mouseover: (event) => event.target.openPopup(),
                   mouseout: (event) => event.target.closePopup(),
                 }}
                 autoPan={false}
                 icon={skater}
-                rotationAngle={camera.rotation || 0}
+                rotationAngle={element.rotation || 0}
                 rotationOrigin="center"
               >
                 <Popup
@@ -169,20 +160,24 @@ export const Mapa = () => {
                     <img
                       className="w-full"
                       src={
-                        element.EmployeeImage ||
+                        `${process.env.REACT_APP_S3_BUCKET_URL}/${element?.image}`||
                         offile
                       }
                       alt="Sunset in the mountains"
                     />
 
                     <p className="font-normal m-0 p-0 text-gray-300">
-                      {camera.name}
+                      {element.name}
                     </p>
                   </div>
                 </Popup>
               </RotatedMarker>
             );
-          })}
+          }
+          
+          ) */
+          
+          } 
           <MapEvents />
         </MapContainer>
       </div>
