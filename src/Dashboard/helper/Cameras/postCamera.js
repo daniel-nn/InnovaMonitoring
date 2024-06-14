@@ -40,8 +40,9 @@ export const postCamera = async (cameraForm, t) => {
     });
 
     if (!response.ok) {
-      throw new Error('Failed to save the camera.');
-    }
+      const errorData = await response.json(); // Parsear la respuesta JSON
+      throw new Error(errorData.message || 'Failed to save the camera.');
+  }
 
     const data = await response.json();
 
@@ -61,7 +62,7 @@ export const postCamera = async (cameraForm, t) => {
     Swal.fire({
       icon: 'error',
       title: 'Error',
-      text: error.toString(),
+      text: error.message,
     });
   }
 }

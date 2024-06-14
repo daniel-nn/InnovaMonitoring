@@ -313,62 +313,6 @@ console.log(cameraForm)
         </button>
 
       </div>
-
-      {/* <div className="flex">
-        <div className="p-inputgroup my-3 ml-3 flex flex-col">
-          <label htmlFor="username">Latitud</label>
-          <div className="p-inputgroup">
-            <span className="p-inputgroup-addon">
-              <BsArrowUpShort></BsArrowUpShort>
-            </span>
-
-            <InputText
-              value={lat}
-              onChange={(e) =>
-                setCameraForm((i) => {
-                  return { ...cameraForm, lat: e.target.value };
-                })
-              }
-              placeholder="Lat"
-            />
-          </div>
-        </div>
-        <div className="p-inputgroup my-3 ml-3 flex flex-col">
-          <label htmlFor="username">Longitud</label>
-          <div className="p-inputgroup">
-            <span className="p-inputgroup-addon">
-              <BsArrowRightShort />
-            </span>
-
-            <InputText
-              value={lon}
-              onChange={(e) =>
-                setCameraForm((i) => {
-                  return { ...cameraForm, lon: e.target.value };
-                })
-              }
-              placeholder="Lng"
-            />
-          </div>
-        </div>
-        <div className="p-inputgroup my-3 ml-3 flex flex-col">
-          <label htmlFor="username">Rotation</label>
-          <div className="p-inputgroup">
-            <span className="p-inputgroup-addon">
-              <MdScreenRotationAlt />
-            </span>
-            <InputText
-              value={rotation}
-              onChange={(e) =>
-                setCameraForm((i) => {
-                  return { ...cameraForm, rotation: e.target.value };
-                })
-              }
-              placeholder="Rotation"
-            />
-          </div>
-        </div>
-      </div> */}
     </div>
   );
 };
