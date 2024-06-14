@@ -33,3 +33,14 @@
   }
 }
 
+.confirm-send-report .button-container {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 1rem; 
+    gap: 10px;
+    margin-top: 1rem;
+}
+
+.confirm-send-report .custom-button {
+    margin-right: 0.5rem; 
+}

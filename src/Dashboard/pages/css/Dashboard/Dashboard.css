@@ -9,6 +9,10 @@
   -webkit-text-fill-color: transparent;
 }
 
+.text-lato{
+  font-family: "Lato";
+}
+
 .text-animation-dashboard {
   font-size: 36px;
   

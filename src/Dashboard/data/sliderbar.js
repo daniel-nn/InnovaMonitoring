@@ -12,8 +12,12 @@ const SidebarLinks = () => {
     const [t, i18n] = useTranslation("global");
     return [
         {
-            title: t("dashboard.dashboard-sliderbar.dashboard-section.dashboard-tittle"),
-            links: [
+            title: (
+                <span style={{ fontFamily: "Lato" }}>
+                    {t("dashboard.dashboard-sliderbar.dashboard-section.dashboard-tittle")}
+                </span>
+            ),           
+             links: [
                 {
                     name: t("dashboard.dashboard-sliderbar.dashboard-section.home"),
                     icon: <FiShoppingBag />,
@@ -24,7 +28,11 @@ const SidebarLinks = () => {
         },
 
         {
-            title: t("dashboard.dashboard-sliderbar.integral-management-section.integral-tittle"),
+            title: (
+                <span style={{ fontFamily: "Lato" }}>
+                    {t("dashboard.dashboard-sliderbar.integral-management-section.integral-tittle")}
+                </span>
+            ),
             links: [
                 {
                     name: t("dashboard.dashboard-sliderbar.integral-management-section.reports"),

@@ -19,14 +19,20 @@ const formatTime = (date) => {
   return `${hours}:${minutes}`;
 };
 
-export const editReport = async (reportForm, t) => {
+export const editReport = async (reportForm, isOtherSeeReportActive, t) => {
   const formattedData = {
     ...reportForm,
     dateOfReport: formatDate(reportForm.dateOfReport),
     timeOfReport: formatTime(reportForm.timeOfReport),
     incidentDate: formatDate(reportForm.incidentDate),
     incidentStartTime: formatTime(reportForm.incidentStartTime),
-    incidentEndTime: formatTime(reportForm.incidentEndTime)
+    incidentEndTime: formatTime(reportForm.incidentEndTime),
+    caseType: {
+      id: isOtherSeeReportActive ? 10 : reportForm.caseType.id,
+      incident: isOtherSeeReportActive ? "Other See Report" : reportForm.caseType.incident,
+      translate: isOtherSeeReportActive ? "Otro tipo de reporte" : reportForm.caseType.translate
+    },
+    otherSeeReport: isOtherSeeReportActive ? reportForm.otherSeeReport : null
   };
 
   delete formattedData.evidences;

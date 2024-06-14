@@ -149,9 +149,13 @@ const EditReport = () => {
         const fetchIncidents = async () => {
             const incidentsData = await getSelectableIncidents(navigate);
             setIncidents(incidentsData);
+            if (reportForm.caseType?.id === 10 && reportForm.otherSeeReport) {
+                setIsOtherSeeReportActive(true);
+            }
         };
         fetchIncidents();
-    }, [navigate]);
+    }, [navigate]); 
+
 
     const handleCheckboxChange = (event) => {
         const checked = event.target.checked;
@@ -334,19 +338,17 @@ const EditReport = () => {
             title: t("dashboard.reports.edit-report.swal.confirmation") + (reportForm.property?.name || ''),
             icon: "info",
             showDenyButton: true,
-            showCancelButton: true,
+            showCancelButton: false,
             confirmButtonText: '<i class="pi pi-check"></i> ' + t("dashboard.reports.edit-report.swal.send"),
             denyButtonText: `<i class="pi pi-times"></i> ` + t("dashboard.reports.edit-report.swal.don't-save"),
-            cancelButtonText: t("dashboard.reports.edit-report.swal.cancel"),
             buttonsStyling: false,
             customClass: {
                 confirmButton: 'swal2-confirm-button-success',
                 denyButton: 'swal2-deny-button',
-                cancelButton: 'swal2-cancel-button'
             }
         }).then((result) => {
             if (result.isConfirmed) {
-                editReport(reportForm, t);
+                editReport(reportForm, isOtherSeeReportActive, t);
             } else if (result.isDenied) {
                 Swal.fire({
                     icon: "error",
@@ -557,24 +559,45 @@ const EditReport = () => {
                 </div>
 
                 <div className="w-full md:w-1/3 px-3 mb-6">
-                    <label htmlFor="caseType" className="font-bold block mb-2">
-                        {t("dashboard.reports.edit-report.select-incident")}
-                    </label>
-                    <div className="p-inputgroup">
-                        <span className="p-inputgroup-addon">
-                            <i className="pi pi-list"></i>
-                        </span>
-                        <Dropdown
-                            value={caseType}
-                            onChange={(e) => setReportForm((i) => {
-
-                                return { ...reportForm, caseType: e.value };
-                            })}
-                            options={incidents}
-                            optionLabel={(incident) => i18n.language === 'en' ? incident.incident : incident.translate}
-                            placeholder={t("dashboard.reports.edit-report.incident")}
-                            className="w-full md:w-14rem"
-                        />
+                    <div className="flex flex-col md:flex-row items-center justify-between mb-2">
+                        <div className="flex-grow">
+                            <label htmlFor="caseType" className="font-bold">
+                                {t("dashboard.reports.edit-report.select-incident")}
+                            </label>
+                            <div className="flex items-center">
+                                <div className="checkbox-wrapper">
+                                    <label className="flex items-center"> {/* Añadir flex y items-center para alinear horizontalmente */}
+                                        <input
+                                            type="checkbox"
+                                            checked={isOtherSeeReportActive}
+                                            onChange={handleCheckboxChange}
+                                            className="mr-[-8px]"
+                                        />
+                                        <span className="checkbox"></span>
+                                        <span>{t("dashboard.reports.edit-report.other-see-report")}</span>
+                                    </label>
+                                </div>
+                                {!isOtherSeeReportActive ? (
+                                    <Dropdown
+                                        value={reportForm.caseType}
+                                        options={incidents}
+                                        onChange={(e) => setReportForm(prev => ({ ...prev, caseType: e.value }))}
+                                        optionLabel={(incident) => i18n.language === 'en' ? incident.incident : incident.translate}
+                                        placeholder={t("dashboard.reports.edit-report.incident")}
+                                        className="flex-grow"
+                                    />
+                                ) : (
+                                    <InputTextarea
+                                        value={reportForm.otherSeeReport}
+                                        onChange={handleTextAreaChange}
+                                        rows={5}
+                                        autoResize
+                                        placeholder={t("dashboard.reports.edit-report.other-see-report")}
+                                        className="flex-grow"
+                                    />
+                                )}
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -883,12 +906,12 @@ const EditReport = () => {
                     <div className="flex flex-col md:flex-row items-center justify-between mb-2">
                         <div className="flex-grow">
                             <label htmlFor="policeNumerCase" className="font-bold">
-                                {t("dashboard.reports.new-report.policeNumerCase")}
+                                {t("dashboard.reports.edit-report.policeNumerCase")}
                             </label>
-                            <FormControlLabel
-                                label={t("dashboard.reports.new-report.include-police-number-case")}
-                                control={
-                                    <Checkbox
+                            <div className="checkbox-wrapper">
+                                <label className="flex items-center">
+                                    <input
+                                        type="checkbox"
                                         checked={reportForm.checkBoxPoliceNumerCase}
                                         onChange={(e) => {
                                             setReportForm(prev => ({
@@ -897,11 +920,11 @@ const EditReport = () => {
                                                 policeNumerCase: e.target.checked ? prev.policeNumerCase : ""
                                             }));
                                         }}
-                                        color="primary"
                                     />
-                                }
-                                className="ml-2"
-                            />
+                                    <span className="checkbox"></span>
+                                    <span>{t("dashboard.reports.new-report.include-police-number-case")}</span>
+                                </label>
+                            </div>
                         </div>
                         <div className="flex-grow pt-8">
                             <InputNumber
@@ -920,6 +943,7 @@ const EditReport = () => {
                         </div>
                     </div>
                 </div>
+
 
 
 
@@ -991,8 +1015,8 @@ const EditReport = () => {
                             <p>{t("dashboard.reports.new-report.drop-evidences")}</p>
                         </div>
                         <div className="files-list">
-                            {reportForm.evidences.map((file, index) => (
-                                <div key={index} className="file-item flex items-center justify-between mb-2 bg-gray-100 p-2 rounded">
+                            {reportForm.evidences.map((file) => (
+                                <div key={file.id || file.name} className="file-item flex items-center justify-between mb-2 bg-gray-100 p-2 rounded">
                                     {(file.type === 'image' || (file.type && file.type.startsWith('image/'))) && (
                                         <img src={file.url} alt={file.name} className="file-image-preview w-20 h-20 mr-2" />
                                     )}
@@ -1036,10 +1060,33 @@ const EditReport = () => {
 
             </div>
 
-
-            <div className="flex justify-end mt-4 pr-20">
-                <Button label={t("dashboard.reports.edit-report.swal.send")} severity="success" onClick={editReportForm} />
+            <div className="flex justify-end mt-4 pr-20">  
+            <button
+                className="send-button"
+                onClick={editReportForm}
+            >
+                <div class="svg-wrapper-1">
+                    <div class="svg-wrapper">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            width="24"
+                            height="24"
+                        >
+                            <path fill="none" d="M0 0h24v24H0z"></path>
+                            <path
+                                fill="currentColor"
+                                d="M1.946 9.315c-.522-.174-.527-.455.01-.634l19.087-6.362c.529-.176.832.12.684.638l-5.454 19.086c-.15.529-.455.547-.679.045L12 14l6-8-8 6-8.054-2.685z"
+                            ></path>
+                        </svg>
+                    </div>
+                </div>
+                <span>
+                    {t("dashboard.reports.edit-report.swal.send")}
+                </span>
+            </button>
             </div>
+           
         </div>
 
     );

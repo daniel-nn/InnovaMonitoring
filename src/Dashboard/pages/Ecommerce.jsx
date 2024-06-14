@@ -111,7 +111,7 @@ const Ecommerce = () => {
   return (
     
     <div className="m-10 md:m-8 mt-5 p-2 md:p-0 bg-white rounded-3xl">
-      <Header category={t("dashboard.dashboard-index.home")} title={<TextAnimation text={propertyContext.name || ""} />} />
+      <Header  category={t("dashboard.dashboard-index.home")} title={<TextAnimation text={propertyContext.name || ""} />} />
       <div className="mt-3 ">
         <div
           className="flex flex-wrap lg:flex-nowrap justify-center bg-no-repeat bg-cover bg-center py-20"
@@ -120,8 +120,8 @@ const Ecommerce = () => {
           <div className="h-44 rounded-xl w-full lg:w-96 p-8 pt-9 m-3 bg-gray-800/60  bg-no-repeat bg-cover bg-center">
             <div className="flex justify-between items-center py-5">
               <div>
-                <p className="p-0 font-bold text-gray-300">{t("dashboard.dashboard-index.number-reports")}</p>
-                <p className="p-0 text-2xl rounded-md text-gray-300">
+                <p className="p-0 font-bold text-gray-300 text-lato">{t("dashboard.dashboard-index.number-reports")}</p>
+                <p className="p-0 text-2xl rounded-md text-gray-300 text-lato">
                   {reportsData === null ? 'Cargando...' : reportsData.length}
                 </p>
               </div>
@@ -154,12 +154,12 @@ const Ecommerce = () => {
                   <TbDeviceCctv />
               </button>
               
-              <p className="p-0 mt-3">
-                <span className="text-lg font-semibold">
+              <p className="p-0 mt-3 text-lato">
+                <span className="text-lg font-semibold text-lato">
                   {propertyFetched ? (propertyFetched.numOfCamerasTotal || 0) : 0}
                 </span>
               </p>
-              <p className="p-0 text-md text-gray-700 mt-1">{t("dashboard.dashboard-index.total-cameras")}</p>
+              <p className="p-0 text-md text-gray-700 mt-1 text-lato">{t("dashboard.dashboard-index.total-cameras")}</p>
             </div>
             <div
               key={2}
@@ -179,13 +179,13 @@ const Ecommerce = () => {
                 <HiStatusOnline />
                 </Link>
               </button>
-              <p className="p-0 mt-3">
-                <span className="text-lg font-semibold">
+              <p className="p-0 mt-3 text-lato">
+                <span className="text-lg font-semibold text-lato">
                   {propertyFetched ? (propertyFetched.camerasOnline || 0) : 0}
             
                 </span>
               </p>
-              <p className="p-0 text-md text-gray-700 mt-1">{t("dashboard.dashboard-index.cameras-on")}</p>
+              <p className="p-0 text-md text-gray-700 mt-1 text-lato">{t("dashboard.dashboard-index.cameras-on")}</p>
             </div>
             <div
               key={3}
@@ -204,11 +204,11 @@ const Ecommerce = () => {
                 <HiStatusOffline />
               </button>
               <p className="p-0 mt-3">
-                <span className="text-lg font-semibold">
+                <span className="text-lg font-semibold text-lato">
                   {propertyFetched ? (propertyFetched.camerasOffline || 0) : 0}
                 </span>
               </p>
-              <p className="p-0 text-md text-gray-700 mt-1">{t("dashboard.dashboard-index.cameras-off")}</p>
+              <p className="p-0 text-md text-gray-700 mt-1 text-lato">{t("dashboard.dashboard-index.cameras-off")}</p>
             </div>
 
             <div key={4} className="bg-white/75 dark:text-gray-200 dark:bg-secondary-dark-bg md:w-1/4 p-4 pt-9 rounded-2xl">
@@ -223,11 +223,11 @@ const Ecommerce = () => {
                 <TbDeviceCctvOff />
               </button>
               <p className="p-0 mt-3">
-                <span className="text-lg font-semibold">
+                <span className="text-lg font-semibold text-lato">
                   {propertyFetched ? (propertyFetched.camerasVandalized || 0) : 0}
                 </span>
               </p>
-              <p className="p-0 text-md text-gray-700 mt-1">
+              <p className="p-0 text-md text-gray-700 mt-1 text-lato">
                 {t("dashboard.dashboard-index.vandalized-cameras")}
               </p>
             </div>

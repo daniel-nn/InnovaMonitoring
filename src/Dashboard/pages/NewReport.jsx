@@ -18,9 +18,10 @@ import { RadioButton } from "primereact/radiobutton";
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { Dialog } from 'primereact/dialog';
 import { getAdminsAndMonitors } from "../helper/getUserAdminsaAndMonitors";
+import TypewriterTextNewReport from "../components/Texts/TypewriterTextNewReport";
+import { getNextIdCase } from "../helper/Reports/IdCase/getNetxtIdCase";
 import "../pages/css/Reports/NewReport.css";
 // import '../pages/css/Outlet/Outlet.css'
-import TypewriterTextNewReport from "../components/Texts/TypewriterTextNewReport";
 
 const NewReport = () => {
   const {
@@ -67,8 +68,28 @@ const NewReport = () => {
   };
 
   useEffect(() => {
-    resetReportForm();
+    const initializeForm = async () => {
+      // Llamar primero a resetReportForm para asegurar que el formulario esté en estado inicial
+      resetReportForm();
+
+      // Esperar un breve momento para asegurarse de que el estado inicial se establezca correctamente
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      // Cargar el nextIdCase y actualizar el formulario
+      const nextIdCase = await getNextIdCase();
+      if (nextIdCase !== null) {
+        console.log("nextidCase dentro de el useEffect", nextIdCase)
+        setReportForm(prevForm => ({
+          ...prevForm,
+          numerCase: nextIdCase
+        }));
+      }
+    };
+
+    initializeForm();
   }, []);
+
+
 
   const validateForm = () => {
     const fieldsToValidate = {
@@ -506,6 +527,7 @@ const NewReport = () => {
     // if (!validateForm()) return;
     setShowConfirmDialog(true);
   };
+
 
 
 
@@ -1226,7 +1248,7 @@ const NewReport = () => {
             <div className="files-list">
               {reportForm.evidences.map((file, index) => (
                 <div
-                  key={index}
+                  key={file.id || file.name} 
                   className="file-item flex items-center justify-between mb-2 bg-gray-100 p-2 rounded"
                 >
                   {file.type.startsWith("image/") && (

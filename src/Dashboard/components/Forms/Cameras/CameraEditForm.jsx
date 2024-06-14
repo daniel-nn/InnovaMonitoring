@@ -12,7 +12,17 @@ import { useTranslation } from "react-i18next";
 import "../../../pages/css/Cameras/Cameras.css"
 import Swal from "sweetalert2";
 import { putEditCamera } from "../../../helper/Cameras/UpdateCamera/putEditCamera";
+import '../../../pages/css/Outlet/Outlet.css'
 
+const parseDateString = (dateString) => {
+    if (!dateString) return null;
+    const parts = dateString.split("-");
+    const day = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10) - 1;
+    const year = parseInt(parts[2], 10);
+    const date = new Date(year, month, day);
+    return date;
+};
 export const CameraEditForm = ({ camera, onClose }) => {
     const [cameraForm, setCameraForm] = useState({});
     const {
@@ -24,11 +34,10 @@ export const CameraEditForm = ({ camera, onClose }) => {
         status,
         type,
     } = cameraForm || {};
+
     const statusList = ["Working", "Offline", "Vandalized"];
     const { t, i18n } = useTranslation("global");
 
-
-    
     const handleImageChange = (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -43,7 +52,6 @@ export const CameraEditForm = ({ camera, onClose }) => {
             }));
         }
     };
-
 
     useEffect(() => {
         if (camera) {
@@ -92,9 +100,24 @@ export const CameraEditForm = ({ camera, onClose }) => {
             }
         }
     };
+    useEffect(() => {
+        if (camera) {
+            const dateInstalled = camera.dateInstalled ? parseDateString(camera.dateInstalled) : null;
+            setCameraForm({
+                ...camera,
+                dateInstalled
+            });
+            console.log("Initial state for form:", cameraForm);
+        }
+    }, [camera]);
 
-    console.log(cameraForm)
-
+    const handleDateChange = (e) => {
+        console.log("New date from calendar:", e.value);
+        setCameraForm(prev => ({
+            ...prev,
+            dateInstalled: e.value
+        }));
+    };    
     return (
         <div>
             <div className="flex">  
@@ -149,7 +172,7 @@ export const CameraEditForm = ({ camera, onClose }) => {
                                     return { ...cameraForm, type: e.value };
                                 })
                             }
-                            options={["Dome", "PTZ", "Bullet", "LPR"]}
+                            options={["Dome", "PTZ", "Bullet", "LPR", "Box"]}
                             placeholder={t("dashboard.cameras.dialog.type-placeholder")}
                             className="w-full md:w-14rem"
                         />
@@ -211,13 +234,12 @@ export const CameraEditForm = ({ camera, onClose }) => {
                         </span>
                         <Calendar
                             placeholder={t("dashboard.cameras.dialog.date-installed-placeholder")}
-                            value={dateInstalled}
-                            onChange={(e) =>
-                                setCameraForm((i) => {
-                                    return { ...cameraForm, dateInstalled: e.value };
-                                })
-                            }
-                        />
+                            value={cameraForm.dateInstalled}
+                            onChange={handleDateChange}
+                            dateFormat="dd-mm-yy"
+                            />
+                            {/* placeholder={t("dashboard.cameras.dialog.date-installed-placeholder")} */}
+
                     </div>
                 </div>
             </div>
@@ -253,7 +275,30 @@ export const CameraEditForm = ({ camera, onClose }) => {
             <div className="w-full flex justify-around   mt-7">
                 <Button icon="pi pi-times" severity="danger" label={t('dashboard.cameras.dialog.cancel')} onClick={onClose} />
                 <div className="w-3"></div>
-                <Button icon="pi pi-check" className="p-button-success" label={t('dashboard.cameras.dialog.send')} onClick={handleUpdateCameraInfo} />
+                <button
+                    className="send-button"
+                    onClick={handleUpdateCameraInfo}
+                >
+                    <div class="svg-wrapper-1">
+                        <div class="svg-wrapper">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                width="24"
+                                height="24"
+                            >
+                                <path fill="none" d="M0 0h24v24H0z"></path>
+                                <path
+                                    fill="currentColor"
+                                    d="M1.946 9.315c-.522-.174-.527-.455.01-.634l19.087-6.362c.529-.176.832.12.684.638l-5.454 19.086c-.15.529-.455.547-.679.045L12 14l6-8-8 6-8.054-2.685z"
+                                ></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <span>
+                        {t("dashboard.cameras.dialog.send")}
+                    </span>
+                </button>
             </div>
 
         </div>

@@ -24,8 +24,8 @@ import { UserContext } from "../../context/UserContext";
 import { cameraGrid, cameraGridAdmin } from "../data/dummy";
 import { useTranslation } from "react-i18next";
 import TableSkeleton from "../components/TableSkeleton";
-import '../pages/css/Outlet/Outlet.css'
 import TypewriterText from "../components/Texts/TypewriterTex";
+import '../pages/css/Outlet/Outlet.css'
 
 const Cameras = () => {
   const toolbarOptions = ["Search"];

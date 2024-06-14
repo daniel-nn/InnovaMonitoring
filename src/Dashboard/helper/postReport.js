@@ -38,7 +38,7 @@ export const postReport = async (reportForm, t, setCreatingReport, userId, updat
   formData.append("report", new Blob([JSON.stringify({
     createdBy: reportForm.createdBy,
     caseType: caseTypeData,
-    otherSeeReport: reportForm.isOtherSeeReportActive && reportForm.otherSeeReport ? reportForm.otherSeeReport : "nulo creo yo",
+    otherSeeReport: reportForm.isOtherSeeReportActive && reportForm.otherSeeReport ? reportForm.otherSeeReport : null,
     company: reportForm.company,
     level: reportForm.level,
     numerCase: reportForm.numerCase,

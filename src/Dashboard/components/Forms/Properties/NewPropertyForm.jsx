@@ -7,7 +7,6 @@ import { UserContext } from "../../../../context/UserContext";
 
 
 export const NewPropertyForm = ({ onClose }) => {
-    const [validationErrors, setValidationErrors] = useState({});
     const { t } = useTranslation("global");
     const [propertyForm, setPropertyForm] = useState({
         name: '',
@@ -17,6 +16,8 @@ export const NewPropertyForm = ({ onClose }) => {
     });
     const [mapImgPreview, setMapImgPreview] = useState(propertyForm.mapImg || '');
     const [imgPreview, setImgPreview] = useState(propertyForm.img || '');
+    const [validationErrors, setValidationErrors] = useState({});
+
     
     const handleInputChange = (event, field) => {
         if (field === 'img' || field === 'mapImg') {
@@ -49,7 +50,6 @@ export const NewPropertyForm = ({ onClose }) => {
             }
         }
     };
-
 
     const validatePropertyDetails = () => {
 
