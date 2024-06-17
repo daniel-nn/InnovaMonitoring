@@ -87,14 +87,14 @@ export const CameraForm = ({ properties, setCameraFormFlag, setCameraSaved, came
   const validateCameraForm = () => {
     const errors = {};
 
-    if (!name.trim()) errors.name = t("dashboard.cameras.validation.name-required");
-    if (!brand.trim()) errors.brand = t("dashboard.cameras.validation.brand-required");
-    if (!type) errors.type = t("dashboard.cameras.validation.type-required");
-    if (!status) errors.status = t("dashboard.cameras.validation.status-required");
-    if (!installedByUs) errors.installedByUs = t("dashboard.cameras.validation.installedBy-required");
-    if (!dateInstalled) { errors.dateInstalled = t("dashboard.cameras.validation.dateInstalled-required");}
-    if (!property) errors.property = t("dashboard.cameras.validation.property-required");
-    if (!imageFile) errors.imageFile = t("dashboard.cameras.validation.image-required");
+    if (!name.trim()) errors.name = t("dashboard.cameras.dialog.validation.name-required");
+    if (!brand.trim()) errors.brand = t("dashboard.cameras.dialog.validation.brand-required");
+    if (!type) errors.type = t("dashboard.cameras.dialog.validation.type-required");
+    if (!status) errors.status = t("dashboard.cameras.dialog.validation.status-required");
+    if (!installedByUs) errors.installedByUs = t("dashboard.cameras.dialog.validation.installedBy-required");
+    if (!dateInstalled) { errors.dateInstalled = t("dashboard.cameras.dialog.validation.dateInstalled-required");}
+    if (!property) errors.property = t("dashboard.cameras.validation.dialog.property-required");
+    if (!imageFile) errors.imageFile = t("dashboard.cameras.dialog.validation.image-required");
 
     setValidationErrors(errors);
     return Object.keys(errors).length === 0; 

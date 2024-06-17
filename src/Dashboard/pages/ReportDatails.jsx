@@ -39,6 +39,7 @@ import postViewedUser from "../helper/postViewedUser "
 import { GridPdf } from "../data/dummy";
 import ViewedsTable from "../components/Reports/ReportDetails/ViewedsTable";
 import TableSkeleton from '../components/TableSkeleton';
+import { faPersonCircleQuestion } from "@fortawesome/free-solid-svg-icons";
 
 let url = `${process.env.REACT_APP_SERVER_IP}/reports`;
 let noImages = [
@@ -136,7 +137,7 @@ export const ReportDatails = () => {
       setLoading(false);
       let evidences = data?.evidences?.map((evidence) => ({
         name: evidence.name,
-        url: "https://innova-input.s3.us-east-1.amazonaws.com/" + evidence.path,
+      url: `${process.env.REACT_APP_S3_BUCKET_URL}/${evidence.path}`,
       }));
       setFilesToDownload(evidences);
 

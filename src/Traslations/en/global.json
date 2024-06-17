@@ -795,7 +795,17 @@
         "property-placeholder": "Select The Camera Property",
         "search-img": "Search Image",
         "cancel": "Cancel",
-        "send": "Send"
+        "send": "Send",
+        "validation": {
+          "name-required": "Name required",
+          "brand-required": "Brand required",
+          "type-required": "Type required",
+          "status-required": "Status required",
+          "installedBy-required": "Installed by required",
+          "dateInstalled-required": "Date installed required",
+          "property-required": "Property required",
+          "image-required": "Image required"
+        }
       },
       "table": {
         "img": "Image",

@@ -2,7 +2,7 @@ import React from 'react';
 import Swal from 'sweetalert2';
 
 export const getCameras = async (id, navigate) => {
-  const url = `${process.env.REACT_APP_SERVER_IP}/cameras`;
+  const url = `${process.env.REACT_APP_SERVER_IP}/cameras/property/${id}`;
   try {
     const response = await fetch(url);
     if (!response.ok) {
@@ -24,7 +24,7 @@ export const getCameras = async (id, navigate) => {
       };
     });
 
-    console.log("camaras mapeadas",camerasMapped);
+    console.log(camerasMapped);
     return camerasMapped;
   } catch (error) {
     console.error('Error fetching cameras:', error);

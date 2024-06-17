@@ -20,7 +20,7 @@ const deleteEvidence = async (evidence, reportId, setReportForm, t) => {
             });
         } else {
             // Evidencia de la bd y el S3
-            const response = await fetch(`http://localhost:8080/api/reports/${reportId}/eliminar-evidencia`, {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_IP}/reports/${reportId}/eliminar-evidencia`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ id: evidence.id, path: evidence.path, name: evidence.name })

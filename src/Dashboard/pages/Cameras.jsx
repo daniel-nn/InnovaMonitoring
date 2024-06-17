@@ -25,7 +25,6 @@ import { cameraGrid, cameraGridAdmin } from "../data/dummy";
 import { useTranslation } from "react-i18next";
 import TableSkeleton from "../components/TableSkeleton";
 import TypewriterText from "../components/Texts/TypewriterTex";
-import '../pages/css/Outlet/Outlet.css'
 
 const Cameras = () => {
   const toolbarOptions = ["Search"];
@@ -48,13 +47,11 @@ const Cameras = () => {
   const [selectedCamera, setSelectedCamera] = useState(null);
 
   useEffect(() => {
-
-    getCameras(navigate).then((data) =>
-      setCamerasList(data),
-      setLoading(false)
+    getCameras(propertyContext.id || id, navigate).then((data) =>
+      setCamerasList(data)
     );
-
-  }, [cameraSaved]);
+    setLoading(false)
+  }, [propertyContext, cameraSaved]);
 
   const handleClose = () => {
     setCameraFormFlag(false);
@@ -62,11 +59,10 @@ const Cameras = () => {
   };
 
   const handleCloseEdit = (updatedCamera) => {
-    setLoading(true)
+    setLoading(false)
     setSelectedCamera(null);
     if (updatedCamera) {
-      getCameras(navigate).then(setCamerasList);
-      setLoading(false);
+      getCameras(propertyContext.id || id, navigate).then(setCamerasList);
     }
   };
 
@@ -99,25 +95,28 @@ const Cameras = () => {
       </Dialog>
 
       <div className="mx-7 bg-white rounded-3xl overflow-auto">
-      <div className="background">
-          <Header title={<TypewriterText text={t("dashboard.cameras.title") + propertyContext.name} />}/>
-          <div className="card flex justify-start">
-            {userRole == "Admin" ? (
-              <button
-                onClick={() => setCameraFormFlag(true)}
-                class="button"
-              >
-                {t("dashboard.cameras.dialog.add-camera")}
-                <AiOutlinePlusCircle/>
-              </button>
-            ) : (
-              <></>
-            )}
+        <div className="background">
+          <Header title={
+            <TypewriterText text={`${t("dashboard.cameras.title")} ${propertyContext.name}`} />
+          } />
+        <div className="card flex justify-start py-2 mb-7">
+          {userRole == "Admin" ? (
+            <Button
+              onClick={() => setCameraFormFlag(true)}
+              severity="info"
+              label={t("dashboard.cameras.dialog.add-camera")}
+            >
+              {" "}
+              <AiOutlinePlusCircle className="ml-2"></AiOutlinePlusCircle>
+            </Button>
+          ) : (
+            <></>
+          )}
         </div>
-          </div>
-        {loading ? (
-          <TableSkeleton />
-        ) : (<GridComponent
+        </div>
+
+        {loading ? <TableSkeleton /> : (
+        <GridComponent
           dataSource={camerasList}
           width="auto"
           allowPaging
@@ -140,7 +139,7 @@ const Cameras = () => {
 
           <Inject services={[Search, Page, Toolbar]} />
         </GridComponent>
-        )}
+       )} 
       </div>
     </>
   );

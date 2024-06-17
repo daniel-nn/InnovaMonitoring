@@ -95,20 +95,6 @@ export const Properties = () => {
     setLoading(false)
 
   };
-
-  const validatePropertyDetails = () => {
-
-    const errors = {};
-    const { name, direction, img, mapImg } = propertyForm;
-    if (!name) errors.name = t("dashboard.properties.dialog.swal.validate-property-details.name");
-    if (!direction) errors.direction = t("dashboard.properties.dialog.swal.validate-property-details.direction");
-    if (!img || typeof img === 'string' || !img.name) errors.img = t("dashboard.properties.dialog.swal.validate-property-details.img-url");
-    if (!mapImg || typeof mapImg === 'string' || !mapImg.name) errors.mapImg = t("dashboard.properties.dialog.swal.validate-property-details.map-url");
-
-
-    setValidationErrors(errors);
-    return Object.keys(errors).length === 0;
-  };
   
 
   const refreshProperties = async () => {

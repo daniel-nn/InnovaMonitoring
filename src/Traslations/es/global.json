@@ -791,7 +791,17 @@
         "property-placeholder": "Seleccióna la propiedad de la camara",
         "search-img": "Buscar imagen",
         "cancel": "Cancelar",
-        "send": "Enviar"
+        "send": "Enviar",
+        "validation": {
+          "name-required": "Nombre requerido",
+          "brand-required": "Marca requerida",
+          "type-required": "Tipo requerido",
+          "status-required": "Estado requerido",
+          "installedBy-required": "Instalado por requerido",
+          "dateInstalled-required": "Fecha de instalación requerida",
+          "property-required": "Propiedad requerida",
+          "image-required": "Imagen requerida"
+        }
       },
       "table": {
         "img": "Imagen",

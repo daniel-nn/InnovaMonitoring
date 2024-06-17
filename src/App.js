@@ -84,10 +84,10 @@ function App() {
               <Route path="/dashboard/Agents" element={<Agents />} />
               <Route path="/dashboard/Cases" element={<Cases />} />
               <Route path="/dashboard/properties" element={<Properties />} />
-S
+
               {/* Charts */}
-              <Route path="/dashboard/line" element={<Line />} />
-           
+
+             {/*  <Route path="/dashboard/line" element={<Line />} /> */}
               <Route path="/dashboard/bar" element={<Bar />} />
               <Route path="/dashboard/pie-reports" element={<Pie />} />
               <Route path="/dashboard/pie-levels" element={<PieLevels />} />

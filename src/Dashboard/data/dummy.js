@@ -1019,6 +1019,13 @@ export const cameraGrid = (t) => {
       textAlign: "Center"
     },
     {
+      field: "LiveView",
+      headerText: t("dashboard.cameras.table.details"),
+      width: "100",
+      textAlign: "Center",
+      template: props => < GridLiveView camera={props} />
+    },
+    {
       field: "type",
       headerText: t("dashboard.cameras.table.type"),
       width: "90",

@@ -76,19 +76,26 @@ const NewReport = () => {
       await new Promise(resolve => setTimeout(resolve, 500));
 
       // Cargar el nextIdCase y actualizar el formulario
-      const nextIdCase = await getNextIdCase();
-      if (nextIdCase !== null) {
-        console.log("nextidCase dentro de el useEffect", nextIdCase)
-        setReportForm(prevForm => ({
-          ...prevForm,
-          numerCase: nextIdCase
-        }));
+      const response = await getNextIdCase();
+      if (response && response.ok) {
+        const responseData = await response.json(); // Convertir la respuesta a JSON
+        const nextIdCase = responseData.nextIdCase; // Extraer el valor de nextIdCase
+        console.log("siguiente número de caso (extracción directa):", nextIdCase);
+        if (nextIdCase !== undefined) {
+          setReportForm(prevForm => ({
+            ...prevForm,
+            numerCase: nextIdCase // Actualizar el estado del formulario con el nuevo número de caso
+          }));
+        } else {
+          console.error("No se pudo extraer nextIdCase de la respuesta");
+        }
+      } else {
+        console.error("Respuesta del servidor no fue ok:", response);
       }
     };
 
     initializeForm();
   }, []);
-
 
 
   const validateForm = () => {
@@ -524,7 +531,7 @@ const NewReport = () => {
 
 
   const sendingreport = () => {
-    // if (!validateForm()) return;
+    if (!validateForm()) return;
     setShowConfirmDialog(true);
   };
 
@@ -1295,6 +1302,9 @@ const NewReport = () => {
             />
           </div>
         </div>
+      </div>
+      <div className="flex justify-start mt-4 pr-20">
+        <p>hola</p>
       </div>
 
       <div className="flex justify-end mt-4 pr-20">

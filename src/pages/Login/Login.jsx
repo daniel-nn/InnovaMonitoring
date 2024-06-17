@@ -86,7 +86,7 @@ const Login = () => {
             const ip = await ipData.json();
             const param = { ip: ip.ip };
             // Construir la URL con los parámetros
-            const baseUrl = "http://localhost:8080/api/networks";
+          const baseUrl = `${process.env.REACT_APP_SERVER_IP}/networks`;
             const url = new URL(baseUrl);
             url.search = new URLSearchParams(param).toString();
 

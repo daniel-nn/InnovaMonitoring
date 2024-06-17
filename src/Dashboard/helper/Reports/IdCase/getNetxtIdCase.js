@@ -9,10 +9,8 @@ export const getNextIdCase = async () => {
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
-        const data = await response.json();
-        console.log("Respuesta completa del servidor:", data);
-        console.log("siguiente número de caso (extracción directa):", data); 
-        return data;    
+    
+        return response;    
     } catch (error) {
         console.error("Error al obtener el próximo número de caso:", error);
         Swal.fire({
