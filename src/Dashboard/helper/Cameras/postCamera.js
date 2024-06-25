@@ -2,16 +2,6 @@ import { CameraAltTwoTone } from '@mui/icons-material';
 import React from 'react'
 import Swal from 'sweetalert2';
 
-
-const formatDate = (date) => {
-  if (typeof date === 'string') {
-    date = new Date(date);
-  }
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const day = date.getDate().toString().padStart(2, '0');
-  return `${month}-${day}-${date.getFullYear()}`;
-};
-
 export const postCamera = async (cameraForm, t) => {
 
   const formData = new FormData();
@@ -23,7 +13,6 @@ export const postCamera = async (cameraForm, t) => {
     status: cameraForm.status,
     property: cameraForm.property,
     installedByUs: cameraForm.installedByUs,
-    dateInstalled: formatDate(cameraForm.dateInstalled),  
   };
 
   formData.append("camera", new Blob([JSON.stringify(cameraData)], { type: 'application/json' }));

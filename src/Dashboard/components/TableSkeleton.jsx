@@ -30,7 +30,6 @@ const TableSkeleton = () => {
                             <TableCell><Skeleton variant="text" width={50} height={20} /></TableCell>
                             <TableCell>
                                 <Skeleton variant="circular" width={40} height={40} />
-                                <Skeleton variant="circular" width={40} height={40} />
                             </TableCell>
                         </TableRow>
                     ))}

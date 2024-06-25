@@ -20,7 +20,9 @@ import { Dialog } from 'primereact/dialog';
 import { getAdminsAndMonitors } from "../helper/getUserAdminsaAndMonitors";
 import TypewriterTextNewReport from "../components/Texts/TypewriterTextNewReport";
 import { getNextIdCase } from "../helper/Reports/IdCase/getNetxtIdCase";
+import chatGPTRequest from "../helper/Reports/chatGpt/chatGPTRequest";
 import "../pages/css/Reports/NewReport.css";
+import "../pages/css/Reports/Reports.css";
 // import '../pages/css/Outlet/Outlet.css'
 
 const NewReport = () => {
@@ -535,6 +537,15 @@ const NewReport = () => {
     setShowConfirmDialog(true);
   };
 
+  const handleGPTButtonClick = async () => {
+    const response = await chatGPTRequest(reportForm.reportDetails);
+    if (response) {
+      setReportForm((prev) => ({
+        ...prev,
+        reportDetails: response,
+      }));
+    }
+  };
 
 
 
@@ -1304,7 +1315,9 @@ const NewReport = () => {
         </div>
       </div>
       <div className="flex justify-start mt-4 pr-20">
-        <p>hola</p>
+        <button class="btn-gpt" onClick={handleGPTButtonClick}>
+           Chat Gpt
+        </button>
       </div>
 
       <div className="flex justify-end mt-4 pr-20">

@@ -1,7 +1,7 @@
-import Swal from "sweetalert2";
+import Swal from 'sweetalert2';
 
-const getReportsNoVerified = async () => {
-    const url = `${process.env.REACT_APP_SERVER_IP}/reports/noVerified`;
+export const getAllReports = async () => {
+    const url = `${process.env.REACT_APP_SERVER_IP}/reports`;
 
     try {
         const response = await fetch(url, {
@@ -18,15 +18,12 @@ const getReportsNoVerified = async () => {
         const data = await response.json();
         return data;
     } catch (error) {
-        console.error('Error fetching non-verified reports:', error);
+        console.error('Error fetching reports:', error);
         Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            text: 'Failed to fetch non-verified reports. Please try again later.'
+            text: 'Failed to fetch reports. Please try again later.'
         });
-            throw error;
+        throw error; // Optional: re-throw the error if you want to handle it later.
     }
 };
-
-export { getReportsNoVerified };
-

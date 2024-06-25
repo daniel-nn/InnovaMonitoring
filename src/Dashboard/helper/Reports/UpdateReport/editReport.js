@@ -11,6 +11,9 @@ const formatDate = (date) => {
 };
 
 const formatTime = (date) => {
+  if (!date) {
+    return null; // Retorna null directamente si la fecha es null o undefined
+  }
   if (typeof date === 'string') {
     date = new Date(date);
   }
@@ -18,6 +21,7 @@ const formatTime = (date) => {
   let minutes = date.getMinutes().toString().padStart(2, '0');
   return `${hours}:${minutes}`;
 };
+
 
 export const editReport = async (reportForm, isOtherSeeReportActive, t) => {
   const formattedData = {

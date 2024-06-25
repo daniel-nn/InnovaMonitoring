@@ -14,15 +14,7 @@ import Swal from "sweetalert2";
 import { putEditCamera } from "../../../helper/Cameras/UpdateCamera/putEditCamera";
 import '../../../pages/css/Outlet/Outlet.css'
 
-const parseDateString = (dateString) => {
-    if (!dateString) return null;
-    const parts = dateString.split("-");
-    const day = parseInt(parts[0], 10);
-    const month = parseInt(parts[1], 10) - 1;
-    const year = parseInt(parts[2], 10);
-    const date = new Date(year, month, day);
-    return date;
-};
+
 export const CameraEditForm = ({ camera, onClose }) => {
     const [cameraForm, setCameraForm] = useState({});
     const {
@@ -100,24 +92,8 @@ export const CameraEditForm = ({ camera, onClose }) => {
             }
         }
     };
-    useEffect(() => {
-        if (camera) {
-            const dateInstalled = camera.dateInstalled ? parseDateString(camera.dateInstalled) : null;
-            setCameraForm({
-                ...camera,
-                dateInstalled
-            });
-            console.log("Initial state for form:", cameraForm);
-        }
-    }, [camera]);
 
-    const handleDateChange = (e) => {
-        console.log("New date from calendar:", e.value);
-        setCameraForm(prev => ({
-            ...prev,
-            dateInstalled: e.value
-        }));
-    };    
+
     return (
         <div>
             <div className="flex">  
@@ -221,25 +197,6 @@ export const CameraEditForm = ({ camera, onClose }) => {
                             placeholder={t("dashboard.cameras.dialog.installed-by-placeholder")}
                             className="w-full md:w-14rem"
                         />
-                    </div>
-                </div>
-            </div>
-
-            <div className="flex">
-                <div className="p-inputgroup my-3 ml-3 flex flex-col">
-                    <label htmlFor="username">{t("dashboard.cameras.dialog.date-installed")}</label>
-                    <div className="p-inputgroup">
-                        <span className="p-inputgroup-addon">
-                            <i className="pi pi-clock"></i>
-                        </span>
-                        <Calendar
-                            placeholder={t("dashboard.cameras.dialog.date-installed-placeholder")}
-                            value={cameraForm.dateInstalled}
-                            onChange={handleDateChange}
-                            dateFormat="dd-mm-yy"
-                            />
-                            {/* placeholder={t("dashboard.cameras.dialog.date-installed-placeholder")} */}
-
                     </div>
                 </div>
             </div>

@@ -77,7 +77,7 @@ export const postReport = async (reportForm, t, setCreatingReport, userId, updat
 
       method: 'POST',
       headers: {
-        "Userid": userId,
+        "userid": userId,
     },
       body: formData,
     });

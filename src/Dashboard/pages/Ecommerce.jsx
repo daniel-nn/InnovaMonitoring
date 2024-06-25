@@ -14,7 +14,7 @@ import { TbDeviceCctv, TbDeviceCctvOff } from "react-icons/tb";
 import { GiPoliceCar } from "react-icons/gi";
 import { useTranslation } from "react-i18next";
 import { Link } from 'react-router-dom';
-import { getNumberOfReportsByRole } from "../helper/getNumberOfReportsByRole";
+import { getNumberOfReportsByRole } from "../helper/Reports/dataTables/getNumberOfReportsByRole";
 import { Button } from "primereact/button";
 import '../pages/css/Dashboard/Dashboard.css'
 import { motion, useAnimation } from "framer-motion";

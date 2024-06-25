@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "..";
 import { useStateContext } from "../../../context/ContextProvider";
 import { UserContext } from "../../../context/UserContext"; 
-import avatar from "../../data/avatar.jpg";
 import useUserProfileData from "../UserProfileData";
 import Shortlogo from "../../../assets/images/Logos/Logo-short.png"
 import LogoutButton from "../LogoutButton";

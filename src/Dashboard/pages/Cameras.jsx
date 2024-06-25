@@ -25,6 +25,7 @@ import { cameraGrid, cameraGridAdmin } from "../data/dummy";
 import { useTranslation } from "react-i18next";
 import TableSkeleton from "../components/TableSkeleton";
 import TypewriterText from "../components/Texts/TypewriterTex";
+import '../pages/css/Outlet/Outlet.css'
 
 const Cameras = () => {
   const toolbarOptions = ["Search"];
@@ -99,16 +100,18 @@ const Cameras = () => {
           <Header title={
             <TypewriterText text={`${t("dashboard.cameras.title")} ${propertyContext.name}`} />
           } />
-        <div className="card flex justify-start py-2 mb-7">
+          <div className="card flex justify-start ">
           {userRole == "Admin" ? (
-            <Button
-              onClick={() => setCameraFormFlag(true)}
-              severity="info"
-              label={t("dashboard.cameras.dialog.add-camera")}
-            >
-              {" "}
-              <AiOutlinePlusCircle className="ml-2"></AiOutlinePlusCircle>
-            </Button>
+            
+            <button
+                    className="button ml-7"
+                    onClick={() => {
+                      setCameraFormFlag(true)                    }}
+                  >
+                  {t("dashboard.cameras.dialog.add-camera")}
+                  <AiOutlinePlusCircle className="ml-2" />
+                  </button>
+
           ) : (
             <></>
           )}

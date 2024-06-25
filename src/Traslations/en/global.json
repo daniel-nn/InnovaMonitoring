@@ -447,12 +447,14 @@
     },
     "reports": {
       "reports-of": "Reports of - ",
-      "non-verified-tittle": "Unverified Reports",
       "reports-tittle": "Reports",
+      "all-reports": "All Reports",
+      "non-verified-tittle": "Unverified Reports",
       "report-loading": "The Report Is Loading",
       "buttons": {
         "add-report": "Add Report",
         "reports-per-property": "Property Reports",
+        "all-reports": "All Reports",
         "non-verified-reports": "Unverified Reports"
       },
       "table": {
@@ -466,7 +468,7 @@
           "TimeCase": "Time",
           "IdCase": "Report ID",
           "CaseVerified": "Verified",
-          "verifiedchanged": "Verified Status Changed",
+          "verifiedchanged": "voided report",
           "CaseEdit": "Edit",
           "CaseDetails": "Details",
           "no-pdf": "This report does not have a pdf"
@@ -481,7 +483,22 @@
           "TimeCase": "Time",
           "IdCase": "Report ID",
           "CaseVerified": "Verified",
-          "verifiedchanged": "Verified Status Changed",
+          "verifiedchanged": "voided report",
+          "CaseEdit": "Edit",
+          "CaseDetails": "Details",
+          "no-pdf": "This report does not have a pdf"
+        },
+        "admin-all-reports": {
+          "property": "Property",
+          "Case": "Incident",
+          "Agent": "Monitor",
+          "CaseLevel": "Case Level",
+          "CaseStatus": "Status",
+          "DateCase": "Date Incident",
+          "TimeCase": "Time",
+          "IdCase": "Report ID",
+          "CaseVerified": "Verified",
+          "verifiedchanged": "voided report",
           "CaseEdit": "Edit",
           "CaseDetails": "Details",
           "no-pdf": "This report does not have a pdf"
@@ -736,6 +753,7 @@
         }
       },
       "case-details": {
+        "evidences": "Dowloand Evidences",
         "incident-report": "Incident Report:",
         "property": "Property:",
         "name": "Monitoring Agent:",
@@ -760,6 +778,7 @@
         "police-notified": "Police Notified:",
         "police-first-responder-notified": "Police On The Scene:",
         "police-numer-case": "Police Number Case:",
+        "send-and-verfied": "Send Email And Verified",
         "yes": "Yes",
         "no": "No",
         "video-gallery": "Video Gallery:",

@@ -5,6 +5,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { GiPoliceBadge } from "react-icons/gi";
 import { MdLocalPolice } from "react-icons/md";
 import { GiCctvCamera } from "react-icons/gi";
+import { MdMarkEmailRead } from "react-icons/md";
+
 import JSZip from "jszip";
 import DownloadIcon from '@mui/icons-material/Download';
 import SendIcon from '@mui/icons-material/Send';
@@ -13,7 +15,7 @@ import CircularProgress, {
 } from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import PropTypes from "prop-types";
+import { Dialog } from "primereact/dialog";
 
 import {
   AiFillCheckCircle,
@@ -36,10 +38,12 @@ import { deleteItem } from "../helper/delete";
 import Swal from "sweetalert2";
 import { useTranslation } from "react-i18next";
 import postViewedUser from "../helper/postViewedUser "
-import { GridPdf } from "../data/dummy";
+import { GridPdf } from "../tablesTemplates/Reports/GridPdf";
+import { PdfEvidences } from "../helper/ReportDetails/PdfEvidences";
 import ViewedsTable from "../components/Reports/ReportDetails/ViewedsTable";
 import TableSkeleton from '../components/TableSkeleton';
-import { faPersonCircleQuestion } from "@fortawesome/free-solid-svg-icons";
+import "../pages/css/ReportDetails/ReportDetails.css"
+import { exportPdfEvidences } from "../helper/ReportDetails/exportPdfEvidences";
 
 let url = `${process.env.REACT_APP_SERVER_IP}/reports`;
 let noImages = [
@@ -61,48 +65,6 @@ export const ReportDatails = () => {
   const [showButton, setShowButton] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
 
-  const handleDownload = async () => {
-    setShowButton(false); // Ocultar el botón al comenzar la descarga
-    setLoading(true); // Activar el loader
-
-    const zip = new JSZip();
-
-    // Obtener la longitud total de archivos para calcular el progreso
-    const totalFiles = filesToDownload.length;
-    let filesProcessed = 0;
-
-    await Promise.all(
-      filesToDownload.map(async (file) => {
-        const response = await fetch(file.url, {
-          method: "GET",
-          mode: "cors",
-          cache: "no-store", // Evitar el almacenamiento en caché en Chrome
-        });
-        const data = await response.arrayBuffer(); // Obtener el cuerpo de la respuesta como un ArrayBuffer
-        zip.file(file.name, data);
-
-        // Incrementar el contador de archivos procesados y calcular el progreso
-        filesProcessed++;
-        const currentProgress = Math.round((filesProcessed / totalFiles) * 100);
-        setProgress(currentProgress);
-      })
-    );
-
-    // Generar el archivo ZIP
-    zip.generateAsync({ type: "blob" }).then((content) => {
-      // Crear el enlace de descarga
-      const downloadLink = document.createElement("a");
-      downloadLink.href = URL.createObjectURL(content);
-      downloadLink.download = folderName; // Nombre del archivo ZIP y la carpeta
-      downloadLink.click();
-
-      setLoading(false); // Desactivar el loader una vez que la descarga esté completa
-      setProgress(0); // Restablecer el progreso
-      setShowButton(true); // Mostrar el botón nuevamente
-    });
-  };
-
-
   const [t, i18n] = useTranslation("global");
   let dataImages = [];
   let dataVideos = [];
@@ -110,7 +72,7 @@ export const ReportDatails = () => {
   let { id } = useParams();
   const [flag, setFlag] = useState(false);
   const [folderName, setFolderName] = useState("");
-  const [reportDetails, setReportDetails] = useState({});
+    const [reportDetails, setReportDetails] = useState({});
   //const {report, isLoading} = useFetchReportId(id, navigate);
   const loadInitialUser = () => {
     const userStored = localStorage.getItem('user');
@@ -131,6 +93,7 @@ export const ReportDatails = () => {
     reportFormVisible,
     setReportFormVisible,
   } = useContext(UserContext);
+  
   useEffect(() => {
     getReportId(id, navigate).then((data) => {
       setReportDetails(data);
@@ -141,7 +104,7 @@ export const ReportDatails = () => {
       }));
       setFilesToDownload(evidences);
 
-      const { company, property, level, numerCase, caseType } = data;
+      const { company, property, level, numerCase, caseType, otherSeeReport } = data;
 
       // Normalizar el nombre de la propiedad para reemplazar los espacios con guiones
       const propertyNormalized = property.name.replace(/\s+/g, "-");
@@ -149,8 +112,18 @@ export const ReportDatails = () => {
       // Normalizar el nombre del equipo para reemplazar los espacios con guiones
       const companyNormalized = company.replace(/\s+/g, "-");
 
+      // Verifica si el tipo de caso es 'Other See Report' y el ID es 10
+      let incidentName;
+      if (caseType.id === 10 && caseType.incident === "Other See Report") {
+        // Reemplaza comas u otros caracteres especiales por guiones y quita espacios adicionales
+        incidentName = otherSeeReport.replace(/[,]/g, "-").trim();
+      } else {
+        incidentName = caseType.incident;
+      }
+
       // Construir el nombre de la carpeta
-      const folder = `report/${companyNormalized}_${propertyNormalized}_Level-${level}_#${numerCase}-${caseType.incident}.zip`;
+      const folder = `report/${companyNormalized}_${propertyNormalized}_Level-${level}_#${numerCase}-${incidentName}.zip`;
+
 
       // Actualizar el estado con el nombre de la carpeta generado
       setFolderName(folder);
@@ -159,9 +132,7 @@ export const ReportDatails = () => {
     });
   }, [reportSaved]);
 
-
-
-
+  
   const deleteReport = () => {
     Swal.fire({
       title: "Are you sure?",
@@ -212,7 +183,6 @@ export const ReportDatails = () => {
     setIncidentType(incidentInCurrentLanguage);
   }, [reportDetails, i18n.language]);
 
-
   useEffect(() => {
        if (userRole === "Client" && user.id && id) {
       console.log("Condiciones cumplidas para marcar como visto");
@@ -220,13 +190,63 @@ export const ReportDatails = () => {
         .catch(error => {
           console.error("Error al marcar el reporte como visto:", error);
         });
-    } else {
-      console.log("No es necesario marcar como visto o ya está marcado.");
-    }
-  }, [userRole, user.id, id]); // As
+    } 
+  }, [userRole, user.id, id]); 
   
 
-  console.log("Vistas del reporte antes despues de", reportDetails.vieweds)
+  const handleDownload = async () => {
+    setShowButton(false); // Ocultar el botón al comenzar la descarga
+    setLoading(true); // Activar el loader
+
+    const zip = new JSZip();
+    const evidencesFolder = zip.folder("Evidences");
+    const pdfFolder = zip.folder("Pdf")
+
+
+    try {
+      // Generación del pdf para agregarlo a la descarga
+      const pdfBlob = await exportPdfEvidences(reportDetails);
+      pdfFolder.file("report.pdf", pdfBlob);
+
+      // Agregar evidencias al ZIP
+      const totalFiles = filesToDownload.length;
+      let filesProcessed = 0;
+
+      await Promise.all(
+        filesToDownload.map(async (file) => {
+          const response = await fetch(file.url, {
+            method: "GET",
+            mode: "cors",
+            cache: "no-store", 
+          });
+          const data = await response.arrayBuffer(); // Obtener el cuerpo de la respuesta como un ArrayBuffer
+          evidencesFolder.file(file.name, data);
+
+          // Incrementar el contador de archivos procesados y calcular el progreso
+          filesProcessed++;
+          const currentProgress = Math.round((filesProcessed / totalFiles) * 100);
+          setProgress(currentProgress);
+        })
+      );
+
+      // Generar el archivo ZIP y descargar
+      const content = await zip.generateAsync({ type: "blob" });
+      const downloadLink = document.createElement("a");
+      downloadLink.href = URL.createObjectURL(content);
+      downloadLink.download = folderName; // Nombre del archivo ZIP y la carpeta
+      downloadLink.click();
+    } catch (error) {
+      console.error('Error durante la generación o descarga del archivo ZIP:', error);
+      Swal.fire("Error", "Failed to generate or download ZIP file.", "error");
+      setLoading(false);
+      setShowButton(true);
+    } finally {
+      setLoading(false); // Desactivar el loader una vez que la descarga esté completa
+      setProgress(0); // Restablecer el progreso
+      setShowButton(true); // Mostrar el botón nuevamente
+    }
+  };
+
 
 
   return (
@@ -234,7 +254,7 @@ export const ReportDatails = () => {
       <div className="w-full flex justify-end">
       <div className="card">
             
-          </div>
+      </div>
         <div className="col-xs-12 col-sm-12 col-lg-6 col-md-6">
         
         </div>
@@ -284,7 +304,11 @@ export const ReportDatails = () => {
         <div className="absolute right-6">
               {showButton && (
                 
-              <Button onClick={handleDownload} label="Evidences" severity="warning" icon="pi pi-save" size="small" />
+              <Button onClick={handleDownload} severity="warning" icon="pi pi-save" size="small">
+                <p className="text-lg text-white ml-3">                    
+                  {t("dashboard.reports.case-details.evidences")}
+                </p>
+              </Button>
 
               )}
               {loading && (
@@ -607,7 +631,7 @@ export const ReportDatails = () => {
                 </div>
                 <div className="flex items-center w-full border-b-1">
                   <p className=" text-lg font-bold mr-5">
-                    {t("dashboard.reports.case-details.report-pdf")}
+                    Pdf:
                   </p>
                   <GridPdf {...reportDetails} className="ml-20">
                     <AiFillFilePdf />
@@ -629,6 +653,7 @@ export const ReportDatails = () => {
                   </p>
                 </div>
               </div>
+
               <div className="flex max-w-full ">
                 <div className=" mr-3">
                   <div className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-50">
@@ -652,6 +677,7 @@ export const ReportDatails = () => {
                   </p>
                 </div>
               </div>
+
               <div className="flex max-w-full ">
                 <div className=" mr-3">
                   <div className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-50">
@@ -690,6 +716,7 @@ export const ReportDatails = () => {
                   </p>
                 </div>
               </div>
+
               <div className="flex max-w-full ">
                 <div className=" mr-3">
                   <div className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-50">
@@ -736,7 +763,28 @@ export const ReportDatails = () => {
                 </div>
               )}
 
+              <div className="flex max-w-full ">
+                <div className=" mr-3">
+                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-50">
+                    <MdMarkEmailRead className="text-yellow-600 w-5 h-6"></MdMarkEmailRead>
+                  </div>
+                </div>
+                <div className="flex items-center w-full border-b-1">
+                  <p className=" text-lg font-bold ">
+                    {t(
+                      "dashboard.reports.case-details.send-and-verfied"
+                    )}
+                  </p>
+                  <button class="button-send-email-and-verification">
+                    <svg class="svgIcon" viewBox="0 0 384 512">
+                      <path
+                        d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"
+                      ></path>
+                    </svg>
+                  </button>
 
+                </div>
+              </div>
 
             </div>
           </div>

@@ -92,7 +92,6 @@ export const CameraForm = ({ properties, setCameraFormFlag, setCameraSaved, came
     if (!type) errors.type = t("dashboard.cameras.dialog.validation.type-required");
     if (!status) errors.status = t("dashboard.cameras.dialog.validation.status-required");
     if (!installedByUs) errors.installedByUs = t("dashboard.cameras.dialog.validation.installedBy-required");
-    if (!dateInstalled) { errors.dateInstalled = t("dashboard.cameras.dialog.validation.dateInstalled-required");}
     if (!property) errors.property = t("dashboard.cameras.validation.dialog.property-required");
     if (!imageFile) errors.imageFile = t("dashboard.cameras.dialog.validation.image-required");
 
@@ -212,28 +211,6 @@ console.log(cameraForm)
 
         </div>
               
-      </div>
-
-      <div className="flex">
-        <div className="p-inputgroup my-3 ml-3 flex flex-col">
-          <label htmlFor="username">{t("dashboard.cameras.dialog.date-installed")}</label>
-          <div className="p-inputgroup">
-            <span className="p-inputgroup-addon">
-              <i className="pi pi-clock"></i>
-            </span>
-            <Calendar
-              placeholder={t("dashboard.cameras.dialog.date-installed-placeholder")}
-              value={dateInstalled}
-              onChange={(e) => {
-                const newDate = e.value || new Date(); 
-                setCameraForm((i) => {
-                  return { ...cameraForm, dateInstalled: newDate };
-                });
-              }}
-            />
-          </div>
-          {validationErrors.dateInstalled && <small className="p-error">{validationErrors.dateInstalled}</small>}
-        </div>
       </div>
 
       <div className="flex">

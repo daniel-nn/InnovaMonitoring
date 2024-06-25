@@ -15,7 +15,7 @@ const Sidebar = () => {
   const { currentColor, activeMenu, setActiveMenu, screenSize } =
     useStateContext();
   let user = JSON.parse(localStorage.getItem("user") || '{}');
-  let userRole = user.role.rolName;
+  let userRole = user.role.rolName || 'Client';
   const navigate = useNavigate();
 
   const handleCloseSideBar = () => {
@@ -63,7 +63,7 @@ const Sidebar = () => {
       {activeMenu && (
         <>
           <div className="flex justify-center items-start flex-col w-full">
-            
+
             <div className="flex flex-col justify-center items-center mt-5">
               <img className={`logodash ${showImage ? 'animate-assembleImage' : ''}`} src={Logo} alt="Logo" />
             </div>
@@ -72,7 +72,7 @@ const Sidebar = () => {
               <p className={`typewriter-text-logo animate-typing pt-2 pl-3 text-sm md:text-lg lg:text-xl `} style={{ visibility: textVisibility }}>
                 Innova Monitoring LLC
               </p>
-</div>
+            </div>
             <TooltipComponent content="Menu" position="BottomCenter">
               <button
                 type="button"
@@ -86,7 +86,7 @@ const Sidebar = () => {
           </div>
           <div className="mt-10">
             {links.map((item) => (
-              <div key={item.title}>
+              <div key={item.url}>
                 <p className="text-gray-400 p-0 dark:text-gray-400 m-3 mt-4 uppercase">
                   {item.title}
                 </p>
@@ -98,7 +98,7 @@ const Sidebar = () => {
                         key={link.name}
                         onClick={handleCloseSideBar}
                         style={({ isActive }) => ({
-                          backgroundColor: isActive ? currentColor :  "",
+                          backgroundColor: isActive ? currentColor : "",
                         })}
                         className={({ isActive }) =>
                           isActive ? activeLink : normalLink
@@ -137,7 +137,7 @@ const Sidebar = () => {
             ))}
 
             <div
-              
+
               onClick={logout}
               className="flex cursor-pointer items-center gap-5 pl-4 pt-3  rounded-lg text-md text-gray-700 dark:text-gray-200 dark:hover:text-black hover:bg-light-gray m-2"
             >

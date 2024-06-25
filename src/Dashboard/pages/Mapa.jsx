@@ -120,6 +120,7 @@ export const Mapa = () => {
           /* y 750/2 ,x */
           center={[355, 295]}
           zoom={0}
+          dragging={false}
           scrollWheelZoom={false}
           crs={CRS.Simple}
           style={{ height: "700px", width: "100%", overflow: "visible" }}
