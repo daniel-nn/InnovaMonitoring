@@ -1,6 +1,6 @@
 .button-send-email-and-verification {
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
   border-radius: 50%;
   background-color: rgb(20, 20, 20);
   border: none;
@@ -10,7 +10,7 @@
   justify-content: center;
   box-shadow: 0px 0px 0px 4px rgba(180, 160, 255, 0.253);
   cursor: pointer;
-  transition-duration: 0.3s;
+  transition: width 0.3s ease, border-radius 0.3s ease;
   overflow: hidden;
   position: relative;
   margin-left: 10px;
@@ -18,40 +18,36 @@
 
 .svgIcon {
   width: 12px;
-  transition-duration: 0.3s;
+  transition: transform 0.3s ease;
 }
 
 .svgIcon path {
   fill: white;
 }
 
+.button-label {
+  display: none;
+  color: white;
+  margin-left: 10px;
+  font-size: 17px;
+  white-space: nowrap;
+}
+
 .button-send-email-and-verification:hover {
-  width: 140px;
+  width: 160px;
   border-radius: 50px;
-  transition-duration: 0.3s;
-  background-color: rgb(181, 160, 255);
-  align-items: center;
+  background-color: rgb(234, 190, 63);
 }
 
 .button-send-email-and-verification:hover .svgIcon {
-  /* width: 20px; */
-  transition-duration: 0.3s;
-  transform: translateY(-200%);
+  transform: translateX(-50%); 
 }
 
-.button-send-email-and-verification::before {
-  position: absolute;
-  bottom: -20px;
-  content: "Back to Top";
-  color: white;
-  /* transition-duration: .3s; */
-  font-size: 0px;
+.button-send-email-and-verification:hover .button-label {
+  display: block;
 }
 
-.button-send-email-and-verification:hover::before {
-  font-size: 13px;
-  opacity: 1;
-  bottom: unset;
-  /* transform: translateY(-30px); */
-  transition-duration: 0.3s;
+.dialog-fullscreen .p-dialog-header {
+    background-color: black; 
+    border-bottom: none; 
 }

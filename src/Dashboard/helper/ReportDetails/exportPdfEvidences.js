@@ -130,7 +130,7 @@ export const exportPdfEvidences = async (data) => {
 
 
     const canvas = await html2canvas(htmlContent, {
-        scale: 2, // Aumenta la calidad de la imagen
+        scale: 2,
         width: htmlContent.offsetWidth,
         windowWidth: htmlContent.offsetWidth
     });
@@ -153,6 +153,7 @@ export const exportPdfEvidences = async (data) => {
     const scale = Math.min(scaleX, scaleY);
 
     pdf.addImage(imgData, 'PNG', scaleX, scaleY, imgWidth * scale, imgHeight * scale);
+    document.body.removeChild(htmlContent);
     return pdf.output('blob');
 
 };

@@ -134,6 +134,8 @@ const exportPDF = async (data) => {
         width: htmlContent.offsetWidth,
         windowWidth: htmlContent.offsetWidth
     });
+    
+        document.body.removeChild(htmlContent);
 
     const imgData = canvas.toDataURL('image/png');
     const pdf = new jsPDF({
@@ -151,10 +153,8 @@ const exportPDF = async (data) => {
     const scaleX = pdfWidth / imgWidth;
     const scaleY = pdfHeight / imgHeight;
     const scale = Math.min(scaleX, scaleY);
-
     pdf.addImage(imgData, 'PNG', scaleX, scaleY, imgWidth * scale, imgHeight * scale);
     pdf.save('report.pdf');
-    document.body.removeChild(htmlContent);
 };
 
 export default exportPDF;

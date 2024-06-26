@@ -1,0 +1,77 @@
+
+.dialog-fullscreen {
+    background-color: black; 
+    color: white;
+}
+
+.banner-container img {
+    width: 100%;
+    height: auto;
+}
+
+.titulo-header {
+    color: yellow; 
+    font-size: 24px; 
+    font-weight: bold;
+}
+
+
+.input-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.input-group .button-text {
+    background-color: transparent;
+    border: 1px solid white;
+    color: white;
+}
+
+.input-group .button-raised {
+    background-color: #f44336; 
+    color: white;
+}
+
+.form-container input, .form-container textarea {
+    width: 100%;
+    background-color: #333; 
+    color: white;
+    border: 1px solid #666;
+    padding: 8px;
+}
+
+
+.titulo-header {
+    font-size: 20px;
+    color: rgb(234, 190, 63)
+}
+
+
+.cco-link {
+    color: gray;
+    cursor: pointer;
+    margin-left: auto;
+    padding: 0 10px;
+}
+
+.cco-input {
+    transition: max-height 0.3s ease-in-out;
+    overflow: hidden;
+    max-height: 0;
+}
+
+.input-group:hover .cco-input {
+    max-height: 100px; 
+}
+
+.image-gallery-container {
+  max-width: 800px; 
+  margin: auto; 
+}
+
+.video-gallery-container video {
+  width: 100%;
+  height: auto;
+}

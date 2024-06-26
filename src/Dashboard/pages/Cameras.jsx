@@ -101,48 +101,48 @@ const Cameras = () => {
             <TypewriterText text={`${t("dashboard.cameras.title")} ${propertyContext.name}`} />
           } />
           <div className="card flex justify-start ">
-          {userRole == "Admin" ? (
-            
-            <button
-                    className="button ml-7"
-                    onClick={() => {
-                      setCameraFormFlag(true)                    }}
-                  >
-                  {t("dashboard.cameras.dialog.add-camera")}
-                  <AiOutlinePlusCircle className="ml-2" />
-                  </button>
+            {userRole == "Admin" ? (
 
-          ) : (
-            <></>
-          )}
-        </div>
+              <button
+                className="button ml-7"
+                onClick={() => {
+                  setCameraFormFlag(true)
+                }}
+              >
+                {t("dashboard.cameras.dialog.add-camera")}
+                <AiOutlinePlusCircle className="ml-2" />
+              </button>
+            ) : (
+              <></>
+            )}
+          </div>
         </div>
 
         {loading ? <TableSkeleton /> : (
-        <GridComponent
-          dataSource={camerasList}
-          width="auto"
-          allowPaging
-          key={i18n.language}
-          allowSorting
-          pageSettings={{ pageCount: 5 }}
-          editSettings={editing}
-          toolbar={toolbarOptions}
-          allowResizing={true}
-        >
+          <GridComponent
+            dataSource={camerasList}
+            width="auto"
+            allowPaging
+            key={i18n.language}
+            allowSorting
+            pageSettings={{ pageCount: 5 }}
+            editSettings={editing}
+            toolbar={toolbarOptions}
+            allowResizing={true}
+          >
 
-          <ColumnsDirective>
-            {userRole === "Admin" ?
-              cameraGridAdmin(t, setSelectedCamera).map((item, index) => (
-                <ColumnDirective key={index} {...item} />
-              )) : cameraGrid(t).map((item, index) => (
-                <ColumnDirective key={index} {...item} />
-              ))}
-          </ColumnsDirective>
+            <ColumnsDirective>
+              {userRole === "Admin" ?
+                cameraGridAdmin(t, setSelectedCamera).map((item, index) => (
+                  <ColumnDirective key={index} {...item} />
+                )) : cameraGrid(t).map((item, index) => (
+                  <ColumnDirective key={index} {...item} />
+                ))}
+            </ColumnsDirective>
 
-          <Inject services={[Search, Page, Toolbar]} />
-        </GridComponent>
-       )} 
+            <Inject services={[Search, Page, Toolbar]} />
+          </GridComponent>
+        )}
       </div>
     </>
   );

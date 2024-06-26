@@ -39,11 +39,11 @@ import Swal from "sweetalert2";
 import { useTranslation } from "react-i18next";
 import postViewedUser from "../helper/postViewedUser "
 import { GridPdf } from "../tablesTemplates/Reports/GridPdf";
-import { PdfEvidences } from "../helper/ReportDetails/PdfEvidences";
 import ViewedsTable from "../components/Reports/ReportDetails/ViewedsTable";
 import TableSkeleton from '../components/TableSkeleton';
-import "../pages/css/ReportDetails/ReportDetails.css"
 import { exportPdfEvidences } from "../helper/ReportDetails/exportPdfEvidences";
+import SendEmail from "../components/Forms/reportDetails/SendEmail";
+import "../pages/css/ReportDetails/ReportDetails.css"
 
 let url = `${process.env.REACT_APP_SERVER_IP}/reports`;
 let noImages = [
@@ -61,6 +61,7 @@ let videos = [];
 export const ReportDatails = () => {
   const [filesToDownload, setFilesToDownload] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [loadingevidences, setLoadingevidences] = useState(false);
   const [progress, setProgress] = useState(0);
   const [showButton, setShowButton] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
@@ -71,6 +72,8 @@ export const ReportDatails = () => {
   const navigate = useNavigate();
   let { id } = useParams();
   const [flag, setFlag] = useState(false);
+  const [sendEmailDialogVisible, setSendEmailDialogVisible] = useState(false);
+
   const [folderName, setFolderName] = useState("");
     const [reportDetails, setReportDetails] = useState({});
   //const {report, isLoading} = useFetchReportId(id, navigate);
@@ -183,6 +186,8 @@ export const ReportDatails = () => {
     setIncidentType(incidentInCurrentLanguage);
   }, [reportDetails, i18n.language]);
 
+
+  
   useEffect(() => {
        if (userRole === "Client" && user.id && id) {
       console.log("Condiciones cumplidas para marcar como visto");
@@ -196,7 +201,7 @@ export const ReportDatails = () => {
 
   const handleDownload = async () => {
     setShowButton(false); // Ocultar el botón al comenzar la descarga
-    setLoading(true); // Activar el loader
+    setLoadingevidences(true); // Activar el loader
 
     const zip = new JSZip();
     const evidencesFolder = zip.folder("Evidences");
@@ -238,18 +243,26 @@ export const ReportDatails = () => {
     } catch (error) {
       console.error('Error durante la generación o descarga del archivo ZIP:', error);
       Swal.fire("Error", "Failed to generate or download ZIP file.", "error");
-      setLoading(false);
+      setLoadingevidences(false);
       setShowButton(true);
     } finally {
-      setLoading(false); // Desactivar el loader una vez que la descarga esté completa
+      setLoadingevidences(false); // Desactivar el loader una vez que la descarga esté completa
       setProgress(0); // Restablecer el progreso
       setShowButton(true); // Mostrar el botón nuevamente
     }
   };
 
+  const handleOpenEmailDialog = () => {
+    setSendEmailDialogVisible(true);
+  };
 
+  const handleCloseEmailDialog = () => {
+    setSendEmailDialogVisible(false);
+  };
 
   return (
+
+      
     <div className="mx-20 md:m-10  md:p-0 bg-white rounded-3xl">
       <div className="w-full flex justify-end">
       <div className="card">
@@ -301,20 +314,7 @@ export const ReportDatails = () => {
       
 
         <div className="px-4 py-3 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-3">
-        <div className="absolute right-6">
-              {showButton && (
-                
-              <Button onClick={handleDownload} severity="warning" icon="pi pi-save" size="small">
-                <p className="text-lg text-white ml-3">                    
-                  {t("dashboard.reports.case-details.evidences")}
-                </p>
-              </Button>
-
-              )}
-              {loading && (
-                <CircularProgressWithLabel color="success" value={progress} />
-              )}
-            </div>
+     
           <div className="max-w-xl mb-10 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12">
             <div className="">
             
@@ -763,28 +763,52 @@ export const ReportDatails = () => {
                 </div>
               )}
 
-              <div className="flex max-w-full ">
-                <div className=" mr-3">
-                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-50">
-                    <MdMarkEmailRead className="text-yellow-600 w-5 h-6"></MdMarkEmailRead>
+                <div className="flex max-w-full ">
+                  <div className=" mr-3">
+                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-50">
+                      <MdMarkEmailRead className="text-yellow-600 w-5 h-6"></MdMarkEmailRead>
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-center w-full border-b-1">
-                  <p className=" text-lg font-bold ">
-                    {t(
-                      "dashboard.reports.case-details.send-and-verfied"
-                    )}
-                  </p>
-                  <button class="button-send-email-and-verification">
-                    <svg class="svgIcon" viewBox="0 0 384 512">
+                  <div className="flex items-center w-full border-b-1">
+                    <p className=" text-lg font-bold ">
+                      {t(
+                        "dashboard.reports.case-details.send-and-verfied"
+                      )}
+                    </p>
+                    
+                  <button className="button-send-email-and-verification" onClick={handleOpenEmailDialog}>
+                    <svg className="svgIcon" viewBox="0 0 384 512">
                       <path
                         d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"
                       ></path>
                     </svg>
+                    <span className="button-label">{t("dashboard.reports.case-details.send")}</span>
                   </button>
 
+                  <Dialog
+                    visible={sendEmailDialogVisible}
+                    modal
+                    dismissableMask
+                    onHide={handleCloseEmailDialog}
+                    className="dialog-fullscreen"
+                    contentStyle={{ borderRadius: '12px', backgroundColor: 'black' }}
+
+                  >
+                    {reportDetails?.caseType && (
+                      <SendEmail
+                        incidentType={incidentType}
+                        caseNumber={reportDetails.numerCase}
+                        incidentEnglish={reportDetails.caseType.incident}
+                        incidentDate={reportDetails.incidentDate}
+                        incidentStartTime={reportDetails.incidentStartTime}
+                        images={dataImages}
+                        videos={dataVideos}
+                      />
+                    )}
+                  </Dialog>
+
+                  </div>
                 </div>
-              </div>
 
             </div>
           </div>
@@ -889,6 +913,19 @@ export const ReportDatails = () => {
         )
       )}
     </div>
+      <div className="flex justify-center items-center my-4">
+        {showButton && (
+          <Button onClick={handleDownload} severity="warning" icon="pi pi-save" size="small">
+            <p className="text-lg text-white ml-3">
+              {t("dashboard.reports.case-details.evidences")}
+            </p>
+          </Button>
+        )}
+        {loadingevidences && (
+          <CircularProgressWithLabel color="success" value={progress} />
+        )}
+      </div>
+
     </div>
   );
 };
