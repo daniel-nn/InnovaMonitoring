@@ -21,7 +21,8 @@ import {
   Toolbar,
 } from "@syncfusion/ej2-react-grids";
 import {
-  contextMenuItems, reportsGrid, reportsGridAdmin, reportsGridMonitor, reportsGridNoVerified} from "../data/dummy";
+  contextMenuItems, reportsGrid, reportsGridAdmin, reportsGridMonitor} from "../data/dummy";
+import { ReportsGridNoVerified } from "../tablesDashboard/Reports/ReportsGridNoVerified";
 import { GridAllReports } from "../tablesDashboard/Reports/GridAllReports";
 import { Header } from "../components";
 import { UserContext } from "../../context/UserContext";
@@ -41,6 +42,7 @@ import { Toast } from "primereact/toast";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import '../pages/css/Outlet/Outlet.css'
+import '../pages/css/Reports/Reports.css'
 import TypewriterText from "../components/Texts/TypewriterTex";
 
   const Reports = () => {
@@ -97,6 +99,11 @@ import TypewriterText from "../components/Texts/TypewriterTex";
       }
     }, []);
 
+    const setActiveViewAndFetch = async (newView, fetchFunction) => {
+      setActiveView(newView);
+      await fetchFunction();
+    };
+
     const refreshReports = useCallback(async () => {
       setLoading(true);
       try {
@@ -112,28 +119,31 @@ import TypewriterText from "../components/Texts/TypewriterTex";
           default:
             const reports = await getNumberOfReportsByRole(id, user.id, userRole);
             setReportes(reports);
+            break;
         }
       } catch (error) {
         console.error('Error al cargar los reportes:', error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     }, [activeView, id, user.id, userRole, getReportsNoVerified, getAllReports, getNumberOfReportsByRole]);
 
-
     useEffect(() => {
-      refreshReports(); 
-    }, [refreshReports]); 
+      console.log('Componente montado o dependencias de refreshReports cambiadas');
+      refreshReports();
+    }, [refreshReports]);
 
 
   //este useEffect se utiliza para recargar los reportes, apartir de el cambio del contexto de creatingReport
-    useEffect(() => {
-      if (!creatingReport) {
-        const timer = setTimeout(() => {
-          fetchReports();
-        }, 2000); 
-        return () => clearTimeout(timer); 
-      }
-    }, [creatingReport, fetchReports]);
+      useEffect(() => {
+        if (!creatingReport) {
+          const timer = setTimeout(() => {
+            setActiveViewAndFetch("default", fetchReports);
+            setCurrentTitle(`${t("dashboard.reports.reports-of")}${propertyContext.name}`);
+          }, 2000); 
+          return () => clearTimeout(timer); 
+        }
+      }, [creatingReport, fetchReports]);
 
     useEffect(() => {
       refreshReports();
@@ -169,8 +179,10 @@ import TypewriterText from "../components/Texts/TypewriterTex";
 
 
 
-    const noVerifiedGridColumns = reportsGridNoVerified(t, refreshReports);
-    const adminGridColumns = reportsGridAdmin(t, refreshReports);
+
+
+    const noVerifiedGridColumns = ReportsGridNoVerified(t, refreshReports);
+    const adminGridColumns =  reportsGridAdmin(t, refreshReports);
     const allReportsColumns = GridAllReports(t, refreshReports);
 
     const monitorGridColumns = useMemo(() => reportsGridMonitor(t), [t]);
@@ -181,13 +193,31 @@ import TypewriterText from "../components/Texts/TypewriterTex";
     <div className="mx-7 bg-white rounded-3xl overflow-auto">
       <div className="background">
    {creatingReport && (
-        <div className="mx-auto">
+          <div className="card flex flex-col justify-center items-center mx-auto">
           <h1 className="text-lg font-semibold text-blue-500 ">
             {t("dashboard.reports.report-loading")}
           </h1>
-          <CircularProgress />
+            <div aria-label="Orange and tan hamster running in a metal wheel" role="img" class="wheel-and-hamster">
+              <div class="wheel"></div>
+              <div class="hamster">
+                <div class="hamster__body">
+                  <div class="hamster__head">
+                    <div class="hamster__ear"></div>
+                    <div class="hamster__eye"></div>
+                    <div class="hamster__nose"></div>
+                  </div>
+                  <div class="hamster__limb hamster__limb--fr"></div>
+                  <div class="hamster__limb hamster__limb--fl"></div>
+                  <div class="hamster__limb hamster__limb--br"></div>
+                  <div class="hamster__limb hamster__limb--bl"></div>
+                  <div class="hamster__tail"></div>
+                </div>
+              </div>
+              <div class="spoke"></div>
+            </div>
         </div>
       )}
+      
       <Toast ref={toast} />
         <Header
           title={<TypewriterText text={currentTitle} />}
@@ -212,8 +242,7 @@ import TypewriterText from "../components/Texts/TypewriterTex";
                   <button
                     className="button"
                     onClick={() => {
-                      setActiveView("default");
-                      fetchReports();
+                      setActiveViewAndFetch("default", fetchReports);
                       setCurrentTitle(`${t("dashboard.reports.reports-of")}${propertyContext.name}`);
                     }}
                   >
@@ -224,8 +253,7 @@ import TypewriterText from "../components/Texts/TypewriterTex";
                   <button
                     className="button ml-7"
                     onClick={() => {
-                      setActiveView("allReports");
-                      fetchallReports();
+                      setActiveViewAndFetch("allReports", fetchallReports)
                       setCurrentTitle(`${t("dashboard.reports.buttons.all-reports")}`);
                     }}
                   >
@@ -236,7 +264,7 @@ import TypewriterText from "../components/Texts/TypewriterTex";
                   <button
                     className="button ml-7"
                     onClick={() => {
-                      handleFetchNonVerifiedReports();
+                      setActiveViewAndFetch("noVerified", handleFetchNonVerifiedReports);
                       setCurrentTitle(t("dashboard.reports.buttons.non-verified-reports"));
                     }}
                   >

@@ -1,6 +1,6 @@
 
 .dialog-fullscreen {
-    background-color: black; 
+    background-color: #2E2E2E; 
     color: white;
 }
 
@@ -48,18 +48,9 @@
     color: rgb(234, 190, 63)
 }
 
+.fondo-body-send-email{
+        background-color: #2E2E2E; 
 
-.cco-link {
-    color: gray;
-    cursor: pointer;
-    margin-left: auto;
-    padding: 0 10px;
-}
-
-.cco-input {
-    transition: max-height 0.3s ease-in-out;
-    overflow: hidden;
-    max-height: 0;
 }
 
 .input-group:hover .cco-input {
@@ -74,4 +65,19 @@
 .video-gallery-container video {
   width: 100%;
   height: auto;
+}
+
+.titulo-images-videos{
+
+    font-size: 25px;
+    color: rgb(234, 190, 63)
+}
+
+.text-footer{
+    color: white;
+    font-size: 20px;
+}
+
+.index-swal{
+    z-index: 1500 !important;
 }

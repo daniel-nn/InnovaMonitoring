@@ -41,10 +41,6 @@
     justify-content: space-between;
 }
 
-.file-name {
-    flex: 1;
-    margin-right: 10px;
-}
 
 .file-size {
     white-space: nowrap;
@@ -79,9 +75,7 @@
     border-color: #80bdff;
 }
 
-.margin-delete-button {
-    margin-right: 1em;
-}
+
 
 
 .swal2-confirm-button-success {
@@ -209,4 +203,58 @@
   border-left-color: transparent;
   border-radius: 0;
 }
+
+.new-report-files-container {
+  display: flex;
+  height: 300px; 
+}
+
+.new-report-file-list {
+  flex: 1;
+  margin: 5px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  overflow-y: scroll;
+}
+
+
+.new-report-file-image-preview, .new-report-file-video-preview {
+  width: 100%; 
+  height: auto;
+}
+
+.search-input {
+  width: calc(100% - 10px);
+  padding: 5px;
+  margin: 10px 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+.file-separator {
+  height: 2px;
+  background-color: #4c0000;
+  margin-top: 5px;
+}
+
+.file-header {
+  display: flex;
+  justify-content: space-between; /* Alinea el nombre del archivo a la izquierda y el botón a la derecha */
+  align-items: center;
+  width: 100%; /* Asegura que el header ocupe todo el ancho del contenedor padre */
+  padding: 5px 10px; /* Agrega un poco de padding para separación visual */
+}
+
+.file-name {
+        flex: 1;
+    margin-right: 10px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis; /* Evita que el nombre del archivo desborde y lo corta con puntos suspensivos si es muy largo */
+}
+
+.margin-delete-button {
+  margin-left: auto; /* Empuja el botón hacia la derecha */
+}
+
 

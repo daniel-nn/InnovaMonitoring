@@ -776,6 +776,23 @@
         "police-numer-case": "Número de caso policial:",
         "send-and-verfied": "Enviar correo y verificar reporte",
         "send": "Enviar",
+          "send-email-form": {
+            "report": "Informe",
+            "of": "De",
+            "case-type": "Tipo de Caso",
+            "number-case": "Número de Caso",
+            "incident-date": "Fecha del Incidente",
+            "incident-time": "Hora del Incidente",
+            "to": "Para",
+            "subject": "Asunto",
+            "images": "Imágenes",
+            "videos": "Videos",
+            "ids": "Sistema de Gestion Innova Monitoring",
+            "promo": "Este informe de incidente ya está disponible en nuestro Tablero IDS. ¿Ya tienes tu suscripción?",
+            "report-validated": "Reporte validado",
+            "verified-send": "Seleccione al menos un destinatario"
+
+          },
         "yes": "Si",
         "no": "No",
         "video-gallery": "Galería de videos:",

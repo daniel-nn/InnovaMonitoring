@@ -36,6 +36,8 @@ const NewReport = () => {
   const { reportForm, setReportForm } = useContext(UserContext);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [isOtherSeeReportActive, setIsOtherSeeReportActive] = useState(false);
+  const [imageSearch, setImageSearch] = useState("");
+  const [videoSearch, setVideoSearch] = useState("");
 
   const resetReportForm = () => {
     setReportForm({
@@ -810,7 +812,7 @@ const NewReport = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="w-full md:w-1/3 px-3 mb-6">
           <label htmlFor="level" className="font-bold block mb-2">
             {t("dashboard.reports.new-report.select-report-level")}
@@ -1244,14 +1246,9 @@ const NewReport = () => {
               style={{ display: "none" }}
             />
             <div className="file-select-button mb-3">
-              <label
-                htmlFor="file-input"
-                className="cursor-pointer text-blue-500 flex items-center"
-              >
-                <i className="pi pi-plus" style={{ fontSize: "1.5em" }}></i>{" "}
-                <span className="ml-2">
-                  {t("dashboard.reports.new-report.upload-evidences")}
-                </span>
+              <label htmlFor="file-input" className="cursor-pointer text-blue-500 flex items-center">
+                <i className="pi pi-plus" style={{ fontSize: "1.5em" }}></i>
+                <span className="ml-2">{t("dashboard.reports.new-report.upload-evidences")}</span>
               </label>
             </div>
             <div
@@ -1263,33 +1260,62 @@ const NewReport = () => {
               <i className="pi pi-upload" style={{ fontSize: "2em" }}></i>
               <p>{t("dashboard.reports.new-report.drop-evidences")}</p>
             </div>
-            <div className="files-list">
-              {reportForm.evidences.map((file, index) => (
-                <div
-                  key={file.id || file.name} 
-                  className="file-item flex items-center justify-between mb-2 bg-gray-100 p-2 rounded"
-                >
-                  {file.type.startsWith("image/") && (
-                    <img
-                      src={file.url}
-                      alt={file.name}
-                      className="file-image-preview w-20 h-20 mr-2"
-                    />
-                  )}
-                  <div className="file-details flex-grow">
-                    <span className="file-name font-semibold">{file.name}</span>
-                    <Button
-                      icon="pi pi-times"
-                      className="p-button-rounded p-button-danger margin-delete-button"
-                      outlined
-                      onClick={() => handleFileRemove(file.id, file.url)}
-                    />
+            
+            <div className="new-report-files-container">
+              <div className="new-report-file-list">
+                <input
+                  type="text"
+                  placeholder="Search images..."
+                  onChange={e => setImageSearch(e.target.value)}
+                  className="search-input"
+                />
+                {reportForm.evidences.filter(file => file.type.startsWith("image/") && file.name.toLowerCase().includes(imageSearch.toLowerCase())).map((file) => (
+                  <div key={file.id || file.name} className="file-item flex flex-col mb-2 bg-gray-100 p-2 rounded">
+                    <div className="file-header flex justify-between items-center">
+                      <span className="file-name font-semibold">{file.name}</span>
+                      <Button
+                        icon="pi pi-times"
+                        className="p-button-rounded p-button-danger margin-delete-button"
+                        outlined
+                        onClick={() => handleFileRemove(file.id, file.url)}
+                      />
+                    </div>
+
+                    <img src={file.url} alt={file.name} className="new-report-file-image-preview mt-2" />
+                    <div className="file-separator"></div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
+              <div className="new-report-file-list">
+                <input
+                  type="text"
+                  placeholder="Search videos..."
+                  onChange={e => setVideoSearch(e.target.value)}
+                  className="search-input"
+                />
+                {reportForm.evidences.filter(file => file.type.startsWith("video/") && file.name.toLowerCase().includes(videoSearch.toLowerCase())).map((file) => (
+                  <div key={file.id || file.name} className="file-item flex flex-col mb-2 bg-gray-100 p-2 rounded">
+                    <div className="file-header flex justify-between items-center">
+                      <span className="file-name font-semibold">{file.name}</span>
+                      <Button
+                        icon="pi pi-times"
+                        className="p-button-rounded p-button-danger margin-delete-button"
+                        outlined
+                        onClick={() => handleFileRemove(file.id, file.url)}
+                      />
+                    </div>
+
+                    <video src={file.url} alt={file.name} className="new-report-file-video-preview mt-2" controls />
+                    <div className="file-separator"></div>
+                  </div>
+                ))}
+              </div>
             </div>
+
           </div>
         </div>
+
+
 
         <div className="w-full px-3 mb-6">
           <label htmlFor="reportDetails" className="font-bold block mb-2">
@@ -1316,7 +1342,7 @@ const NewReport = () => {
       </div>
       <div className="flex justify-start mt-4 pr-20">
         <button class="btn-gpt" onClick={handleGPTButtonClick}>
-           Chat Gpt
+          Chat Gpt
         </button>
       </div>
 

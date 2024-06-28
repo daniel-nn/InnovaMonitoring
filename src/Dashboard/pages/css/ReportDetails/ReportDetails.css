@@ -25,29 +25,47 @@
   fill: white;
 }
 
-.button-label {
-  display: none;
-  color: white;
-  margin-left: 10px;
-  font-size: 17px;
-  white-space: nowrap;
+.hover-effect {
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  width: 100%; /* Asegura que ocupa todo el espacio del contenedor */
+  --primary-color: #111;
+  --hovered-color: #c84747;
 }
 
-.button-send-email-and-verification:hover {
-  width: 160px;
-  border-radius: 50px;
-  background-color: rgb(234, 190, 63);
+.hover-effect p {
+  margin: 0;
+  font-size: 20px;
+  color: var(--primary-color);
+  font-weight: 600;
+  transition: color 0.3s ease-out;
 }
 
-.button-send-email-and-verification:hover .svgIcon {
-  transform: translateX(-50%); 
+.hover-effect::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  left: 0;
+  bottom: -7px;
+  background: var(--hovered-color);
+  height: 2px;
+  transition: width 0.3s ease-out;
 }
 
-.button-send-email-and-verification:hover .button-label {
-  display: block;
+.hover-effect:hover::after {
+  width: 100%;
+}
+
+.hover-effect:hover p {
+  color: var(--hovered-color);
 }
 
 .dialog-fullscreen .p-dialog-header {
-    background-color: black; 
+    background-color: #2E2E2E; 
     border-bottom: none; 
 }

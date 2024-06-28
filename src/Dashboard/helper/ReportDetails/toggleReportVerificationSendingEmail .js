@@ -1,7 +1,14 @@
+// En el archivo toggleReportVerificationSendingEmail.js
 import Swal from 'sweetalert2';
-import "../pages/css/Reports/NewReport.css"
+import "../../pages/css/ReportDetails/SendEmail.css"
 
-export const toggleReportVerification = async (id, verified, t) => {
+
+const toggleReportVerificationSendingEmail = async (id, verified, shouldVerify, t) => {
+    if (!shouldVerify) {
+        console.log("Report is already verified. Skipping verification.");
+        return verified;  // Retorna el estado actual sin cambios si ya está verificado
+    }
+
     const url = `${process.env.REACT_APP_SERVER_IP}/reports/${id}/verify`;
 
     try {
@@ -18,11 +25,11 @@ export const toggleReportVerification = async (id, verified, t) => {
             toast: true,
             position: 'top-end',
             icon: 'success',
-            title: t('dashboard.reports.table.admin.verifiedchanged'),
+            title: t('dashboard.reports.case-details.send-email-form.report-validated'),
             showConfirmButton: false,
             timer: 3000,
             customClass: {
-                container: 'wrong-property'
+                container: 'index-swal'
             }
         });
 
@@ -34,9 +41,11 @@ export const toggleReportVerification = async (id, verified, t) => {
             text: error.toString(),
             timer: 5000,
             customClass: {
-                container: 'wrong-property'
+                container: 'index-swal'
             }
         });
-        return verified; // Devuelve el estado original en caso de error
+        return verified; 
     }
 };
+
+export default toggleReportVerificationSendingEmail;

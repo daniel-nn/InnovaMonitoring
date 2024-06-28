@@ -72,6 +72,7 @@ export const ReportDatails = () => {
   const navigate = useNavigate();
   let { id } = useParams();
   const [flag, setFlag] = useState(false);
+  
   const [sendEmailDialogVisible, setSendEmailDialogVisible] = useState(false);
 
   const [folderName, setFolderName] = useState("");
@@ -252,13 +253,30 @@ export const ReportDatails = () => {
     }
   };
 
-  const handleOpenEmailDialog = () => {
+  const handleOpenEmailDialog = (event) => {
+    event.stopPropagation();  
     setSendEmailDialogVisible(true);
   };
 
+  
   const handleCloseEmailDialog = () => {
-    setSendEmailDialogVisible(false);
+    setSendEmailDialogVisible(prev => !prev);
   };
+
+  const updateVerificationStatus = (newStatus) => {
+    setReportDetails(prevDetails => ({
+      ...prevDetails,
+      verified: newStatus
+    }));
+  };
+
+  useEffect(() => {
+    if (reportDetails?.caseType) {
+      const isOtherSeeReport = reportDetails.caseType.id === 10 || reportDetails.caseType.incident === "Other See Report";
+      const incidentToUse = isOtherSeeReport ? reportDetails.otherSeeReport : reportDetails.caseType.incident;
+      setIncidentType(incidentToUse);
+    }
+  }, [reportDetails]);
 
   return (
 
@@ -763,52 +781,48 @@ export const ReportDatails = () => {
                 </div>
               )}
 
-                <div className="flex max-w-full ">
-                  <div className=" mr-3">
-                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-50">
-                      <MdMarkEmailRead className="text-yellow-600 w-5 h-6"></MdMarkEmailRead>
-                    </div>
-                  </div>
-                  <div className="flex items-center w-full border-b-1">
-                    <p className=" text-lg font-bold ">
-                      {t(
-                        "dashboard.reports.case-details.send-and-verfied"
-                      )}
-                    </p>
-                    
-                  <button className="button-send-email-and-verification" onClick={handleOpenEmailDialog}>
-                    <svg className="svgIcon" viewBox="0 0 384 512">
-                      <path
-                        d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"
-                      ></path>
-                    </svg>
-                    <span className="button-label">{t("dashboard.reports.case-details.send")}</span>
-                  </button>
+            { (userRole === "Admin") && (
 
-                  <Dialog
-                    visible={sendEmailDialogVisible}
-                    modal
-                    dismissableMask
-                    onHide={handleCloseEmailDialog}
-                    className="dialog-fullscreen"
-                    contentStyle={{ borderRadius: '12px', backgroundColor: 'black' }}
-
-                  >
-                    {reportDetails?.caseType && (
-                      <SendEmail
-                        incidentType={incidentType}
-                        caseNumber={reportDetails.numerCase}
-                        incidentEnglish={reportDetails.caseType.incident}
-                        incidentDate={reportDetails.incidentDate}
-                        incidentStartTime={reportDetails.incidentStartTime}
-                        images={dataImages}
-                        videos={dataVideos}
-                      />
-                    )}
-                  </Dialog>
-
+              <div className="flex max-w-full hover-effect">
+                <div className="mr-3">
+                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-50">
+                    <MdMarkEmailRead className="text-yellow-600 w-5 h-6"></MdMarkEmailRead>
                   </div>
                 </div>
+                <div className="flex items-center w-full border-b-1" onClick={handleOpenEmailDialog}>
+                  <p className="text-lg font-bold ">
+                    {t("dashboard.reports.case-details.send-and-verfied")}
+                  </p>
+                </div>
+
+                <Dialog
+                  visible={sendEmailDialogVisible}
+                  modal
+                  dismissableMask
+                  onHide={handleCloseEmailDialog}
+                  className="dialog-fullscreen"
+                  contentStyle={{ borderRadius: '12px', backgroundColor: '#2E2E2E' }}
+                >
+                  {reportDetails?.caseType && (
+                    <SendEmail
+                      incidentType={incidentType}
+                        caseNumber={reportDetails.numerCase}
+                        incidentToUse={reportDetails.caseType.incident}
+                      incidentDate={reportDetails.incidentDate}
+                      incidentStartTime={reportDetails.incidentStartTime}
+                      images={dataImages}
+                      videos={dataVideos}
+                      propertyName={reportDetails.property.name}
+                      reportId={reportDetails.id}
+                      reportVerified={reportDetails.verified}
+                      updateVerification={updateVerificationStatus}
+                      onHide={handleCloseEmailDialog}
+                    />
+                  )}
+                </Dialog>
+              </div>
+              )}
+
 
             </div>
           </div>
