@@ -5,7 +5,7 @@ export const putUserInfo = async (input, userId, t) => {
         id: userId,  
         name: input.name,
         email: input.email,
-        pasword: input.pasword,
+        password: input.password,
         rol: {
             id: input.rol.rolKey, 
             rolName: input.rol.originalName

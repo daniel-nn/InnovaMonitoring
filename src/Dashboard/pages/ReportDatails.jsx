@@ -270,13 +270,9 @@ export const ReportDatails = () => {
     }));
   };
 
-  useEffect(() => {
-    if (reportDetails?.caseType) {
-      const isOtherSeeReport = reportDetails.caseType.id === 10 || reportDetails.caseType.incident === "Other See Report";
-      const incidentToUse = isOtherSeeReport ? reportDetails.otherSeeReport : reportDetails.caseType.incident;
-      setIncidentType(incidentToUse);
-    }
-  }, [reportDetails]);
+  const isOtherSeeReport = reportDetails.caseType?.id === 10 || reportDetails.caseType?.incident === "Other See Report";
+  const incidentToUse = isOtherSeeReport ? reportDetails.otherSeeReport : reportDetails.caseType?.incident;
+
 
   return (
 
@@ -805,9 +801,9 @@ export const ReportDatails = () => {
                 >
                   {reportDetails?.caseType && (
                     <SendEmail
-                      incidentType={incidentType}
+                        incidentType={incidentType}
                         caseNumber={reportDetails.numerCase}
-                        incidentToUse={reportDetails.caseType.incident}
+                        incidentEnglish={incidentToUse}
                       incidentDate={reportDetails.incidentDate}
                       incidentStartTime={reportDetails.incidentStartTime}
                       images={dataImages}

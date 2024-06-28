@@ -40,7 +40,7 @@ const Login = () => {
     }
     const user = {
       email: email,
-      pasword: password,
+      password: password,
     };
 
     try {

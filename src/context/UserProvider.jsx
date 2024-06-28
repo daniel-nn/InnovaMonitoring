@@ -72,7 +72,7 @@ export const UserProvider = ({ children }) => {
     name: "",
     email: "",
     image: "",
-    pasword:"",
+    password:"",
     rol: {
       rolName:""
     },

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { useTranslation } from 'react-i18next';
@@ -7,6 +7,8 @@ import "../../../pages/css/ReportDetails/SendEmail.css";
 import SendEmailComponent from './SendEmailComponent';
 import toggleReportVerificationSendingEmail from '../../../helper/ReportDetails/toggleReportVerificationSendingEmail ';
 import swal from 'sweetalert2';
+import getUserEmails from '../../../helper/ReportDetails/getUserEmails ';
+
 const SendEmail = ({
     incidentType,
     caseNumber,
@@ -19,34 +21,80 @@ const SendEmail = ({
     reportId,
     reportVerified,
     updateVerification,
-    onHide }) => {
+    onHide }) => {  
 
-    const { t } = useTranslation("global");
+    const [userEmails, setUserEmails] = useState([]);
+    const [suggestionsTo, setSuggestionsTo] = useState([]);
+    const [suggestionsCc, setSuggestionsCc] = useState([]);    const { t } = useTranslation("global");
     const [mailData, setMailData] = useState({
         to: '',
         Cc: '',
         subject: `Report #${caseNumber} - ${incidentEnglish} - ${propertyName}`,
         body: ''
     });
+    
 
+    useEffect(() => {
+        const fetchEmails = async () => {
+            const emails = await getUserEmails();
+            setUserEmails(emails);
+        };
+        fetchEmails();
+    }, []);
+    
+    // Función para manejar cambios en los campos de entrada y generar sugerencias
     const handleInputChange = (e, field) => {
-        setMailData({ ...mailData, [field]: e.target.value });
+        setMailData(prev => ({ ...prev, [field]: e.target.value }));
+        const searchString = e.target.value.split(/[,;]+/).pop().trim(); // Busca el último segmento después de una coma o punto y coma
+        if (searchString.length > 0) {
+            const filter = userEmails.filter(email => email.toLowerCase().includes(searchString.toLowerCase()));
+            if (field === 'to') {
+                setSuggestionsTo(filter.filter(email => !mailData.Cc.includes(email)));
+            } else if (field === 'Cc') {
+                setSuggestionsCc(filter.filter(email => !mailData.to.includes(email)));
+            }
+        } else {
+            if (field === 'to') {
+                setSuggestionsTo([]);
+            } else if (field === 'Cc') {
+                setSuggestionsCc([]);
+            }
+        }
     };
 
+    const handleSuggestionClick = (email, field) => {
+        // Calcula el nuevo valor del campo, reemplazando el texto de búsqueda actual con el correo electrónico seleccionado
+        const currentValue = mailData[field];
+        const lastCommaIndex = currentValue.lastIndexOf(',');
+        const newValue = lastCommaIndex !== -1 ? currentValue.substring(0, lastCommaIndex + 1) : '';
+        const finalValue = `${newValue} ${email}, `;
 
+        // Actualiza el estado con el nuevo valor
+        setMailData(prev => ({
+            ...prev,
+            [field]: finalValue.trimStart()  // Elimina espacios iniciales innecesarios
+        }));
+
+        // Limpia las sugerencias y el texto de búsqueda
+        if (field === 'to') {
+            setSuggestionsTo([]);
+        } else if (field === 'Cc') {
+            setSuggestionsCc([]);
+        }
+
+        // Borra cualquier texto residual en el campo de entrada
+        document.getElementById(field).value = finalValue;
+    };
+
+    //Función de envio y verificacón del reporte
     const handleEmailSent = async () => {
         if (!mailData.to.trim() && !mailData.Cc.trim()) {
             swal.fire({
                 icon: 'warning',
-                toast: true,
                 text: t("dashboard.reports.case-details.send-email-form.verified-send"),
                 timer: 3000,
                 position: 'top-end',
-                showConfirmButton: false,
-                customClass: {
-                    container: 'index-swal'
-                }
-
+                showConfirmButton: false
             });
             return;
         }
@@ -92,20 +140,47 @@ const SendEmail = ({
             </div>
 
 
-            <div className="form-container">
+                      <div className="form-container">
                 <div className="input-group">
-                    <InputText id="to" value={mailData.to} onChange={(e) => handleInputChange(e, 'to')} placeholder={t("dashboard.reports.case-details.send-email-form.to")} />
+                    <InputText autocomplete="off"  id="to" value={mailData.to} onChange={(e) => handleInputChange(e, 'to')}
+                        placeholder={t("dashboard.reports.case-details.send-email-form.to")}
+                    />
+                    <div className="suggestions-container">
+                        {suggestionsTo.map((email, index) => (
+                            <div key={index} onClick={() => handleSuggestionClick(email, 'to')} className="suggestion-item">
+                                {email}
+                            </div>
+                        ))}
+                    </div>
+
                 </div>
 
-                <div className="input-group">
-                    <InputText id="Cc" value={mailData.Cc} onChange={(e) => handleInputChange(e, 'Cc')} placeholder="CC" />
+                 <div className="input-group">
+                    <InputText autocomplete="off"  id="Cc" value={mailData.Cc} onChange={(e) => handleInputChange(e, 'Cc')}
+                        placeholder="CC"
+                    />
+                    <div className="suggestions-container">
+                        {suggestionsCc.map((email, index) => (
+                            <div key={index} onClick={() => handleSuggestionClick(email, 'Cc')} className="suggestion-item">
+                                {email}
+                            </div>
+                        ))}
+                    </div>
                 </div>
+            
+           
+            
+        
+
+
                 <div className="input-group">
                     <InputText id="subject" value={mailData.subject} onChange={(e) => handleInputChange(e, 'subject')} placeholder={t("dashboard.reports.case-details.send-email-form.subject")} />
                 </div>
+
                 <div className="input-group">
                     <InputTextarea id="body" value={mailData.body} onChange={(e) => handleInputChange(e, 'body')} rows={5} autoResize style={{ resize: 'none' }} />
                 </div>
+                
                 <div className="image-gallery-container mt-10">
                     <div className="flex justify-center mt-2 p-5">
                         <p className="titulo-images-videos">{ }</p>

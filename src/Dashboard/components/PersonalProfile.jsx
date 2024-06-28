@@ -36,7 +36,7 @@ export const PersonalProfile = ({ userProvider, setUserProvider, initialRolName,
   const [input, setInput] = useState({
     name: userProvider.name,
     email: userProvider.email,
-    pasword: userProvider?.pasword,
+    password: userProvider?.password,
     rol: userProvider.rol
   });
 
@@ -44,7 +44,7 @@ export const PersonalProfile = ({ userProvider, setUserProvider, initialRolName,
     setInput({
       name: userProvider.name,
       email: userProvider.email,
-      pasword: userProvider?.pasword,
+      password: userProvider?.password,
       rol: userProvider.rol
     });
   };
@@ -192,15 +192,15 @@ export const PersonalProfile = ({ userProvider, setUserProvider, initialRolName,
               </div>
 
               <div className="mb-2 sm:mb-6">
-                <label htmlFor="pasword"
+                <label htmlFor="password"
                   className="block mb-2 text-sm font-medium text-primary dark:text-white"> {t(`dashboard.user-details.personal-profile.password`)}</label>
                 <input
                   type={showPasword ? "text" : "password"}
-                  id="pasword"
+                  id="password"
                   className="bg-indigo-50 border border-indigo-300 text-primary text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
                   placeholder={t("dashboard.user-details.personal-profile.password-placeholder")}
-                  value={input?.pasword}
-                  onChange={handleInputChange('pasword')}
+                  value={input?.password}
+                  onChange={handleInputChange('password')}
                   required
                   disabled={!canChangePassword} 
                 />

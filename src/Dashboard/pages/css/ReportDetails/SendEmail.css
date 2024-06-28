@@ -17,6 +17,7 @@
 
 
 .input-group {
+    position: relative;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -80,4 +81,31 @@
 
 .index-swal{
     z-index: 1500 !important;
+}
+
+.suggestions-container {
+    position: absolute;
+    top: 100%; 
+    background-color: #cccccc ;
+    width: calc(100% - 30px);
+    max-height: 150px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    z-index: 1000; /* Asegúrate de que el dropdown esté por encima de otros elementos */
+    overflow-y: auto;
+}
+
+.input-group:hover .suggestions-container {
+    display: block; /* Mostrar cuando el input está activo */
+}
+
+.suggestion-item {
+    padding: 8px;
+    cursor: pointer;
+    color: #333;
+    border-bottom: 1px solid #666;
+}
+
+.suggestion-item:hover {
+    background-color: rgb(234, 190, 63); /* Un poco más oscuro al pasar el mouse */
 }

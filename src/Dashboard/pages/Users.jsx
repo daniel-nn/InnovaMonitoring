@@ -146,8 +146,8 @@ export const Users = () => {
     if (!userProvider.email || userProvider.email.trim() === "") {
       errors.email = t("dashboard.users.dialog-add-user.validation.email-required");
     }
-    if (!userProvider.pasword || userProvider.pasword.trim() === "") {
-      errors.pasword = t("dashboard.users.dialog-add-user.validation.password-required");
+    if (!userProvider.password || userProvider.password.trim() === "") {
+      errors.password = t("dashboard.users.dialog-add-user.validation.password-required");
     }
     if (!userProvider.rol) {
       errors.rol = t("dashboard.users.dialog-add-user.validation.role-required");
@@ -193,7 +193,7 @@ export const Users = () => {
     const userBlob = new Blob([JSON.stringify({
       name: userProvider.name,
       email: userProvider.email,
-      pasword: userProvider.pasword,
+      password: userProvider.password,
       rol: {
         id: userProvider.rol.rolKey,
         rolName: userProvider.rol.originalName
@@ -287,14 +287,14 @@ export const Users = () => {
               <Password
                 id="password"
                 toggleMask
-                value={userProvider.pasword}
-                onChange={(e) => handleInputChange('pasword', e.target.value)}
+                value={userProvider.password}
+                onChange={(e) => handleInputChange('password', e.target.value)}
                 className="w-full"
                 header={header}
                 footer={footer}
               />
               <label htmlFor="password">{t("dashboard.users.dialog-add-user.password")}</label>
-              {validationErrors.pasword && <small className="p-error">{validationErrors.pasword}</small>}
+              {validationErrors.password && <small className="p-error">{validationErrors.password}</small>}
             </span>
           </div>
 

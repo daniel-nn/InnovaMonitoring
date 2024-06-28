@@ -120,8 +120,8 @@ export const Agents = () => {
     if (!userProvider.email || userProvider.email.trim() === "") {
       errors.email = t("dashboard.users.dialog-add-user.validation.email-required");
     }
-    if (!userProvider.pasword || userProvider.pasword.trim() === "") {
-      errors.pasword = t("dashboard.users.dialog-add-user.validation.password-required");
+    if (!userProvider.password || userProvider.password.trim() === "") {
+      errors.password = t("dashboard.users.dialog-add-user.validation.password-required");
     }
 
     if (!userProvider.image || userProvider.image.trim() === "") {
@@ -140,7 +140,7 @@ export const Agents = () => {
     const userToSend = {
       name: userProvider.name,
       email: userProvider.email,
-      pasword: userProvider.pasword,
+      password: userProvider.password,
       image: userProvider.image,
       rol: {
         id: userProvider.rol.rolKey,
@@ -268,16 +268,16 @@ export const Agents = () => {
             <span className="p-float-label w-full">
               <Password
                 toggleMask
-                value={userProvider.pasword}
+                value={userProvider.password}
                 onChange={(e) => {
                   setUserProvider((prev) => ({
                     ...prev,
-                    pasword: e.target.value
+                    password: e.target.value
                   }));
-                  if (validationErrors.pasword) {
+                  if (validationErrors.password) {
                     setValidationErrors((prev) => ({
                       ...prev,
-                      pasword: null
+                      password: null
                     }));
                   }
                 }}
