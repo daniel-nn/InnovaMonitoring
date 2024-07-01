@@ -2,6 +2,7 @@ import React from 'react';
 import emailjs from 'emailjs-com';
 import { useTranslation } from 'react-i18next';
 
+
 const SendEmailComponent = ({
     emailTo,
     Cc,
@@ -9,7 +10,7 @@ const SendEmailComponent = ({
     message,
     images,
     videos,
-    numerCase,
+    numberCase,
     incident,
     date,
     hour,
@@ -141,7 +142,7 @@ const SendEmailComponent = ({
             imagesHtml,
             videosHtmlColumn1,
             videosHtmlColumn2: '', 
-            numerCase,
+            numberCase,
             incident,
             date,
             hour

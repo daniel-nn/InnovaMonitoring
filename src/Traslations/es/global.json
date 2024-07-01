@@ -419,6 +419,7 @@
         "integral-tittle": "Gestión Integral",
         "reports": "Informes",
         "map": "Mapa",
+        "cameras": "Camaras",
         "agents": "Agentes",
         "users": "Usuarios",
         "cases": "Categoria de casos",
@@ -714,6 +715,7 @@
         "report-details": "Detalles del reporte",
         "report-details-placeholder": "Descripción del reporte",
         "images": "Imagenes",
+        "evidence-removed": "Evidencia eliminada",
         "swal": {
           "confirmation": "Estas seguro de editar el reporte para la propiedad - ",
           "send": "Editar",
@@ -1015,7 +1017,9 @@
           "Monitor": "Monitor"
         },
         "save": "Guardar",
-        "update-success": "Usuario actualizado"
+        "update-success": "Usuario actualizado",
+        "update-image-success": "imagen actualizada",
+        "update-image-error": "Error actualizando la iimgaen"
       },
       "properties": {
         "assigned-properties": "Propiedades asignadas",

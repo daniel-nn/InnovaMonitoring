@@ -422,6 +422,7 @@
       "integral-management-section": {
         "integral-tittle": "Integral management",
         "reports": "Reports",
+        "cameras": "Cameras",
         "map": "Map",
         "agents": "Agents",
         "users": "Users",
@@ -718,6 +719,7 @@
         "report-details": "Report Details",
         "report-details-placeholder": "Report Description",
         "images": "Images",
+        "evidence-removed": "Evidence removed",
         "swal": {
           "confirmation": "Are you sure to Edit the report for the property - ",
           "cancel": "Cancel",
@@ -1014,7 +1016,9 @@
           "Monitor": "Monitor"
         },
         "save": "Edit",
-        "update-success": "User Updated"
+        "update-success": "User Updated",
+        "update-image-success": "Image Updated",
+        "update-image-error": "Error Updating The image"
       },
       "properties": {
         "assigned-properties": "Assigned Properties",

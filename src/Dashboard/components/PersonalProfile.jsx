@@ -27,12 +27,21 @@ export const PersonalProfile = ({ userProvider, setUserProvider, initialRolName,
 
   const fileInputRef = useRef();
 
-  const handleFileChange = (event) => {
+  const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
-      putUserImg(userProvider.id, file, t);
+      try {
+        const updatedUser = await putUserImg(userProvider.id, file, t);
+        if (updatedUser) {
+          setUserProvider(updatedUser); // Esto actualizará el estado y causará un re-render
+        }
+      } catch (error) {
+        console.error('Failed to update user image:', error);
+      }
     }
   };
+
+
   const [input, setInput] = useState({
     name: userProvider.name,
     email: userProvider.email,

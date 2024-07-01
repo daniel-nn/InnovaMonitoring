@@ -48,7 +48,7 @@ const SidebarLinks = () => {
           permit: "Yes",
         },
         {
-          name: "cameras",
+          name: t("dashboard.dashboard-sliderbar.integral-management-section.cameras"),
           icon: <HiUserCircle />,
           url: "cameras",
           permit: "Yes",
